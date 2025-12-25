@@ -49,10 +49,10 @@ importers:
         version: 8.6.15(@storybook/test@8.6.15(storybook@8.6.15))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.15)(typescript@5.9.3)
       '@storybook/react-vite':
         specifier: ^8.6.15
-        version: 8.6.15(@storybook/test@8.6.15(storybook@8.6.15))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.54.0)(storybook@8.6.15)(typescript@5.9.3)(vite@6.3.5(jiti@2.6.1)(lightningcss@1.30.1))
+        version: 8.6.15(@storybook/test@8.6.15(storybook@8.6.15))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.54.0)(storybook@8.6.15)(typescript@5.9.3)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.30.1))
       '@tailwindcss/vite':
         specifier: 4.1.12
-        version: 4.1.12(vite@6.3.5(jiti@2.6.1)(lightningcss@1.30.1))
+        version: 4.1.12(vite@6.4.1(jiti@2.6.1)(lightningcss@1.30.1))
       storybook:
         specifier: ^8.6.15
         version: 8.6.15
@@ -242,16 +242,16 @@ importers:
     devDependencies:
       '@tailwindcss/vite':
         specifier: 4.1.12
-        version: 4.1.12(vite@6.3.5(jiti@2.6.1)(lightningcss@1.30.1))
+        version: 4.1.12(vite@6.4.1(jiti@2.6.1)(lightningcss@1.30.1))
       '@vitejs/plugin-react':
         specifier: 4.7.0
-        version: 4.7.0(vite@6.3.5(jiti@2.6.1)(lightningcss@1.30.1))
+        version: 4.7.0(vite@6.4.1(jiti@2.6.1)(lightningcss@1.30.1))
       tailwindcss:
         specifier: 4.1.12
         version: 4.1.12
       vite:
-        specifier: 6.3.5
-        version: 6.3.5(jiti@2.6.1)(lightningcss@1.30.1)
+        specifier: 6.4.1
+        version: 6.4.1(jiti@2.6.1)(lightningcss@1.30.1)
 
   packages/runtime:
     dependencies:
@@ -4382,8 +4382,8 @@ packages:
   victory-vendor@36.9.2:
     resolution: {integrity: sha512-PnpQQMuxlwYdocC8fIJqVXvkeViHYzotI+NJrCuav0ZYFoq912ZHBk3mCeuj+5/VpodOjPe1z0Fk2ihgzlXqjQ==}
 
-  vite@6.3.5:
-    resolution: {integrity: sha512-cZn6NDFE7wdTpINgs++ZJ4N49W2vRp8LCKrn3Ob1kYNtOo21vfDoaV5GzBfLU4MovSAB8uNRm4jgzVQZ+mBzPQ==}
+  vite@6.4.1:
+    resolution: {integrity: sha512-+Oxm7q9hDoLMyJOYfUYBuHQo+dkAloi33apOPP56pzj+vsdJDzr+j1NISE5pyaAuKL4A3UD34qd0lx5+kfKp2g==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
     peerDependencies:
@@ -4802,12 +4802,12 @@ snapshots:
     dependencies:
       minipass: 7.1.2
 
-  '@joshwooding/vite-plugin-react-docgen-typescript@0.5.0(typescript@5.9.3)(vite@6.3.5(jiti@2.6.1)(lightningcss@1.30.1))':
+  '@joshwooding/vite-plugin-react-docgen-typescript@0.5.0(typescript@5.9.3)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.30.1))':
     dependencies:
       glob: 10.5.0
       magic-string: 0.27.0
       react-docgen-typescript: 2.4.0(typescript@5.9.3)
-      vite: 6.3.5(jiti@2.6.1)(lightningcss@1.30.1)
+      vite: 6.4.1(jiti@2.6.1)(lightningcss@1.30.1)
     optionalDependencies:
       typescript: 5.9.3
 
@@ -6481,13 +6481,13 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@storybook/builder-vite@8.6.15(storybook@8.6.15)(vite@6.3.5(jiti@2.6.1)(lightningcss@1.30.1))':
+  '@storybook/builder-vite@8.6.15(storybook@8.6.15)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.30.1))':
     dependencies:
       '@storybook/csf-plugin': 8.6.15(storybook@8.6.15)
       browser-assert: 1.2.1
       storybook: 8.6.15
       ts-dedent: 2.2.0
-      vite: 6.3.5(jiti@2.6.1)(lightningcss@1.30.1)
+      vite: 6.4.1(jiti@2.6.1)(lightningcss@1.30.1)
 
   '@storybook/components@8.6.15(storybook@8.6.15)':
     dependencies:
@@ -6544,11 +6544,11 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       storybook: 8.6.15
 
-  '@storybook/react-vite@8.6.15(@storybook/test@8.6.15(storybook@8.6.15))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.54.0)(storybook@8.6.15)(typescript@5.9.3)(vite@6.3.5(jiti@2.6.1)(lightningcss@1.30.1))':
+  '@storybook/react-vite@8.6.15(@storybook/test@8.6.15(storybook@8.6.15))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.54.0)(storybook@8.6.15)(typescript@5.9.3)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.30.1))':
     dependencies:
-      '@joshwooding/vite-plugin-react-docgen-typescript': 0.5.0(typescript@5.9.3)(vite@6.3.5(jiti@2.6.1)(lightningcss@1.30.1))
+      '@joshwooding/vite-plugin-react-docgen-typescript': 0.5.0(typescript@5.9.3)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.30.1))
       '@rollup/pluginutils': 5.3.0(rollup@4.54.0)
-      '@storybook/builder-vite': 8.6.15(storybook@8.6.15)(vite@6.3.5(jiti@2.6.1)(lightningcss@1.30.1))
+      '@storybook/builder-vite': 8.6.15(storybook@8.6.15)(vite@6.4.1(jiti@2.6.1)(lightningcss@1.30.1))
       '@storybook/react': 8.6.15(@storybook/test@8.6.15(storybook@8.6.15))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.6.15)(typescript@5.9.3)
       find-up: 5.0.0
       magic-string: 0.30.21
@@ -6558,7 +6558,7 @@ snapshots:
       resolve: 1.22.11
       storybook: 8.6.15
       tsconfig-paths: 4.2.0
-      vite: 6.3.5(jiti@2.6.1)(lightningcss@1.30.1)
+      vite: 6.4.1(jiti@2.6.1)(lightningcss@1.30.1)
     optionalDependencies:
       '@storybook/test': 8.6.15(storybook@8.6.15)
     transitivePeerDependencies:
@@ -6660,12 +6660,12 @@ snapshots:
       '@tailwindcss/oxide-win32-arm64-msvc': 4.1.12
       '@tailwindcss/oxide-win32-x64-msvc': 4.1.12
 
-  '@tailwindcss/vite@4.1.12(vite@6.3.5(jiti@2.6.1)(lightningcss@1.30.1))':
+  '@tailwindcss/vite@4.1.12(vite@6.4.1(jiti@2.6.1)(lightningcss@1.30.1))':
     dependencies:
       '@tailwindcss/node': 4.1.12
       '@tailwindcss/oxide': 4.1.12
       tailwindcss: 4.1.12
-      vite: 6.3.5(jiti@2.6.1)(lightningcss@1.30.1)
+      vite: 6.4.1(jiti@2.6.1)(lightningcss@1.30.1)
 
   '@testing-library/dom@10.4.0':
     dependencies:
@@ -6789,7 +6789,7 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@vitejs/plugin-react@4.7.0(vite@6.3.5(jiti@2.6.1)(lightningcss@1.30.1))':
+  '@vitejs/plugin-react@4.7.0(vite@6.4.1(jiti@2.6.1)(lightningcss@1.30.1))':
     dependencies:
       '@babel/core': 7.28.5
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.28.5)
@@ -6797,7 +6797,7 @@ snapshots:
       '@rolldown/pluginutils': 1.0.0-beta.27
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
-      vite: 6.3.5(jiti@2.6.1)(lightningcss@1.30.1)
+      vite: 6.4.1(jiti@2.6.1)(lightningcss@1.30.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -9025,7 +9025,7 @@ snapshots:
       d3-time: 3.1.0
       d3-timer: 3.0.1
 
-  vite@6.3.5(jiti@2.6.1)(lightningcss@1.30.1):
+  vite@6.4.1(jiti@2.6.1)(lightningcss@1.30.1):
     dependencies:
       esbuild: 0.25.12
       fdir: 6.5.0(picomatch@4.0.3)
