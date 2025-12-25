@@ -1,9 +1,10 @@
+import type { ReactNode } from 'react';
 import { useState } from 'react';
-import { 
-  IconPlusLg, 
-  IconGlobe, 
-  IconPaperclip, 
-  IconMic, 
+import {
+  IconPlusLg,
+  IconGlobe,
+  IconPaperclip,
+  IconMic,
   IconGoFilled,
   IconX,
   IconCamera,
@@ -23,11 +24,17 @@ interface ModelConfig {
   description: string;
 }
 
-interface ChatInputProps {
+export interface ChatInputProps {
   selectedModel: ModelConfig;
+
+  /** Slot: Custom content left of composer input (before attachment button) */
+  composerLeft?: ReactNode;
+
+  /** Slot: Custom content right of composer input (after send button) */
+  composerRight?: ReactNode;
 }
 
-export function ChatInput({ selectedModel }: ChatInputProps) {
+export function ChatInput({ selectedModel, composerLeft, composerRight }: ChatInputProps) {
   const [message, setMessage] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [activeTag, setActiveTag] = useState('Work with Terminal Tab');
@@ -87,6 +94,13 @@ export function ChatInput({ selectedModel }: ChatInputProps) {
 
           {/* Action Bar */}
           <div className="flex items-center justify-between px-3 py-2 border-t border-white/5">
+            {/* composerLeft Slot */}
+            {composerLeft && (
+              <div className="flex items-center gap-1">
+                {composerLeft}
+              </div>
+            )}
+
             {/* Left Actions */}
             <div className="flex items-center gap-1 relative">
               <button 
@@ -238,7 +252,7 @@ export function ChatInput({ selectedModel }: ChatInputProps) {
               </button>
 
               {/* Send button */}
-              <button 
+              <button
                 type="submit"
                 disabled={!message.trim()}
                 className="ml-1 p-2 bg-white text-[#0D0D0D] rounded-full hover:bg-white/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
@@ -247,6 +261,13 @@ export function ChatInput({ selectedModel }: ChatInputProps) {
                 <IconGoFilled className="size-4" />
               </button>
             </div>
+
+            {/* composerRight Slot */}
+            {composerRight && (
+              <div className="flex items-center gap-1">
+                {composerRight}
+              </div>
+            )}
           </div>
         </div>
       </form>

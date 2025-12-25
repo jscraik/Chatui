@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ChatSidebar } from "./components/ChatSidebar";
 import { ChatHeader } from "./components/ChatHeader";
@@ -40,6 +41,24 @@ export interface ChatUIRootProps {
    * overlayOpen = overlay drawer open state
    */
   onSidebarToggle?: (next: { desktopOpen: boolean; overlayOpen: boolean }) => void;
+
+  /** Slot: Custom content on the right side of header (action buttons) */
+  headerRight?: ReactNode;
+
+  /** Slot: Custom content at top of sidebar */
+  sidebarTop?: ReactNode;
+
+  /** Slot: Custom content at bottom of sidebar */
+  sidebarFooter?: ReactNode;
+
+  /** Slot: Custom content left of composer input */
+  composerLeft?: ReactNode;
+
+  /** Slot: Custom content right of composer input (send/attach controls) */
+  composerRight?: ReactNode;
+
+  /** Slot: Custom empty state when no messages */
+  emptyState?: ReactNode;
 }
 
 function useMediaQuery(query: string) {
@@ -81,6 +100,12 @@ export function ChatUIRoot({
   defaultModel,
   mobileBreakpointPx = 768,
   onSidebarToggle,
+  headerRight,
+  sidebarTop,
+  sidebarFooter,
+  composerLeft,
+  composerRight,
+  emptyState,
 }: ChatUIRootProps) {
   const isMobile = useMediaQuery(`(max-width: ${mobileBreakpointPx}px)`);
 
@@ -251,14 +276,19 @@ export function ChatUIRoot({
           onModelChange={setSelectedModel}
           viewMode={viewMode}
           onViewModeChange={setViewMode}
+          headerRight={headerRight}
         />
 
         {viewMode === "compose" ? (
           <ComposeView />
         ) : (
           <>
-            <ChatMessages />
-            <ChatInput selectedModel={selectedModel} />
+            <ChatMessages emptyState={emptyState} />
+            <ChatInput
+              selectedModel={selectedModel}
+              composerLeft={composerLeft}
+              composerRight={composerRight}
+            />
           </>
         )}
       </div>
@@ -269,13 +299,24 @@ export function ChatUIRoot({
     toggleSidebar,
     selectedModel,
     viewMode,
+    headerRight,
+    sidebarTop,
+    sidebarFooter,
+    composerLeft,
+    composerRight,
+    emptyState,
   ]);
 
   return (
     <div className="size-full flex bg-[#212121] dark">
       {/* Inline desktop sidebar (twoPane desktop only; Option B = fully hidden when closed) */}
       {sidebarBehavior === "inline" ? (
-        <ChatSidebar isOpen={desktopSidebarOpen} onToggle={toggleSidebar} />
+        <ChatSidebar
+          isOpen={desktopSidebarOpen}
+          onToggle={toggleSidebar}
+          sidebarTop={sidebarTop}
+          sidebarFooter={sidebarFooter}
+        />
       ) : null}
 
       {/* Overlay sidebar (twoPane mobile + full all sizes) */}
@@ -296,7 +337,12 @@ export function ChatUIRoot({
             tabIndex={-1}
             className="absolute left-0 top-0 h-full w-64 outline-none"
           >
-            <ChatSidebar isOpen={true} onToggle={closeOverlay} />
+            <ChatSidebar
+              isOpen={true}
+              onToggle={closeOverlay}
+              sidebarTop={sidebarTop}
+              sidebarFooter={sidebarFooter}
+            />
           </div>
         </div>
       ) : null}

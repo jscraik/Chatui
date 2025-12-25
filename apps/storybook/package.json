@@ -15,12 +15,14 @@
     "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "storybook": "^10.1.10",
-    "@storybook/react-vite": "^10.1.10",
-    "@storybook/addon-essentials": "^10.1.10",
-    "@storybook/addon-interactions": "^10.1.10",
-    "@storybook/addon-a11y": "^10.1.10",
+    "storybook": "^8.6.15",
+    "@storybook/react": "^8.6.15",
+    "@storybook/react-vite": "^8.6.15",
+    "@storybook/addon-essentials": "^8.6.15",
+    "@storybook/addon-interactions": "^8.6.15",
+    "@storybook/addon-a11y": "^8.6.15",
     "@tailwindcss/vite": "4.1.12",
-    "tailwindcss": "4.1.12"
+    "tailwindcss": "4.1.12",
+    "tw-animate-css": "^1.3.8"
   }
 }

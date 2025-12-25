@@ -1,8 +1,9 @@
+import type { ReactNode } from 'react';
 import { useState } from 'react';
-import { 
-  IconSearch, 
-  IconPlusLg, 
-  IconChevronRightMd, 
+import {
+  IconSearch,
+  IconPlusLg,
+  IconChevronRightMd,
   IconDotsHorizontal,
   IconX,
   IconSettings,
@@ -24,9 +25,15 @@ interface SidebarItem {
   color?: string;
 }
 
-interface ChatSidebarProps {
+export interface ChatSidebarProps {
   isOpen: boolean;
   onToggle: () => void;
+
+  /** Slot: Custom content at top of sidebar (below search) */
+  sidebarTop?: ReactNode;
+
+  /** Slot: Custom content at bottom of sidebar (above user profile) */
+  sidebarFooter?: ReactNode;
 }
 
 const quickActions: SidebarItem[] = [
@@ -61,7 +68,7 @@ const chatHistory = [
   'Learn Year 7 Maths',
 ];
 
-export function ChatSidebar({ isOpen, onToggle }: ChatSidebarProps) {
+export function ChatSidebar({ isOpen, onToggle, sidebarTop, sidebarFooter }: ChatSidebarProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedAction, setSelectedAction] = useState('chatgpt');
   const [showProjectModal, setShowProjectModal] = useState(false);
@@ -239,6 +246,13 @@ export function ChatSidebar({ isOpen, onToggle }: ChatSidebarProps) {
           )}
         </div>
 
+        {/* sidebarTop Slot */}
+        {sidebarTop && (
+          <div className="px-3 py-2">
+            {sidebarTop}
+          </div>
+        )}
+
         {/* Divider */}
         <div className="mx-3 my-2 border-t border-white/10" />
 
@@ -258,6 +272,13 @@ export function ChatSidebar({ isOpen, onToggle }: ChatSidebarProps) {
               </button>
             ))}
         </div>
+
+        {/* sidebarFooter Slot */}
+        {sidebarFooter && (
+          <div className="px-3 py-2">
+            {sidebarFooter}
+          </div>
+        )}
 
         {/* User Profile */}
         <div className="p-3 border-t border-white/10 relative">

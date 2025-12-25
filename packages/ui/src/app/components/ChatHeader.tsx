@@ -1,5 +1,6 @@
+import type { ReactNode } from 'react';
 import { useState } from 'react';
-import { 
+import {
   IconChevronDownMd,
   IconUpload,
   IconShare,
@@ -15,13 +16,16 @@ interface ModelConfig {
   description: string;
 }
 
-interface ChatHeaderProps {
+export interface ChatHeaderProps {
   isSidebarOpen: boolean;
   onSidebarToggle: () => void;
   selectedModel: ModelConfig;
   onModelChange: (model: ModelConfig) => void;
   viewMode: 'chat' | 'compose';
   onViewModeChange: (mode: 'chat' | 'compose') => void;
+
+  /** Slot for custom content on the right side of header (action buttons) */
+  headerRight?: ReactNode;
 }
 
 const availableModels: ModelConfig[] = [
@@ -32,7 +36,15 @@ const availableModels: ModelConfig[] = [
   { name: 'Gemini Pro', shortName: 'Gemini', description: 'Google\'s advanced model' },
 ];
 
-export function ChatHeader({ isSidebarOpen, onSidebarToggle, selectedModel, onModelChange, viewMode, onViewModeChange }: ChatHeaderProps) {
+export function ChatHeader({
+  isSidebarOpen,
+  onSidebarToggle,
+  selectedModel,
+  onModelChange,
+  viewMode,
+  onViewModeChange,
+  headerRight,
+}: ChatHeaderProps) {
   const [showModelPicker, setShowModelPicker] = useState(false);
 
   return (
@@ -80,14 +92,20 @@ export function ChatHeader({ isSidebarOpen, onSidebarToggle, selectedModel, onMo
       </div>
 
       {/* Right Side - Action Buttons - Wrapped in bubble */}
-      <div className="flex items-center gap-0.5 bg-black/20 rounded-lg p-0.5">
-        <button className="p-1.5 hover:bg-white/10 rounded-md transition-colors">
-          <Download className="size-4 text-white/60" />
-        </button>
-        <button className="p-1.5 hover:bg-white/10 rounded-md transition-colors">
-          <IconShare className="size-4 text-white/60" />
-        </button>
-      </div>
+      {headerRight ? (
+        <div className="flex items-center gap-0.5 bg-black/20 rounded-lg p-0.5">
+          {headerRight}
+        </div>
+      ) : (
+        <div className="flex items-center gap-0.5 bg-black/20 rounded-lg p-0.5">
+          <button className="p-1.5 hover:bg-white/10 rounded-md transition-colors">
+            <Download className="size-4 text-white/60" />
+          </button>
+          <button className="p-1.5 hover:bg-white/10 rounded-md transition-colors">
+            <IconShare className="size-4 text-white/60" />
+          </button>
+        </div>
+      )}
 
       {/* Model Picker Modal */}
       {showModelPicker && (

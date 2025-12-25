@@ -1,9 +1,8 @@
 import type { StorybookConfig } from "@storybook/react-vite";
 import path from "node:path";
-import tailwindcss from "@tailwindcss/vite";
 
 const config: StorybookConfig = {
-  stories: ["../../packages/ui/src/**/*.stories.@(ts|tsx)"],
+  stories: ["../../../packages/ui/src/**/*.stories.tsx"],
   addons: [
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
@@ -17,8 +16,7 @@ const config: StorybookConfig = {
     autodocs: true,
   },
   viteFinal: async (viteConfig) => {
-    // Align with the Vite app setup: Tailwind 4 plugin + workspace FS allow.
-    viteConfig.plugins = [...(viteConfig.plugins ?? []), tailwindcss()];
+    // Tailwind CSS v4 via PostCSS - handled by the CSS import in preview.tsx
     viteConfig.base = "./";
     viteConfig.server = {
       ...(viteConfig.server ?? {}),

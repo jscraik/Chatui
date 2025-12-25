@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { IconOpenAILogo, IconUser } from './icons/ChatGPTIcons';
 import { Copy, Pencil } from 'lucide-react';
 
@@ -6,6 +7,11 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+}
+
+interface ChatMessagesProps {
+  /** Slot: Custom empty state when no messages */
+  emptyState?: ReactNode;
 }
 
 const sampleMessages: Message[] = [
@@ -29,7 +35,7 @@ const sampleMessages: Message[] = [
   },
 ];
 
-export function ChatMessages() {
+export function ChatMessages({ emptyState }: ChatMessagesProps) {
   return (
     <div className="flex-1 overflow-y-auto bg-[#212121]">
       <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
