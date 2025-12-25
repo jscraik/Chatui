@@ -75,13 +75,13 @@ export function DiscoverySettingsModal({
       <div className="relative bg-[#1a1a1a] border border-white/10 rounded-xl w-[420px] max-h-[90vh] overflow-y-auto shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
-          <h2 className="text-[16px] font-medium leading-[24px] text-white">
+          <h2 className="text-[16px] font-semibold leading-[24px] tracking-[-0.32px] text-white">
             Discovery Settings
           </h2>
           <div className="flex items-center gap-2">
             <button
               onClick={handleReset}
-              className="px-3 py-1.5 text-[13px] font-normal leading-[18px] text-[#4ade80] hover:bg-white/5 rounded-lg transition-colors flex items-center gap-1.5"
+              className="px-3 py-1.5 text-[13px] font-normal leading-[18px] text-[#40C977] hover:bg-white/5 rounded-lg transition-colors flex items-center gap-1.5"
             >
               <svg className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -101,7 +101,7 @@ export function DiscoverySettingsModal({
         <div className="p-6 space-y-6">
           {/* Token Budgets Section */}
           <div>
-            <h3 className="text-[14px] font-medium leading-[20px] text-white mb-2">
+            <h3 className="text-[14px] font-semibold leading-[20px] tracking-[-0.3px] text-white mb-2">
               Token Budgets
             </h3>
             <p className="text-[13px] font-normal leading-[18px] text-white/60 mb-4">
@@ -114,7 +114,7 @@ export function DiscoverySettingsModal({
                 <label className="text-[13px] font-normal leading-[18px] text-white/80">
                   Target size
                 </label>
-                <span className="text-[13px] font-medium leading-[18px] text-white">
+                <span className="text-[13px] font-semibold leading-[18px] tracking-[-0.32px] text-white">
                   {targetSize}k
                 </span>
               </div>
@@ -126,7 +126,7 @@ export function DiscoverySettingsModal({
                 onChange={(e) => handleTargetSizeChange(Number(e.target.value))}
                 className="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:cursor-pointer [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer"
                 style={{
-                  background: `linear-gradient(to right, #4ade80 0%, #4ade80 ${(targetSize - 20) / 0.8}%, rgba(255,255,255,0.1) ${(targetSize - 20) / 0.8}%, rgba(255,255,255,0.1) 100%)`
+                  background: `linear-gradient(to right, #40C977 0%, #40C977 ${(targetSize - 20) / 0.8}%, rgba(255,255,255,0.1) ${(targetSize - 20) / 0.8}%, rgba(255,255,255,0.1) 100%)`
                 }}
               />
             </div>
@@ -162,7 +162,7 @@ export function DiscoverySettingsModal({
                       <label className="text-[13px] font-normal leading-[18px] text-white/80">
                         Target size
                       </label>
-                      <span className="text-[13px] font-medium leading-[18px] text-white">
+                      <span className="text-[13px] font-semibold leading-[18px] tracking-[-0.32px] text-white">
                         {autoPlanBudget}k
                       </span>
                     </div>
@@ -174,7 +174,7 @@ export function DiscoverySettingsModal({
                       onChange={(e) => setAutoPlanBudget(Number(e.target.value))}
                       className="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:cursor-pointer [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer"
                       style={{
-                        background: `linear-gradient(to right, #4ade80 0%, #4ade80 ${(autoPlanBudget - 20) / 0.8}%, rgba(255,255,255,0.1) ${(autoPlanBudget - 20) / 0.8}%, rgba(255,255,255,0.1) 100%)`
+                        background: `linear-gradient(to right, #40C977 0%, #40C977 ${(autoPlanBudget - 20) / 0.8}%, rgba(255,255,255,0.1) ${(autoPlanBudget - 20) / 0.8}%, rgba(255,255,255,0.1) 100%)`
                       }}
                     />
                   </div>
@@ -185,7 +185,7 @@ export function DiscoverySettingsModal({
 
           {/* Prompt Enhancement Section */}
           <div>
-            <h3 className="text-[14px] font-medium leading-[20px] text-white mb-2">
+            <h3 className="text-[14px] font-semibold leading-[20px] tracking-[-0.3px] text-white mb-2">
               Prompt Enhancement
             </h3>
             <p className="text-[13px] font-normal leading-[18px] text-white/60 mb-3">
@@ -197,7 +197,7 @@ export function DiscoverySettingsModal({
                 onClick={() => handlePromptEnhancementChange('rewrite')}
                 className={`px-4 py-2 rounded-lg text-[13px] font-normal leading-[18px] transition-colors ${
                   promptEnhancement === 'rewrite'
-                    ? 'bg-[#4ade80] text-black'
+                    ? 'bg-[#40C977] text-black'
                     : 'bg-[#2a2a2a] text-white/60 hover:text-white'
                 }`}
               >
@@ -207,7 +207,7 @@ export function DiscoverySettingsModal({
                 onClick={() => handlePromptEnhancementChange('augment')}
                 className={`px-4 py-2 rounded-lg text-[13px] font-normal leading-[18px] transition-colors ${
                   promptEnhancement === 'augment'
-                    ? 'bg-[#4ade80] text-black'
+                    ? 'bg-[#40C977] text-black'
                     : 'bg-[#2a2a2a] text-white/60 hover:text-white'
                 }`}
               >
@@ -217,7 +217,7 @@ export function DiscoverySettingsModal({
                 onClick={() => handlePromptEnhancementChange('preserve')}
                 className={`px-4 py-2 rounded-lg text-[13px] font-normal leading-[18px] transition-colors ${
                   promptEnhancement === 'preserve'
-                    ? 'bg-[#4ade80] text-black'
+                    ? 'bg-[#40C977] text-black'
                     : 'bg-[#2a2a2a] text-white/60 hover:text-white'
                 }`}
               >
@@ -232,7 +232,7 @@ export function DiscoverySettingsModal({
 
           {/* Clarifying Questions Section */}
           <div>
-            <h3 className="text-[14px] font-medium leading-[20px] text-white mb-2">
+            <h3 className="text-[14px] font-semibold leading-[20px] tracking-[-0.3px] text-white mb-2">
               Clarifying Questions
             </h3>
             <p className="text-[13px] font-normal leading-[18px] text-white/60 mb-4">
@@ -249,7 +249,7 @@ export function DiscoverySettingsModal({
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <div className="text-[13px] font-medium leading-[18px] text-white mb-0.5">
+                    <div className="text-[13px] font-semibold leading-[18px] tracking-[-0.32px] text-white mb-0.5">
                       Manual Runs (UI)
                     </div>
                     <div className="text-[12px] font-normal leading-[16px] text-white/50">
@@ -260,7 +260,7 @@ export function DiscoverySettingsModal({
                 <button
                   onClick={() => setManualRuns(!manualRuns)}
                   className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 ${
-                    manualRuns ? 'bg-[#4ade80]' : 'bg-white/20'
+                    manualRuns ? 'bg-[#40C977]' : 'bg-white/20'
                   }`}
                 >
                   <div
@@ -275,12 +275,12 @@ export function DiscoverySettingsModal({
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-3">
                   <div className="mt-0.5">
-                    <svg className="size-5 text-[#4ade80]" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="size-5 text-[#40C977]" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M3 3h18v2H3V3zm0 16h18v2H3v-2zm0-8h18v2H3v-2z" />
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <div className="text-[13px] font-medium leading-[18px] text-white mb-0.5">
+                    <div className="text-[13px] font-semibold leading-[18px] tracking-[-0.32px] text-white mb-0.5">
                       MCP Runs
                     </div>
                     <div className="text-[12px] font-normal leading-[16px] text-white/50">
@@ -291,7 +291,7 @@ export function DiscoverySettingsModal({
                 <button
                   onClick={() => setMcpRuns(!mcpRuns)}
                   className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 ${
-                    mcpRuns ? 'bg-[#4ade80]' : 'bg-white/20'
+                    mcpRuns ? 'bg-[#40C977]' : 'bg-white/20'
                   }`}
                 >
                   <div
@@ -306,7 +306,7 @@ export function DiscoverySettingsModal({
 
           {/* Text Format Section */}
           <div>
-            <h3 className="text-[14px] font-medium leading-[20px] text-white mb-2">
+            <h3 className="text-[14px] font-semibold leading-[20px] tracking-[-0.3px] text-white mb-2">
               Text Format
             </h3>
             <p className="text-[13px] font-normal leading-[18px] text-white/60 mb-3">
@@ -318,7 +318,7 @@ export function DiscoverySettingsModal({
                 onClick={() => setTextFormat('text')}
                 className={`px-4 py-2 rounded-lg text-[13px] font-normal leading-[18px] transition-colors ${
                   textFormat === 'text'
-                    ? 'bg-[#4ade80] text-black'
+                    ? 'bg-[#40C977] text-black'
                     : 'bg-[#2a2a2a] text-white/60 hover:text-white'
                 }`}
               >
@@ -328,7 +328,7 @@ export function DiscoverySettingsModal({
                 onClick={() => setTextFormat('markdown')}
                 className={`px-4 py-2 rounded-lg text-[13px] font-normal leading-[18px] transition-colors ${
                   textFormat === 'markdown'
-                    ? 'bg-[#4ade80] text-black'
+                    ? 'bg-[#40C977] text-black'
                     : 'bg-[#2a2a2a] text-white/60 hover:text-white'
                 }`}
               >
@@ -338,7 +338,7 @@ export function DiscoverySettingsModal({
                 onClick={() => setTextFormat('xml')}
                 className={`px-4 py-2 rounded-lg text-[13px] font-normal leading-[18px] transition-colors ${
                   textFormat === 'xml'
-                    ? 'bg-[#4ade80] text-black'
+                    ? 'bg-[#40C977] text-black'
                     : 'bg-[#2a2a2a] text-white/60 hover:text-white'
                 }`}
               >
@@ -348,7 +348,7 @@ export function DiscoverySettingsModal({
                 onClick={() => setTextFormat('json')}
                 className={`px-4 py-2 rounded-lg text-[13px] font-normal leading-[18px] transition-colors ${
                   textFormat === 'json'
-                    ? 'bg-[#4ade80] text-black'
+                    ? 'bg-[#40C977] text-black'
                     : 'bg-[#2a2a2a] text-white/60 hover:text-white'
                 }`}
               >
@@ -359,7 +359,7 @@ export function DiscoverySettingsModal({
 
           {/* Reasoning Effort Section */}
           <div>
-            <h3 className="text-[14px] font-medium leading-[20px] text-white mb-2">
+            <h3 className="text-[14px] font-semibold leading-[20px] tracking-[-0.3px] text-white mb-2">
               Reasoning Effort
             </h3>
             <p className="text-[13px] font-normal leading-[18px] text-white/60 mb-3">
@@ -371,7 +371,7 @@ export function DiscoverySettingsModal({
                 onClick={() => setReasoningEffort('low')}
                 className={`px-4 py-2 rounded-lg text-[13px] font-normal leading-[18px] transition-colors ${
                   reasoningEffort === 'low'
-                    ? 'bg-[#4ade80] text-black'
+                    ? 'bg-[#40C977] text-black'
                     : 'bg-[#2a2a2a] text-white/60 hover:text-white'
                 }`}
               >
@@ -381,7 +381,7 @@ export function DiscoverySettingsModal({
                 onClick={() => setReasoningEffort('medium')}
                 className={`px-4 py-2 rounded-lg text-[13px] font-normal leading-[18px] transition-colors ${
                   reasoningEffort === 'medium'
-                    ? 'bg-[#4ade80] text-black'
+                    ? 'bg-[#40C977] text-black'
                     : 'bg-[#2a2a2a] text-white/60 hover:text-white'
                 }`}
               >
@@ -391,7 +391,7 @@ export function DiscoverySettingsModal({
                 onClick={() => setReasoningEffort('high')}
                 className={`px-4 py-2 rounded-lg text-[13px] font-normal leading-[18px] transition-colors ${
                   reasoningEffort === 'high'
-                    ? 'bg-[#4ade80] text-black'
+                    ? 'bg-[#40C977] text-black'
                     : 'bg-[#2a2a2a] text-white/60 hover:text-white'
                 }`}
               >
@@ -402,7 +402,7 @@ export function DiscoverySettingsModal({
 
           {/* Verbosity Section */}
           <div>
-            <h3 className="text-[14px] font-medium leading-[20px] text-white mb-2">
+            <h3 className="text-[14px] font-semibold leading-[20px] tracking-[-0.3px] text-white mb-2">
               Verbosity
             </h3>
             <p className="text-[13px] font-normal leading-[18px] text-white/60 mb-3">
@@ -414,7 +414,7 @@ export function DiscoverySettingsModal({
                 onClick={() => setVerbosity('low')}
                 className={`px-4 py-2 rounded-lg text-[13px] font-normal leading-[18px] transition-colors ${
                   verbosity === 'low'
-                    ? 'bg-[#4ade80] text-black'
+                    ? 'bg-[#40C977] text-black'
                     : 'bg-[#2a2a2a] text-white/60 hover:text-white'
                 }`}
               >
@@ -424,7 +424,7 @@ export function DiscoverySettingsModal({
                 onClick={() => setVerbosity('medium')}
                 className={`px-4 py-2 rounded-lg text-[13px] font-normal leading-[18px] transition-colors ${
                   verbosity === 'medium'
-                    ? 'bg-[#4ade80] text-black'
+                    ? 'bg-[#40C977] text-black'
                     : 'bg-[#2a2a2a] text-white/60 hover:text-white'
                 }`}
               >
@@ -434,7 +434,7 @@ export function DiscoverySettingsModal({
                 onClick={() => setVerbosity('high')}
                 className={`px-4 py-2 rounded-lg text-[13px] font-normal leading-[18px] transition-colors ${
                   verbosity === 'high'
-                    ? 'bg-[#4ade80] text-black'
+                    ? 'bg-[#40C977] text-black'
                     : 'bg-[#2a2a2a] text-white/60 hover:text-white'
                 }`}
               >
@@ -445,7 +445,7 @@ export function DiscoverySettingsModal({
 
           {/* Store Logs Section */}
           <div>
-            <h3 className="text-[14px] font-medium leading-[20px] text-white mb-2">
+            <h3 className="text-[14px] font-semibold leading-[20px] tracking-[-0.3px] text-white mb-2">
               Store Logs
             </h3>
             <p className="text-[13px] font-normal leading-[18px] text-white/60 mb-3">
@@ -460,7 +460,7 @@ export function DiscoverySettingsModal({
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <div className="text-[13px] font-medium leading-[18px] text-white mb-0.5">
+                  <div className="text-[13px] font-semibold leading-[18px] tracking-[-0.32px] text-white mb-0.5">
                     Store Logs
                   </div>
                   <div className="text-[12px] font-normal leading-[16px] text-white/50">
@@ -471,7 +471,7 @@ export function DiscoverySettingsModal({
               <button
                 onClick={() => setStoreLogs(!storeLogs)}
                 className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 ${
-                  storeLogs ? 'bg-[#4ade80]' : 'bg-white/20'
+                  storeLogs ? 'bg-[#40C977]' : 'bg-white/20'
                 }`}
               >
                 <div
@@ -493,7 +493,7 @@ export function DiscoverySettingsModal({
             <span className="text-[14px] font-medium leading-[20px] text-white">
               {targetSize}k
             </span>
-            <span className="text-[13px] font-normal leading-[18px] text-[#4ade80] capitalize">
+            <span className="text-[13px] font-normal leading-[18px] text-[#40C977] capitalize">
               {promptEnhancement}
             </span>
           </div>
