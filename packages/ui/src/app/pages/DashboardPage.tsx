@@ -137,7 +137,7 @@ export function DashboardPage({
                     <span className="text-secondary">Messages</span>
                     <span className="text-primary">450/500</span>
                   </div>
-                  <Progress value={90} className="h-2" />
+                  <Progress value={90} className="h-2" aria-label="Messages usage" />
                 </div>
 
                 <div>
@@ -145,7 +145,7 @@ export function DashboardPage({
                     <span className="text-secondary">API Calls</span>
                     <span className="text-primary">1.2k/2k</span>
                   </div>
-                  <Progress value={60} className="h-2" />
+                  <Progress value={60} className="h-2" aria-label="API calls usage" />
                 </div>
 
                 <div>
@@ -153,7 +153,7 @@ export function DashboardPage({
                     <span className="text-secondary">Storage</span>
                     <span className="text-primary">2.1GB/5GB</span>
                   </div>
-                  <Progress value={42} className="h-2" />
+                  <Progress value={42} className="h-2" aria-label="Storage usage" />
                 </div>
               </div>
             </Card>

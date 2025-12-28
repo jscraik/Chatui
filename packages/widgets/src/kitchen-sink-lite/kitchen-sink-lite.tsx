@@ -11,8 +11,9 @@
  * Styling uses Apps SDK UI components/tokens with minimal custom CSS for code sizing.
  */
 import React, { useEffect, useMemo, useState } from "react";
-import { Badge, Button, Checkbox, CodeBlock, Input, Textarea } from "@chatui/ui";
+import { Badge, Button, Checkbox, Input, Textarea } from "@chatui/ui";
 
+import { CodeBlock } from "../shared/code-block";
 import { useOpenAiGlobal } from "../shared/use-openai-global";
 import { useWidgetState } from "../shared/use-widget-state";
 import type { DisplayMode, Theme } from "../shared/types";

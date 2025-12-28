@@ -93,6 +93,32 @@ Navigate to "Design System/Design Tokens" in Storybook to see:
 - Border radius tokens
 - Usage examples
 
+### **Tool Output Stories**
+
+Create stories that mirror MCP tool outputs so UI can be verified without running the server.
+Example from `DashboardPage`:
+
+```tsx
+export const WithToolOutput: Story = {
+  args: {
+    headerSlot: <div className="text-secondary text-sm">Tool-driven dashboard</div>,
+    stats: [
+      { label: "Active Projects", value: "12", change: "+2" },
+      { label: "Weekly Runs", value: "438", change: "+18%" },
+      { label: "Open Issues", value: "7", change: "-3" },
+      { label: "Avg Response", value: "1.1s", change: "-6%" },
+    ],
+    recentChats: [
+      { id: "t-1", title: "Release Readiness", model: "GPT-4o", time: "5 min ago" },
+      { id: "t-2", title: "A11y Audit Review", model: "GPT-4", time: "2 hours ago" },
+      { id: "t-3", title: "Partner Onboarding", model: "Claude", time: "Yesterday" },
+    ],
+  },
+};
+```
+
+This keeps stories aligned to your tool schemas and prevents UI drift.
+
 ### **Component Documentation**
 
 Each component story includes:

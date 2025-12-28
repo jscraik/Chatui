@@ -55,6 +55,9 @@ jobs:
       - name: Unit tests
         run: pnpm -C packages/ui test
 
+      - name: MCP tool contract tests
+        run: pnpm test:mcp-contract
+
       - name: Build packages
         run: |
           pnpm -C packages/tokens build
@@ -102,3 +105,57 @@ jobs:
 
       - name: Run Storybook tests (a11y + interactions)
         run: pnpm storybook:test
+
+      - name: Cache UI dist
+        id: ui-dist-cache
+        uses: actions/cache@v4
+        with:
+          path: packages/ui/dist
+          key: ${{ runner.os }}-ui-dist-${{ hashFiles('packages/ui/src/**', 'packages/ui/package.json', 'pnpm-lock.yaml') }}
+
+      - name: Build UI (if cache miss)
+        if: steps.ui-dist-cache.outputs.cache-hit != 'true'
+        run: pnpm -C packages/ui build
+
+      - name: Run widget a11y audit
+        run: pnpm test:a11y:widgets:ci
+        env:
+          A11Y_STRICT: "1"
+
+  visual:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run visual regression (Playwright)
+        run: pnpm test:visual:web

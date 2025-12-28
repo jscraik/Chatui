@@ -114,3 +114,92 @@ export const Muted: Story = {
     </div>
   ),
 };
+
+export const KeyboardShortcuts: Story = {
+  render: () => {
+    const keyboardIcons: IconEntry[] = [
+      ["IconKeyEscape", Icons.IconKeyEscape as IconComponent],
+      ["IconKeyShift", Icons.IconKeyShift as IconComponent],
+      ["IconKeyCommand", Icons.IconKeyCommand as IconComponent],
+      ["IconKeyOption", Icons.IconKeyOption as IconComponent],
+      ["IconKeyControl", Icons.IconKeyControl as IconComponent],
+      ["IconKeyTab", Icons.IconKeyTab as IconComponent],
+      ["IconKeyCapsLock", Icons.IconKeyCapsLock as IconComponent],
+      ["IconKeyReturn", Icons.IconKeyReturn as IconComponent],
+      ["IconKeyDelete", Icons.IconKeyDelete as IconComponent],
+      ["IconKeyBackspace", Icons.IconKeyBackspace as IconComponent],
+      ["IconKeySpace", Icons.IconKeySpace as IconComponent],
+      ["IconKeyFn", Icons.IconKeyFn as IconComponent],
+      ["IconKeyUp", Icons.IconKeyUp as IconComponent],
+      ["IconKeyDown", Icons.IconKeyDown as IconComponent],
+      ["IconKeyLeft", Icons.IconKeyLeft as IconComponent],
+      ["IconKeyRight", Icons.IconKeyRight as IconComponent],
+      ["IconKeyHome", Icons.IconKeyHome as IconComponent],
+      ["IconKeyEnd", Icons.IconKeyEnd as IconComponent],
+      ["IconKeyPageUp", Icons.IconKeyPageUp as IconComponent],
+      ["IconKeyPageDown", Icons.IconKeyPageDown as IconComponent],
+      ["IconKeyArrowUp", Icons.IconKeyArrowUp as IconComponent],
+      ["IconKeyArrowDown", Icons.IconKeyArrowDown as IconComponent],
+      ["IconKeyArrowLeft", Icons.IconKeyArrowLeft as IconComponent],
+      ["IconKeyArrowRight", Icons.IconKeyArrowRight as IconComponent],
+      ["IconKeyBacktick", Icons.IconKeyBacktick as IconComponent],
+      ["IconKeyMinus", Icons.IconKeyMinus as IconComponent],
+      ["IconKeyEquals", Icons.IconKeyEquals as IconComponent],
+      ["IconKeyBracketLeft", Icons.IconKeyBracketLeft as IconComponent],
+      ["IconKeyBracketRight", Icons.IconKeyBracketRight as IconComponent],
+      ["IconKeyBackslash", Icons.IconKeyBackslash as IconComponent],
+      ["IconKeySemicolon", Icons.IconKeySemicolon as IconComponent],
+      ["IconKeyQuote", Icons.IconKeyQuote as IconComponent],
+      ["IconKeyEnter", Icons.IconKeyEnter as IconComponent],
+      ["IconKeyComma", Icons.IconKeyComma as IconComponent],
+      ["IconKeyPeriod", Icons.IconKeyPeriod as IconComponent],
+      ["IconKeySlash", Icons.IconKeySlash as IconComponent],
+      ["IconKeyLeftAlt", Icons.IconKeyLeftAlt as IconComponent],
+      ["IconKeyRightAlt", Icons.IconKeyRightAlt as IconComponent],
+      ["IconKeyLeftMeta", Icons.IconKeyLeftMeta as IconComponent],
+      ["IconKeyRightMeta", Icons.IconKeyRightMeta as IconComponent],
+      ["IconKeyLeftWindows", Icons.IconKeyLeftWindows as IconComponent],
+      ["IconKeyRightWindows", Icons.IconKeyRightWindows as IconComponent],
+      ["IconKeyExclamation", Icons.IconKeyExclamation as IconComponent],
+      ["IconKeyAt", Icons.IconKeyAt as IconComponent],
+      ["IconKeyHash", Icons.IconKeyHash as IconComponent],
+      ["IconKeyDollar", Icons.IconKeyDollar as IconComponent],
+      ["IconKeyPercent", Icons.IconKeyPercent as IconComponent],
+      ["IconKeyCaret", Icons.IconKeyCaret as IconComponent],
+      ["IconKeyAmpersand", Icons.IconKeyAmpersand as IconComponent],
+      ["IconKeyAsterisk", Icons.IconKeyAsterisk as IconComponent],
+      ["IconKeyParenLeft", Icons.IconKeyParenLeft as IconComponent],
+      ["IconKeyParenRight", Icons.IconKeyParenRight as IconComponent],
+      ["IconKeyUnderscore", Icons.IconKeyUnderscore as IconComponent],
+      ["IconKeyPlus", Icons.IconKeyPlus as IconComponent],
+      ["IconKeyBraceLeft", Icons.IconKeyBraceLeft as IconComponent],
+      ["IconKeyBraceRight", Icons.IconKeyBraceRight as IconComponent],
+      ["IconKeyPipe", Icons.IconKeyPipe as IconComponent],
+      ["IconKeyColon", Icons.IconKeyColon as IconComponent],
+      ["IconKeyDoubleQuote", Icons.IconKeyDoubleQuote as IconComponent],
+      ["IconKeyQuestion", Icons.IconKeyQuestion as IconComponent],
+    ];
+
+    return (
+      <div className="w-full max-w-6xl">
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">Keyboard Shortcut Icons</h3>
+          <p className="text-sm text-gray-600">
+            Icons for keyboard keys and modifiers used in shortcut displays
+          </p>
+        </div>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+          {keyboardIcons.map(([name, Icon]) => (
+            <div
+              key={name}
+              className="flex flex-col items-center gap-2 rounded-md border border-gray-200 bg-white p-3"
+            >
+              <Icon className="size-8 text-gray-900" />
+              <span className="text-xs text-gray-600">{name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  },
+};

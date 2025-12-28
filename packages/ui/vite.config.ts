@@ -11,6 +11,7 @@ const entries = {
   chat: resolve(__dirname, "src/app/components/ui/chat/index.ts"),
   layout: resolve(__dirname, "src/app/components/ui/layout/index.ts"),
   templates: resolve(__dirname, "src/templates/index.ts"),
+  experimental: resolve(__dirname, "src/experimental.ts"),
 };
 
 export default defineConfig({

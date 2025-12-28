@@ -1,13 +1,13 @@
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { ChatHeader } from "./components/ChatHeader";
-import { ChatInput } from "./components/ChatInput";
-import { ChatMessages, type ChatMessage } from "./components/ChatMessages";
-import { ChatSidebar, type ChatSidebarUser, type SidebarItem } from "./components/ChatSidebar";
-import { ComposeView } from "./components/ComposeView";
-import type { ModeConfig } from "./components/ui/mode-selector";
-import type { ModelConfig } from "./components/ui/model-selector";
+import { ChatHeader } from "./components/chat/ChatHeader";
+import { ChatInput } from "./components/chat/ChatInput";
+import { ChatMessages, type ChatMessage } from "./components/chat/ChatMessages";
+import { ChatSidebar, type ChatSidebarUser, type SidebarItem } from "./components/chat/ChatSidebar";
+import { ComposeView } from "./components/chat/ComposeView";
+import type { ModeConfig } from "./components/ui/navigation/mode-selector";
+import type { ModelConfig } from "./components/ui/navigation/model-selector";
 import { useControllableState } from "./hooks/useControllableState";
 import { ChatUISlotsProvider, type ChatUISlots } from "./slots";
 
@@ -333,7 +333,7 @@ export function ChatUIRoot({
     }
 
     return (
-      <div className="flex-1 flex flex-col bg-[var(--foundation-bg-dark-1)]">
+      <div className="flex-1 flex flex-col bg-[var(--foundation-bg-light-1)] dark:bg-[var(--foundation-bg-dark-1)]">
         <ChatHeader
           isSidebarOpen={sidebarOpenForHeader}
           onSidebarToggle={toggleSidebar}
@@ -387,7 +387,10 @@ export function ChatUIRoot({
   ]);
 
   return (
-    <div className="size-full flex bg-[var(--foundation-bg-dark-1)] dark overflow-hidden">
+    <div
+      className="size-full flex bg-[var(--foundation-bg-light-1)] dark:bg-[var(--foundation-bg-dark-1)] overflow-hidden"
+      data-testid="chat-ui-root"
+    >
       {sidebarBehavior === "inline" ? (
         <ChatUISlotsProvider value={slotsValue}>
           <ChatSidebar

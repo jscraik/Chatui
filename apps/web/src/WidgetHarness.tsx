@@ -10,6 +10,12 @@ interface Widget {
 
 const WIDGETS: Widget[] = [
   {
+    id: "dashboard-widget",
+    name: "Dashboard Widget",
+    description: "Dashboard overview widget with stats and recent chats",
+    path: "/widgets/dashboard-widget/index.html",
+  },
+  {
     id: "chat-view",
     name: "Chat View",
     description: "Main chat interface - same as standalone app",

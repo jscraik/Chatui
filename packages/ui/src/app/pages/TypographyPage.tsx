@@ -1,4 +1,4 @@
-import { TypographyShowcase } from "../components/TypographyShowcase";
+import { TypographyShowcase } from "../components/showcase/TypographyShowcase";
 
 export function TypographyPage() {
   return <TypographyShowcase />;

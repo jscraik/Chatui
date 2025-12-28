@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 
-import { ChatHeader } from "../app/components/ChatHeader";
-import { ChatSidebar } from "../app/components/ChatSidebar";
-import { ChatMessages } from "../app/components/ChatMessages";
-import { ChatInput } from "../app/components/ChatInput";
-import { ComposeView } from "../app/components/ComposeView";
+import { ChatHeader } from "../app/components/chat/ChatHeader";
+import { ChatInput } from "../app/components/chat/ChatInput";
+import { ChatMessages } from "../app/components/chat/ChatMessages";
+import { ChatSidebar } from "../app/components/chat/ChatSidebar";
+import { ComposeView } from "../app/components/chat/ComposeView";
 
 import { ChatTwoPaneTemplate } from "./ChatTwoPaneTemplate";
 

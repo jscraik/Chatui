@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-import { ChatHeader } from "./components/ChatHeader";
-import { ChatInput } from "./components/ChatInput";
-import { ChatMessages } from "./components/ChatMessages";
-import { ChatSidebar } from "./components/ChatSidebar";
-import { ComposeView } from "./components/ComposeView";
+import { ChatHeader } from "./components/chat/ChatHeader";
+import { ChatInput } from "./components/chat/ChatInput";
+import { ChatMessages } from "./components/chat/ChatMessages";
+import { ChatSidebar } from "./components/chat/ChatSidebar";
+import { ComposeView } from "./components/chat/ComposeView";
 import { DesignSystemPage } from "./pages/DesignSystemPage";
 import { SpacingPage } from "./pages/SpacingPage";
 import { TypographyPage } from "./pages/TypographyPage";

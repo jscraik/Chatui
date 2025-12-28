@@ -1,16 +1,16 @@
-import type { ChatMessage } from "../components/ChatMessages";
-import type { ChatSidebarUser, SidebarItem } from "../components/ChatSidebar";
+import type { ChatMessage } from "../components/chat/ChatMessages";
+import type { ChatSidebarUser, SidebarItem } from "../components/chat/ChatSidebar";
 import {
-  IconBarChart,
-  IconBook,
-  IconChat,
-  IconCompose,
-  IconFolder,
-  IconSearch,
-  IconWriting,
+    IconBarChart,
+    IconBook,
+    IconChat,
+    IconCompose,
+    IconFolder,
+    IconSearch,
+    IconWriting,
 } from "../components/icons/ChatGPTIcons";
-import type { ModeConfig } from "../components/ui/mode-selector";
-import type { ModelConfig } from "../components/ui/model-selector";
+import type { ModeConfig } from "../components/ui/navigation/mode-selector";
+import type { ModelConfig } from "../components/ui/navigation/model-selector";
 
 export const sampleModels: ModelConfig[] = [
   { name: "Auto", shortName: "Auto", description: "Decides how long to think" },

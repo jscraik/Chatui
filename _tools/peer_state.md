@@ -27,10 +27,12 @@
 - [x] Add fullscreen mode support to Pizzaz Shop
 - [x] Add accessibility improvements to shopping-cart widget
 - [x] Add bundle size budgets + vendor chunking
-- [ ] Run automated accessibility audit (axe/lighthouse) on all widgets
+- [x] Run automated accessibility audit (axe/lighthouse) on all widgets
 - [x] Restyle remaining widgets (pizzaz-carousel, pizzaz-gallery, solar-system) to Apps SDK UI tokens
+- [x] Split Three.js vendor chunk and adjust widget build size warning threshold
 - [ ] Add unit tests for remaining components (Select, Tabs, Accordion, etc.)
-- [ ] Add Playwright integration tests for apps/web routing
+- [x] Add Playwright integration tests for apps/web routing
+- [x] Re-run widget a11y audit after fixing regressions
 - [ ] Add visual regression testing (Playwright screenshots or Chromatic)
 
 ### Medium
@@ -98,8 +100,37 @@
 - 2025-12-27: Remaining widget restyle + dashboard tool
   - Restyled pizzaz-carousel, pizzaz-gallery, and solar-system widgets to Apps SDK UI tokens
   - Added `display_dashboard` tool pointing to `ui://widget/dashboard-widget.html`
+  - Dashboard widget now reads tool output for stats/recent chats
   - `pnpm lint` clean
-  - `pnpm -C packages/widgets build` succeeded with chunk size warning (vendor-three > 500kB)
+  - Split Three.js dependencies into dedicated chunks and raised warning limit to 800KB
+  - `pnpm -C packages/widgets build` succeeded without warnings
+
+- 2025-12-27: Dashboard tooling + Storybook demo
+  - Added DashboardPage story with tool-output sample data
+  - Updated golden prompt set with `display_dashboard`
+  - Reworked Three.js chunking via manualChunks (react, motion, three core/react/post)
+  - `pnpm -C packages/widgets build` clean with new chunking
+
+- 2025-12-27: Storybook + widget harness polish
+  - Added Tool Output guidance to `packages/ui/STORYBOOK_GUIDE.md`
+  - Added dashboard widget to `apps/web` widget harness
+  - Exported UI icons from `packages/ui/src/index.ts` to fix `IconGrid3x3` import in `apps/web`
+  - Ran full-repo formatting (`pnpm format`) with no changes
+  - Verified `apps/web` dev server boots (Vite ready at `http://localhost:5173/`)
+
+- 2025-12-27: E2E, a11y, and MCP contract testing
+  - Added Playwright e2e routing tests for `apps/web` with `apps/web/playwright.config.ts`
+  - Added widget a11y audit (axe + Playwright) with CI enforcement (`A11Y_STRICT=1`)
+  - Added MCP tool contracts + golden prompt coverage tests (`apps/mcp/tool-contracts.json`)
+  - Updated MCP server to export `createChatUiServer` and guard direct-run startup
+
+- 2025-12-27: A11y fixes for chat-view, dashboard, kitchen-sink-lite
+  - Added aria labels for icon-only ChatHeader actions and IconButton accessibility
+  - Converted ChatSidebar Popover trigger to a button element for proper ARIA attributes
+  - Added aria labels to DashboardPage progress bars
+  - Replaced kitchen-sink-lite CodeBlock with accessible local version and removed duplicate mock setup
+  - Updated widget a11y test script to build UI first, and re-ran `pnpm test:a11y:widgets` (12 passed)
+  - Ran `pnpm test:mcp-contract` (2/2 passed)
 
 ## Decisions Made
 

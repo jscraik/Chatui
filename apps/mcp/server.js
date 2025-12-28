@@ -980,69 +980,76 @@ function createChatUiServer() {
   return server;
 }
 
-const port = Number(process.env.PORT ?? 8787);
-const MCP_PATH = "/mcp";
+export { createChatUiServer, outputTemplate, versionedUri, WIDGET_VERSION };
 
-const httpServer = createServer(async (req, res) => {
-  if (!req.url) {
-    res.writeHead(400).end("Missing URL");
-    return;
-  }
+const isDirectRun =
+  process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
-  const url = new URL(req.url, `http://${req.headers.host ?? "localhost"}`);
+if (isDirectRun) {
+  const port = Number(process.env.PORT ?? 8787);
+  const MCP_PATH = "/mcp";
 
-  if (req.method === "OPTIONS" && url.pathname === MCP_PATH) {
-    res.writeHead(204, {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-      "Access-Control-Allow-Headers": "content-type, mcp-session-id",
-      "Access-Control-Expose-Headers": "Mcp-Session-Id",
-    });
-    res.end();
-    return;
-  }
-
-  if (req.method === "GET" && url.pathname === "/") {
-    res
-      .writeHead(200, { "content-type": "text/plain" })
-      .end("ChatUI MCP server - Apps SDK compliant");
-    return;
-  }
-
-  const MCP_METHODS = new Set(["POST", "GET", "DELETE"]);
-  if (url.pathname === MCP_PATH && req.method && MCP_METHODS.has(req.method)) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Expose-Headers", "Mcp-Session-Id");
-
-    const server = createChatUiServer();
-    const transport = new StreamableHTTPServerTransport({
-      sessionIdGenerator: undefined,
-      enableJsonResponse: true,
-    });
-
-    res.on("close", () => {
-      transport.close();
-      server.close();
-    });
-
-    try {
-      await server.connect(transport);
-      await transport.handleRequest(req, res);
-    } catch (error) {
-      console.error("Error handling MCP request:", error);
-      if (!res.headersSent) {
-        res.writeHead(500).end("Internal server error");
-      }
+  const httpServer = createServer(async (req, res) => {
+    if (!req.url) {
+      res.writeHead(400).end("Missing URL");
+      return;
     }
 
-    return;
-  }
+    const url = new URL(req.url, `http://${req.headers.host ?? "localhost"}`);
 
-  res.writeHead(404).end("Not Found");
-});
+    if (req.method === "OPTIONS" && url.pathname === MCP_PATH) {
+      res.writeHead(204, {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+        "Access-Control-Allow-Headers": "content-type, mcp-session-id",
+        "Access-Control-Expose-Headers": "Mcp-Session-Id",
+      });
+      res.end();
+      return;
+    }
 
-httpServer.listen(port, () => {
-  console.log(`ChatUI MCP server listening on http://localhost:${port}${MCP_PATH}`);
-  console.log(`Widget source: ${widgetHtmlPath}`);
-  console.log(`Widget bundles: ${widgetsDistPath}`);
-});
+    if (req.method === "GET" && url.pathname === "/") {
+      res
+        .writeHead(200, { "content-type": "text/plain" })
+        .end("ChatUI MCP server - Apps SDK compliant");
+      return;
+    }
+
+    const MCP_METHODS = new Set(["POST", "GET", "DELETE"]);
+    if (url.pathname === MCP_PATH && req.method && MCP_METHODS.has(req.method)) {
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader("Access-Control-Expose-Headers", "Mcp-Session-Id");
+
+      const server = createChatUiServer();
+      const transport = new StreamableHTTPServerTransport({
+        sessionIdGenerator: undefined,
+        enableJsonResponse: true,
+      });
+
+      res.on("close", () => {
+        transport.close();
+        server.close();
+      });
+
+      try {
+        await server.connect(transport);
+        await transport.handleRequest(req, res);
+      } catch (error) {
+        console.error("Error handling MCP request:", error);
+        if (!res.headersSent) {
+          res.writeHead(500).end("Internal server error");
+        }
+      }
+
+      return;
+    }
+
+    res.writeHead(404).end("Not Found");
+  });
+
+  httpServer.listen(port, () => {
+    console.log(`ChatUI MCP server listening on http://localhost:${port}${MCP_PATH}`);
+    console.log(`Widget source: ${widgetHtmlPath}`);
+    console.log(`Widget bundles: ${widgetsDistPath}`);
+  });
+}

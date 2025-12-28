@@ -1,58 +1,79 @@
-export * from "./accordion";
-export * from "./alert";
-export * from "./alert-dialog";
-export * from "./aspect-ratio";
-export * from "./avatar";
-export * from "./badge";
-export * from "./breadcrumb";
-export * from "./button";
-export * from "./calendar";
-export * from "./card";
-export * from "./carousel";
-export * from "./chart";
-export * from "./checkbox";
-export * from "./collapsible";
-export * from "./collapsible-section";
-export * from "./command";
-export * from "./context-menu";
-export * from "./context-tag";
-export * from "./dialog";
-export * from "./drawer";
-export * from "./dropdown-menu";
-export * from "./form";
-export * from "./hover-card";
-export * from "./icon-button";
-export * from "./input";
-export * from "./input-otp";
-export * from "./label";
-export * from "./list-item";
-export * from "./menubar";
-export * from "./message-actions";
-export * from "./mode-selector";
-export * from "./model-badge";
-export * from "./model-selector";
-export * from "./navigation-menu";
-export * from "./pagination";
-export * from "./popover";
-export * from "./progress";
-export * from "./radio-group";
-export * from "./range-slider";
-export * from "./resizable";
-export * from "./scroll-area";
-export * from "./section-header";
-export * from "./segmented-control";
-export * from "./select";
-export * from "./separator";
-export * from "./sheet";
-export * from "./sidebar";
-export * from "./skeleton";
-export * from "./slider";
-export * from "./sonner";
-export * from "./switch";
-export * from "./table";
-export * from "./tabs";
-export * from "./textarea";
-export * from "./toggle";
-export * from "./toggle-group";
-export * from "./tooltip";
-export * from "./view-mode-toggle";
+// ============================================================================
+// UI Components Index
+// ============================================================================
+// Components are organized by category for better maintainability.
+// All exports are re-exported here for backward compatibility.
+// ============================================================================
+
+// Base Components - Fundamental UI primitives
+export * from "./base/accordion";
+export * from "./base/alert";
+export * from "./base/aspect-ratio";
+export * from "./base/avatar";
+export * from "./base/badge";
+export * from "./base/button";
+export * from "./base/calendar";
+export * from "./base/checkbox";
+export * from "./base/collapsible";
+export * from "./base/collapsible-section";
+export * from "./base/icon-button";
+export * from "./base/input";
+export * from "./base/input-otp";
+export * from "./base/label";
+export * from "./base/list-item";
+export * from "./base/radio-group";
+export * from "./base/resizable";
+export * from "./base/scroll-area";
+export * from "./base/section-header";
+export * from "./base/select";
+export * from "./base/separator";
+export * from "./base/skeleton";
+export * from "./base/slider";
+export * from "./base/switch";
+export * from "./base/textarea";
+export * from "./base/toggle";
+export * from "./base/toggle-group";
+export * from "./base/use-mobile";
+
+// Data Display - Components for visualizing data
+export * from "./data-display/card";
+export * from "./data-display/chart";
+export * from "./data-display/progress";
+
+// Feedback - User feedback and notification components
+export * from "./feedback/alert-dialog";
+export * from "./feedback/dialog";
+export * from "./feedback/sonner";
+
+// Forms - Form-specific components
+export * from "./layout"; // Re-export form components via layout
+
+// Navigation - Navigation and menu components
+export * from "./navigation/breadcrumb";
+export * from "./navigation/carousel";
+export * from "./navigation/menubar";
+export * from "./navigation/mode-selector";
+export * from "./navigation/model-badge";
+export * from "./navigation/model-selector";
+export * from "./navigation/navigation-menu";
+export * from "./navigation/pagination";
+export * from "./navigation/sidebar";
+export * from "./navigation/tabs";
+export * from "./navigation/view-mode-toggle";
+
+// Overlays - Popover, tooltip, and overlay components
+export * from "./overlays/command";
+export * from "./overlays/context-menu";
+export * from "./overlays/context-tag";
+export * from "./overlays/dropdown-menu";
+export * from "./overlays/drawer";
+export * from "./overlays/hover-card";
+export * from "./overlays/popover";
+export * from "./overlays/sheet";
+export * from "./overlays/tooltip";
+
+// Chat - Chat-specific components
+export * from "./chat/message-actions";
+
+// Utilities
+export * from "./utils";

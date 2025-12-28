@@ -1,21 +1,12 @@
 import { HostProvider, createEmbeddedHost, ensureMockOpenAI } from "@chatui/runtime";
 import { AppsSDKUIProvider } from "@chatui/ui";
 import { Button } from "@openai/apps-sdk-ui/components/Button";
-import { CodeBlock } from "@openai/apps-sdk-ui/components/CodeBlock";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { CodeBlock } from "../shared/code-block";
 import "../styles.css";
 
 // Mock for standalone development
-if (import.meta.env.DEV) {
-  ensureMockOpenAI({
-    toolOutput: {
-      message: "Kitchen Sink Lite - API coverage widget",
-      data: { items: ["Tool calls", "State management", "Resize handling"] },
-    },
-  });
-}
-
 // Mock for standalone development
 if (import.meta.env.DEV) {
   ensureMockOpenAI({

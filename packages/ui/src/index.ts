@@ -8,11 +8,11 @@ export * from "./app/hooks/useControllableState";
 export * from "./app/slots";
 
 // Main Chat Components
-export * from "./app/components/ChatHeader";
-export * from "./app/components/ChatInput";
-export * from "./app/components/ChatMessages";
-export * from "./app/components/ChatSidebar";
-export * from "./app/components/ComposeView";
+export * from "./app/components/chat/ChatHeader";
+export * from "./app/components/chat/ChatInput";
+export * from "./app/components/chat/ChatMessages";
+export * from "./app/components/chat/ChatSidebar";
+export * from "./app/components/chat/ComposeView";
 
 // UI Components (prioritized over vendor)
 export * from "./app/components/ui";
@@ -39,10 +39,10 @@ export {
 
 // Icons (ChatGPT icons take precedence, avoid conflicts)
 export * from "./app/components/icons/ChatGPTIcons";
+export { IconGrid3x3 } from "./icons";
 
 // Utils
 export * from "./app/components/ui/utils";
 export * from "./app/utils/theme";
 
-// Templates
-export * from "./templates";
+// Templates (use @chatui/ui/experimental or @chatui/ui/templates)

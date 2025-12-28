@@ -43,6 +43,13 @@ export default [
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
       "import/order": ["warn", { "newlines-between": "always" }],
+      "jsx-a11y/control-has-associated-label": [
+        "error",
+        {
+          labelAttributes: ["aria-label", "aria-labelledby", "title"],
+          controlComponents: ["IconButton", "Button"],
+        },
+      ],
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": [
         "warn",

@@ -50,7 +50,17 @@ The web app includes a flexible page system with URL-based routing:
 
 ### Adding New Pages
 
-See [PAGES_QUICK_START.md](./PAGES_QUICK_START.md) for a 5-minute guide, or check `.kiro/steering/page-development.md` for comprehensive patterns.
+See [PAGES_QUICK_START.md](./docs/guides/PAGES_QUICK_START.md) for a 5-minute guide, or check `.kiro/steering/page-development.md` for comprehensive patterns.
+
+## 📚 Documentation
+
+Comprehensive documentation is organized in the [`docs/`](./docs) directory:
+
+- **[Architecture](./docs/architecture)** - System design and technical architecture
+- **[Audits](./docs/audits)** - Design system compliance and color audits
+- **[Guides](./docs/guides)** - How-to guides and quick starts
+
+See [docs/README.md](./docs/README.md) for the complete documentation index.
 
 ## Rules of the road
 
@@ -119,12 +129,22 @@ const host = createStandaloneHost("http://localhost:8787");
 
 For embedded ChatGPT apps, use `createEmbeddedHost()` which wraps `window.openai`.
 
+Runtime details and widgetSessionId guidance live in `packages/runtime/README.md`.
+
 ## Library exports
 
 The UI package re-exports chat components and UI primitives from a single entry point.
 
 ```ts
 import { Button, ChatHeader, ChatSidebar } from "@chatui/ui";
+```
+
+For production code, prefer subpath exports for better tree-shaking:
+
+```ts
+import { Button } from "@chatui/ui/forms";
+import { ChatSidebar } from "@chatui/ui/chat";
+import { SectionHeader } from "@chatui/ui/layout";
 ```
 
 ### Dev/demo exports
@@ -135,6 +155,14 @@ Demo pages and sandbox utilities are exposed from a separate entry to keep the p
 import { ChatUIApp, DesignSystemPage } from "@chatui/ui/dev";
 ```
 
+### Experimental exports
+
+Experimental or fast-evolving APIs are exposed separately:
+
+```ts
+import { ChatFullWidthTemplate } from "@chatui/ui/experimental";
+```
+
 ## Public API surface
 
 | Category           | Exports (examples)                                                        |
@@ -142,9 +170,15 @@ import { ChatUIApp, DesignSystemPage } from "@chatui/ui/dev";
 | Chat UI components | ChatUIRoot, ChatHeader, ChatSidebar, ChatMessages, ChatInput, ComposeView |
 | UI primitives      | Button, Dialog, Tabs, Tooltip, and more                                   |
 | Icons              | Icons adapter, ChatGPTIcons                                               |
-| Pages              | DesignSystemPage, TypographyPage, SpacingPage                             |
-| Templates          | ChatFullWidthTemplate, ChatTwoPaneTemplate, DashboardTemplate             |
+| Pages              | DesignSystemPage, TypographyPage, SpacingPage (via `@chatui/ui/dev`)       |
+| Templates          | ChatFullWidthTemplate, ChatTwoPaneTemplate, DashboardTemplate (experimental) |
 | Utilities          | useControllableState                                                      |
+
+## Public API policy
+
+- **Stable**: `@chatui/ui` root exports and the `@chatui/ui/forms`, `@chatui/ui/chat`, `@chatui/ui/layout` subpaths.
+- **Experimental**: `@chatui/ui/experimental` and `@chatui/ui/templates` (subject to breaking changes).
+- **Dev-only**: `@chatui/ui/dev` is for Storybook, docs, and local harnesses — not production.
 
 ## Storybook navigation
 
@@ -160,6 +194,13 @@ import { ChatUIApp, DesignSystemPage } from "@chatui/ui/dev";
 
 - Node.js 18+
 - pnpm
+
+## Compatibility matrix
+
+- **React**: 19.x (required by `@chatui/ui` via Apps SDK UI)
+- **TypeScript**: 5.9+
+- **Node.js**: 18+
+- **Apps SDK UI**: ^0.2.1
 
 ## Commands
 
@@ -197,6 +238,16 @@ Build a single-file widget HTML (for the MCP harness):
 
 ```bash
 pnpm build:widget
+```
+
+## Release & versioning
+
+This repo uses Changesets for versioning and release automation:
+
+```bash
+pnpm changeset
+pnpm version-packages
+pnpm release
 ```
 
 Run the MCP harness (optional):
