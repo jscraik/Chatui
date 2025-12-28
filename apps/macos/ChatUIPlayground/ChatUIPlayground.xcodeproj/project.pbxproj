@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		74BCA44E2F01041E000BB6E0 /* ChatUISwift in Frameworks */ = {isa = PBXBuildFile; productRef = 74BCA44D2F01041E000BB6E0 /* ChatUISwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		74BCA4192F00FBF9000BB6E0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74BCA44E2F01041E000BB6E0 /* ChatUISwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = ChatUIPlayground;
 			packageProductDependencies = (
+				74BCA44D2F01041E000BB6E0 /* ChatUISwift */,
 			);
 			productName = ChatUIPlayground;
 			productReference = 74BCA4092F00FBF6000BB6E0 /* ChatUIPlayground.app */;
@@ -196,7 +202,7 @@
 			mainGroup = 74BCA4002F00FBF6000BB6E0;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				74BCA4352F00FFB4000BB6E0 /* XCLocalSwiftPackageReference "../../../packages/ui-swift" */,
+				74BCA44C2F01041E000BB6E0 /* XCLocalSwiftPackageReference "../../../packages/ui-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 74BCA40A2F00FBF6000BB6E0 /* Products */;
@@ -580,11 +586,18 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		74BCA4352F00FFB4000BB6E0 /* XCLocalSwiftPackageReference "../../../packages/ui-swift" */ = {
+		74BCA44C2F01041E000BB6E0 /* XCLocalSwiftPackageReference "../../../packages/ui-swift" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../../packages/ui-swift";
 		};
 /* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		74BCA44D2F01041E000BB6E0 /* ChatUISwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ChatUISwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 74BCA4012F00FBF6000BB6E0 /* Project object */;
 }
