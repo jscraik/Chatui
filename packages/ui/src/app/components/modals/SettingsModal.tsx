@@ -415,6 +415,8 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                         </span>
                         <button
                           onClick={() => setKeyboardShortcut("")}
+                          aria-label="Clear keyboard shortcut"
+                          title="Clear keyboard shortcut"
                           className="p-1 hover:bg-[var(--foundation-bg-dark-3)] rounded-full transition-colors"
                         >
                           <IconX className="size-3 text-[var(--foundation-icon-dark-secondary)]" />
@@ -457,7 +459,11 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                         <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-[var(--foundation-text-dark-secondary)]">
                           {togglePairing}
                         </span>
-                        <button className="p-1 hover:bg-[var(--foundation-bg-dark-3)] rounded-full transition-colors">
+                        <button
+                          aria-label="Clear pairing"
+                          title="Clear pairing"
+                          className="p-1 hover:bg-[var(--foundation-bg-dark-3)] rounded-full transition-colors"
+                        >
                           <IconX className="size-3 text-[var(--foundation-icon-dark-secondary)]" />
                         </button>
                       </div>

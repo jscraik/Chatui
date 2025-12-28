@@ -59,8 +59,16 @@
   "pnpm": {
     "peerDependencyRules": {
       "allowedVersions": {
-        "storybook": "^10.1.10"
+        "storybook": "^10.1.10",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0"
       }
+    },
+    "overrides": {
+      "react": "19.0.0",
+      "react-dom": "19.0.0",
+      "@types/react": "19.2.7",
+      "@types/react-dom": "19.2.3"
     }
   }
 }

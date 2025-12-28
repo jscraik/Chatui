@@ -13,8 +13,17 @@ function DrawerTrigger({ ...props }: React.ComponentProps<typeof DrawerPrimitive
   return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />;
 }
 
-function DrawerPortal({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Portal>) {
-  return <DrawerPrimitive.Portal data-slot="drawer-portal" {...props} />;
+type DrawerPortalProps = React.PropsWithChildren<React.ComponentProps<typeof DrawerPrimitive.Portal>>;
+const DrawerPortalBase = DrawerPrimitive.Portal as unknown as React.ComponentType<
+  React.PropsWithChildren<Record<string, unknown>>
+>;
+
+function DrawerPortal({ children, ...props }: DrawerPortalProps) {
+  return (
+    <DrawerPortalBase data-slot="drawer-portal" {...props}>
+      {children}
+    </DrawerPortalBase>
+  );
 }
 
 function DrawerClose({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Close>) {

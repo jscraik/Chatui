@@ -34,6 +34,7 @@
 - [x] Add Playwright integration tests for apps/web routing
 - [x] Re-run widget a11y audit after fixing regressions
 - [ ] Add visual regression testing (Playwright screenshots or Chromatic)
+- [x] Add Storybook stories for all settings components
 
 ### Medium
 
@@ -57,6 +58,15 @@
 | Test utils          | `packages/ui/src/test/utils.tsx` | Testing Library helpers                  |
 
 ## Session Notes
+
+- 2025-12-28: Settings components Storybook stories
+  - Created 12 comprehensive Storybook stories for all settings components
+  - Stories include: SettingRow, SettingToggle, SettingDropdown (base components)
+  - Panel stories: PersonalizationPanel, SecurityPanel, AudioSettingsPanel, AppsPanel, ArchivedChatsPanel, CheckForUpdatesPanel, DataControlsPanel, NotificationsPanel, ManageAppsPanel
+  - All stories follow established patterns with proper Meta/StoryObj types
+  - Include interactive examples, multiple variants, and proper documentation
+  - All stories pass TypeScript diagnostics with no errors
+  - Stories use proper dark theme backgrounds and fullscreen layouts for panels
 
 - 2025-12-27: Iconography expansion
   - Added 30+ arrow/navigation icons to ChatGPTIcons.tsx from design reference SVG

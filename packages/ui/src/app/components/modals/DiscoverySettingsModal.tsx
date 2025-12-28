@@ -95,6 +95,8 @@ export function DiscoverySettingsModal({
             </button>
             <button
               onClick={onClose}
+              aria-label="Close discovery settings"
+              title="Close discovery settings"
               className="p-1 hover:bg-white/10 rounded-lg transition-colors"
             >
               <IconX className="size-4 text-white/60" />

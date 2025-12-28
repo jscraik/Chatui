@@ -87,6 +87,8 @@ export function ContextTag({
       {onClose && (
         <button
           onClick={onClose}
+          aria-label={`Remove ${label}`}
+          title={`Remove ${label}`}
           className={cn("rounded-full p-0.5 transition-colors", styles.hover)}
         >
           <IconX className="size-3" />

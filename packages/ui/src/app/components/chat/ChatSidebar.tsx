@@ -406,6 +406,8 @@ export function ChatSidebar({
                             e.stopPropagation();
                             setShowIconPicker(true);
                           }}
+                          aria-label="Choose project icon"
+                          title="Choose project icon"
                           className={`absolute left-3 top-1/2 -translate-y-1/2 hover:opacity-70 transition-opacity ${newProjectColor}`}
                         >
                           {getProjectIcon(newProjectIcon)}
