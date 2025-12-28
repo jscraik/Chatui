@@ -2,6 +2,28 @@
 
 ## Current Focus
 
+- **COMPLETED: Cloudflare Workers Integration (Phase 3)**
+  - Production-ready deployment template for ChatUI widgets
+  - Auto-discovery and asset copying from widgets package
+  - MCP server with proper TypeScript types and error handling
+  - Environment-aware configuration and CSP headers
+  - Comprehensive deployment guide and documentation
+  - **NEW: Fixed TypeScript errors in Cloudflare Worker implementation**
+  - **NEW: Updated ChatGPT integration guide to follow OpenAI's official documentation**
+  - **NEW: Added proper MCP protocol implementation with resource/tool handling**
+  - **NEW: Enhanced error handling and CORS support for production deployment**
+- **COMPLETED: Enhanced Widget Infrastructure (Phase 2)**
+  - Advanced OpenAI integration hooks (useWidgetState, useTheme, useDeviceCapabilities, etc.)
+  - Enhanced scrollbar styling with cross-browser support
+  - Development middleware for clean URLs and hot reloading
+  - Environment configuration system with validation
+  - Enhanced error boundaries with refresh functionality
+  - Comprehensive example widget demonstrating all new patterns
+- **COMPLETED: Enhanced Widget Infrastructure (Phase 1)**
+  - Auto-discovery widget manifest system with content hashing
+  - Standardized widget registry for tool creation
+  - Widget base components with error boundaries
+  - Enhanced MCP server with auto-generated manifests
 - Apps SDK compliance audit completed (~95% compliance)
 - Release workflow and Changesets wiring in place
 - React 19 compatibility enforced across the UI library
@@ -9,6 +31,7 @@
 - Iconography system expanded with full arrow icon set
 - Widgets restyled to Apps SDK UI tokens (auth-demo, shopping-cart, pizzaz-shop, search-results, pizzaz-table, pizzaz-markdown)
 - Full-repo formatting run (`pnpm format`)
+- Phase 1 SwiftUI: accessibility labels/submit intent + preview coverage improvements
 
 ## Todo List
 
@@ -47,15 +70,19 @@
 
 ## Resources
 
-| Asset               | Path                             | Purpose                                  |
-| ------------------- | -------------------------------- | ---------------------------------------- |
-| Repo overview       | `README.md`                      | Monorepo purpose, packages, dev commands |
-| Compliance audit    | `APPS_SDK_COMPLIANCE_AUDIT.md`   | Current Apps SDK checklist               |
-| Gap analysis        | `APPS_SDK_GAP_ANALYSIS.md`       | Detailed gap analysis vs Apps SDK docs   |
-| Widget architecture | `WIDGET_ARCHITECTURE.md`         | Widget pipeline summary                  |
-| Compliance script   | `scripts/compliance.mjs`         | Hex/radix/lucide/MUI policy checks       |
-| Test setup          | `packages/ui/src/test/setup.ts`  | Vitest test configuration                |
-| Test utils          | `packages/ui/src/test/utils.tsx` | Testing Library helpers                  |
+| Asset               | Path                                      | Purpose                                  |
+| ------------------- | ----------------------------------------- | ---------------------------------------- |
+| Repo overview       | `README.md`                               | Monorepo purpose, packages, dev commands |
+| Compliance audit    | `APPS_SDK_COMPLIANCE_AUDIT.md`            | Current Apps SDK checklist               |
+| Gap analysis        | `APPS_SDK_GAP_ANALYSIS.md`                | Detailed gap analysis vs Apps SDK docs   |
+| Widget architecture | `WIDGET_ARCHITECTURE.md`                  | Widget pipeline summary                  |
+| Compliance script   | `scripts/compliance.mjs`                  | Hex/radix/lucide/MUI policy checks       |
+| Test setup          | `packages/ui/src/test/setup.ts`           | Vitest test configuration                |
+| Test utils          | `packages/ui/src/test/utils.tsx`          | Testing Library helpers                  |
+| Widget manifest     | `packages/widgets/src/plugins/widget-manifest.ts` | Auto-discovery & content hashing plugin |
+| Widget registry     | `packages/widgets/src/shared/widget-registry.ts`  | Standardized tool creation helpers       |
+| Widget base         | `packages/widgets/src/shared/widget-base.tsx`     | Consistent widget components & mounting  |
+| Enhanced MCP        | `apps/mcp/enhanced-server.js`             | Auto-discovery MCP server implementation |
 
 ## Session Notes
 
@@ -100,6 +127,17 @@
   - Include interactive examples, multiple variants, and proper documentation
   - All stories pass TypeScript diagnostics with no errors
   - Stories use proper dark theme backgrounds and fullscreen layouts for panels
+
+- 2025-12-28: Phase 1 SwiftUI accessibility pass
+  - Added optional accessibilityLabel/accessibilityHint params to ChatUIButton/ChatUIInput
+  - Added submitLabel support for ChatUIInput with resolver tests
+  - Expanded playground galleries + previews for accessibility/dynamic type/high contrast
+  - Updated Swift integration docs + README with new usage examples
+
+- 2025-12-28: Phase 1 SwiftUI mapping + render tests
+  - Added style mapping helpers for button/input/card (color tokens, spacing, typography)
+  - Added render smoke tests via NSHostingView for core components
+  - Added dynamic type scaling + high contrast token handling in core components
 
 - 2025-12-27: Iconography expansion
   - Added 30+ arrow/navigation icons to ChatGPTIcons.tsx from design reference SVG
@@ -194,3 +232,35 @@
 
 - Wants deeper review across all areas and guidance aligned to industry best practice/standards as of Dec 2025
 - Production-scale testing: unit tests, a11y enforcement, visual regression, bundle budgets
+
+- 2025-12-28: Enhanced Widget Infrastructure Implementation
+  - **Phase 1 Complete**: Auto-discovery widget system inspired by Toolbase-AI template
+  - Created `widget-manifest.ts` Vite plugin for automatic widget discovery and content hashing
+  - Built `widget-registry.ts` for standardized tool creation with auto-generated URIs
+  - Added `widget-base.tsx` with consistent styling, error boundaries, and mounting helpers
+  - Generated `enhanced-server.js` MCP implementation using new registry patterns
+  - Successfully built 13 widgets with auto-generated content hashes (e.g., `auth-demo.df302ead`)
+  - Added `example-widget` demonstrating new patterns with WidgetBase, createWidget HOC
+  - All widgets now have automatic cache busting via content-based hashing
+  - Zero-config widget discovery eliminates manual registration in Vite config
+  - Enhanced error handling with WidgetErrorBoundary for production resilience
+  - Environment-aware resource metadata for CSP and domain configuration
+- 2025-12-28: Enhanced Widget Infrastructure Phase 2 Complete
+  - **Advanced OpenAI Integration**: Created comprehensive hook system (`openai-hooks.ts`) with reactive state management, theme detection, device capabilities, display mode control, and tool calling
+  - **Enhanced UX**: Added cross-browser scrollbar styling with theme awareness and hover states
+  - **Development Experience**: Implemented development middleware for clean URLs (`/widget-name` redirects)
+  - **Environment System**: Built type-safe environment configuration with validation and CSP helpers
+  - **Error Handling**: Enhanced error boundaries with refresh functionality and better reporting
+  - **Comprehensive Example**: Created `enhanced-example-widget` demonstrating all new patterns including persistent state, responsive design, and OpenAI API integration
+  - **Build Success**: 14 widgets now auto-discovered and built with content hashing
+  - **Backward Compatibility**: All enhancements are opt-in, existing widgets unchanged
+  - **Production Ready**: Enhanced system provides robust foundation for scaling widget ecosystem
+- 2025-12-28: Enhanced Cloudflare Workers Implementation with OpenAI Official Patterns
+  - **OpenAI Documentation Integration**: Enhanced MCP server implementation following OpenAI's official MCP server and ChatGPT UI documentation
+  - **Advanced Tool Patterns**: Implemented comprehensive tool examples with proper metadata, input schemas, and structured content
+  - **Widget Accessibility**: Added proper `openai/widgetAccessible` and `openai/visibility` configurations for different tool types
+  - **File Handling**: Added file processing tool example with `openai/fileParams` for image upload and processing
+  - **Enhanced Metadata**: Proper CSP configuration, widget domains, and resource metadata following OpenAI specifications
+  - **Tool Categories**: Public tools (dashboard, data table), widget-accessible tools (enhanced example, shopping cart), and private tools (refresh, cart operations)
+  - **Rich Structured Content**: Enhanced structured content with proper typing and comprehensive data for model reasoning
+  - **Production Ready**: Clean TypeScript implementation with proper error handling and CORS support

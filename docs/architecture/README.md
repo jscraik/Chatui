@@ -4,27 +4,15 @@ Technical architecture and design decisions for the ChatUI system.
 
 ## Documents
 
-### [WIDGET_ARCHITECTURE.md](./WIDGET_ARCHITECTURE.md)
+### Core Architecture
 
-Widget system architecture, including how widgets are built, bundled, and integrated with ChatGPT.
+- **[WIDGET_ARCHITECTURE.md](./WIDGET_ARCHITECTURE.md)** - Widget system architecture, build system, and ChatGPT integration patterns
+- **[CROSS_PLATFORM.md](./CROSS_PLATFORM.md)** - Cross-platform architecture and design decisions
+- **[WIDGET_SYSTEM_ENHANCEMENTS.md](./WIDGET_SYSTEM_ENHANCEMENTS.md)** - Enhanced widget infrastructure implementation details
 
-**Topics:**
+### Analysis & Planning
 
-- Widget build system
-- Standalone HTML generation
-- ChatGPT integration patterns
-- MCP server architecture
-
-### [APPS_SDK_GAP_ANALYSIS.md](./APPS_SDK_GAP_ANALYSIS.md)
-
-Analysis of gaps between Apps SDK UI and ChatGPT design system requirements.
-
-**Topics:**
-
-- Missing components
-- Design token differences
-- Implementation recommendations
-- Migration strategies
+- **[APPS_SDK_GAP_ANALYSIS.md](./APPS_SDK_GAP_ANALYSIS.md)** - Analysis of gaps between Apps SDK UI and ChatGPT design system requirements
 
 ## Related Documentation
 

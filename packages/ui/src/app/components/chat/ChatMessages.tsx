@@ -38,7 +38,13 @@ export function ChatMessages({ emptyState, messages }: ChatMessagesProps) {
                   </div>
                   <MessageActions
                     messageId={message.id}
-                    onCopy={() => navigator.clipboard.writeText(message.content)}
+                    onCopy={async () => {
+                      try {
+                        await navigator.clipboard.writeText(message.content);
+                      } catch {
+                        // Silently fail on clipboard errors
+                      }
+                    }}
                     onThumbsUp={() => console.log("Thumbs up:", message.id)}
                     onThumbsDown={() => console.log("Thumbs down:", message.id)}
                     onShare={() => console.log("Share:", message.id)}
@@ -58,7 +64,13 @@ export function ChatMessages({ emptyState, messages }: ChatMessagesProps) {
                   </div>
                   <MessageActions
                     messageId={message.id}
-                    onCopy={() => navigator.clipboard.writeText(message.content)}
+                    onCopy={async () => {
+                      try {
+                        await navigator.clipboard.writeText(message.content);
+                      } catch {
+                        // Silently fail on clipboard errors
+                      }
+                    }}
                     actions={["copy"]}
                   />
                 </div>

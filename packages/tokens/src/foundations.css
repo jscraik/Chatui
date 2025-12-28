@@ -114,6 +114,25 @@
   --foundation-high-contrast-text: #ffffff;
   --foundation-high-contrast-bg: #000000;
   --foundation-high-contrast-border: #ffffff;
+
+  /* Tailwind preset aliases (hyphenated for class names) */
+  --foundation-heading-1-size: var(--foundation-heading1-size);
+  --foundation-heading-1-line: var(--foundation-heading1-line);
+  --foundation-heading-1-tracking: var(--foundation-heading1-tracking);
+  --foundation-heading-1-weight: var(--foundation-heading1-weight);
+
+  --foundation-heading-2-size: var(--foundation-heading2-size);
+  --foundation-heading-2-line: var(--foundation-heading2-line);
+  --foundation-heading-2-tracking: var(--foundation-heading2-tracking);
+  --foundation-heading-2-weight: var(--foundation-heading2-weight);
+
+  --foundation-heading-3-size: var(--foundation-heading3-size);
+  --foundation-heading-3-line: var(--foundation-heading3-line);
+  --foundation-heading-3-tracking: var(--foundation-heading3-tracking);
+  --foundation-heading-3-weight: var(--foundation-heading3-weight);
+
+  --foundation-body-weight-regular: var(--foundation-body-weight);
+  --foundation-body-small-weight-regular: var(--foundation-body-small-weight);
 }
 
 /* High contrast mode support */

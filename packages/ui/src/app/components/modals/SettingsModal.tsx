@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   IconArchive,
@@ -61,6 +61,14 @@ import {
 interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
+  account?: {
+    email?: string;
+    phone?: string;
+    subscriptionLabel?: string;
+  };
+  appInfo?: {
+    versionLabel?: string;
+  };
 }
 
 type SettingsView =
@@ -86,7 +94,7 @@ const accentColors = [
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="mb-5">
-      <h3 className="text-[14px] font-semibold leading-[20px] tracking-[-0.3px] text-foundation-text-dark-primary mb-2">
+      <h3 className="text-[14px] font-semibold leading-[20px] tracking-[-0.3px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary mb-2">
         {title}
       </h3>
       {children}
@@ -94,7 +102,29 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
+export function SettingsModal({ isOpen, onClose, account, appInfo }: SettingsModalProps) {
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const lastActiveRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    lastActiveRef.current = document.activeElement as HTMLElement | null;
+    const t = window.setTimeout(() => dialogRef.current?.focus(), 0);
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener("keydown", onKeyDown);
+      lastActiveRef.current?.focus?.();
+      lastActiveRef.current = null;
+    };
+  }, [isOpen, onClose]);
+
   // Navigation state
   const [currentView, setCurrentView] = useState<SettingsView>("main");
 
@@ -112,7 +142,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   const [enableWorkWithApps, setEnableWorkWithApps] = useState(true);
   const [togglePairing] = useState("⌘⌥1");
   const [linearApps] = useState("Never");
-  const [autoFairWithApps, setAutoFairWithApps] = useState(true);
+  const [autoPairWithApps, setAutoPairWithApps] = useState(true);
   const [generateSuggestedEdits, setGenerateSuggestedEdits] = useState(false);
   const [autoApplySuggestedEdits, setAutoApplySuggestedEdits] = useState(false);
 
@@ -157,26 +187,35 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
     <div
       className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[200]"
       onClick={onClose}
+      role="presentation"
     >
       <div
-        className="bg-foundation-bg-dark-1 rounded-[16px] w-[560px] max-h-[85vh] overflow-hidden shadow-2xl border border-foundation-text-dark-primary/10"
+        ref={dialogRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="settings-modal-title"
+        className="bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 rounded-[16px] w-[560px] max-h-[85vh] overflow-hidden shadow-2xl border border-foundation-text-light-primary/10 dark:border-foundation-text-dark-primary/10 outline-none"
         onClick={(e) => e.stopPropagation()}
       >
         {currentView !== "main" ? (
           renderPanel()
         ) : (
           <>
-            <div className="px-6 py-4 border-b border-foundation-text-dark-primary/10 flex items-center gap-3">
+            <div className="px-6 py-4 border-b border-foundation-text-light-primary/10 dark:border-foundation-text-dark-primary/10 flex items-center gap-3">
               <div className="flex gap-2">
                 <button
                   onClick={onClose}
-                  className="size-3 rounded-full bg-foundation-accent-red hover:bg-foundation-accent-red/80 transition-colors"
+                  className="size-3 rounded-full bg-foundation-accent-red hover:bg-foundation-accent-red/80 transition-colors focus-visible:ring-2 focus-visible:ring-black/20 dark:focus-visible:ring-white/20"
                   aria-label="Close"
                 />
                 <div className="size-3 rounded-full bg-foundation-accent-orange" />
                 <div className="size-3 rounded-full bg-foundation-accent-green" />
               </div>
-              <h2 className="text-[18px] font-semibold leading-[26px] tracking-[-0.45px] text-foundation-text-dark-primary">
+              <h2
+                id="settings-modal-title"
+                className="text-[18px] font-semibold leading-[26px] tracking-[-0.45px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary"
+              >
                 Settings
               </h2>
             </div>
@@ -185,85 +224,85 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <Section title="Account">
                 <div className="space-y-0.5">
                   <SettingRow
-                    icon={<IconEmail className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconEmail className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Email"
                     right={
-                      <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-secondary">
-                        fndveteran@gmail.com
+                      <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+                        {account?.email ?? "—"}
                       </span>
                     }
                   />
                   <SettingRow
-                    icon={<IconPhone className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconPhone className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Phone number"
                     right={
-                      <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-secondary">
-                        +447472683324
+                      <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+                        {account?.phone ?? "—"}
                       </span>
                     }
                   />
                   <SettingRow
-                    icon={<IconCreditCard className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconCreditCard className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Subscription"
                     right={
-                      <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-secondary">
-                        ChatGPT Pro
+                      <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+                        {account?.subscriptionLabel ?? "—"}
                       </span>
                     }
                   />
                   <SettingRow
-                    icon={<IconSuitcase className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconSuitcase className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Orders"
                     right={
-                      <IconChevronRightMd className="size-4 text-foundation-icon-dark-tertiary" />
+                      <IconChevronRightMd className="size-4 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary" />
                     }
                   />
                   <SettingRow
-                    icon={<IconStarFilled className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconStarFilled className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Personalization"
                     onClick={() => setCurrentView("personalization")}
                     right={
-                      <IconChevronRightMd className="size-4 text-foundation-icon-dark-tertiary" />
+                      <IconChevronRightMd className="size-4 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary" />
                     }
                   />
                   <SettingRow
-                    icon={<IconStatus className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconStatus className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Notifications"
                     onClick={() => setCurrentView("notifications")}
                     right={
-                      <IconChevronRightMd className="size-4 text-foundation-icon-dark-tertiary" />
+                      <IconChevronRightMd className="size-4 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary" />
                     }
                   />
                   <SettingRow
-                    icon={<IconCategory className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconCategory className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Apps"
                     onClick={() => setCurrentView("apps")}
                     right={
-                      <IconChevronRightMd className="size-4 text-foundation-icon-dark-tertiary" />
+                      <IconChevronRightMd className="size-4 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary" />
                     }
                   />
                   <SettingRow
-                    icon={<IconUserLock className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconUserLock className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Data controls"
                     onClick={() => setCurrentView("dataControls")}
                     right={
-                      <IconChevronRightMd className="size-4 text-foundation-icon-dark-tertiary" />
+                      <IconChevronRightMd className="size-4 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary" />
                     }
                   />
                   <SettingRow
-                    icon={<IconArchive className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconArchive className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Archived chats"
                     onClick={() => setCurrentView("archivedChats")}
                     right={
-                      <IconChevronRightMd className="size-4 text-foundation-icon-dark-tertiary" />
+                      <IconChevronRightMd className="size-4 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary" />
                     }
                   />
                   <SettingRow
-                    icon={<IconUserLock className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconUserLock className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Security"
                     onClick={() => setCurrentView("security")}
                     right={
-                      <IconChevronRightMd className="size-4 text-foundation-icon-dark-tertiary" />
+                      <IconChevronRightMd className="size-4 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary" />
                     }
                   />
                 </div>
@@ -287,19 +326,19 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <button className="w-full flex items-center justify-between px-3 py-2.5 hover:bg-foundation-bg-dark-2 rounded-lg transition-colors">
+                      <button className="w-full flex items-center justify-between px-3 py-2.5 hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2 rounded-lg transition-colors">
                         <div className="flex items-center gap-3">
-                          <IconPlayground className="size-4 text-foundation-icon-dark-secondary" />
-                          <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-primary">
+                          <IconPlayground className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
+                          <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
                             Show in Menu Bar
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-secondary">
+                          <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
                             {showInMenuBar}
                           </span>
-                          <div className="size-5 rounded-full bg-foundation-bg-dark-3 flex items-center justify-center">
-                            <IconChevronDownMd className="size-3 text-foundation-icon-dark-secondary" />
+                          <div className="size-5 rounded-full bg-foundation-bg-light-3 dark:bg-foundation-bg-dark-3 flex items-center justify-center">
+                            <IconChevronDownMd className="size-3 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
                           </div>
                         </div>
                       </button>
@@ -320,10 +359,10 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <button className="w-full flex items-center justify-between px-3 py-2.5 hover:bg-foundation-bg-dark-2 rounded-lg transition-colors">
+                      <button className="w-full flex items-center justify-between px-3 py-2.5 hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2 rounded-lg transition-colors">
                         <div className="flex items-center gap-3">
-                          <IconSun className="size-4 text-foundation-icon-dark-secondary" />
-                          <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-primary">
+                          <IconSun className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
+                          <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
                             Accent color
                           </span>
                         </div>
@@ -332,11 +371,11 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                             className="size-3 rounded-full"
                             style={{ backgroundColor: selectedColorHex }}
                           />
-                          <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-secondary">
+                          <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
                             {accentColor}
                           </span>
-                          <div className="size-5 rounded-full bg-foundation-bg-dark-3 flex items-center justify-center">
-                            <IconChevronDownMd className="size-3 text-foundation-icon-dark-secondary" />
+                          <div className="size-5 rounded-full bg-foundation-bg-light-3 dark:bg-foundation-bg-dark-3 flex items-center justify-center">
+                            <IconChevronDownMd className="size-3 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
                           </div>
                         </div>
                       </button>
@@ -359,32 +398,32 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                   </DropdownMenu>
 
                   <SettingToggle
-                    icon={<IconComment className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconComment className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Show additional models"
                     checked={showAdditionalModels}
                     onCheckedChange={() => setShowAdditionalModels(!showAdditionalModels)}
                   />
 
                   <SettingToggle
-                    icon={<IconCheckmark className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconCheckmark className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Correct spelling automatically"
                     checked={correctSpelling}
                     onCheckedChange={() => setCorrectSpelling(!correctSpelling)}
                   />
 
                   <SettingToggle
-                    icon={<IconLink className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconLink className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Open ChatGPT links in desktop app"
                     checked={openLinksInApp}
                     onCheckedChange={() => setOpenLinksInApp(!openLinksInApp)}
                   />
 
                   <SettingRow
-                    icon={<IconRegenerate className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconRegenerate className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Check for updates..."
                     onClick={() => setCurrentView("checkForUpdates")}
                     right={
-                      <IconChevronRightMd className="size-4 text-foundation-icon-dark-tertiary" />
+                      <IconChevronRightMd className="size-4 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary" />
                     }
                   />
                 </div>
@@ -394,15 +433,15 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 <div className="space-y-0.5">
                   <SettingRow
                     onClick={() => {}}
-                    icon={<IconMessaging className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconMessaging className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Position on screen"
                     right={
                       <div className="flex items-center gap-2">
-                        <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-secondary">
+                        <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
                           {positionOnScreen}
                         </span>
-                        <div className="size-5 rounded-full bg-foundation-bg-dark-3 flex items-center justify-center">
-                          <IconChevronDownMd className="size-3 text-foundation-icon-dark-secondary" />
+                        <div className="size-5 rounded-full bg-foundation-bg-light-3 dark:bg-foundation-bg-dark-3 flex items-center justify-center">
+                          <IconChevronDownMd className="size-3 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
                         </div>
                       </div>
                     }
@@ -410,50 +449,50 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 
                   <SettingRow
                     onClick={() => {}}
-                    icon={<IconUndo className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconUndo className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Reset to new chat"
                     right={
                       <div className="flex items-center gap-2">
-                        <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-secondary">
+                        <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
                           {resetToNewChat}
                         </span>
-                        <div className="size-5 rounded-full bg-foundation-bg-dark-3 flex items-center justify-center">
-                          <IconChevronDownMd className="size-3 text-foundation-icon-dark-secondary" />
+                        <div className="size-5 rounded-full bg-foundation-bg-light-3 dark:bg-foundation-bg-dark-3 flex items-center justify-center">
+                          <IconChevronDownMd className="size-3 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
                         </div>
                       </div>
                     }
                   />
 
                   <SettingRow
-                    icon={<IconTerminal className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconTerminal className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Keyboard shortcut"
                     right={
                       <div className="flex items-center gap-2">
-                        <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-secondary">
+                        <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
                           {keyboardShortcut}
                         </span>
                         <button
                           onClick={() => setKeyboardShortcut("")}
                           aria-label="Clear keyboard shortcut"
                           title="Clear keyboard shortcut"
-                          className="p-1 hover:bg-foundation-bg-dark-3 rounded-full transition-colors"
+                          className="p-1 hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3 rounded-full transition-colors"
                         >
-                          <IconX className="size-3 text-foundation-icon-dark-secondary" />
+                          <IconX className="size-3 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
                         </button>
                       </div>
                     }
                   />
 
                   <SettingRow
-                    icon={<IconMessaging className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconMessaging className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Open new chats"
                     right={
                       <div className="flex items-center gap-2">
-                        <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-secondary">
+                        <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
                           In Companion Chat
                         </span>
-                        <div className="size-5 rounded-full bg-foundation-bg-dark-3 flex items-center justify-center">
-                          <IconChevronDownMd className="size-3 text-foundation-icon-dark-secondary" />
+                        <div className="size-5 rounded-full bg-foundation-bg-light-3 dark:bg-foundation-bg-dark-3 flex items-center justify-center">
+                          <IconChevronDownMd className="size-3 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
                         </div>
                       </div>
                     }
@@ -464,7 +503,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <Section title="Work with Apps">
                 <div className="space-y-0.5">
                   <SettingToggle
-                    icon={<IconPro className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconPro className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Enable Work with Apps"
                     checked={enableWorkWithApps}
                     onCheckedChange={() => setEnableWorkWithApps(!enableWorkWithApps)}
@@ -472,72 +511,72 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 
                   <SettingRow
                     icon={
-                      <IconCheckCircle className="size-4 text-foundation-icon-dark-secondary" />
+                      <IconCheckCircle className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
                     }
                     label="Toggle pairing"
                     right={
                       <div className="flex items-center gap-2">
-                        <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-secondary">
+                        <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
                           {togglePairing}
                         </span>
                         <button
                           aria-label="Clear pairing"
                           title="Clear pairing"
-                          className="p-1 hover:bg-foundation-bg-dark-3 rounded-full transition-colors"
+                          className="p-1 hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3 rounded-full transition-colors"
                         >
-                          <IconX className="size-3 text-foundation-icon-dark-secondary" />
+                          <IconX className="size-3 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
                         </button>
                       </div>
                     }
                   />
 
                   <SettingRow
-                    icon={<IconStack className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconStack className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Unpair apps"
                     right={
                       <div className="flex items-center gap-2">
-                        <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-secondary">
+                        <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
                           {linearApps}
                         </span>
-                        <div className="size-5 rounded-full bg-foundation-bg-dark-3 flex items-center justify-center">
-                          <IconChevronDownMd className="size-3 text-foundation-icon-dark-secondary" />
+                        <div className="size-5 rounded-full bg-foundation-bg-light-3 dark:bg-foundation-bg-dark-3 flex items-center justify-center">
+                          <IconChevronDownMd className="size-3 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
                         </div>
                       </div>
                     }
                   />
 
                   <SettingRow
-                    icon={<IconSettings className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconSettings className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Manage Apps"
                     onClick={() => setCurrentView("manageApps")}
                     right={
-                      <IconChevronRightMd className="size-4 text-foundation-icon-dark-tertiary" />
+                      <IconChevronRightMd className="size-4 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary" />
                     }
                   />
 
                   <SettingToggle
-                    icon={<IconLightBulb className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconLightBulb className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Automatically Pair with Apps from Chat Bar"
-                    checked={autoFairWithApps}
-                    onCheckedChange={() => setAutoFairWithApps(!autoFairWithApps)}
+                    checked={autoPairWithApps}
+                    onCheckedChange={() => setAutoPairWithApps(!autoPairWithApps)}
                   />
 
                   <SettingToggle
-                    icon={<IconEdit className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconEdit className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Generate suggested edits"
                     checked={generateSuggestedEdits}
                     onCheckedChange={() => setGenerateSuggestedEdits(!generateSuggestedEdits)}
                   />
 
                   <SettingToggle
-                    icon={<IconEdit className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconEdit className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Automatically Apply Suggested Edits"
                     checked={autoApplySuggestedEdits}
                     onCheckedChange={() => setAutoApplySuggestedEdits(!autoApplySuggestedEdits)}
                   />
 
                   <div className="px-3 py-2">
-                    <p className="text-[13px] text-foundation-text-dark-tertiary leading-[18px] tracking-[-0.32px] font-normal">
+                    <p className="text-[13px] text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary leading-[18px] tracking-[-0.32px] font-normal">
                       Allow ChatGPT to work with code and text editors.
                     </p>
                   </div>
@@ -547,44 +586,44 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <Section title="Speech">
                 <div className="space-y-0.5">
                   <SettingRow
-                    icon={<IconMic className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconMic className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Voice"
                     right={
                       <div className="flex items-center gap-2">
-                        <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-secondary">
+                        <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
                           {voice}
                         </span>
-                        <IconChevronRightMd className="size-4 text-foundation-icon-dark-tertiary" />
+                        <IconChevronRightMd className="size-4 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary" />
                       </div>
                     }
                   />
 
                   <SettingRow
-                    icon={<IconGlobe className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconGlobe className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Main language"
                     right={
                       <div className="flex items-center gap-2">
-                        <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-secondary">
+                        <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
                           {mainLanguage}
                         </span>
-                        <div className="size-5 rounded-full bg-foundation-bg-dark-3 flex items-center justify-center">
-                          <IconChevronDownMd className="size-3 text-foundation-icon-dark-secondary" />
+                        <div className="size-5 rounded-full bg-foundation-bg-light-3 dark:bg-foundation-bg-dark-3 flex items-center justify-center">
+                          <IconChevronDownMd className="size-3 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
                         </div>
                       </div>
                     }
                   />
 
                   <SettingRow
-                    icon={<IconSoundOn className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconSoundOn className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Audio settings"
                     onClick={() => setCurrentView("audioSettings")}
                     right={
-                      <IconChevronRightMd className="size-4 text-foundation-icon-dark-tertiary" />
+                      <IconChevronRightMd className="size-4 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary" />
                     }
                   />
 
                   <div className="px-3 py-2">
-                    <p className="text-[13px] text-foundation-text-dark-tertiary leading-[18px] tracking-[-0.32px] font-normal">
+                    <p className="text-[13px] text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary leading-[18px] tracking-[-0.32px] font-normal">
                       For best results, select the language you mainly speak. If it's not listed, it
                       may still be supported via auto-detection.
                     </p>
@@ -596,7 +635,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 <div className="space-y-0.5">
                   <SettingToggle
                     icon={
-                      <IconCheckCircle className="size-4 text-foundation-icon-dark-secondary" />
+                      <IconCheckCircle className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
                     }
                     label="Autocomplete"
                     checked={autocomplete}
@@ -604,14 +643,14 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                   />
 
                   <SettingToggle
-                    icon={<IconBarChart className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconBarChart className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Trending searches"
                     checked={trendingSearches}
                     onCheckedChange={() => setTrendingSearches(!trendingSearches)}
                   />
 
                   <SettingToggle
-                    icon={<IconLightBulb className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconLightBulb className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Follow-up suggestions"
                     checked={followUpSuggestions}
                     onCheckedChange={() => setFollowUpSuggestions(!followUpSuggestions)}
@@ -622,46 +661,46 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <Section title="About">
                 <div className="space-y-0.5">
                   <SettingRow
-                    icon={<IconWarning className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconWarning className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Report bug"
                     right={
-                      <IconChevronRightMd className="size-4 text-foundation-icon-dark-tertiary" />
+                      <IconChevronRightMd className="size-4 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary" />
                     }
                   />
                   <SettingRow
-                    icon={<IconQuestion className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconQuestion className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Help Center"
                     right={
-                      <IconChevronRightMd className="size-4 text-foundation-icon-dark-tertiary" />
+                      <IconChevronRightMd className="size-4 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary" />
                     }
                   />
                   <SettingRow
-                    icon={<IconBook className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconBook className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Terms of Use"
                     right={
-                      <IconChevronRightMd className="size-4 text-foundation-icon-dark-tertiary" />
+                      <IconChevronRightMd className="size-4 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary" />
                     }
                   />
                   <SettingRow
-                    icon={<IconUserLock className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconUserLock className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="Privacy Policy"
                     right={
-                      <IconChevronRightMd className="size-4 text-foundation-icon-dark-tertiary" />
+                      <IconChevronRightMd className="size-4 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary" />
                     }
                   />
                   <SettingRow
-                    icon={<IconInfo className="size-4 text-foundation-icon-dark-secondary" />}
+                    icon={<IconInfo className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />}
                     label="ChatGPT for macOS"
                     right={
-                      <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-secondary">
-                        1.2025.350 (1766813062)
+                      <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+                        {appInfo?.versionLabel ?? "—"}
                       </span>
                     }
                   />
                   <SettingRow
                     label="Log out"
                     right={
-                      <IconChevronRightMd className="size-4 text-foundation-icon-dark-tertiary" />
+                      <IconChevronRightMd className="size-4 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary" />
                     }
                   />
                 </div>

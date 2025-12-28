@@ -99,8 +99,12 @@ function useMediaQuery(query: string) {
     const mql = window.matchMedia(query);
     const onChange = () => setMatches(mql.matches);
     onChange();
-    mql.addEventListener?.("change", onChange);
-    return () => mql.removeEventListener?.("change", onChange);
+    if (mql.addEventListener) mql.addEventListener("change", onChange);
+    else mql.addListener(onChange);
+    return () => {
+      if (mql.removeEventListener) mql.removeEventListener("change", onChange);
+      else mql.removeListener(onChange);
+    };
   }, [query]);
 
   return matches;
@@ -184,6 +188,15 @@ export function ChatUIRoot({
   const [selectedModel, setSelectedModel] = useState<ModelConfig>(
     defaultModel ?? resolvedModels[0] ?? FALLBACK_MODEL,
   );
+
+  // Sync selectedModel when models prop changes
+  useEffect(() => {
+    const exists = resolvedModels.some((m) => m.shortName === selectedModel.shortName);
+    if (!exists && resolvedModels.length > 0) {
+      setSelectedModel(defaultModel ?? resolvedModels[0] ?? FALLBACK_MODEL);
+    }
+  }, [defaultModel, resolvedModels, selectedModel.shortName]);
+
   const [viewMode, setViewMode] = useControllableState<"chat" | "compose">({
     value: viewModeProp,
     defaultValue: defaultViewMode,
@@ -327,7 +340,9 @@ export function ChatUIRoot({
     if (mode === "dashboard") {
       return (
         <div className="flex-1 flex flex-col">
-          <div className="p-4 text-white/80">Dashboard template placeholder</div>
+          <div className="p-4 text-foundation-text-light-secondary dark:text-white/80">
+            Dashboard template placeholder
+          </div>
         </div>
       );
     }
@@ -340,8 +355,8 @@ export function ChatUIRoot({
           selectedModel={selectedModel}
           onModelChange={(model) => {
             if (typeof model === "string") {
-              // Handle string model selection - convert to ModelConfig
-              setSelectedModel({ name: model, shortName: model, description: "" });
+              const found = resolvedModels.find((m) => m.name === model || m.shortName === model);
+              setSelectedModel(found ?? { name: model, shortName: model, description: "" });
             } else {
               setSelectedModel(model);
             }
@@ -387,15 +402,14 @@ export function ChatUIRoot({
   ]);
 
   return (
-    <div
-      className="size-full flex bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 overflow-hidden"
-      data-testid="chat-ui-root"
-    >
-      {sidebarBehavior === "inline" ? (
-        <ChatUISlotsProvider value={slotsValue}>
+    <ChatUISlotsProvider value={slotsValue}>
+      <div
+        className="size-full flex bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 overflow-hidden"
+        data-testid="chat-ui-root"
+      >
+        {sidebarBehavior === "inline" ? (
           <ChatSidebar
             isOpen={sidebarOpen}
-            onToggle={toggleSidebar}
             projects={projects}
             chatHistory={chatHistory}
             groupChats={groupChats}
@@ -405,27 +419,25 @@ export function ChatUIRoot({
             categoryIconColors={categoryIconColors}
             user={user}
           />
-        </ChatUISlotsProvider>
-      ) : null}
+        ) : null}
 
-      {sidebarBehavior === "overlay" && sidebarOpen ? (
-        <div className="fixed inset-0 z-50">
-          <button
-            type="button"
-            aria-label="Close sidebar"
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={closeOverlay}
-          />
+        {sidebarBehavior === "overlay" && sidebarOpen ? (
+          <div className="fixed inset-0 z-50">
+            <button
+              type="button"
+              aria-label="Close sidebar"
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+              onClick={closeOverlay}
+            />
 
-          <div
-            ref={overlayDrawerRef}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Sidebar"
-            tabIndex={-1}
-            className="absolute left-0 top-0 h-full w-64 outline-none"
-          >
-            <ChatUISlotsProvider value={slotsValue}>
+            <div
+              ref={overlayDrawerRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Sidebar"
+              tabIndex={-1}
+              className="absolute left-0 top-0 h-full w-64 outline-none"
+            >
               <ChatSidebar
                 isOpen={sidebarOpen}
                 onToggle={closeOverlay}
@@ -438,12 +450,12 @@ export function ChatUIRoot({
                 categoryIconColors={categoryIconColors}
                 user={user}
               />
-            </ChatUISlotsProvider>
+            </div>
           </div>
-        </div>
-      ) : null}
+        ) : null}
 
-      <div className="flex-1 flex min-w-0">{mainContent}</div>
-    </div>
+        <div className="flex-1 flex min-w-0">{mainContent}</div>
+      </div>
+    </ChatUISlotsProvider>
   );
 }

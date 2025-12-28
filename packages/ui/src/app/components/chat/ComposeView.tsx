@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { IconCheckmark, IconChevronDownMd, IconSettings } from "../../../icons";
+import { IconCheckmark, IconChevronDownMd } from "../../../icons";
 import { IconOperator } from "../icons/ChatGPTIcons";
 import { DiscoverySettingsModal } from "../modals/DiscoverySettingsModal";
 import { SegmentedControl } from "../ui/base/segmented-control";
@@ -50,10 +50,6 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
   const [selectedModel, setSelectedModel] = useState<ModelConfig>(
     resolvedModels[0] ?? fallbackModel,
   );
-  const [selectedMode, setSelectedMode] = useState<ComposeModeConfig>(
-    resolvedModes[0] ?? fallbackMode,
-  );
-  const [activeTab] = useState<"builder" | "rules">("builder");
   const [instructions, setInstructions] = useState("");
   const [promptEnhancement, setPromptEnhancement] = useState<"rewrite" | "augment" | "preserve">(
     "rewrite",
@@ -61,7 +57,6 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
   const [isWebSearchActive, setIsWebSearchActive] = useState(false);
   const [systemMessage, setSystemMessage] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
-  const [showModeSelector, setShowModeSelector] = useState(false);
   const [autoPlan, setAutoPlan] = useState(false);
   const [showDiscoverySettings, setShowDiscoverySettings] = useState(false);
   const [targetSize, setTargetSize] = useState(60);
@@ -75,12 +70,6 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
   const [selectedModelConfig, setSelectedModelConfig] = useState("GPT-5.2 Codex Medium");
 
   const handleModeSelect = (mode: ComposeModeConfig) => {
-    setSelectedMode(mode);
-    setPreviewMode(mode);
-    setShowModeSelector(false);
-  };
-
-  const handleModeHover = (mode: ComposeModeConfig) => {
     setPreviewMode(mode);
   };
 
@@ -119,18 +108,18 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
 
   return (
     <>
-      <div className="flex-1 flex flex-col bg-foundation-bg-dark-1">
+      <div className="flex-1 flex flex-col bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
         <div className="flex-1 overflow-y-auto">
           <div className="w-full px-8 py-8 space-y-4 overflow-y-auto">
-            <div className="bg-foundation-bg-dark-1 border border-white/10 rounded-lg overflow-hidden">
-              <div className="flex items-center justify-between px-4 py-3 bg-foundation-bg-dark-2">
+            <div className="bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 border border-foundation-bg-light-3 dark:border-white/10 rounded-lg overflow-hidden">
+              <div className="flex items-center justify-between px-4 py-3 bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-[15px] leading-6 text-white font-medium">
+                  <span className="text-[15px] leading-6 text-foundation-text-light-primary dark:text-foundation-text-dark-primary font-medium">
                     Prompt Instructions
                   </span>
-                  <button className="p-1.5 hover:bg-white/10 rounded-md transition-colors">
+                  <button className="p-1.5 hover:bg-black/10 dark:hover:bg-white/10 rounded-md transition-colors" aria-label="Copy to clipboard">
                     <svg
-                      className="size-4 text-foundation-text-dark-tertiary"
+                      className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -144,9 +133,9 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                     </svg>
                   </button>
                 </div>
-                <button className="flex items-center gap-2 px-3 py-1.5 bg-foundation-bg-dark-2 hover:bg-foundation-bg-dark-3 border border-white/10 text-white rounded-lg transition-colors text-[13px] leading-5">
+                <button className="flex items-center gap-2 px-3 py-1.5 bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3 border border-foundation-bg-light-3 dark:border-white/10 text-foundation-text-light-primary dark:text-foundation-text-dark-primary rounded-lg transition-colors text-[13px] leading-5">
                   <svg
-                    className="size-4 text-foundation-text-dark-tertiary"
+                    className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -164,18 +153,20 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
               <textarea
                 value={instructions}
                 onChange={(e) => setInstructions(e.target.value)}
-                placeholder=" Enter your prompt's task specific instructions. Use {{template variables}} for dynamic inputs"
-                className="w-full h-[187px] bg-foundation-bg-dark-1 px-4 py-3 text-[15px] leading-6 text-foundation-text-dark-primary placeholder:text-foundation-text-dark-primary/40 focus:outline-none resize-none border-0"
+                placeholder="Enter your prompt's task specific instructions. Use {{template variables}} for dynamic inputs"
+                aria-label="Prompt instructions"
+                className="w-full h-[187px] bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 px-4 py-3 text-[15px] leading-6 text-foundation-text-light-primary dark:text-foundation-text-dark-primary placeholder:text-foundation-text-light-primary/40 dark:placeholder:text-foundation-text-dark-primary/40 focus:outline-none resize-none border-0"
               />
 
-              <div className="flex items-center justify-between px-4 py-2 bg-foundation-bg-dark-1 border-t border-white/10">
+              <div className="flex items-center justify-between px-4 py-2 bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 border-t border-foundation-bg-light-3 dark:border-white/10">
                 <div className="flex items-center gap-1">
                   <button
-                    className="p-1.5 hover:bg-white/10 rounded-md transition-colors"
+                    className="p-1.5 hover:bg-black/10 dark:hover:bg-white/10 rounded-md transition-colors"
                     title="Add"
+                    aria-label="Add"
                   >
                     <svg
-                      className="size-4 text-foundation-text-dark-tertiary"
+                      className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -187,15 +178,16 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                   <button
                     onClick={() => setIsWebSearchActive(!isWebSearchActive)}
                     className={`p-1.5 rounded-md transition-colors relative ${
-                      isWebSearchActive ? "bg-foundation-accent-blue/10" : "hover:bg-white/10"
+                      isWebSearchActive ? "bg-foundation-accent-blue/10" : "hover:bg-black/10 dark:hover:bg-white/10"
                     }`}
                     title="Web"
+                    aria-label="Toggle web search"
                   >
                     <svg
                       className={`size-4 ${
                         isWebSearchActive
                           ? "text-foundation-accent-blue"
-                          : "text-foundation-text-dark-tertiary"
+                          : "text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary"
                       }`}
                       fill="none"
                       viewBox="0 0 24 24"
@@ -225,11 +217,12 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                     )}
                   </button>
                   <button
-                    className="p-1.5 hover:bg-white/10 rounded-md transition-colors"
+                    className="p-1.5 hover:bg-black/10 dark:hover:bg-white/10 rounded-md transition-colors"
                     title="Link"
+                    aria-label="Link"
                   >
                     <svg
-                      className="size-4 text-foundation-text-dark-tertiary"
+                      className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -243,11 +236,12 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                     </svg>
                   </button>
                   <button
-                    className="p-1.5 hover:bg-white/10 rounded-md transition-colors"
+                    className="p-1.5 hover:bg-black/10 dark:hover:bg-white/10 rounded-md transition-colors"
                     title="Refresh"
+                    aria-label="Refresh"
                   >
                     <svg
-                      className="size-4 text-foundation-text-dark-tertiary"
+                      className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -262,15 +256,16 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                   </button>
                   <button
                     type="button"
-                    className="flex items-center gap-1.5 px-2 py-1 rounded-lg transition-colors group hover:bg-white/5"
+                    className="flex items-center gap-1.5 px-2 py-1 rounded-lg transition-colors group hover:bg-black/5 dark:hover:bg-white/5"
                     title="Tools"
+                    aria-label="Tools"
                   >
-                    <IconOperator className="size-4 text-white/60 group-hover:text-white" />
+                    <IconOperator className="size-4 text-foundation-text-light-tertiary dark:text-white/60 group-hover:text-foundation-text-light-primary dark:text-white" />
                     <span className="hidden text-[14px] font-normal leading-[20px] tracking-[-0.3px]">
                       Apps
                     </span>
                   </button>
-                  <div className="ml-1 px-2 py-1 bg-foundation-bg-dark-2 rounded-md">
+                  <div className="ml-1 px-2 py-1 bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 rounded-md">
                     <span className="text-[11px] leading-4 text-foundation-accent-blue font-medium">
                       {selectedModel.shortName}
                     </span>
@@ -278,9 +273,9 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                 </div>
 
                 <div className="flex items-center gap-1">
-                  <button className="flex items-center gap-1.5 px-2 py-1 hover:bg-white/10 rounded-md transition-colors">
+                  <button className="flex items-center gap-1.5 px-2 py-1 hover:bg-black/10 dark:hover:bg-white/10 rounded-md transition-colors">
                     <svg
-                      className="size-3.5 text-foundation-text-dark-tertiary"
+                      className="size-3.5 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -292,16 +287,17 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                         d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                       />
                     </svg>
-                    <span className="text-[12px] leading-4 text-foundation-text-dark-tertiary">
+                    <span className="text-[12px] leading-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary">
                       Auto-clear
                     </span>
                   </button>
                   <button
-                    className="p-1.5 hover:bg-white/10 rounded-md transition-colors"
+                    className="p-1.5 hover:bg-black/10 dark:hover:bg-white/10 rounded-md transition-colors"
                     title="Voice"
+                    aria-label="Voice"
                   >
                     <svg
-                      className="size-4 text-foundation-text-dark-tertiary"
+                      className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -314,9 +310,13 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                       />
                     </svg>
                   </button>
-                  <button className="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 ml-1 flex items-center justify-center hover:opacity-80 transition-opacity">
+                  <button
+                    aria-label="Send message"
+                    type="button"
+                    className="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 ml-1 flex items-center justify-center hover:opacity-80 transition-opacity"
+                  >
                     <svg
-                      className="size-3 text-white"
+                      className="size-3 text-foundation-text-light-primary dark:text-white"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -333,18 +333,17 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
               </div>
             </div>
 
-            <div className="border-b border-white/10"></div>
+            <div className="border-b border-foundation-bg-light-3 dark:border-white/10"></div>
 
             <div className="min-h-[200px]">
-              {activeTab === "builder" && (
-                <div className="bg-foundation-bg-dark-1 border border-white/10 rounded-lg overflow-hidden">
-                  <div className="flex items-center justify-between px-4 py-3 bg-foundation-bg-dark-2">
+              <div className="bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 border border-foundation-bg-light-3 dark:border-white/10 rounded-lg overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-3 bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-[15px] leading-6 text-foundation-text-dark-primary font-medium">
+                      <span className="text-[15px] leading-6 text-foundation-text-light-primary dark:text-foundation-text-dark-primary font-medium">
                         Prompt Builder
                       </span>
                     </div>
-                    <button className="flex items-center gap-2 px-3 py-1.5 bg-foundation-bg-dark-2 hover:bg-foundation-bg-dark-3 border border-white/10 text-foundation-text-dark-primary rounded-lg transition-colors text-[13px] leading-5">
+                    <button aria-label="Run discovery" className="flex items-center gap-2 px-3 py-1.5 bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3 border border-foundation-bg-light-3 dark:border-white/10 text-foundation-text-light-primary dark:text-foundation-text-dark-primary rounded-lg transition-colors text-[13px] leading-5">
                       <svg
                         className="size-[18px]"
                         fill="none"
@@ -371,7 +370,7 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                     <div className="space-y-5">
                       <div className="flex gap-6">
                         <div className="w-[340px] flex-shrink-0">
-                          <label className="block text-[13px] leading-5 text-foundation-text-dark-primary/70 mb-2">
+                          <label className="block text-[13px] leading-5 text-foundation-text-light-primary dark:text-foundation-text-dark-primary/70 mb-2">
                             Model
                           </label>
                           <ModelSelector
@@ -385,32 +384,34 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                         </div>
 
                         <div className="flex-1">
-                          <label className="block text-[13px] leading-5 text-foundation-text-dark-primary/70 mb-2">
+                          <label className="block text-[13px] leading-5 text-foundation-text-light-primary dark:text-foundation-text-dark-primary/70 mb-2">
                             System Message
                           </label>
                           <textarea
                             value={systemMessage}
                             onChange={(e) => setSystemMessage(e.target.value)}
                             placeholder="Describe desired modal behavior (tone, tool usage, response style)"
-                            className="w-full h-[60px] bg-foundation-bg-dark-2 border border-white/10 rounded-lg px-3 py-2.5 text-[13px] leading-5 text-foundation-text-dark-primary placeholder:text-foundation-text-dark-primary/50 focus:outline-none focus:border-white/20 resize-none"
+                            className="w-full h-[60px] bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 border border-foundation-bg-light-3 dark:border-white/10 rounded-lg px-3 py-2.5 text-[13px] leading-5 text-foundation-text-light-primary dark:text-foundation-text-dark-primary placeholder:text-foundation-text-light-primary/50 dark:placeholder:text-foundation-text-dark-primary/50 focus:outline-none focus:border-foundation-bg-light-3/70 dark:focus:border-white/20 resize-none"
+                            aria-label="System message input"
                           />
                         </div>
                       </div>
 
                       <div className="relative">
                         <div className="flex items-center justify-between mb-2">
-                          <label className="text-[13px] leading-5 text-foundation-text-dark-primary/70">
+                          <label className="text-[13px] leading-5 text-foundation-text-light-primary dark:text-foundation-text-dark-primary/70">
                             {taskConfig.label}
                           </label>
                           <div className="flex items-center gap-1">
                             <div className="relative">
                               <button
-                                className="p-1.5 hover:bg-foundation-bg-dark-2 rounded transition-colors"
+                                aria-label="Show task information"
+                                className="p-1.5 hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2 rounded transition-colors"
                                 onMouseEnter={() => setShowTooltip(true)}
                                 onMouseLeave={() => setShowTooltip(false)}
                               >
                                 <svg
-                                  className="size-4 text-foundation-text-dark-primary/70"
+                                  className="size-4 text-foundation-text-light-primary dark:text-foundation-text-dark-primary/70"
                                   fill="none"
                                   viewBox="0 0 24 24"
                                   stroke="currentColor"
@@ -425,8 +426,8 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                               </button>
 
                               {showTooltip && (
-                                <div className="absolute right-0 top-8 w-[320px] bg-foundation-bg-dark-2 border border-white/10 rounded-lg p-4 shadow-xl z-50">
-                                  <div className="text-[13px] leading-5 text-foundation-text-dark-primary space-y-3">
+                                <div className="absolute right-0 top-8 w-[320px] bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 border border-foundation-bg-light-3 dark:border-white/10 rounded-lg p-4 shadow-xl z-50">
+                                  <div className="text-[13px] leading-5 text-foundation-text-light-primary dark:text-foundation-text-dark-primary space-y-3">
                                     {promptEnhancement === "rewrite" && (
                                       <>
                                         <p className="font-medium">Describe your task here.</p>
@@ -438,7 +439,7 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                                             <li>• Write detailed instructions above</li>
                                           </ul>
                                         </div>
-                                        <p className="text-foundation-text-dark-primary/90">
+                                        <p className="text-foundation-text-light-primary dark:text-foundation-text-dark-primary/90">
                                           This is your primary input in Rewrite mode.
                                         </p>
                                       </>
@@ -456,7 +457,7 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                                             <li>• Select appropriate files</li>
                                           </ul>
                                         </div>
-                                        <p className="text-foundation-text-dark-primary/90">
+                                        <p className="text-foundation-text-light-primary dark:text-foundation-text-dark-primary/90">
                                           Leave empty to just enhance with file context.
                                         </p>
                                       </>
@@ -473,7 +474,7 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                                             <li>• Leave your instructions unchanged</li>
                                           </ul>
                                         </div>
-                                        <p className="text-foundation-text-dark-primary/90">
+                                        <p className="text-foundation-text-light-primary dark:text-foundation-text-dark-primary/90">
                                           Useful when you've already written detailed instructions.
                                         </p>
                                       </>
@@ -482,9 +483,9 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                                 </div>
                               )}
                             </div>
-                            <button className="p-1.5 hover:bg-foundation-bg-dark-2 rounded transition-colors">
+                            <button aria-label="Clear task" className="p-1.5 hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2 rounded transition-colors">
                               <svg
-                                className="size-4 text-foundation-text-dark-primary/70"
+                                className="size-4 text-foundation-text-light-primary dark:text-foundation-text-dark-primary/70"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
@@ -505,13 +506,15 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                             value={taskDescription}
                             onChange={(e) => setTaskDescription(e.target.value)}
                             placeholder={taskConfig.placeholder}
-                            className="flex-1 h-[120px] bg-foundation-bg-dark-2 border border-white/10 rounded-lg px-3 py-2.5 text-[13px] leading-5 text-foundation-text-dark-primary placeholder:text-foundation-text-dark-primary/50 focus:outline-none focus:border-white/20 resize-none"
+                            className="flex-1 h-[120px] bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 border border-foundation-bg-light-3 dark:border-white/10 rounded-lg px-3 py-2.5 text-[13px] leading-5 text-foundation-text-light-primary dark:text-foundation-text-dark-primary placeholder:text-foundation-text-light-primary/50 dark:placeholder:text-foundation-text-dark-primary/50 focus:outline-none focus:border-foundation-bg-light-3/70 dark:focus:border-white/20 resize-none"
+                            aria-label={taskConfig.label}
                           />
 
                           <div className="flex flex-col gap-2">
                             <button
                               onClick={() => setShowDiscoverySettings(true)}
-                              className="px-4 py-2 bg-foundation-bg-dark-2 hover:bg-foundation-bg-dark-3 border border-white/10 text-foundation-text-dark-primary/90 rounded-lg transition-all text-[13px] leading-5 whitespace-nowrap flex items-center gap-2"
+                              aria-label={`Run discovery: ${taskConfig.buttonText}`}
+                              className="px-4 py-2 bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3 border border-foundation-bg-light-3 dark:border-white/10 text-foundation-text-light-primary dark:text-foundation-text-dark-primary rounded-lg transition-all text-[13px] leading-5 whitespace-nowrap flex items-center gap-2"
                             >
                               <span className="flex items-center gap-1.5">
                                 <span className="text-foundation-accent-green">{targetSize}k</span>
@@ -522,13 +525,13 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between pt-5 border-t border-white/10">
+                      <div className="flex items-center justify-between pt-5 border-t border-foundation-bg-light-3 dark:border-white/10">
                         <div className="flex items-center gap-4">
                           <div>
-                            <div className="text-[13px] leading-5 text-foundation-text-dark-primary">
+                            <div className="text-[13px] leading-5 text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
                               Prompt Enhancement
                             </div>
-                            <div className="text-[12px] leading-[18px] text-foundation-text-dark-primary/70">
+                            <div className="text-[12px] leading-[18px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary/70">
                               How to handle your instructions
                             </div>
                           </div>
@@ -545,7 +548,7 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
 
                         <div className="flex items-center gap-4">
                           <div className="flex items-center gap-2">
-                            <span className="text-[12px] leading-[18px] text-foundation-text-dark-primary/70">
+                            <span className="text-[12px] leading-[18px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary/70">
                               Plan mode
                             </span>
                             <ModeSelector
@@ -557,7 +560,7 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                           </div>
 
                           <Toggle checked={autoPlan} onChange={setAutoPlan} />
-                          <span className="text-[13px] leading-5 text-foundation-text-dark-primary/70 min-w-[32px]">
+                          <span className="text-[13px] leading-5 text-foundation-text-light-primary dark:text-foundation-text-dark-primary/70 min-w-[32px]">
                             {autoPlan ? "On" : "Off"}
                           </span>
                         </div>
@@ -565,7 +568,6 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                     </div>
                   </div>
                 </div>
-              )}
             </div>
           </div>
         </div>
@@ -580,147 +582,6 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
         onTargetSizeChange={setTargetSize}
       />
 
-      {showModeSelector && (
-        <>
-          <div
-            className="fixed inset-0 bg-black/40 z-40"
-            onClick={() => setShowModeSelector(false)}
-          />
-
-          <div className="fixed top-16 right-4 z-50 w-[960px] bg-foundation-bg-dark-1 border border-white/10 rounded-[16px] shadow-2xl overflow-hidden">
-            <div className="flex h-[600px]">
-              <div className="flex-1 p-8 overflow-y-auto">
-                <div className="flex items-start gap-3 mb-6">
-                  <div className="p-2 bg-white/5 rounded-lg">
-                    <IconSettings className="size-5 text-white/60" />
-                  </div>
-                  <div>
-                    <h2 className="text-[18px] font-semibold leading-[26px] tracking-[-0.45px] text-white">
-                      {previewMode.name}
-                    </h2>
-                    <p className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-white/60">
-                      {previewMode.subtitle}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mb-8">
-                  <h3 className="text-[14px] font-semibold leading-[20px] tracking-[-0.3px] text-white/60 mb-4">
-                    Context Configuration
-                  </h3>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="px-4 py-3 bg-white/5 border border-white/10 rounded-lg">
-                      <div className="text-[12px] font-normal leading-[18px] tracking-[-0.32px] text-white/60">
-                        Mode ·{" "}
-                        <span className="text-white">{previewMode.contextConfig?.mode ?? "—"}</span>
-                      </div>
-                    </div>
-                    <div className="px-4 py-3 bg-white/5 border border-white/10 rounded-lg">
-                      <div className="text-[12px] font-normal leading-[18px] tracking-[-0.32px] text-white/60">
-                        Selected Files ·{" "}
-                        <span className="text-white">
-                          {previewMode.contextConfig?.selectedFiles ?? "—"}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="px-4 py-3 bg-white/5 border border-white/10 rounded-lg">
-                      <div className="text-[12px] font-normal leading-[18px] tracking-[-0.32px] text-white/60">
-                        File Tree{" "}
-                        <span className="text-white">
-                          {previewMode.contextConfig?.fileTree ?? "—"}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="px-4 py-3 bg-white/5 border border-white/10 rounded-lg">
-                      <div className="text-[12px] font-normal leading-[18px] tracking-[-0.32px] text-white/60">
-                        Code Map ·{" "}
-                        <span className="text-white">
-                          {previewMode.contextConfig?.codeMap ?? "—"}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="px-4 py-3 bg-white/5 border border-white/10 rounded-lg col-span-2">
-                      <div className="text-[12px] font-normal leading-[18px] tracking-[-0.32px] text-white/60">
-                        Git Diff ·{" "}
-                        <span className="text-white">
-                          {previewMode.contextConfig?.gitDiff ?? "—"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mb-8">
-                  <h3 className="text-[14px] font-semibold leading-[20px] tracking-[-0.3px] text-white/60 mb-3">
-                    When to use
-                  </h3>
-                  <ul className="space-y-2">
-                    {previewMode.whenToUse?.map((item, index) => (
-                      <li
-                        key={index}
-                        className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-white/80 flex items-start gap-2"
-                      >
-                        <span className="text-white/60">•</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="text-[14px] font-semibold leading-[20px] tracking-[-0.3px] text-white/60 mb-3">
-                    About this mode
-                  </h3>
-                  <p className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-white/80">
-                    {previewMode.about}
-                  </p>
-                </div>
-
-                {previewMode.id === "pro-edit" && (
-                  <div className="mt-6">
-                    <button
-                      onClick={() => setShowProEditConfig(true)}
-                      className="px-4 py-2 bg-foundation-accent-green hover:bg-foundation-accent-green/80 text-white rounded-lg transition-all text-[14px] font-normal leading-[20px] tracking-[-0.3px]"
-                    >
-                      Pro Edit Config
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              <div className="w-[360px] bg-foundation-bg-dark-1 border-l border-white/10 p-6">
-                <h3 className="text-[14px] font-semibold leading-[20px] tracking-[-0.3px] text-white/60 mb-4">
-                  Standard Modes
-                </h3>
-                <div className="space-y-2">
-                  {resolvedModes.map((mode) => (
-                    <button
-                      key={mode.id}
-                      onClick={() => handleModeSelect(mode)}
-                      onMouseEnter={() => handleModeHover(mode)}
-                      className={`w-full px-4 py-3 rounded-lg text-left transition-all flex items-center justify-between ${
-                        selectedMode.id === mode.id
-                          ? mode.id === "manual"
-                            ? "bg-foundation-accent-blue/10 border-2 border-foundation-accent-blue text-white"
-                            : "bg-foundation-accent-green/10 border border-foundation-accent-green/30 text-white"
-                          : "bg-white/5 border border-transparent text-white/80 hover:bg-white/10"
-                      }`}
-                    >
-                      <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px]">
-                        {mode.name}
-                      </span>
-                      {selectedMode.id === mode.id && (
-                        <IconCheckmark className="size-4 text-white" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
-
       {showProEditConfig && (
         <>
           <div
@@ -728,8 +589,8 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
             onClick={() => setShowProEditConfig(false)}
           />
 
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60] w-[720px] bg-foundation-bg-dark-2 border border-white/10 rounded-[12px] shadow-2xl p-8">
-            <h2 className="text-[18px] font-semibold leading-[26px] tracking-[-0.45px] text-white mb-4">
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60] w-[720px] bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 border border-foundation-bg-light-3 dark:border-white/10 rounded-[12px] shadow-2xl p-8">
+            <h2 className="text-[18px] font-semibold leading-[26px] tracking-[-0.45px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary mb-4">
               Pro Edit Settings
             </h2>
 
@@ -740,18 +601,18 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
               </span>
             </div>
 
-            <p className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-white/70 mb-6">
+            <p className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-primary dark:text-white/70 mb-6">
               Pro Edit mode uses your selected AI model to plan edits, while delegate edit agents or
               models apply those edits simultaneously.
             </p>
 
-            <div className="inline-flex items-center gap-0 bg-foundation-bg-dark-2 rounded-lg p-1 mb-6">
+            <div className="inline-flex items-center gap-0 bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 rounded-lg p-1 mb-6">
               <button
                 onClick={() => setProEditMode("agent")}
                 className={`px-4 py-1.5 rounded-md transition-all text-[14px] font-normal leading-[20px] tracking-[-0.3px] ${
                   proEditMode === "agent"
-                    ? "bg-foundation-accent-green/30 text-white"
-                    : "text-white/60 hover:text-white"
+                    ? "bg-foundation-accent-green/30 text-foundation-text-light-primary dark:text-foundation-text-dark-primary"
+                    : "text-foundation-text-light-primary dark:text-foundation-text-dark-secondary hover:text-foundation-text-light-primary dark:hover:text-foundation-text-dark-primary"
                 }`}
               >
                 Agent
@@ -760,8 +621,8 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
                 onClick={() => setProEditMode("model")}
                 className={`px-4 py-1.5 rounded-md transition-all text-[14px] font-normal leading-[20px] tracking-[-0.3px] ${
                   proEditMode === "model"
-                    ? "bg-foundation-accent-green/30 text-white"
-                    : "text-white/60 hover:text-white"
+                    ? "bg-foundation-accent-green/30 text-foundation-text-light-primary dark:text-foundation-text-dark-primary"
+                    : "text-foundation-text-light-primary dark:text-foundation-text-dark-secondary hover:text-foundation-text-light-primary dark:hover:text-foundation-text-dark-primary"
                 }`}
               >
                 Model
@@ -770,47 +631,47 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
 
             {proEditMode === "agent" && (
               <div>
-                <h3 className="text-[16px] font-semibold leading-[24px] tracking-[-0.32px] text-white mb-2">
+                <h3 className="text-[16px] font-semibold leading-[24px] tracking-[-0.32px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary mb-2">
                   Agent Configuration
                 </h3>
-                <p className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-white/70 mb-4">
+                <p className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-primary dark:text-white/70 mb-4">
                   Runs a headless agent for each file to apply edits in parallel within a sandbox.
                 </p>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-white/70 mb-2">
+                    <label className="block text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-primary dark:text-white/70 mb-2">
                       Agent
                     </label>
                     <div className="relative">
                       <select
                         value={selectedAgent}
                         onChange={(e) => setSelectedAgent(e.target.value)}
-                        className="w-full bg-foundation-bg-dark-2 border border-white/10 rounded-lg px-4 py-2.5 text-[14px] text-white font-normal leading-[20px] tracking-[-0.3px] appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-white/20"
+                        className="w-full bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 border border-foundation-bg-light-3 dark:border-white/10 rounded-lg px-4 py-2.5 text-[14px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary font-normal leading-[20px] tracking-[-0.3px] appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-black/20 dark:focus:ring-white/20"
                       >
                         <option value="Codex CLI">Codex CLI</option>
                         <option value="Aider">Aider</option>
                         <option value="Custom">Custom</option>
                       </select>
-                      <IconChevronDownMd className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-white/60 pointer-events-none" />
+                      <IconChevronDownMd className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-foundation-text-light-primary dark:text-white/60 pointer-events-none" />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-white/70 mb-2">
+                    <label className="block text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-primary dark:text-white/70 mb-2">
                       Model
                     </label>
                     <div className="relative">
                       <select
                         value={selectedModelConfig}
                         onChange={(e) => setSelectedModelConfig(e.target.value)}
-                        className="w-full bg-foundation-bg-dark-2 border border-white/10 rounded-lg px-4 py-2.5 text-[14px] text-white font-normal leading-[20px] tracking-[-0.3px] appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-white/20"
+                        className="w-full bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 border border-foundation-bg-light-3 dark:border-white/10 rounded-lg px-4 py-2.5 text-[14px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary font-normal leading-[20px] tracking-[-0.3px] appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-black/20 dark:focus:ring-white/20"
                       >
                         <option value="GPT-5.2 Codex Medium">GPT-5.2 Codex Medium</option>
                         <option value="GPT-5.2 Codex Large">GPT-5.2 Codex Large</option>
                         <option value="Claude 3.5 Sonnet">Claude 3.5 Sonnet</option>
                       </select>
-                      <IconChevronDownMd className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-white/60 pointer-events-none" />
+                      <IconChevronDownMd className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-foundation-text-light-primary dark:text-white/60 pointer-events-none" />
                     </div>
                   </div>
                 </div>

@@ -4,16 +4,19 @@ Step-by-step guides for common development tasks.
 
 ## Documents
 
-### [PAGES_QUICK_START.md](./PAGES_QUICK_START.md)
+### Development Guides
 
-Quick start guide for creating new pages in the ChatUI system.
+- **[PAGES_QUICK_START.md](./PAGES_QUICK_START.md)** - Quick start guide for creating new pages in the ChatUI system
+- **[DESIGN_GUIDELINES.md](./DESIGN_GUIDELINES.md)** - Design system guidelines and best practices
 
-**Topics:**
+### Integration Guides
 
-- Page creation patterns
-- Routing setup
-- Component integration
-- Best practices
+- **[CHATGPT_INTEGRATION.md](./CHATGPT_INTEGRATION.md)** - ChatGPT Apps SDK integration guide
+- **[CLOUDFLARE_DEPLOYMENT.md](./CLOUDFLARE_DEPLOYMENT.md)** - Cloudflare Workers deployment guide
+
+### Process Guides
+
+- **[RELEASE_CHECKLIST.md](./RELEASE_CHECKLIST.md)** - Release process checklist
 
 ## Related Documentation
 

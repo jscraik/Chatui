@@ -34,14 +34,14 @@ import {
 interface IconPickerModalProps {
   isOpen: boolean;
   onClose: () => void;
-  currentIcon?: React.ReactNode;
+  currentIconId?: string;
   currentColor?: string;
   onSave: (icon: string, color: string) => void;
   projectName: string;
 }
 
 const colors = [
-  { id: "gray", value: "text-white/60", bg: "bg-white/60" },
+  { id: "gray", value: "text-foundation-text-light-tertiary dark:text-white/60", bg: "bg-foundation-bg-light-3 dark:bg-white/10" },
   {
     id: "blue",
     value: "text-foundation-accent-blue",
@@ -100,12 +100,12 @@ const getSelectedIconComponent = (selectedIcon: string) =>
 
 function ModalHeader({ projectName }: { projectName: string }) {
   return (
-    <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+    <div className="flex items-center justify-between px-6 py-4 border-b border-foundation-bg-light-3 dark:border-white/10">
       <div>
-        <h2 className="text-[16px] font-medium text-white leading-[24px] tracking-[-0.32px]">
+        <h2 className="text-[16px] font-medium text-foundation-text-light-primary dark:text-white leading-[24px] tracking-[-0.32px]">
           Choose icon
         </h2>
-        <p className="text-[13px] text-white/60 mt-0.5 leading-[18px] tracking-[-0.32px]">
+        <p className="text-[13px] text-foundation-text-light-tertiary dark:text-white/60 mt-0.5 leading-[18px] tracking-[-0.32px]">
           {projectName}
         </p>
       </div>
@@ -122,7 +122,7 @@ function IconPreview({
 }) {
   return (
     <div className="flex items-center justify-center mb-6">
-      <div className={`p-4 rounded-xl bg-white/5 ${selectedColor}`}>
+      <div className={`p-4 rounded-xl bg-black/5 dark:bg-white/5 ${selectedColor}`}>
         <SelectedIconComponent className="size-8" />
       </div>
     </div>
@@ -145,10 +145,11 @@ function ColorPicker({
             onClick={() => onSelect(color.value)}
             className={`size-8 rounded-full transition-all ${color.bg} ${
               selectedColor === color.value
-                ? "ring-2 ring-white ring-offset-2 ring-offset-foundation-bg-dark-2 scale-110"
+                ? "ring-2 ring-black/20 dark:ring-white ring-offset-2 ring-offset-foundation-bg-light-2 dark:ring-offset-foundation-bg-dark-2 scale-110"
                 : "hover:scale-105"
             }`}
             title={color.id}
+            aria-label={`Color: ${color.id}`}
           />
         ))}
       </div>
@@ -174,12 +175,13 @@ function IconGrid({
             key={icon.id}
             onClick={() => onSelect(icon.id)}
             className={`p-3 rounded-lg transition-all ${
-              selectedIcon === icon.id ? "bg-white/10 scale-95" : "hover:bg-white/5"
+              selectedIcon === icon.id ? "bg-black/10 dark:bg-white/10 scale-95" : "hover:bg-black/5 dark:hover:bg-white/5"
             }`}
             title={icon.id}
+            aria-label={`Icon: ${icon.id}`}
           >
             <IconComponent
-              className={`size-5 ${selectedIcon === icon.id ? selectedColor : "text-white/60"}`}
+              className={`size-5 ${selectedIcon === icon.id ? selectedColor : "text-foundation-text-light-tertiary dark:text-white/60"}`}
             />
           </button>
         );
@@ -190,10 +192,10 @@ function IconGrid({
 
 function ModalFooter({ onClose, onSave }: { onClose: () => void; onSave: () => void }) {
   return (
-    <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-white/10">
+    <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-foundation-bg-light-3 dark:border-white/10">
       <button
         onClick={onClose}
-        className="px-4 py-2 text-[14px] text-white/70 hover:text-white hover:bg-white/5 rounded-lg transition-colors font-normal leading-[20px] tracking-[-0.3px]"
+        className="px-4 py-2 text-[14px] text-foundation-text-light-secondary dark:text-white/70 hover:text-foundation-text-light-primary dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-colors font-normal leading-[20px] tracking-[-0.3px]"
       >
         Cancel
       </button>
@@ -210,12 +212,13 @@ function ModalFooter({ onClose, onSave }: { onClose: () => void; onSave: () => v
 export function IconPickerModal({
   isOpen,
   onClose,
-  currentColor = "text-white/60",
+  currentIconId,
+  currentColor = "text-foundation-text-light-tertiary dark:text-white/60",
   onSave,
   projectName,
 }: IconPickerModalProps) {
   const [selectedColor, setSelectedColor] = useState(currentColor);
-  const [selectedIcon, setSelectedIcon] = useState("folder");
+  const [selectedIcon, setSelectedIcon] = useState(currentIconId ?? "folder");
 
   if (!isOpen) return null;
 
@@ -229,8 +232,13 @@ export function IconPickerModal({
   return (
     <>
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200]" onClick={onClose} />
-      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[201] w-[400px]">
-        <div className="bg-foundation-bg-dark-2 border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+      <div
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[201] w-[400px]"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="icon-picker-title"
+      >
+        <div className="bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 border border-foundation-bg-light-3 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden">
           <ModalHeader projectName={projectName} />
           <div className="px-6 py-6">
             <IconPreview
@@ -256,11 +264,21 @@ export function IconPickerModal({
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.2);
+          background: rgba(0, 0, 0, 0.15);
           border-radius: 3px;
         }
+        @media (prefers-color-scheme: dark) {
+          .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+          }
+        }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.3);
+          background: rgba(0, 0, 0, 0.25);
+        }
+        @media (prefers-color-scheme: dark) {
+          .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+          }
         }
       `}</style>
     </>

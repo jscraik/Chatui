@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   IconArchive,
@@ -26,7 +27,7 @@ import { ListItem } from "../ui/base/list-item";
 export interface SidebarItem {
   id: string;
   label: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   color?: string;
 }
 
@@ -38,19 +39,19 @@ export interface ChatSidebarUser {
 
 interface ChatSidebarProps {
   isOpen: boolean;
-  onToggle: () => void;
+  onToggle?: () => void;
   onProjectSelect?: (project: SidebarItem) => void;
   projects?: SidebarItem[];
   chatHistory?: string[];
   groupChats?: SidebarItem[];
   categories?: string[];
-  categoryIcons?: Record<string, React.ReactNode>;
+  categoryIcons?: Record<string, ReactNode>;
   categoryColors?: Record<string, string>;
   categoryIconColors?: Record<string, string>;
   user?: ChatSidebarUser;
 }
 
-const projectIconMap: { [key: string]: React.ReactNode } = {
+const projectIconMap: Record<string, ReactNode> = {
   folder: <IconFolder className="size-4" />,
   chat: <IconChat className="size-4" />,
   "bar-chart": <IconBarChart className="size-4" />,
@@ -61,6 +62,31 @@ const projectIconMap: { [key: string]: React.ReactNode } = {
 
 const getProjectIcon = (iconId: string) =>
   projectIconMap[iconId] || <IconFolder className="size-4" />;
+
+function RailButton(props: {
+  icon: ReactNode;
+  label: string;
+  active?: boolean;
+  onClick?: () => void;
+}) {
+  const { icon, label, active, onClick } = props;
+
+  return (
+    <button
+      type="button"
+      data-rail-item="true"
+      aria-label={label}
+      title={label}
+      aria-current={active ? "page" : undefined}
+      onClick={onClick}
+      className={`mx-2 mb-1 size-10 rounded-lg flex items-center justify-center transition-colors hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 dark:focus-visible:ring-white/30 ${
+        active ? "bg-black/10 dark:bg-white/10" : ""
+      }`}
+    >
+      {icon}
+    </button>
+  );
+}
 
 function ProjectSettingsModal({
   memoryOption,
@@ -73,23 +99,74 @@ function ProjectSettingsModal({
   onClose: () => void;
   onDone: () => void;
 }) {
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+
+  // Focus management with focus trap
+  useEffect(() => {
+    const t = window.setTimeout(() => dialogRef.current?.focus(), 0);
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+        return;
+      }
+
+      // Focus trap for Tab key
+      if (e.key === "Tab" && dialogRef.current) {
+        const focusableElements = dialogRef.current.querySelectorAll<
+          HTMLElement
+        >(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        );
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement?.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement?.focus();
+          }
+        }
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [onClose]);
+
   return (
     <div
       className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100]"
       onClick={onClose}
+      role="presentation"
     >
       <div
-        className="bg-foundation-bg-dark-2 border border-white/10 text-white rounded-2xl w-[380px] shadow-2xl"
+        ref={dialogRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="project-settings-title"
+        className="bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 border border-foundation-bg-light-3 dark:border-white/10 text-foundation-text-light-primary dark:text-foundation-text-dark-primary rounded-2xl w-[380px] shadow-2xl outline-none"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="px-6 pt-6 pb-5">
-          <h2 className="text-[16px] font-semibold text-white leading-[22px] tracking-[-0.32px]">
+          <h2
+            id="project-settings-title"
+            className="text-[16px] font-semibold text-foundation-text-light-primary dark:text-foundation-text-dark-primary leading-[22px] tracking-[-0.32px]"
+          >
             Project settings
           </h2>
         </div>
         <div className="px-6 pb-6">
           <div className="mb-6">
-            <h3 className="text-[13px] text-white/50 mb-3 font-normal leading-[18px] tracking-[-0.3px]">
+            <h3 className="text-[13px] text-foundation-text-light-tertiary dark:text-white/50 mb-3 font-normal leading-[18px] tracking-[-0.3px]">
               Memory
             </h3>
             <button
@@ -97,15 +174,15 @@ function ProjectSettingsModal({
               className={`w-full text-left p-4 rounded-xl mb-3 border-2 transition-all ${
                 memoryOption === "default"
                   ? "bg-foundation-accent-green/20 border-foundation-accent-green/40"
-                  : "bg-transparent border-white/10 hover:border-white/20"
+                  : "bg-transparent border-foundation-bg-light-3 dark:border-white/10 hover:border-foundation-bg-light-3/70 dark:hover:border-white/20"
               }`}
             >
               <div className="flex items-start justify-between mb-2">
-                <span className="text-[14px] font-semibold text-white leading-[20px] tracking-[-0.3px]">
+                <span className="text-[14px] font-semibold text-foundation-text-light-primary dark:text-foundation-text-dark-primary leading-[20px] tracking-[-0.3px]">
                   Default
                 </span>
               </div>
-              <p className="text-[13px] text-white/50 leading-[18px] tracking-[-0.32px] font-normal">
+              <p className="text-[13px] text-foundation-text-light-tertiary dark:text-white/50 leading-[18px] tracking-[-0.32px] font-normal">
                 Project can access memories from outside chats, and vice versa.
               </p>
             </button>
@@ -114,31 +191,31 @@ function ProjectSettingsModal({
               className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
                 memoryOption === "project-only"
                   ? "bg-foundation-accent-green/20 border-foundation-accent-green/40"
-                  : "bg-transparent border-white/10 hover:border-white/20"
+                  : "bg-transparent border-foundation-bg-light-3 dark:border-white/10 hover:border-foundation-bg-light-3/70 dark:hover:border-white/20"
               }`}
             >
               <div className="flex items-start justify-between mb-2">
-                <span className="text-[14px] font-semibold text-white leading-[20px] tracking-[-0.3px]">
+                <span className="text-[14px] font-semibold text-foundation-text-light-primary dark:text-foundation-text-dark-primary leading-[20px] tracking-[-0.3px]">
                   Project-only
                 </span>
               </div>
-              <p className="text-[13px] text-white/50 leading-[18px] tracking-[-0.32px] font-normal">
+              <p className="text-[13px] text-foundation-text-light-tertiary dark:text-white/50 leading-[18px] tracking-[-0.32px] font-normal">
                 Project can only access its own memories. Its memories are hidden from outside
                 chats.
               </p>
             </button>
           </div>
         </div>
-        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-white/10">
+        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-foundation-bg-light-3 dark:border-white/10">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-[14px] text-white/70 hover:text-white hover:bg-white/5 rounded-lg transition-colors font-normal leading-[20px] tracking-[-0.3px]"
+            className="px-4 py-2 text-[14px] text-foundation-text-light-secondary dark:text-white/70 hover:text-foundation-text-light-primary dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-colors font-normal leading-[20px] tracking-[-0.3px]"
           >
             Cancel
           </button>
           <button
             onClick={onDone}
-            className="px-4 py-2 text-[14px] bg-white text-foundation-text-light-primary hover:bg-white/90 rounded-lg transition-colors font-semibold leading-[20px] tracking-[-0.3px]"
+            className="px-4 py-2 text-[14px] bg-foundation-bg-light-1 dark:bg-white text-foundation-text-light-primary dark:text-foundation-text-dark-primary hover:bg-foundation-bg-light-1/90 dark:hover:bg-white/90 rounded-lg transition-colors font-semibold leading-[20px] tracking-[-0.3px]"
           >
             Done
           </button>
@@ -150,7 +227,7 @@ function ProjectSettingsModal({
 
 export function ChatSidebar({
   isOpen,
-  onToggle: _onToggle,
+  onToggle,
   onProjectSelect,
   projects,
   chatHistory,
@@ -176,7 +253,6 @@ export function ChatSidebar({
 
   const { sidebarFooter } = useChatUISlots();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [_searchQuery, _setSearchQuery] = useState("");
   const [_selectedAction, _setSelectedAction] = useState("chatgpt");
   const [projectName, setProjectName] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -184,8 +260,21 @@ export function ChatSidebar({
   const [selectedProjectForIcon, setSelectedProjectForIcon] = useState<SidebarItem | null>(null);
   const [projectsData, setProjectsData] = useState<SidebarItem[]>(resolvedProjects);
   const [newProjectIcon, setNewProjectIcon] = useState("folder");
-  const [newProjectColor, setNewProjectColor] = useState("text-white/60");
+  const [newProjectColorId, setNewProjectColorId] = useState("gray");
   const [showMoreOptions, setShowMoreOptions] = useState(false);
+
+  // Ref to track if we've initialized from props (prevents overwriting local edits)
+  const didInitProjectsRef = useRef(false);
+
+  // Color key to class mapping (matches IconPickerModal colors)
+  const colorClassMap: Record<string, string> = {
+    gray: "text-foundation-icon-light-tertiary dark:text-white/60",
+    blue: "text-foundation-accent-blue",
+    green: "text-foundation-accent-green",
+    orange: "text-foundation-accent-orange",
+    red: "text-foundation-accent-red",
+  };
+  const newProjectColor = colorClassMap[newProjectColorId] || colorClassMap.gray;
   const [memoryOption, setMemoryOption] = useState<"default" | "project-only">("default");
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
@@ -195,12 +284,33 @@ export function ChatSidebar({
   const [yourChatsExpanded, setYourChatsExpanded] = useState(true);
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
 
+  const onRailKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+
+    const root = e.currentTarget as HTMLElement;
+    const buttons = Array.from(
+      root.querySelectorAll<HTMLButtonElement>('button[data-rail-item="true"]'),
+    );
+    const i = buttons.indexOf(document.activeElement as HTMLButtonElement);
+    if (i < 0) return;
+
+    const delta = e.key === "ArrowDown" ? 1 : -1;
+    const next = buttons[(i + delta + buttons.length) % buttons.length];
+    next?.focus();
+    e.preventDefault();
+  };
+
+  // Initialize projects from props only once (prevents overwriting local edits)
   useEffect(() => {
+    if (didInitProjectsRef.current) return;
     setProjectsData(resolvedProjects);
+    didInitProjectsRef.current = true;
   }, [resolvedProjects]);
 
   const handleNewChat = () => {
+    _setSelectedAction("chatgpt");
     console.log("Starting new chat");
+    onToggle?.();
   };
 
   const toggleCategory = (category: string) => {
@@ -213,38 +323,56 @@ export function ChatSidebar({
     });
   };
 
-  const handleCreateProject = () => {
-    console.log("Creating project:", {
-      name: projectName,
-      categories: selectedCategories,
-    });
+  const handleCreateProject = useCallback(() => {
+    if (!projectName.trim()) return;
+
+    const newProject: SidebarItem = {
+      id: `project-${Date.now()}`,
+      label: projectName,
+      icon: getProjectIcon(newProjectIcon),
+      color: newProjectColor,
+    };
+
+    // Use functional update to avoid stale state
+    setProjectsData((prev) => [...prev, newProject]);
     setProjectName("");
     setSelectedCategories([]);
-  };
+    // Note: Popover closing would require controlled state - this is left as exercise for implementer
+  }, [projectName, newProjectIcon, newProjectColor]);
 
-  const handleIconChange = (iconId: string, color: string) => {
+  const handleIconChange = useCallback((iconId: string, color: string) => {
     if (selectedProjectForIcon) {
       const newIcon = getProjectIcon(iconId);
-      const updatedProjects = projectsData.map((project) =>
-        project.id === selectedProjectForIcon.id ? { ...project, icon: newIcon, color } : project,
+      setProjectsData((prev) =>
+        prev.map((project) =>
+          project.id === selectedProjectForIcon.id ? { ...project, icon: newIcon, color } : project,
+        ),
       );
-      setProjectsData(updatedProjects);
     }
     setShowIconPicker(false);
     setSelectedProjectForIcon(null);
-  };
+  }, [selectedProjectForIcon]);
 
-  const handleNewProjectIconChange = (iconId: string, color: string) => {
+  const handleNewProjectIconChange = useCallback((iconId: string, color: string) => {
     setNewProjectIcon(iconId);
-    setNewProjectColor(color);
+    // More robust color matching: split color into tokens and check for any match
+    const colorTokens = new Set(color.split(/\s+/));
+    const colorId =
+      Object.entries(colorClassMap).find(([_, value]) => {
+        const valueTokens = value.split(/\s+/);
+        // Check if any token from the color value matches any token from our map
+        return valueTokens.some((token) => colorTokens.has(token));
+      })?.[0] ?? "gray";
+    setNewProjectColorId(colorId);
     setShowIconPicker(false);
-  };
+  }, []);
 
   const handleProjectSelect = (project: SidebarItem) => {
     _setSelectedAction(project.id);
     if (onProjectSelect) {
       onProjectSelect(project);
     }
+    onToggle?.();
   };
 
   const renderProjectIcon = (project: SidebarItem) => {
@@ -255,7 +383,9 @@ export function ChatSidebar({
   const renderProjectActions = (projectId: string) =>
     hoveredProject === projectId ? (
       <button
-        className="p-1.5 hover:bg-white/10 rounded-md transition-colors"
+        type="button"
+        aria-label="Project options"
+        className="p-1.5 hover:bg-black/5 dark:hover:bg-white/10 rounded-md transition-colors"
         onClick={(e) => {
           e.stopPropagation();
           console.log("Project options");
@@ -272,7 +402,7 @@ export function ChatSidebar({
   return (
     <>
       <div
-        className={`bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 text-white flex flex-col h-full border-r border-foundation-bg-light-3 dark:border-white/10 transition-all duration-300 ${
+        className={`bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 text-foundation-text-light-primary dark:text-foundation-text-dark-primary flex flex-col h-full border-r border-foundation-bg-light-3 dark:border-white/10 transition-all duration-300 ${
           isCollapsed ? "w-[60px]" : "w-64"
         }`}
       >
@@ -288,111 +418,216 @@ export function ChatSidebar({
           )}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="size-8 flex items-center justify-center rounded-lg hover:bg-white/5 transition-colors"
+            type="button"
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            className="size-8 flex items-center justify-center rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
             title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             <IconSidebar className="size-5 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary" />
           </button>
         </div>
 
-        <div className="px-2 pb-1">
-          <ListItem
-            icon={<IconCompose className="size-4" />}
-            label={isCollapsed ? "" : "New chat"}
-            onClick={handleNewChat}
-            className={isCollapsed ? "justify-center" : ""}
-          />
-        </div>
-
-        <div className="px-2 pb-1">
-          <ListItem
-            icon={<IconSearch className="size-4" />}
-            label={isCollapsed ? "" : "Search chats"}
-            className={isCollapsed ? "justify-center" : ""}
-          />
-        </div>
-
-        {!isCollapsed && (
-          <div className="px-2 pb-1">
-            <ListItem icon={<Sparkles className="size-4" />} label="Your Year With ChatGPT" />
-          </div>
-        )}
-
-        <div className="px-2 pb-1">
-          <ListItem
-            icon={<IconRadio className="size-4" />}
-            label={isCollapsed ? "" : "Pulse"}
-            className={isCollapsed ? "justify-center" : ""}
-          />
-        </div>
-
-        <div className="px-2 pb-1">
-          <ListItem
-            icon={<IconImage className="size-4" />}
-            label={isCollapsed ? "" : "Images"}
-            right={
-              !isCollapsed && (
-                <span className="text-[10px] font-semibold leading-[14px] tracking-[0.5px] px-1.5 py-0.5 bg-white/10 rounded text-white uppercase">
-                  NEW
-                </span>
-              )
-            }
-            className={isCollapsed ? "justify-center" : ""}
-          />
-        </div>
-
-        {!isCollapsed && (
-          <div className="px-2 pb-1">
-            <ListItem icon={<IconArchive className="size-4" />} label="Archived chats" />
-          </div>
-        )}
-
-        <div className="flex-1 overflow-y-auto overflow-x-hidden">
-          {!isCollapsed && (
-            <div className="px-2 pb-1">
-              <ListItem icon={<IconGrid3x3 className="size-4" />} label="Apps" />
-            </div>
-          )}
-
-          {!isCollapsed && (
-            <div className="px-2 pb-1">
-              <ListItem icon={<IconCode className="size-4" />} label="Codex" />
-            </div>
-          )}
-
-          {!isCollapsed && (
-            <CollapsibleSection
-              title="GPTs"
-              expanded={gptsExpanded}
-              onExpandedChange={(expanded: boolean) => setGptsExpanded(expanded)}
+        {isCollapsed ? (
+          <div
+            role="navigation"
+            aria-label="Sidebar"
+            onKeyDown={onRailKeyDown}
+            className="flex-1 overflow-y-auto overflow-x-hidden pt-1"
+          >
+            {/* Primary actions */}
+            <RailButton
+              icon={<IconCompose className="size-4" />}
+              label="New chat"
+              active={_selectedAction === "chatgpt"}
+              onClick={handleNewChat}
             />
-          )}
-
-          {!isCollapsed && (
-            <CollapsibleSection
-              title="Projects"
-              expanded={projectsExpanded}
-              onExpandedChange={(expanded: boolean) => setProjectsExpanded(expanded)}
+            <RailButton
+              icon={<IconSearch className="size-4" />}
+              label="Search chats"
+              active={_selectedAction === "search"}
+              onClick={() => {
+                _setSelectedAction("search");
+                console.log("Search chats");
+              }}
             />
-          )}
+            <RailButton
+              icon={<IconRadio className="size-4" />}
+              label="Pulse"
+              active={_selectedAction === "pulse"}
+              onClick={() => {
+                _setSelectedAction("pulse");
+                console.log("Pulse");
+              }}
+            />
+            <RailButton
+              icon={<IconImage className="size-4" />}
+              label="Images"
+              active={_selectedAction === "images"}
+              onClick={() => {
+                _setSelectedAction("images");
+                console.log("Images");
+              }}
+            />
+            <RailButton
+              icon={<IconGrid3x3 className="size-4" />}
+              label="Apps"
+              active={_selectedAction === "apps"}
+              onClick={() => {
+                _setSelectedAction("apps");
+                console.log("Apps");
+              }}
+            />
+            <RailButton
+              icon={<IconArchive className="size-4" />}
+              label="Archived chats"
+              active={_selectedAction === "archived"}
+              onClick={() => {
+                _setSelectedAction("archived");
+                console.log("Archived chats");
+              }}
+            />
+            <RailButton
+              icon={<IconCode className="size-4" />}
+              label="Codex"
+              active={_selectedAction === "codex"}
+              onClick={() => {
+                _setSelectedAction("codex");
+                console.log("Codex");
+              }}
+            />
 
-          {projectsExpanded && !isCollapsed && (
+            <div className="mx-2 my-2 border-t border-foundation-bg-light-3 dark:border-white/10" />
+
+            {/* Projects */}
+            <div role="group" aria-label="Projects">
+              {projectsData.map((project) => (
+                <RailButton
+                  key={project.id}
+                  icon={renderProjectIcon(project)}
+                  label={project.label}
+                  active={_selectedAction === project.id}
+                  onClick={() => handleProjectSelect(project)}
+                />
+              ))}
+            </div>
+
+            {resolvedGroupChats.length > 0 ? (
+              <>
+                <div className="mx-2 my-2 border-t border-foundation-bg-light-3 dark:border-white/10" />
+                <div role="group" aria-label="Group chats">
+                  {resolvedGroupChats.map((chat) => (
+                    <RailButton
+                      key={chat.id}
+                      icon={renderProjectIcon(chat)}
+                      label={chat.label}
+                      active={_selectedAction === chat.id}
+                      onClick={() => handleProjectSelect(chat)}
+                    />
+                  ))}
+                </div>
+              </>
+            ) : null}
+          </div>
+        ) : null}
+
+        {!isCollapsed ? (
+          <>
+            <div className="px-2 pb-1">
+              <ListItem
+                icon={<IconCompose className="size-4" />}
+                label={isCollapsed ? "" : "New chat"}
+                onClick={handleNewChat}
+                className={isCollapsed ? "justify-center" : ""}
+              />
+            </div>
+
+            <div className="px-2 pb-1">
+              <ListItem
+                icon={<IconSearch className="size-4" />}
+                label={isCollapsed ? "" : "Search chats"}
+                className={isCollapsed ? "justify-center" : ""}
+              />
+            </div>
+
+            <div className="px-2 pb-1">
+              <ListItem icon={<Sparkles className="size-4" />} label="Your Year With ChatGPT" />
+            </div>
+
+            <div className="px-2 pb-1">
+              <ListItem
+                icon={<IconRadio className="size-4" />}
+                label={isCollapsed ? "" : "Pulse"}
+                className={isCollapsed ? "justify-center" : ""}
+              />
+            </div>
+
+            <div className="px-2 pb-1">
+              <ListItem
+                icon={<IconImage className="size-4" />}
+                label={isCollapsed ? "" : "Images"}
+                right={
+                  !isCollapsed && (
+                    <span className="text-[10px] font-semibold leading-[14px] tracking-[0.5px] px-1.5 py-0.5 bg-black/10 dark:bg-white/10 rounded text-foundation-text-light-primary dark:text-white uppercase">
+                      NEW
+                    </span>
+                  )
+                }
+                className={isCollapsed ? "justify-center" : ""}
+              />
+            </div>
+
+            {!isCollapsed && (
+              <div className="px-2 pb-1">
+                <ListItem icon={<IconArchive className="size-4" />} label="Archived chats" />
+              </div>
+            )}
+
+            <div className="flex-1 overflow-y-auto overflow-x-hidden">
+              {!isCollapsed && (
+                <div className="px-2 pb-1">
+                  <ListItem icon={<IconGrid3x3 className="size-4" />} label="Apps" />
+                </div>
+              )}
+
+              {!isCollapsed && (
+                <div className="px-2 pb-1">
+                  <ListItem icon={<IconCode className="size-4" />} label="Codex" />
+                </div>
+              )}
+
+              {!isCollapsed && (
+                <CollapsibleSection
+                  title="GPTs"
+                  expanded={gptsExpanded}
+                  onExpandedChange={(expanded: boolean) => setGptsExpanded(expanded)}
+                />
+              )}
+
+              {!isCollapsed && (
+                <CollapsibleSection
+                  title="Projects"
+                  expanded={projectsExpanded}
+                  onExpandedChange={(expanded: boolean) => setProjectsExpanded(expanded)}
+                />
+              )}
+
+              {projectsExpanded && !isCollapsed && (
             <>
               <div className="px-2 pb-1">
                 <Popover>
-                  <Popover.Trigger>
-                    <button type="button" className="w-full text-left">
+                  <Popover.Trigger asChild>
+                    <div className="w-full">
                       <ListItem icon={<IconFolder className="size-4" />} label="New project" />
-                    </button>
+                    </div>
                   </Popover.Trigger>
                   <Popover.Content
                     side="right"
                     align="start"
                     sideOffset={12}
-                    className="z-[60] w-[420px] rounded-2xl border border-white/10 bg-foundation-bg-dark-2 shadow-2xl outline-none"
+                    className="z-[60] w-[420px] rounded-2xl border border-foundation-bg-light-3 dark:border-white/10 bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 shadow-2xl outline-none"
                   >
                     <div className="px-6 pt-6 pb-5">
-                      <p className="text-[13px] text-white/50 leading-[18px] tracking-[-0.32px] font-normal text-center">
+                      <p className="text-[13px] text-foundation-text-light-tertiary dark:text-white/50 leading-[18px] tracking-[-0.32px] font-normal text-center">
                         Projects give ChatGPT shared context
                         <br />
                         across chats and files, all in one place.
@@ -415,9 +650,10 @@ export function ChatSidebar({
                         <input
                           type="text"
                           placeholder="Project Name"
+                          aria-label="Project Name"
                           value={projectName}
                           onChange={(e) => setProjectName(e.target.value)}
-                          className="w-full bg-foundation-bg-dark-3 border border-white/10 rounded-lg pl-10 pr-3 py-3 text-[14px] text-white placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-white/20 transition-all font-normal leading-[20px] tracking-[-0.3px]"
+                          className="w-full bg-foundation-bg-light-3 dark:bg-foundation-bg-dark-3 border border-foundation-bg-light-3 dark:border-white/10 rounded-lg pl-10 pr-3 py-3 text-[14px] text-foundation-text-light-primary dark:text-white placeholder:text-foundation-text-light-tertiary dark:placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-black/20 dark:focus:ring-white/20 transition-all font-normal leading-[20px] tracking-[-0.3px]"
                         />
                       </div>
                       {resolvedCategories.length > 0 ? (
@@ -437,7 +673,7 @@ export function ChatSidebar({
                                       ? resolvedCategoryColors[
                                           category as keyof typeof resolvedCategoryColors
                                         ]
-                                      : "bg-foundation-bg-dark-3 text-white/60 border-white/10 hover:bg-foundation-bg-dark-3/80"
+                                      : "bg-foundation-bg-light-3 dark:bg-foundation-bg-dark-3 text-foundation-text-light-tertiary dark:text-white/60 border-foundation-bg-light-3 dark:border-white/10 hover:bg-foundation-bg-light-3/80 dark:hover:bg-foundation-bg-dark-3/80"
                                   }`}
                                 >
                                   {resolvedCategoryIcons[category] ? (
@@ -465,13 +701,13 @@ export function ChatSidebar({
                       <button
                         onClick={handleCreateProject}
                         disabled={!projectName.trim()}
-                        className="w-full bg-foundation-accent-green hover:bg-foundation-accent-green/80 disabled:bg-foundation-bg-dark-3 disabled:text-white/30 disabled:cursor-not-allowed text-white py-3 rounded-lg transition-all text-[14px] font-normal leading-[20px] tracking-[-0.3px]"
+                        className="w-full bg-foundation-accent-green hover:bg-foundation-accent-green/80 disabled:bg-foundation-bg-light-3 dark:disabled:bg-foundation-bg-dark-3 disabled:text-foundation-text-light-tertiary dark:disabled:text-white/30 disabled:cursor-not-allowed text-white py-3 rounded-lg transition-all text-[14px] font-normal leading-[20px] tracking-[-0.3px]"
                       >
                         Create project
                       </button>
                       <button
                         onClick={() => setShowMoreOptions(true)}
-                        className="w-full bg-foundation-bg-dark-3 hover:bg-foundation-bg-dark-3/80 text-white/70 py-3 rounded-lg mt-2 transition-colors text-[14px] font-normal leading-[20px] tracking-[-0.3px]"
+                        className="w-full bg-foundation-bg-light-3 dark:bg-foundation-bg-dark-3 hover:bg-foundation-bg-light-3/80 dark:hover:bg-foundation-bg-dark-3/80 text-foundation-text-light-secondary dark:text-white/70 py-3 rounded-lg mt-2 transition-colors text-[14px] font-normal leading-[20px] tracking-[-0.3px]"
                       >
                         More options
                       </button>
@@ -485,6 +721,8 @@ export function ChatSidebar({
                   className="px-2 pb-1"
                   onMouseEnter={() => setHoveredProject(project.id)}
                   onMouseLeave={() => setHoveredProject(null)}
+                  onFocusCapture={() => setHoveredProject(project.id)}
+                  onBlurCapture={() => setHoveredProject(null)}
                 >
                   <ListItem
                     icon={renderProjectIcon(project)}
@@ -497,7 +735,7 @@ export function ChatSidebar({
             </>
           )}
 
-          {!isCollapsed && resolvedGroupChats.length > 0 && (
+          {resolvedGroupChats.length > 0 && (
             <CollapsibleSection
               title="Group chats"
               expanded={groupChatsExpanded}
@@ -505,10 +743,17 @@ export function ChatSidebar({
             />
           )}
 
-          {groupChatsExpanded && !isCollapsed && resolvedGroupChats.length > 0 && (
+          {groupChatsExpanded && resolvedGroupChats.length > 0 && (
             <>
               {resolvedGroupChats.map((chat) => (
-                <div key={chat.id} className="px-2 pb-1">
+                <div
+                  key={chat.id}
+                  className="px-2 pb-1"
+                  onMouseEnter={() => setHoveredProject(chat.id)}
+                  onMouseLeave={() => setHoveredProject(null)}
+                  onFocusCapture={() => setHoveredProject(chat.id)}
+                  onBlurCapture={() => setHoveredProject(null)}
+                >
                   <ListItem
                     icon={renderProjectIcon(chat)}
                     label={chat.label}
@@ -520,7 +765,7 @@ export function ChatSidebar({
             </>
           )}
 
-          {!isCollapsed && resolvedChatHistory.length > 0 && (
+          {resolvedChatHistory.length > 0 && (
             <CollapsibleSection
               title="Your chats"
               expanded={yourChatsExpanded}
@@ -528,7 +773,7 @@ export function ChatSidebar({
             />
           )}
 
-          {yourChatsExpanded && !isCollapsed && resolvedChatHistory.length > 0 && (
+          {yourChatsExpanded && resolvedChatHistory.length > 0 && (
             <>
               {resolvedChatHistory.slice(0, 5).map((chat) => (
                 <div key={chat} className="px-2 pb-1">
@@ -537,12 +782,18 @@ export function ChatSidebar({
               ))}
             </>
           )}
-        </div>
+            </div>
+          </>
+        ) : null}
 
-        <div className="p-2 border-t border-white/10 relative">
+        {sidebarFooter && !isCollapsed ? <div className="px-2 pb-2">{sidebarFooter}</div> : null}
+
+        <div className="p-2 border-t border-foundation-bg-light-3 dark:border-white/10 relative">
           <button
             onClick={() => setShowUserMenu(!showUserMenu)}
-            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors ${
+            aria-haspopup="menu"
+            aria-expanded={showUserMenu}
+            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors ${
               isCollapsed ? "justify-center" : ""
             }`}
             title={isCollapsed ? resolvedUser.name : ""}
@@ -552,7 +803,7 @@ export function ChatSidebar({
             </div>
             {!isCollapsed && (
               <div className="flex flex-col items-start flex-1 min-w-0">
-                <span className="text-[14px] truncate font-normal leading-[20px] tracking-[-0.3px] text-white">
+                <span className="text-[14px] truncate font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
                   {resolvedUser.name}
                 </span>
                 <span className="text-[12px] font-normal leading-[16px] tracking-[-0.3px] text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary">
@@ -562,16 +813,16 @@ export function ChatSidebar({
             )}
           </button>
           {showUserMenu && !isCollapsed && (
-            <div className="absolute bottom-full left-3 right-3 mb-2 bg-foundation-bg-dark-2 border border-white/20 rounded-xl shadow-2xl py-1 z-50">
-              <div className="px-3 py-2.5 border-b border-white/10">
+            <div role="menu" className="absolute bottom-full left-3 right-3 mb-2 bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 border border-foundation-bg-light-3 dark:border-white/20 rounded-xl shadow-2xl py-1 z-50">
+              <div className="px-3 py-2.5 border-b border-foundation-bg-light-3 dark:border-white/10">
                 <div className="flex items-center gap-2 text-[13px]">
                   <div className="size-2 rounded-full bg-foundation-accent-green" />
-                  <span className="text-white/70 font-normal">{resolvedUser.planLabel}</span>
+                  <span className="text-foundation-text-light-secondary dark:text-white/70 font-normal">{resolvedUser.planLabel}</span>
                 </div>
               </div>
-              <button className="w-full text-left px-3 py-2.5 hover:bg-white/5 transition-colors flex items-center gap-2">
+              <button className="w-full text-left px-3 py-2.5 hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center gap-2">
                 <svg
-                  className="size-4 text-white/70"
+                  className="size-4 text-foundation-text-light-secondary dark:text-white/70"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -580,7 +831,7 @@ export function ChatSidebar({
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                   <circle cx="12" cy="7" r="4" />
                 </svg>
-                <span className="text-[14px] text-white font-normal leading-[20px] tracking-[-0.3px]">
+                <span className="text-[14px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary font-normal leading-[20px] tracking-[-0.3px]">
                   {resolvedUser.accountLabel}
                 </span>
               </button>
@@ -589,16 +840,16 @@ export function ChatSidebar({
                   setShowUserMenu(false);
                   setShowSettingsModal(true);
                 }}
-                className="w-full text-left px-3 py-2.5 hover:bg-white/5 transition-colors flex items-center gap-2"
+                className="w-full text-left px-3 py-2.5 hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center gap-2"
               >
-                <IconSettings className="size-4 text-white/70" />
-                <span className="text-[14px] text-white font-normal leading-[20px] tracking-[-0.3px]">
+                <IconSettings className="size-4 text-foundation-text-light-secondary dark:text-white/70" />
+                <span className="text-[14px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary font-normal leading-[20px] tracking-[-0.3px]">
                   Settings
                 </span>
               </button>
-              <div className="my-1 border-t border-white/10" />
-              <button className="w-full text-left px-3 py-2.5 hover:bg-white/5 transition-colors">
-                <span className="text-[14px] text-white font-normal leading-[20px] tracking-[-0.3px]">
+              <div className="my-1 border-t border-foundation-bg-light-3 dark:border-white/10" />
+              <button className="w-full text-left px-3 py-2.5 hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                <span className="text-[14px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary font-normal leading-[20px] tracking-[-0.3px]">
                   Log Out
                 </span>
               </button>
@@ -614,6 +865,7 @@ export function ChatSidebar({
               setSelectedProjectForIcon(null);
             }}
             onSave={handleIconChange}
+            currentIconId={selectedProjectForIcon.id}
             currentColor={selectedProjectForIcon.color}
             projectName={selectedProjectForIcon.label}
           />
@@ -627,6 +879,7 @@ export function ChatSidebar({
               setShowMoreOptions(false);
             }}
             onSave={handleNewProjectIconChange}
+            currentIconId={newProjectIcon}
             currentColor={newProjectColor}
             projectName={projectName || "New Project"}
           />
@@ -645,10 +898,13 @@ export function ChatSidebar({
         )}
 
         {showSettingsModal && (
-          <SettingsModal isOpen={showSettingsModal} onClose={() => setShowSettingsModal(false)} />
+          <SettingsModal
+            isOpen={showSettingsModal}
+            onClose={() => setShowSettingsModal(false)}
+            account={{ subscriptionLabel: resolvedUser.planLabel }}
+          />
         )}
       </div>
-      {sidebarFooter}
     </>
   );
 }

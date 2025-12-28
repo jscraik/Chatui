@@ -162,6 +162,17 @@ ChatUIButton("Delete", variant: .destructive, size: .sm) {
 ChatUIButton(systemName: "heart.fill", size: .icon) {
     // Handle favorite
 }
+
+// Icon button with accessibility label + hint
+ChatUIButton(
+    systemName: "trash",
+    variant: .destructive,
+    size: .icon,
+    accessibilityLabel: "Delete item",
+    accessibilityHint: "Permanently removes the selected item"
+) {
+    // Handle delete
+}
 ```
 
 ### ChatUIInput
@@ -180,6 +191,15 @@ ChatUIInput(
     text: $text,
     placeholder: "Search...",
     variant: .search
+)
+
+// Search input with accessibility label and submit intent
+ChatUIInput(
+    text: $text,
+    placeholder: "Search messages",
+    variant: .search,
+    accessibilityLabel: "Search messages",
+    submitLabel: .search
 )
 
 // With submit handler

@@ -125,7 +125,12 @@ struct PreviewScenarios {
                     placeholder: "Search...",
                     variant: .search
                 )
-                ChatUIButton(systemName: "magnifyingglass", variant: .default, size: .icon) {}
+                ChatUIButton(
+                    systemName: "magnifyingglass",
+                    variant: .default,
+                    size: .icon,
+                    accessibilityLabel: "Search"
+                ) {}
             }
             .padding(DesignTokens.Spacing.sm)
         }
@@ -212,8 +217,18 @@ struct PreviewScenarios {
                     Spacer()
 
                     VStack(spacing: DesignTokens.Spacing.xxs) {
-                        ChatUIButton(systemName: "pencil", variant: .secondary, size: .icon) {}
-                        ChatUIButton(systemName: "gear", variant: .ghost, size: .icon) {}
+                        ChatUIButton(
+                            systemName: "pencil",
+                            variant: .secondary,
+                            size: .icon,
+                            accessibilityLabel: "Edit profile"
+                        ) {}
+                        ChatUIButton(
+                            systemName: "gear",
+                            variant: .ghost,
+                            size: .icon,
+                            accessibilityLabel: "Profile settings"
+                        ) {}
                     }
                 }
             }
@@ -277,43 +292,84 @@ struct PreviewScenarios {
 
 // MARK: - Previews
 
+private struct PreviewScenarioContainer<Content: View>: View {
+    let width: CGFloat?
+    let height: CGFloat?
+    let content: Content
+
+    init(width: CGFloat? = nil, height: CGFloat? = nil, @ViewBuilder content: () -> Content) {
+        self.width = width
+        self.height = height
+        self.content = content()
+    }
+
+    var body: some View {
+        content
+            .frame(width: width, height: height)
+            .padding(DesignTokens.Spacing.sm)
+            .background(DesignTokens.Colors.Background.secondary)
+    }
+}
+
 #Preview("Chat Messages") {
-    PreviewScenarios.ChatMessageScenario()
-        .frame(width: 500, height: 300)
-        .background(DesignTokens.Colors.Background.secondary)
+    PreviewScenarioContainer(width: 500, height: 300) {
+        PreviewScenarios.ChatMessageScenario()
+    }
 }
 
 #Preview("Form") {
-    PreviewScenarios.FormScenario()
-        .frame(width: 450)
-        .background(DesignTokens.Colors.Background.secondary)
+    PreviewScenarioContainer(width: 450) {
+        PreviewScenarios.FormScenario()
+    }
 }
 
 #Preview("Search Bar") {
-    PreviewScenarios.SearchBarScenario()
-        .frame(width: 500)
-        .background(DesignTokens.Colors.Background.secondary)
+    PreviewScenarioContainer(width: 500) {
+        PreviewScenarios.SearchBarScenario()
+    }
 }
 
 #Preview("Action Card") {
-    PreviewScenarios.ActionCardScenario()
-        .frame(width: 500)
-        .background(DesignTokens.Colors.Background.secondary)
+    PreviewScenarioContainer(width: 500) {
+        PreviewScenarios.ActionCardScenario()
+    }
 }
 
 #Preview("Confirmation Dialog") {
-    PreviewScenarios.ConfirmationDialogScenario()
-        .background(DesignTokens.Colors.Background.secondary)
+    PreviewScenarioContainer {
+        PreviewScenarios.ConfirmationDialogScenario()
+    }
 }
 
 #Preview("User Profile") {
-    PreviewScenarios.UserProfileScenario()
-        .frame(width: 450)
-        .background(DesignTokens.Colors.Background.secondary)
+    PreviewScenarioContainer(width: 450) {
+        PreviewScenarios.UserProfileScenario()
+    }
 }
 
 #Preview("Stats Cards") {
-    PreviewScenarios.StatsCardScenario()
-        .frame(width: 800)
-        .background(DesignTokens.Colors.Background.secondary)
+    PreviewScenarioContainer(width: 800) {
+        PreviewScenarios.StatsCardScenario()
+    }
+}
+
+#Preview("Form - High Contrast") {
+    PreviewScenarioContainer(width: 450) {
+        PreviewScenarios.FormScenario()
+    }
+    .environment(\.colorSchemeContrast, .increased)
+}
+
+#Preview("Form - Dynamic Type") {
+    PreviewScenarioContainer(width: 450) {
+        PreviewScenarios.FormScenario()
+    }
+    .environment(\.dynamicTypeSize, .accessibility3)
+}
+
+#Preview("Form - Dark Mode") {
+    PreviewScenarioContainer(width: 450) {
+        PreviewScenarios.FormScenario()
+    }
+    .environment(\.colorScheme, .dark)
 }

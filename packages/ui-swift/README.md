@@ -75,6 +75,29 @@ struct MyView: View {
 }
 ```
 
+### Accessibility + Submit Labels
+
+```swift
+@State private var query = ""
+
+ChatUIButton(
+    systemName: "trash",
+    variant: .destructive,
+    accessibilityLabel: "Delete item",
+    accessibilityHint: "Permanently removes the selected item"
+) {
+    // Handle delete
+}
+
+ChatUIInput(
+    text: $query,
+    placeholder: "Search messages",
+    variant: .search,
+    accessibilityLabel: "Search messages",
+    submitLabel: .search
+)
+```
+
 ### SwiftUI Previews
 
 The package includes comprehensive preview examples:

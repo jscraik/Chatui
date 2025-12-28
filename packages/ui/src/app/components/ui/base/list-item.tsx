@@ -1,16 +1,17 @@
+import type { ReactNode } from "react";
 import { IconChevronRightMd } from "../../../../icons";
 
 import { cn } from "../utils";
 
 export interface ListItemProps {
   /** Icon to display on the left */
-  icon?: React.ReactNode;
+  icon?: ReactNode;
   /** Primary label text */
   label: string;
   /** Secondary description text */
   description?: string;
   /** Content to display on the right */
-  right?: React.ReactNode;
+  right?: ReactNode;
   /** Whether to show a chevron on the right */
   showChevron?: boolean;
   /** Click handler */
@@ -61,25 +62,31 @@ export function ListItem({
 
   return (
     <Component
+      {...(Component === "button" ? { type: "button" as const } : {})}
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       className={cn(
         "w-full flex items-center justify-between rounded-lg transition-colors text-left",
         sizes[size],
-        onClick && "hover:bg-white/5 cursor-pointer",
-        selected && "bg-white/10",
+        onClick &&
+          "hover:bg-foundation-bg-light-2 dark:hover:bg-white/5 cursor-pointer",
+        selected && "bg-foundation-bg-light-2 dark:bg-white/10",
         disabled && "opacity-50 cursor-not-allowed",
         className,
       )}
     >
       <div className="flex items-center gap-3 flex-1 min-w-0">
-        {icon && <div className="flex-shrink-0 text-foundation-text-dark-tertiary">{icon}</div>}
+        {icon && (
+          <div className="flex-shrink-0 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary">
+            {icon}
+          </div>
+        )}
         <div className="flex-1 min-w-0">
-          <div className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-white truncate">
+          <div className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary truncate">
             {label}
           </div>
           {description && (
-            <div className="text-[12px] text-foundation-text-dark-tertiary leading-[16px] tracking-[-0.3px] truncate">
+            <div className="text-[12px] text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary leading-[16px] tracking-[-0.3px] truncate">
               {description}
             </div>
           )}
@@ -89,7 +96,7 @@ export function ListItem({
       <div className="flex items-center gap-2 flex-shrink-0 ml-2">
         {right}
         {showChevron && (
-          <IconChevronRightMd className="size-4 text-foundation-text-dark-tertiary" />
+          <IconChevronRightMd className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary" />
         )}
       </div>
     </Component>
@@ -111,7 +118,7 @@ export function ListItemCheck({ checked = false, ...props }: ListItemCheckProps)
       right={
         checked && (
           <svg
-            className="size-4 text-white"
+            className="size-4 text-foundation-text-light-primary dark:text-foundation-text-dark-primary"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

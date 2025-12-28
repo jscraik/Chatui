@@ -42,12 +42,12 @@ export function ChatHeader({
           title={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
         />
 
-        <ViewModeToggle value={viewMode} onChange={onViewModeChange} />
+        <ViewModeToggle value={viewMode} onChange={onViewModeChange ?? (() => {})} />
 
         {viewMode !== "compose" && resolvedModels.length > 0 && (
           <ModelSelector
             value={modelName}
-            onChange={onModelChange}
+            onChange={onModelChange ?? (() => {})}
             models={resolvedModels}
             legacyModels={resolvedLegacyModels}
           />

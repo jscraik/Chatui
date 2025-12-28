@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { IconX } from "../icons/ChatGPTIcons";
 import { SectionHeader } from "../ui/base/section-header";
@@ -23,6 +23,36 @@ export function DiscoverySettingsModal({
   targetSize: externalTargetSize,
   onTargetSizeChange,
 }: DiscoverySettingsModalProps) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const lastActiveRef = useRef<HTMLElement | null>(null);
+
+  // Sync local state with props when modal opens or props change
+  useEffect(() => {
+    if (!isOpen) return;
+    setTargetSize(externalTargetSize);
+    setPromptEnhancement(externalPromptEnhancement);
+  }, [isOpen, externalTargetSize, externalPromptEnhancement]);
+
+  // Focus management
+  useEffect(() => {
+    if (!isOpen) return;
+    lastActiveRef.current = document.activeElement as HTMLElement | null;
+    const t = window.setTimeout(() => dialogRef.current?.focus(), 0);
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener("keydown", onKeyDown);
+      lastActiveRef.current?.focus?.();
+      lastActiveRef.current = null;
+    };
+  }, [isOpen, onClose]);
+
   const [targetSize, setTargetSize] = useState(externalTargetSize);
   const [showAutoPlanBudget, setShowAutoPlanBudget] = useState(false);
   const [autoPlanBudget, setAutoPlanBudget] = useState(80);
@@ -47,10 +77,17 @@ export function DiscoverySettingsModal({
   if (!isOpen) return null;
 
   const handleReset = () => {
-    setTargetSize(60);
+    const nextSize = 60;
+    const nextMode = "rewrite" as const;
+
+    setTargetSize(nextSize);
+    onTargetSizeChange(nextSize);
+
+    setPromptEnhancement(nextMode);
+    onPromptEnhancementChange(nextMode);
+
     setShowAutoPlanBudget(false);
     setAutoPlanBudget(80);
-    setPromptEnhancement("rewrite");
     setManualRuns(true);
     setMcpRuns(true);
     setTextFormat("text");
@@ -71,17 +108,31 @@ export function DiscoverySettingsModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      role="presentation"
+    >
       <div className="absolute inset-0 bg-black/60" onClick={onClose} />
-      <div className="relative bg-foundation-bg-dark-1 border border-white/10 rounded-xl w-[420px] max-h-[90vh] overflow-y-auto shadow-2xl">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
-          <h2 className="text-[16px] font-semibold leading-[24px] tracking-[-0.32px] text-white">
+      <div
+        ref={dialogRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="discovery-settings-title"
+        className="relative bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 border border-foundation-bg-light-3 dark:border-white/10 rounded-xl w-[420px] max-h-[90vh] overflow-y-auto shadow-2xl outline-none"
+      >
+        <div className="flex items-center justify-between px-6 py-4 border-b border-foundation-bg-light-3 dark:border-white/10">
+          <h2
+            id="discovery-settings-title"
+            className="text-[16px] font-semibold leading-[24px] tracking-[-0.32px] text-foundation-text-light-primary dark:text-white"
+          >
             Discovery Settings
           </h2>
           <div className="flex items-center gap-2">
             <button
               onClick={handleReset}
-              className="px-3 py-1.5 text-[13px] font-normal leading-[18px] text-foundation-accent-green hover:bg-white/5 rounded-lg transition-colors flex items-center gap-1.5"
+              className="px-3 py-1.5 text-[13px] font-normal leading-[18px] text-foundation-accent-green hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-colors flex items-center gap-1.5"
+              aria-label="Reset all settings to defaults"
             >
               <svg className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -97,9 +148,9 @@ export function DiscoverySettingsModal({
               onClick={onClose}
               aria-label="Close discovery settings"
               title="Close discovery settings"
-              className="p-1 hover:bg-white/10 rounded-lg transition-colors"
+              className="p-1 hover:bg-black/10 dark:hover:bg-white/10 rounded-lg transition-colors"
             >
-              <IconX className="size-4 text-white/60" />
+              <IconX className="size-4 text-foundation-text-light-tertiary dark:text-white/60" />
             </button>
           </div>
         </div>
@@ -109,7 +160,7 @@ export function DiscoverySettingsModal({
             <SectionHeader
               title="Token Budgets"
               description="Sets the target size for your final prompt. Use 60k for ChatGPT (lite Pro context), higher for CLIAPI tools with larger context windows."
-              descriptionClassName="text-[13px] font-normal leading-[18px] text-white/60 mb-4"
+              descriptionClassName="text-[13px] font-normal leading-[18px] text-foundation-text-light-tertiary dark:text-white/60 mb-4"
             />
             <RangeSlider
               label="Target size"
@@ -122,7 +173,7 @@ export function DiscoverySettingsModal({
             <div className="mt-3">
               <button
                 onClick={() => setShowAutoPlanBudget(!showAutoPlanBudget)}
-                className="flex items-center gap-2 text-[13px] font-normal leading-[18px] text-white/80 hover:text-white transition-colors w-full"
+                className="flex items-center gap-2 text-[13px] font-normal leading-[18px] text-foundation-text-light-secondary dark:text-white/80 hover:text-foundation-text-light-primary dark:hover:text-white transition-colors w-full"
               >
                 <svg
                   className={`size-3 transition-transform ${showAutoPlanBudget ? "rotate-90" : ""}`}
@@ -145,12 +196,12 @@ export function DiscoverySettingsModal({
                   <path d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
                 <span>Auto Plan Budget</span>
-                <span className="ml-auto text-white/60">{autoPlanBudget}k</span>
+                <span className="ml-auto text-foundation-text-light-tertiary dark:text-white/60">{autoPlanBudget}k</span>
               </button>
 
               {showAutoPlanBudget && (
                 <div className="mt-3 ml-5 space-y-3">
-                  <p className="text-[12px] font-normal leading-[16px] text-white/50">
+                  <p className="text-[12px] font-normal leading-[16px] text-foundation-text-light-tertiary dark:text-white/50">
                     Auto Plan runs use CLI/API calls which support larger context windows.
                   </p>
                   <RangeSlider
@@ -180,7 +231,7 @@ export function DiscoverySettingsModal({
               ]}
               onChange={handlePromptEnhancementChange}
             />
-            <p className="text-[12px] font-normal leading-[16px] text-white/50">
+            <p className="text-[12px] font-normal leading-[16px] text-foundation-text-light-tertiary dark:text-white/50">
               {getEnhancementDescription()}
             </p>
           </div>
@@ -189,7 +240,7 @@ export function DiscoverySettingsModal({
             <SectionHeader
               title="Clarifying Questions"
               description="Allow the agent to ask you questions during discovery to better understand your intent."
-              descriptionClassName="text-[13px] font-normal leading-[18px] text-white/60 mb-4"
+              descriptionClassName="text-[13px] font-normal leading-[18px] text-foundation-text-light-tertiary dark:text-white/60 mb-4"
             />
             <div className="space-y-4">
               <div className="flex items-start justify-between">
@@ -204,10 +255,10 @@ export function DiscoverySettingsModal({
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <div className="text-[13px] font-medium leading-[18px] text-white mb-0.5">
+                    <div className="text-[13px] font-medium leading-[18px] text-foundation-text-light-primary dark:text-white mb-0.5">
                       Manual Runs (UI)
                     </div>
-                    <div className="text-[12px] font-normal leading-[16px] text-white/50">
+                    <div className="text-[12px] font-normal leading-[16px] text-foundation-text-light-tertiary dark:text-white/50">
                       When you click Run Discovery
                     </div>
                   </div>
@@ -226,10 +277,10 @@ export function DiscoverySettingsModal({
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <div className="text-[13px] font-medium leading-[18px] text-white mb-0.5">
+                    <div className="text-[13px] font-medium leading-[18px] text-foundation-text-light-primary dark:text-white mb-0.5">
                       MCP Runs
                     </div>
-                    <div className="text-[12px] font-normal leading-[16px] text-white/50">
+                    <div className="text-[12px] font-normal leading-[16px] text-foundation-text-light-tertiary dark:text-white/50">
                       When called via context_builder
                     </div>
                   </div>
@@ -305,10 +356,10 @@ export function DiscoverySettingsModal({
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <div className="text-[13px] font-medium leading-[18px] text-white mb-0.5">
+                  <div className="text-[13px] font-medium leading-[18px] text-foundation-text-light-primary dark:text-white mb-0.5">
                     Store Logs
                   </div>
-                  <div className="text-[12px] font-normal leading-[16px] text-white/50">
+                  <div className="text-[12px] font-normal leading-[16px] text-foundation-text-light-tertiary dark:text-white/50">
                     Enable logging for debugging and analysis
                   </div>
                 </div>
@@ -318,8 +369,8 @@ export function DiscoverySettingsModal({
           </div>
         </div>
 
-        <div className="border-t border-white/10 px-6 py-4 flex items-center justify-center">
-          <div className="flex items-center gap-2 bg-foundation-bg-dark-1 border border-white/10 rounded-lg px-4 py-2">
+        <div className="border-t border-foundation-bg-light-3 dark:border-white/10 px-6 py-4 flex items-center justify-center">
+          <div className="flex items-center gap-2 bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 border border-foundation-bg-light-3 dark:border-white/10 rounded-lg px-4 py-2">
             <svg
               className="size-5 text-foundation-accent-blue"
               fill="currentColor"
@@ -327,7 +378,7 @@ export function DiscoverySettingsModal({
             >
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
             </svg>
-            <span className="text-[14px] font-medium leading-[20px] text-white">{targetSize}k</span>
+            <span className="text-[14px] font-medium leading-[20px] text-foundation-text-light-primary dark:text-white">{targetSize}k</span>
             <span className="text-[13px] font-normal leading-[18px] text-foundation-accent-green capitalize">
               {promptEnhancement}
             </span>

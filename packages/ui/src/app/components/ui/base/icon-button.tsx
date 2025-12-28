@@ -99,7 +99,7 @@ export function IconButton({
         "rounded-md transition-colors flex items-center justify-center font-foundation",
         sizes[size],
         variants[variant],
-        active && `bg-[${activeColor}]/10`,
+        // active background handled via inline style (color-mix) below
         disabled && "opacity-50 cursor-not-allowed",
         className,
       )}

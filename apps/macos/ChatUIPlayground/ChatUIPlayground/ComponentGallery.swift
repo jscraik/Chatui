@@ -14,6 +14,7 @@ struct ComponentGallery: View {
     var body: some View {
         ScrollView {
             VStack(spacing: DesignTokens.Spacing.md) {
+                AccessibilityChecklist()
                 switch selectedComponent {
                 case .button:
                     ButtonGallery()
@@ -69,9 +70,37 @@ struct ButtonGallery: View {
             // Icon Buttons
             GroupBox(label: Text("Icon Buttons")) {
                 HStack(spacing: DesignTokens.Spacing.smXs) {
-                    ChatUIButton(systemName: "heart.fill", variant: .default, size: .icon) {}
-                    ChatUIButton(systemName: "trash", variant: .destructive, size: .icon) {}
-                    ChatUIButton(systemName: "square.and.arrow.up", variant: .secondary, size: .icon) {}
+                    ChatUIButton(systemName: "heart.fill", variant: .default, size: .icon, accessibilityLabel: "Favorite") {}
+                    ChatUIButton(systemName: "trash", variant: .destructive, size: .icon, accessibilityLabel: "Delete") {}
+                    ChatUIButton(systemName: "square.and.arrow.up", variant: .secondary, size: .icon, accessibilityLabel: "Share") {}
+                }
+                .padding(DesignTokens.Spacing.sm)
+            }
+            
+            // Accessibility
+            GroupBox(label: Text("Accessibility")) {
+                VStack(alignment: .leading, spacing: DesignTokens.Spacing.smXs) {
+                    HStack(spacing: DesignTokens.Spacing.smXs) {
+                        ChatUIButton(
+                            systemName: "trash",
+                            variant: .destructive,
+                            size: .icon,
+                            accessibilityLabel: "Delete item",
+                            accessibilityHint: "Permanently removes the selected item"
+                        ) {}
+                        ChatUIButton(
+                            systemName: "square.and.arrow.up",
+                            variant: .secondary,
+                            size: .icon,
+                            accessibilityLabel: "Share",
+                            accessibilityHint: "Opens sharing options"
+                        ) {}
+                    }
+                    ChatUIButton(
+                        "Save",
+                        variant: .default,
+                        accessibilityHint: "Saves your changes"
+                    ) {}
                 }
                 .padding(DesignTokens.Spacing.sm)
             }
@@ -81,7 +110,13 @@ struct ButtonGallery: View {
                 HStack(spacing: DesignTokens.Spacing.smXs) {
                     ChatUIButton("Disabled", variant: .default, isDisabled: true) {}
                     ChatUIButton("Disabled", variant: .outline, isDisabled: true) {}
-                    ChatUIButton(systemName: "heart", variant: .ghost, size: .icon, isDisabled: true) {}
+                    ChatUIButton(
+                        systemName: "heart",
+                        variant: .ghost,
+                        size: .icon,
+                        isDisabled: true,
+                        accessibilityLabel: "Favorite"
+                    ) {}
                 }
                 .padding(DesignTokens.Spacing.sm)
             }
@@ -142,6 +177,27 @@ struct InputGallery: View {
                         text: .constant(""),
                         placeholder: "Large input",
                         size: .lg
+                    )
+                }
+                .padding(DesignTokens.Spacing.sm)
+            }
+            
+            // Accessibility + Submit
+            GroupBox(label: Text("Accessibility + Submit")) {
+                VStack(alignment: .leading, spacing: DesignTokens.Spacing.smXs) {
+                    ChatUIInput(
+                        text: $searchText,
+                        placeholder: "Search messages",
+                        variant: .search,
+                        accessibilityLabel: "Search messages",
+                        accessibilityHint: "Type a keyword and press return",
+                        submitLabel: .search
+                    )
+                    ChatUIInput(
+                        text: $defaultText,
+                        placeholder: "Email address",
+                        accessibilityLabel: "Email address",
+                        submitLabel: .done
                     )
                 }
                 .padding(DesignTokens.Spacing.sm)
@@ -335,6 +391,40 @@ struct ColorSwatch: View {
                 .foregroundColor(DesignTokens.Colors.Text.secondary)
         }
     }
+}
+
+private struct AccessibilityChecklist: View {
+    var body: some View {
+        GroupBox(label: Text("Accessibility Checklist")) {
+            VStack(alignment: .leading, spacing: DesignTokens.Spacing.xxs) {
+                Text("• Tab/Shift-Tab through controls to verify focus order.")
+                Text("• Focused inputs must show a visible focus ring (not color-only).")
+                Text("• Icon-only buttons must announce an accessible name.")
+                Text("• VoiceOver smoke test: toggle with ⌘F5.")
+            }
+            .font(.system(size: DesignTokens.Typography.BodySmall.size))
+            .foregroundColor(DesignTokens.Colors.Text.secondary)
+            .padding(DesignTokens.Spacing.sm)
+        }
+    }
+}
+
+#Preview("Component Gallery - Dark Mode") {
+    ComponentGallery(selectedComponent: .button)
+        .frame(width: 800, height: 600)
+        .environment(\.colorScheme, .dark)
+}
+
+#Preview("Component Gallery - High Contrast") {
+    ComponentGallery(selectedComponent: .button)
+        .frame(width: 800, height: 600)
+        .environment(\.colorSchemeContrast, .increased)
+}
+
+#Preview("Component Gallery - Large Text") {
+    ComponentGallery(selectedComponent: .button)
+        .frame(width: 800, height: 600)
+        .environment(\.dynamicTypeSize, .accessibility3)
 }
 
 #Preview {

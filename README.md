@@ -58,6 +58,18 @@ Comprehensive documentation is organized in the [`docs/`](./docs) directory:
 
 - **[Architecture](./docs/architecture)** - System design and technical architecture
 - **[Audits](./docs/audits)** - Design system compliance and color audits
+- **[Guides](./docs/guides)** - Step-by-step development guides
+
+### Key Documents
+
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Contribution guidelines
+- **[CHANGELOG.md](./CHANGELOG.md)** - Version history
+- **[SECURITY.md](./SECURITY.md)** - Security policies
+
+### AI Assistant Guidance
+
+- **[AGENTS.md](./AGENTS.md)** - System instructions for AI agents
+- **[CLAUDE.md](./CLAUDE.md)** - Project guidance for Claude AI
 - **[Guides](./docs/guides)** - How-to guides and quick starts
 
 See [docs/README.md](./docs/README.md) for the complete documentation index.

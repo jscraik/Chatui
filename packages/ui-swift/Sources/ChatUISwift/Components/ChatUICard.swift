@@ -40,19 +40,15 @@ public struct ChatUICard<Content: View>: View {
     // MARK: - Style Helpers
     
     private func backgroundForVariant(_ variant: Variant) -> Color {
-        switch variant {
-        case .default, .elevated, .outlined:
-            return DesignTokens.Colors.Background.primary
-        }
+        let prefersHighContrast = DesignTokens.Accessibility.AccessibilityPreferences.prefersHighContrast
+        let token = Self.backgroundToken(for: variant, prefersHighContrast: prefersHighContrast)
+        return color(for: token)
     }
     
     private func borderColorForVariant(_ variant: Variant) -> Color {
-        switch variant {
-        case .outlined:
-            return DesignTokens.Colors.Background.tertiary
-        case .default, .elevated:
-            return Color.clear
-        }
+        let prefersHighContrast = DesignTokens.Accessibility.AccessibilityPreferences.prefersHighContrast
+        let token = Self.borderToken(for: variant, prefersHighContrast: prefersHighContrast)
+        return color(for: token)
     }
     
     private func borderWidthForVariant(_ variant: Variant) -> CGFloat {
@@ -65,12 +61,10 @@ public struct ChatUICard<Content: View>: View {
     }
     
     private func shadowColorForVariant(_ variant: Variant) -> Color {
-        switch variant {
-        case .elevated:
-            return DesignTokens.Colors.Text.primary.opacity(0.1)
-        case .default, .outlined:
-            return Color.clear
-        }
+        let prefersHighContrast = DesignTokens.Accessibility.AccessibilityPreferences.prefersHighContrast
+        let token = Self.shadowToken(for: variant, prefersHighContrast: prefersHighContrast)
+        let base = color(for: token)
+        return token == .shadow ? base.opacity(0.1) : base
     }
     
     private func shadowRadiusForVariant(_ variant: Variant) -> CGFloat {
@@ -90,6 +84,44 @@ public struct ChatUICard<Content: View>: View {
             return 0
         }
     }
+    
+    static func backgroundToken(for variant: Variant, prefersHighContrast: Bool) -> ChatUICardColorToken {
+        if prefersHighContrast {
+            return .highContrastBackground
+        }
+        return .backgroundPrimary
+    }
+    
+    static func borderToken(for variant: Variant, prefersHighContrast: Bool) -> ChatUICardColorToken {
+        if prefersHighContrast {
+            return variant == .outlined ? .highContrastBorder : .clear
+        }
+        return variant == .outlined ? .borderTertiary : .clear
+    }
+    
+    static func shadowToken(for variant: Variant, prefersHighContrast: Bool) -> ChatUICardColorToken {
+        if prefersHighContrast {
+            return .clear
+        }
+        return variant == .elevated ? .shadow : .clear
+    }
+    
+    private func color(for token: ChatUICardColorToken) -> Color {
+        switch token {
+        case .backgroundPrimary:
+            return DesignTokens.Colors.Background.primary
+        case .borderTertiary:
+            return DesignTokens.Colors.Background.tertiary
+        case .shadow:
+            return DesignTokens.Colors.Text.primary
+        case .highContrastBackground:
+            return DesignTokens.Accessibility.HighContrast.backgroundContrast
+        case .highContrastBorder:
+            return DesignTokens.Accessibility.HighContrast.borderContrast
+        case .clear:
+            return Color.clear
+        }
+    }
 }
 
 // MARK: - Convenience Modifiers
@@ -98,4 +130,13 @@ extension ChatUICard {
     public func variant(_ variant: Variant) -> ChatUICard<Content> {
         ChatUICard(variant: variant, content: content)
     }
+}
+
+enum ChatUICardColorToken {
+    case backgroundPrimary
+    case borderTertiary
+    case shadow
+    case highContrastBackground
+    case highContrastBorder
+    case clear
 }
