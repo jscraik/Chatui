@@ -28,7 +28,9 @@
     "type-check": "tsc -p tsconfig.json --noEmit",
     "clean": "rm -rf dist",
     "generate": "tsx scripts/generate-tokens.ts",
-    "generate:watch": "tsx watch scripts/generate-tokens.ts"
+    "generate:watch": "tsx watch scripts/generate-tokens.ts",
+    "test": "vitest --run",
+    "test:watch": "vitest"
   },
   "publishConfig": {
     "access": "public"
