@@ -60,8 +60,14 @@ coverage/
 *.lcov
 test-results/
 playwright-report/
-apps/web/test-results/
-apps/web/playwright-report/
+**/test-results/
+**/playwright-report/
+**/playwright-snapshots/
+
+# Build outputs (ensure all variants are covered)
+**/dist/
+**/build/
+**/storybook-static/
 
 # Misc
 .cache/
