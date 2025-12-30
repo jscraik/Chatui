@@ -52,9 +52,14 @@ public struct VisualEffectView: View {
     }
     
     public var body: some View {
-        Rectangle()
-            .fill(.background)
-            .background(material)
+        if FAccessibility.prefersReducedTransparency || FAccessibility.prefersHighContrast {
+            Rectangle()
+                .fill(FColor.bgApp)
+        } else {
+            Rectangle()
+                .fill(.background)
+                .background(material)
+        }
     }
 }
 

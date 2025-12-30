@@ -2,6 +2,14 @@
 
 This directory contains all UI components organized by purpose for better maintainability and discoverability.
 
+## Table of contents
+- [Directory structure](#directory-structure)
+- [Component categories](#component-categories)
+- [Import patterns](#import-patterns)
+- [Adding new components](#adding-new-components)
+- [Design principles](#design-principles)
+- [Verify](#verify)
+
 ## Directory Structure
 
 ```
@@ -28,6 +36,10 @@ Chat-specific components for the main chat interface.
 - `ChatMessages` - Message list display
 - `ChatSidebar` - Left sidebar with conversations
 - `ComposeView` - Compose mode interface
+- `ChatShell` - Slot-based layout container for chat variants
+- `ChatVariantSplitSidebar` - Desktop-style sidebar layout
+- `ChatVariantCompact` - Compact layout for small surfaces
+- `ChatVariantContextRail` - Right-rail context panel layout
 
 **Usage:**
 
@@ -197,5 +209,9 @@ For commonly used components, add to `packages/ui/src/index.ts`
 5. **Co-location** - Stories live next to components
 
 ## Migration Notes
+
+## Verify
+
+- Run Storybook (`pnpm dev:storybook`) and confirm components appear under the expected section.
 
 Components were reorganized from a flat structure to this categorized structure on 2025-12-28. All import paths have been updated throughout the codebase.

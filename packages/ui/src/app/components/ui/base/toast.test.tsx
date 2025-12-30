@@ -49,22 +49,22 @@ describe("Toast", () => {
 
     it("renders success variant", () => {
       render(<Toast variant="success" title="Success" />);
-      expect(screen.getByRole("alert")).toHaveClass("text-foundation-accent-green");
+      expect(screen.getByRole("alert")).toHaveClass("text-foundation-text-light-primary");
     });
 
     it("renders error variant", () => {
       render(<Toast variant="error" title="Error" />);
-      expect(screen.getByRole("alert")).toHaveClass("text-foundation-accent-red");
+      expect(screen.getByRole("alert")).toHaveClass("text-foundation-text-light-primary");
     });
 
     it("renders warning variant", () => {
       render(<Toast variant="warning" title="Warning" />);
-      expect(screen.getByRole("alert")).toHaveClass("text-foundation-accent-orange");
+      expect(screen.getByRole("alert")).toHaveClass("text-foundation-text-light-primary");
     });
 
     it("renders info variant", () => {
       render(<Toast variant="info" title="Info" />);
-      expect(screen.getByRole("alert")).toHaveClass("text-foundation-accent-blue");
+      expect(screen.getByRole("alert")).toHaveClass("text-foundation-text-light-primary");
     });
   });
 

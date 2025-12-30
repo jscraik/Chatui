@@ -2,6 +2,37 @@
 
 Semantic design tokens, platform utilities, and accessibility helpers for native SwiftUI development.
 
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Quickstart](#quickstart)
+- [Overview](#overview)
+- [Installation](#installation)
+- [Components](#components)
+- [Verify](#verify)
+- [Troubleshooting](#troubleshooting)
+
+## Prerequisites
+
+- Xcode 15+
+- Swift 5.9
+- iOS 15+ / macOS 13+ / visionOS 1+
+
+## Quickstart
+
+1) Add the local package to your app:
+```swift
+dependencies: [
+    .package(path: "../ChatUIFoundation")
+]
+```
+
+2) Use tokens:
+```swift
+import ChatUIFoundation
+
+Text("Hello").foregroundStyle(FColor.textPrimary)
+```
+
 ## Overview
 
 ChatUIFoundation is the foundation layer of the ChatUI Swift package architecture. It provides semantic design tokens through Asset Catalog integration, typography styles matching React components, platform detection utilities, and comprehensive accessibility helpers.
@@ -197,6 +228,17 @@ struct MyView: View {
 ### FAccessibility - Accessibility Utilities
 
 Comprehensive accessibility helpers and system preference detection.
+
+## Verify
+
+- Build the package: `cd swift/ChatUIFoundation && swift build`
+- Import `ChatUIFoundation` in a SwiftUI view and reference `FColor` / `FType`.
+
+## Troubleshooting
+
+### Symptom: Colors render as clear/empty
+Cause: Asset Catalog resources not bundled.
+Fix: Ensure `Resources/Colors.xcassets` is present in the package and rebuild.
 
 ```swift
 import SwiftUI

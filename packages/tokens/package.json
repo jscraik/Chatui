@@ -10,7 +10,8 @@
     },
     "./foundations.css": "./src/foundations.css",
     "./tokens.css": "./src/tokens.css",
-    "./tailwind.preset": "./tailwind.preset.ts"
+    "./tailwind.preset": "./tailwind.preset.ts",
+    "./tokens/index.dtcg.json": "./src/tokens/index.dtcg.json"
   },
   "files": [
     "src",
@@ -27,7 +28,8 @@
     "build": "tsc -p tsconfig.build.json",
     "type-check": "tsc -p tsconfig.json --noEmit",
     "clean": "rm -rf dist",
-    "generate": "tsx scripts/generate-tokens.ts",
+    "generate": "tsx scripts/sync-dtcg.ts && tsx scripts/generate-tokens.ts",
+    "tokens:sync": "tsx scripts/sync-dtcg.ts",
     "generate:watch": "tsx watch scripts/generate-tokens.ts",
     "dev": "tsx scripts/dev-tools.ts",
     "dev:verbose": "tsx scripts/dev-tools.ts --verbose",

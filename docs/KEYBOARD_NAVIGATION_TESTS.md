@@ -2,6 +2,13 @@
 
 This document describes the keyboard navigation and accessibility tests for modal and sidebar components using Playwright and Axe-core.
 
+## Table of contents
+- [Test files](#test-files)
+- [Running tests](#running-tests)
+- [Test coverage](#test-coverage)
+- [Test utilities](#test-utilities)
+- [A11y test patterns](#a11y-test-patterns)
+
 ## Test Files
 
 | Test File | Description |
@@ -15,28 +22,28 @@ This document describes the keyboard navigation and accessibility tests for moda
 ### All Tests
 ```bash
 # Run all E2E tests (includes keyboard nav)
-pnpm test:e2e
+pnpm test:e2e:web
 
 # Run keyboard navigation tests only
-npx playwright test keyboard-navigation.spec.ts
+pnpm exec playwright test -c apps/web/playwright.config.ts keyboard-navigation.spec.ts
 
 # Run sidebar tests only
-npx playwright test sidebar-keyboard.spec.ts
+pnpm exec playwright test -c apps/web/playwright.config.ts sidebar-keyboard.spec.ts
 
 # Run with UI (debug mode)
-npx playwright test keyboard-navigation.spec.ts --ui
+pnpm exec playwright test -c apps/web/playwright.config.ts keyboard-navigation.spec.ts --ui
 ```
 
 ### Specific Tests
 ```bash
 # Modal tests only
-npx playwright test keyboard-navigation.spec.ts --grep "ModalDialog"
+pnpm exec playwright test -c apps/web/playwright.config.ts keyboard-navigation.spec.ts --grep "ModalDialog"
 
 # Settings modal tests
-npx playwright test keyboard-navigation.spec.ts --grep "SettingsModal"
+pnpm exec playwright test -c apps/web/playwright.config.ts keyboard-navigation.spec.ts --grep "SettingsModal"
 
 # Sidebar rail navigation
-npx playwright test sidebar-keyboard.spec.ts --grep "Collapsed Mode"
+pnpm exec playwright test -c apps/web/playwright.config.ts sidebar-keyboard.spec.ts --grep "Collapsed Mode"
 ```
 
 ### Accessibility Tests
@@ -45,7 +52,7 @@ npx playwright test sidebar-keyboard.spec.ts --grep "Collapsed Mode"
 pnpm test:a11y:widgets
 
 # Run specific accessibility test
-npx playwright test sidebar-keyboard.spec.ts --grep "accessibility"
+pnpm exec playwright test -c apps/web/playwright.config.ts sidebar-keyboard.spec.ts --grep "accessibility"
 ```
 
 ## Test Coverage

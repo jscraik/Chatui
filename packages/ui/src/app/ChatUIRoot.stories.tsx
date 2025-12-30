@@ -42,7 +42,7 @@ const meta: Meta<typeof ChatUIRoot> = {
     layout: "fullscreen",
   },
   render: (args) => (
-    <div className="min-h-screen bg-[var(--foundation-bg-dark-1)]">
+    <div className="min-h-screen bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1">
       <ChatUIRoot {...args} />
     </div>
   ),
@@ -69,24 +69,24 @@ export const WithCustomHeaderActions: Story = {
       <>
         <button
           type="button"
-          className="p-1.5 hover:bg-white/10 rounded-md transition-colors"
+          className="p-1.5 hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3 rounded-md transition-colors"
           aria-label="New chat"
         >
-          <IconPlusLg className="size-4 text-white/60" />
+          <IconPlusLg className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary" />
         </button>
         <button
           type="button"
-          className="p-1.5 hover:bg-white/10 rounded-md transition-colors"
+          className="p-1.5 hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3 rounded-md transition-colors"
           aria-label="Star"
         >
-          <IconStar className="size-4 text-white/60" />
+          <IconStar className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary" />
         </button>
         <button
           type="button"
-          className="p-1.5 hover:bg-white/10 rounded-md transition-colors"
+          className="p-1.5 hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3 rounded-md transition-colors"
           aria-label="Settings"
         >
-          <IconSettings className="size-4 text-white/60" />
+          <IconSettings className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary" />
         </button>
       </>
     ),
@@ -101,7 +101,7 @@ export const WithShareButton: Story = {
     headerRight: (
       <button
         type="button"
-        className="px-3 py-1.5 bg-[var(--foundation-accent-green)] hover:bg-[var(--foundation-accent-green)]/80 text-white rounded-lg transition-colors text-sm font-medium flex items-center gap-2"
+        className="px-3 py-1.5 bg-foundation-accent-green-light dark:bg-foundation-accent-green hover:bg-foundation-accent-green-light/90 dark:hover:bg-foundation-accent-green/90 text-foundation-text-dark-primary dark:text-foundation-text-light-primary rounded-lg transition-colors text-sm font-medium flex items-center gap-2"
       >
         <IconShare className="size-4" />
         Share Chat
@@ -119,7 +119,7 @@ export const WithSidebarSlots: Story = {
       sidebarFooter: (
         <button
           type="button"
-          className="w-full px-3 py-2 bg-white/10 hover:bg-white/15 rounded-lg text-sm text-white/80 transition-colors"
+          className="w-full px-3 py-2 bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3 rounded-lg text-sm text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary transition-colors"
         >
           + New Workspace
         </button>
@@ -145,10 +145,10 @@ export const WithComposerSlots: Story = {
     composerRight: (
       <button
         type="button"
-        className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg transition-colors"
+        className="p-2 bg-foundation-accent-purple-light dark:bg-foundation-accent-purple rounded-lg transition-colors"
         aria-label="AI Assistant"
       >
-        <IconPro className="size-4 text-white" />
+        <IconPro className="size-4 text-foundation-text-dark-primary dark:text-foundation-text-light-primary" />
       </button>
     ),
   },
@@ -171,17 +171,17 @@ export const WithAllSlots: Story = {
       <>
         <button
           type="button"
-          className="p-1.5 hover:bg-white/10 rounded-md transition-colors"
+          className="p-1.5 hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3 rounded-md transition-colors"
           aria-label="New chat"
         >
-          <IconPlusLg className="size-4 text-white/60" />
+          <IconPlusLg className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary" />
         </button>
         <button
           type="button"
-          className="p-1.5 hover:bg-white/10 rounded-md transition-colors"
+          className="p-1.5 hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3 rounded-md transition-colors"
           aria-label="Share"
         >
-          <IconShare className="size-4 text-white/60" />
+          <IconShare className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary" />
         </button>
       </>
     ),
@@ -197,10 +197,10 @@ export const WithAllSlots: Story = {
     composerRight: (
       <button
         type="button"
-        className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg transition-colors"
+        className="p-2 bg-foundation-accent-purple-light dark:bg-foundation-accent-purple rounded-lg transition-colors"
         aria-label="AI Assistant"
       >
-        <IconPro className="size-4 text-white" />
+        <IconPro className="size-4 text-foundation-text-dark-primary dark:text-foundation-text-light-primary" />
       </button>
     ),
   },
@@ -215,17 +215,17 @@ export const FullWidthWithSlots: Story = {
       <>
         <button
           type="button"
-          className="p-1.5 hover:bg-white/10 rounded-md transition-colors"
+          className="p-1.5 hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3 rounded-md transition-colors"
           aria-label="New chat"
         >
-          <IconPlusLg className="size-4 text-white/60" />
+          <IconPlusLg className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary" />
         </button>
         <button
           type="button"
-          className="p-1.5 hover:bg-white/10 rounded-md transition-colors"
+          className="p-1.5 hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3 rounded-md transition-colors"
           aria-label="Share"
         >
-          <IconShare className="size-4 text-white/60" />
+          <IconShare className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary" />
         </button>
       </>
     ),

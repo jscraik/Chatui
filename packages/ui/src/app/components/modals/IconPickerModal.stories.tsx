@@ -11,7 +11,7 @@ const meta: Meta<typeof IconPickerModal> = {
     layout: "fullscreen",
   },
   render: (args) => (
-    <div className="h-screen bg-[var(--foundation-bg-dark-1)]">
+    <div className="h-screen bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1">
       <IconPickerModal {...args} />
     </div>
   ),
@@ -29,6 +29,20 @@ export const Default: Story = {
     currentIconId: "folder",
     currentColorId: "blue",
     projectName: "Apps SDK Designer",
+  },
+};
+
+export const LightTheme: Story = {
+  args: {
+    isOpen: true,
+    onClose: fn(),
+    onSave: fn(),
+    currentIconId: "folder",
+    currentColorId: "blue",
+    projectName: "Apps SDK Designer",
+  },
+  parameters: {
+    backgrounds: { default: "light" },
   },
 };
 

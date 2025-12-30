@@ -42,8 +42,11 @@ export const Interactive: Story = {
     return (
       <div className="space-y-4">
         <ModeSelector mode={mode} onModeChange={setMode} />
-        <div className="text-center text-white/80">
-          Current mode: <span className="font-medium text-white">{mode}</span>
+        <div className="text-center text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+          Current mode:{" "}
+          <span className="font-medium text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
+            {mode}
+          </span>
         </div>
       </div>
     );

@@ -35,7 +35,7 @@ const meta: Meta<typeof ChatSidebar> = {
     layout: "fullscreen",
   },
   render: (args) => (
-    <div className="h-screen bg-[var(--foundation-bg-dark-1)]">
+    <div className="h-screen bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1">
       <ChatSidebar {...args} />
     </div>
   ),
@@ -46,3 +46,9 @@ export default meta;
 type Story = StoryObj<typeof ChatSidebar>;
 
 export const DefaultOpen: Story = {};
+
+export const LightTheme: Story = {
+  parameters: {
+    backgrounds: { default: "light" },
+  },
+};

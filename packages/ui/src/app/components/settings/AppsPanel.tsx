@@ -2,11 +2,57 @@ import { IconChevronLeftMd, IconChevronRightMd } from "../icons/ChatGPTIcons";
 
 import type { SettingsPanelProps } from "./types";
 
+const LIGHT_TEXT_HEX = "#0D0D0D";
+const DARK_TEXT_HEX = "#FFFFFF";
+
+const hexToRgb = (hex: string) => {
+  const normalized = hex.replace("#", "");
+  if (normalized.length !== 6) return null;
+  const r = Number.parseInt(normalized.slice(0, 2), 16);
+  const g = Number.parseInt(normalized.slice(2, 4), 16);
+  const b = Number.parseInt(normalized.slice(4, 6), 16);
+  if (Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) return null;
+  return { r, g, b };
+};
+
+const relativeLuminance = ({ r, g, b }: { r: number; g: number; b: number }) => {
+  const toLinear = (c: number) => {
+    const normalized = c / 255;
+    return normalized <= 0.04045
+      ? normalized / 12.92
+      : Math.pow((normalized + 0.055) / 1.055, 2.4);
+  };
+  const rLin = toLinear(r);
+  const gLin = toLinear(g);
+  const bLin = toLinear(b);
+  return 0.2126 * rLin + 0.7152 * gLin + 0.0722 * bLin;
+};
+
+const contrastRatio = (hexA: string, hexB: string) => {
+  const rgbA = hexToRgb(hexA);
+  const rgbB = hexToRgb(hexB);
+  if (!rgbA || !rgbB) return 1;
+  const l1 = relativeLuminance(rgbA);
+  const l2 = relativeLuminance(rgbB);
+  const lighter = Math.max(l1, l2);
+  const darker = Math.min(l1, l2);
+  return (lighter + 0.05) / (darker + 0.05);
+};
+
+const getReadableTextClass = (backgroundHex: string) => {
+  const onLight = contrastRatio(backgroundHex, LIGHT_TEXT_HEX);
+  const onDark = contrastRatio(backgroundHex, DARK_TEXT_HEX);
+  return onLight >= onDark
+    ? "text-foundation-text-light-primary"
+    : "text-foundation-text-dark-primary";
+};
+
 // App icon component for consistent styling
 function AppIcon({ children, color }: { children: React.ReactNode; color: string }) {
+  const textClass = getReadableTextClass(color);
   return (
     <div
-      className="size-5 rounded flex items-center justify-center text-white text-[10px] font-semibold"
+      className={`size-5 rounded flex items-center justify-center text-[10px] font-semibold ${textClass}`}
       style={{ backgroundColor: color }}
     >
       {children}
@@ -87,7 +133,12 @@ export function AppsPanel({ onBack }: SettingsPanelProps) {
             <p className="text-[13px] leading-[18px] tracking-[-0.32px] text-foundation-text-dark-tertiary">
               ChatGPT can access information from connected apps. Your permissions are always
               respected.{" "}
-              <button type="button" className="text-foundation-accent-blue hover:underline">Learn more</button>
+              <button
+                type="button"
+                className="text-foundation-text-light-primary dark:text-foundation-text-dark-primary underline decoration-foundation-accent-blue underline-offset-2 hover:decoration-foundation-accent-blue/70"
+              >
+                Learn more
+              </button>
             </p>
           </div>
         </div>

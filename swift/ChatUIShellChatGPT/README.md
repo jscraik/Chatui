@@ -2,6 +2,36 @@
 
 Optional complete application shell layouts for ChatGPT-style experiences.
 
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Quickstart](#quickstart)
+- [Overview](#overview)
+- [Components](#components)
+- [Usage example](#usage-example)
+- [Platform support](#platform-support)
+- [Verify](#verify)
+- [Troubleshooting](#troubleshooting)
+
+## Prerequisites
+
+- Xcode 15+
+- Swift 5.9
+- iOS 15+ / macOS 13+ / visionOS 1+
+
+## Quickstart
+
+```swift
+import ChatUIShellChatGPT
+
+RoundedAppContainer {
+    AppShellView {
+        SidebarView()
+    } detail: {
+        DetailView()
+    }
+}
+```
+
 ## Overview
 
 ChatUIShellChatGPT provides ready-to-use shell components for building complete native macOS applications with ChatGPT-style visual design. This package is completely optional and can be used independently or alongside the core ChatUI packages.
@@ -191,6 +221,17 @@ Run tests:
 ```bash
 swift test
 ```
+
+## Verify
+
+- Build the package: `cd swift/ChatUIShellChatGPT && swift build`
+- Run the ComponentGallery app and confirm the shell renders correctly.
+
+## Troubleshooting
+
+### Symptom: Glass effects do not appear on macOS
+Cause: Reduced transparency or high-contrast accessibility settings are enabled.
+Fix: Disable “Reduce transparency” in System Settings or expect the solid fallback.
 
 ## License
 

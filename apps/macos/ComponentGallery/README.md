@@ -2,6 +2,20 @@
 
 Interactive component browser for the ChatUI SwiftUI library, demonstrating all components from the modular package architecture.
 
+## Table of contents
+- [Overview](#overview)
+- [Features](#features)
+- [Building and running](#building-and-running)
+- [Verify](#verify)
+- [DocC documentation](#docc-documentation)
+- [UI tests](#ui-tests-xcode)
+- [Unit tests](#unit-tests)
+- [Architecture](#architecture)
+- [Usage](#usage)
+- [Development](#development)
+- [Integration with token hot reload](#integration-with-token-hot-reload)
+- [Troubleshooting](#troubleshooting)
+
 ## Overview
 
 The Component Gallery is a macOS and iOS application that provides:
@@ -66,6 +80,12 @@ swift run
 1. Open `Package.swift` in Xcode
 2. Select an iOS device or simulator target
 3. Build and run the iOS app
+
+## Verify
+
+- App launches and sidebar categories render.
+- Light/dark mode comparison works in Side‑by‑Side mode.
+- Accessibility panel checklist is interactive.
 
 ## DocC Documentation
 
@@ -191,6 +211,23 @@ The Component Gallery is designed to work with the token hot reload system:
 4. Asset Catalog regenerates automatically
 5. Component Gallery reflects changes immediately (SwiftUI previews refresh)
 
+## Troubleshooting
+
+### Symptom: Xcode can’t resolve local packages
+Cause: Package paths are not added or caches are stale.
+Fix: In Xcode, use **File → Packages → Reset Package Caches** and re-add local packages.
+
+### Symptom: UI tests do not see accessibility identifiers
+Cause: Accessibility options are disabled in the scheme.
+Fix: Ensure the test scheme has Accessibility enabled.
+
+### Symptom: Token hot reload doesn’t update UI
+Cause: Token watcher not running.
+Fix:
+```bash
+pnpm -C packages/tokens tokens:watch
+```
+
 ## Requirements Validation
 
 This Component Gallery satisfies the following requirements from Task 11.1:
@@ -199,12 +236,11 @@ This Component Gallery satisfies the following requirements from Task 11.1:
 - ✅ Built interactive component browser with all primitives
 - ✅ Supports side-by-side light/dark mode comparison
 - ✅ Added accessibility testing interface (VoiceOver, high contrast, keyboard nav)
-- ✅ Enables screenshot export for documentation (keyboard shortcut implemented)
+- ✅ Enables screenshot export for documentation (menu item + ⌘⇧E saves PNG)
 - ✅ Integrates with token hot reload for instant preview updates (via SwiftUI + Asset Catalog)
 
 ## Future Enhancements
 
-- [ ] Implement actual screenshot export functionality (currently just keyboard shortcut)
 - [ ] Add code snippet viewer showing component usage
 - [ ] Add performance metrics and rendering statistics
 - [ ] Add component variant comparison view

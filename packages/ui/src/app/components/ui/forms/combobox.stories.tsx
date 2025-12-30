@@ -46,6 +46,23 @@ export const Default: Story = {
   },
 };
 
+export const LightTheme: Story = {
+  parameters: {
+    backgrounds: { default: "light" },
+  },
+  render: () => {
+    const [value, setValue] = useState("");
+    return (
+      <Combobox
+        options={frameworks}
+        value={value}
+        onValueChange={setValue}
+        placeholder="Select framework..."
+      />
+    );
+  },
+};
+
 export const WithPreselectedValue: Story = {
   render: () => {
     const [value, setValue] = useState("react");

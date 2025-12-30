@@ -56,14 +56,19 @@ export function DataControlsPanel({ onBack }: SettingsPanelProps) {
               className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${improveModel ? "bg-foundation-accent-green" : "bg-foundation-bg-dark-3"}`}
             >
               <span
-                className={`inline-block size-4 transform rounded-full bg-white transition-transform ${improveModel ? "translate-x-[18px]" : "translate-x-0.5"}`}
+                className={`inline-block size-4 transform rounded-full bg-foundation-bg-light-1 transition-transform ${improveModel ? "translate-x-[18px]" : "translate-x-0.5"}`}
               />
             </button>
           </div>
           <p className="text-[13px] leading-[18px] tracking-[-0.32px] text-foundation-text-dark-tertiary px-3 mt-1">
             Allow your content to be used to train our models, which makes ChatGPT better for you
             and everyone who uses it. We take steps to protect your privacy.{" "}
-            <button type="button" className="text-foundation-accent-blue hover:underline">Learn more</button>
+            <button
+              type="button"
+              className="text-foundation-text-light-primary dark:text-foundation-text-dark-primary underline decoration-foundation-accent-blue underline-offset-2 hover:decoration-foundation-accent-blue/70"
+            >
+              Learn more
+            </button>
           </p>
         </div>
 
@@ -91,7 +96,7 @@ export function DataControlsPanel({ onBack }: SettingsPanelProps) {
                 className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${includeAudioRecordings ? "bg-foundation-accent-green" : "bg-foundation-bg-dark-3"}`}
               >
                 <span
-                  className={`inline-block size-4 transform rounded-full bg-white transition-transform ${includeAudioRecordings ? "translate-x-[18px]" : "translate-x-0.5"}`}
+                  className={`inline-block size-4 transform rounded-full bg-foundation-bg-light-1 transition-transform ${includeAudioRecordings ? "translate-x-[18px]" : "translate-x-0.5"}`}
                 />
               </button>
             </div>
@@ -115,14 +120,19 @@ export function DataControlsPanel({ onBack }: SettingsPanelProps) {
                 className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${includeVideoRecordings ? "bg-foundation-accent-green" : "bg-foundation-bg-dark-3"}`}
               >
                 <span
-                  className={`inline-block size-4 transform rounded-full bg-white transition-transform ${includeVideoRecordings ? "translate-x-[18px]" : "translate-x-0.5"}`}
+                  className={`inline-block size-4 transform rounded-full bg-foundation-bg-light-1 transition-transform ${includeVideoRecordings ? "translate-x-[18px]" : "translate-x-0.5"}`}
                 />
               </button>
             </div>
             <p className="text-[13px] leading-[18px] tracking-[-0.32px] text-foundation-text-dark-tertiary px-3 mt-1">
               Include your audio or video recordings from Voice Mode to train our models.
               Transcripts and other data are covered by "Improve the model for everyone".{" "}
-              <button type="button" className="text-foundation-accent-blue hover:underline">Learn more</button>
+              <button
+                type="button"
+                className="text-foundation-text-light-primary dark:text-foundation-text-dark-primary underline decoration-foundation-accent-blue underline-offset-2 hover:decoration-foundation-accent-blue/70"
+              >
+                Learn more
+              </button>
             </p>
           </div>
         </div>
@@ -145,7 +155,7 @@ export function DataControlsPanel({ onBack }: SettingsPanelProps) {
             <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-primary">
               Delete all chats
             </span>
-            <button type="button" className="px-3 py-1.5 text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-white bg-foundation-accent-red hover:bg-foundation-accent-red/80 rounded-md transition-colors">
+            <button type="button" className="px-3 py-1.5 text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-dark-primary dark:text-foundation-text-light-primary bg-foundation-accent-red hover:bg-foundation-accent-red/80 rounded-md transition-colors">
               Delete all
             </button>
           </div>

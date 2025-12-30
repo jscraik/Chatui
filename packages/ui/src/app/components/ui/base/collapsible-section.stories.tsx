@@ -19,8 +19,12 @@ export const Default: Story = {
     title: "Section Title",
     children: (
       <div className="space-y-2">
-        <p className="text-white/80">This is some content inside the collapsible section.</p>
-        <p className="text-white/80">You can put any content here.</p>
+        <p className="text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+          This is some content inside the collapsible section.
+        </p>
+        <p className="text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+          You can put any content here.
+        </p>
       </div>
     ),
   },
@@ -32,8 +36,12 @@ export const DefaultOpen: Story = {
     defaultOpen: true,
     children: (
       <div className="space-y-2">
-        <p className="text-white/80">This section starts open by default.</p>
-        <p className="text-white/80">Click the title to collapse it.</p>
+        <p className="text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+          This section starts open by default.
+        </p>
+        <p className="text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+          Click the title to collapse it.
+        </p>
       </div>
     ),
   },
@@ -61,11 +69,15 @@ export const WithIcon: Story = {
     children: (
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-white/80">Dark mode</span>
+          <span className="text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+            Dark mode
+          </span>
           <input type="checkbox" className="rounded" aria-label="Toggle dark mode" />
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-white/80">Notifications</span>
+          <span className="text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+            Notifications
+          </span>
           <input type="checkbox" className="rounded" defaultChecked aria-label="Toggle notifications" />
         </div>
       </div>
@@ -78,15 +90,15 @@ export const LongContent: Story = {
     title: "Long Content Section",
     children: (
       <div className="space-y-2 max-w-md">
-        <p className="text-white/80">
+        <p className="text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
           This is a section with longer content to demonstrate how the collapsible behavior works
           with more text.
         </p>
-        <p className="text-white/80">
+        <p className="text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt
           ut labore et dolore magna aliqua.
         </p>
-        <p className="text-white/80">
+        <p className="text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
           Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
           commodo consequat.
         </p>

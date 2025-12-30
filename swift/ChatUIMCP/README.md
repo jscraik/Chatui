@@ -2,6 +2,33 @@
 
 Swift package for MCP (Model Context Protocol) integration with native macOS applications.
 
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Quickstart](#quickstart)
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Supported widget types](#supported-widget-types)
+- [Error handling](#error-handling)
+- [Testing](#testing)
+- [Troubleshooting](#troubleshooting)
+
+## Prerequisites
+
+- Xcode 15+
+- Swift 5.9
+- macOS 13+ / iOS 15+
+
+## Quickstart
+
+```swift
+import ChatUIMCP
+
+let client = MCPClient(baseURL: URL(string: "http://localhost:8787")!)
+let response = try await client.callTool(name: "display_chat")
+```
+
 ## Overview
 
 ChatUIMCP provides a Swift networking layer to communicate with existing web-based MCP infrastructure, widget rendering using native SwiftUI components styled with ChatUIFoundation tokens, and macOS-specific authentication flows using Keychain.
@@ -195,6 +222,16 @@ swift test --filter WidgetRendererTests
 
 - ChatUIFoundation: Semantic design tokens
 - ChatUIComponents: Reusable SwiftUI primitives
+
+## Troubleshooting
+
+### Symptom: `Authentication required`
+Cause: MCP server expects a token in Keychain.
+Fix: Store a token with `MCPAuthenticator.storeToken(_:)`.
+
+### Symptom: `Invalid response from MCP server`
+Cause: MCP server returned a non-JSON or empty response.
+Fix: Confirm the server is running and the endpoint is `/mcp`.
 
 ## License
 

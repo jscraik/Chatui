@@ -34,6 +34,16 @@ export const Default: Story = {
   },
 };
 
+export const LightTheme: Story = {
+  args: {
+    title: "Notification",
+    description: "This is a default toast notification.",
+  },
+  parameters: {
+    backgrounds: { default: "light" },
+  },
+};
+
 export const Success: Story = {
   args: {
     variant: "success",

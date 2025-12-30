@@ -62,7 +62,7 @@ export const WithAction: Story = {
     action: (
       <button
         type="button"
-        className="px-2 py-1 text-xs bg-white/10 hover:bg-white/20 rounded transition-colors"
+        className="px-2 py-1 text-xs bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3 rounded transition-colors text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary"
       >
         Open
       </button>
@@ -134,8 +134,12 @@ export const WithSubtext: Story = {
     ),
     children: (
       <div>
-        <div className="text-white">John Doe</div>
-        <div className="text-white/60 text-sm">john.doe@example.com</div>
+        <div className="text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
+          John Doe
+        </div>
+        <div className="text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary text-sm">
+          john.doe@example.com
+        </div>
       </div>
     ),
   },

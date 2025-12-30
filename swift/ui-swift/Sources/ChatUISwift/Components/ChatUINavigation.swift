@@ -1,6 +1,7 @@
 import SwiftUI
 
 /// A native macOS navigation component following platform patterns
+@available(*, deprecated, message: "Prefer NavigationStack + .toolbar to inherit system navigation and Liquid Glass behaviors.")
 public struct ChatUINavigationView<Content: View>: View {
     
     private let title: String
@@ -157,6 +158,7 @@ public struct NavigationAction {
 // MARK: - Tab Navigation
 
 /// A native macOS tab navigation component
+@available(*, deprecated, message: "Prefer TabView with system styles to inherit platform navigation behaviors.")
 public struct ChatUITabView<Content: View>: View {
     
     @Binding private var selection: Int
@@ -210,6 +212,7 @@ public struct ChatUITabView<Content: View>: View {
                 if let systemName = tab.systemName {
                     Image(systemName: systemName)
                         .font(.system(size: 16))
+                        .accessibilityHidden(true)
                 }
                 
                 Text(tab.title)

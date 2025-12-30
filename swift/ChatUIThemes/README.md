@@ -2,6 +2,31 @@
 
 Theme presets including pixel-perfect ChatGPT styling and native macOS alternatives.
 
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Quickstart](#quickstart)
+- [Overview](#overview)
+- [Installation](#installation)
+- [Themes](#themes)
+- [Usage patterns](#usage-patterns)
+- [Verify](#verify)
+- [Troubleshooting](#troubleshooting)
+
+## Prerequisites
+
+- Xcode 15+
+- Swift 5.9
+- iOS 15+ / macOS 13+ / visionOS 1+
+
+## Quickstart
+
+```swift
+import ChatUIThemes
+
+ContentView()
+  .chatUITheme(.chatgpt)
+```
+
 ## Overview
 
 ChatUIThemes provides theme presets that enable pixel-perfect ChatGPT-style interfaces and native macOS design patterns. This package remains separate from core components to enable custom themes while providing ready-to-use constants for rapid development.
@@ -217,8 +242,19 @@ struct ThemeAwareRow: View {
             )
         )
         .onHover { isHovering = $0 }
-    }
 }
+}
+
+## Verify
+
+- Build the package: `cd swift/ChatUIThemes && swift build`
+- Apply `.chatUITheme(.chatgpt)` and confirm component styling changes.
+
+## Troubleshooting
+
+### Symptom: Theme tokens do not apply
+Cause: The environment theme is not set at the root.
+Fix: Wrap your app root in `.chatUITheme(.chatgpt)` or `.chatUITheme(.default)`.
 ```
 
 ### Switching Themes

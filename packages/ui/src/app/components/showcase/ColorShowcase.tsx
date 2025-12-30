@@ -3,21 +3,27 @@ import { colorTokens } from "@chatui/tokens";
 interface ColorSwatchProps {
   name: string;
   value: string;
-  textColor?: string;
+  borderClassName: string;
+  textClassName: string;
+  valueClassName: string;
 }
 
-function ColorSwatch({ name, value, textColor = "inherit" }: ColorSwatchProps) {
+function ColorSwatch({
+  name,
+  value,
+  borderClassName,
+  textClassName,
+  valueClassName,
+}: ColorSwatchProps) {
   return (
     <div className="flex items-center gap-3">
       <div
-        className="size-12 rounded-lg border border-white/10 shadow-sm"
+        className={`size-12 rounded-lg border shadow-sm ${borderClassName}`}
         style={{ backgroundColor: value }}
       />
       <div>
-        <div className="text-sm font-medium" style={{ color: textColor }}>
-          {name}
-        </div>
-        <div className="text-xs font-mono opacity-60">{value}</div>
+        <div className={`text-sm font-medium ${textClassName}`}>{name}</div>
+        <div className={`text-xs font-mono ${valueClassName}`}>{value}</div>
       </div>
     </div>
   );
@@ -30,24 +36,32 @@ interface ColorGroupProps {
 }
 
 function ColorGroup({ title, colors, isDark = true }: ColorGroupProps) {
-  const textColor = isDark
-    ? "var(--foundation-text-dark-primary)"
-    : "var(--foundation-text-light-primary)";
+  const textClassName = isDark
+    ? "text-foundation-text-dark-primary"
+    : "text-foundation-text-light-primary";
+  const valueClassName = isDark
+    ? "text-foundation-text-dark-tertiary"
+    : "text-foundation-text-light-tertiary";
+  const borderClassName = isDark
+    ? "border-foundation-text-dark-primary/10"
+    : "border-foundation-text-light-primary/10";
+  const groupClassName = isDark
+    ? "bg-foundation-bg-dark-2 border-foundation-text-dark-primary/10"
+    : "bg-foundation-bg-light-1 border-foundation-text-light-primary/10";
 
   return (
-    <div
-      className="rounded-xl p-5 border"
-      style={{
-        backgroundColor: isDark ? "var(--foundation-bg-dark-2)" : "var(--foundation-bg-light-1)",
-        borderColor: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)",
-      }}
-    >
-      <h3 className="text-sm font-semibold mb-4" style={{ color: textColor }}>
-        {title}
-      </h3>
+    <div className={`rounded-xl p-5 border ${groupClassName}`}>
+      <h3 className={`text-sm font-semibold mb-4 ${textClassName}`}>{title}</h3>
       <div className="space-y-3">
         {Object.entries(colors).map(([name, value]) => (
-          <ColorSwatch key={name} name={name} value={value} textColor={textColor} />
+          <ColorSwatch
+            key={name}
+            name={name}
+            value={value}
+            borderClassName={borderClassName}
+            textClassName={textClassName}
+            valueClassName={valueClassName}
+          />
         ))}
       </div>
     </div>
@@ -74,7 +88,7 @@ export function ColorShowcase() {
 
       {/* Light Theme Colors */}
       <section>
-        <h2 className="text-lg font-semibold mb-4 text-foundation-text-dark-primary">
+        <h2 className="text-lg font-semibold mb-4 text-foundation-text-light-primary">
           Light Theme
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -91,10 +105,7 @@ export function ColorShowcase() {
           CSS Variables (Live)
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div
-            className="rounded-xl p-5 border border-white/10"
-            style={{ backgroundColor: "var(--foundation-bg-dark-2)" }}
-          >
+          <div className="rounded-xl p-5 border border-foundation-text-dark-primary/10 bg-foundation-bg-dark-2">
             <h3 className="text-sm font-semibold mb-4 text-foundation-text-dark-primary">
               Dark Backgrounds
             </h3>
@@ -106,7 +117,7 @@ export function ColorShowcase() {
               ].map(({ name, desc }) => (
                 <div key={name} className="flex items-center gap-3">
                   <div
-                    className="size-12 rounded-lg border border-white/10"
+                    className="size-12 rounded-lg border border-foundation-text-dark-primary/10"
                     style={{ backgroundColor: `var(${name})` }}
                   />
                   <div>
@@ -122,10 +133,7 @@ export function ColorShowcase() {
             </div>
           </div>
 
-          <div
-            className="rounded-xl p-5 border border-white/10"
-            style={{ backgroundColor: "var(--foundation-bg-dark-2)" }}
-          >
+          <div className="rounded-xl p-5 border border-foundation-text-dark-primary/10 bg-foundation-bg-dark-2">
             <h3 className="text-sm font-semibold mb-4 text-foundation-text-dark-primary">
               Accent Colors
             </h3>
@@ -138,7 +146,7 @@ export function ColorShowcase() {
               ].map(({ name, desc }) => (
                 <div key={name} className="flex items-center gap-3">
                   <div
-                    className="size-12 rounded-lg border border-white/10"
+                    className="size-12 rounded-lg border border-foundation-text-dark-primary/10"
                     style={{ backgroundColor: `var(${name})` }}
                   />
                   <div>

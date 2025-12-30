@@ -2,6 +2,15 @@
 
 This document explains the `widgetSessionId` pattern for maintaining state across widget instances in ChatGPT Apps SDK.
 
+## Table of contents
+- [Overview](#overview)
+- [How it works](#how-it-works)
+- [Use cases](#use-cases)
+- [Best practices](#best-practices)
+- [TypeScript types](#typescript-types)
+- [Verify](#verify)
+- [Related documentation](#related-documentation)
+
 ## Overview
 
 The `widgetSessionId` is a unique identifier that persists across tool calls within the same conversation. It enables widgets to maintain state and context even when the widget is re-rendered or when multiple tool calls occur.
@@ -159,6 +168,10 @@ declare global {
   }
 }
 ```
+
+## Verify
+
+- Use `console.log(window.openai?.toolResponseMetadata)` in the widget runtime and confirm `openai/widgetSessionId` exists.
 
 ## Related Documentation
 

@@ -21,16 +21,22 @@ import {
 test.describe("ChatSidebar keyboard navigation - Expanded Mode", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
+    await page.waitForSelector('[data-testid="chat-sidebar"]');
+    await page.click("body");
   });
 
   test("navigates main items with Tab", async ({ page }) => {
     const sidebar = page.locator('[data-testid="chat-sidebar"]');
 
-    // Tab into sidebar
-    await pressKey(page, "Tab");
-    await pressKey(page, "Tab");
+    const firstFocusable = sidebar.locator(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
 
-    // Should focus first sidebar item
+    await expect(firstFocusable.first()).toBeVisible();
+    await firstFocusable.first().focus();
+
+    // Tab should keep focus within sidebar when starting inside it.
+    await pressKey(page, "Tab");
     const focused = await getFocusedElement(page);
     const isInSidebar = await sidebar.evaluate(
       (sidebarEl, focusedEl) => sidebarEl.contains(focusedEl),
@@ -106,6 +112,8 @@ test.describe("ChatSidebar keyboard navigation - Expanded Mode", () => {
 test.describe("ChatSidebar keyboard navigation - Collapsed Mode", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
+    await page.waitForSelector('[data-testid="chat-sidebar"]');
+    await page.click("body");
   });
 
   test("collapses sidebar with keyboard", async ({ page }) => {
@@ -191,6 +199,8 @@ test.describe("ChatSidebar keyboard navigation - Collapsed Mode", () => {
 test.describe("ChatSidebar keyboard navigation - Modals", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
+    await page.waitForSelector('[data-testid="chat-sidebar"]');
+    await page.click("body");
   });
 
   test("opens project settings modal with keyboard", async ({ page }) => {
@@ -269,6 +279,7 @@ test.describe("ChatSidebar keyboard navigation - Modals", () => {
 test.describe("ChatSidebar accessibility", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
+    await page.waitForSelector('[data-testid="chat-sidebar"]');
   });
 
   test("has proper ARIA attributes", async ({ page }) => {
@@ -318,6 +329,8 @@ test.describe("ChatSidebar accessibility", () => {
 test.describe("ChatSidebar keyboard shortcuts", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
+    await page.waitForSelector('[data-testid="chat-sidebar"]');
+    await page.click("body");
   });
 
   test("opens settings with keyboard shortcut", async ({ page }) => {

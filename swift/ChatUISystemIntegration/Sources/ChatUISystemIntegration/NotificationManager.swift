@@ -212,9 +212,13 @@ public class NotificationManager: NSObject {
     /// Clear badge count
     public func clearBadge() {
         #if os(macOS)
-        NSApplication.shared.dockTile.badgeLabel = nil
+        DispatchQueue.main.async {
+            NSApplication.shared.dockTile.badgeLabel = nil
+        }
         #elseif os(iOS)
-        UIApplication.shared.applicationIconBadgeNumber = 0
+        DispatchQueue.main.async {
+            UIApplication.shared.applicationIconBadgeNumber = 0
+        }
         #endif
     }
 }

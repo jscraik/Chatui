@@ -65,7 +65,7 @@ export function ViewModeToggle({
       ) : (
         <>
           <Sparkles className="size-4 text-foundation-accent-blue" />
-          <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-accent-blue">
+          <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
             {labels.compose}
           </span>
         </>

@@ -1,10 +1,12 @@
 import SwiftUI
+import os
 import ChatUIFoundation
-import ChatUIComponents
 import ChatUIThemes
 import ChatUIShellChatGPT
 import ChatUIMCP
 import ChatUISystemIntegration
+
+private let appLogger = Logger(subsystem: "ChatUIApp", category: "ContentView")
 
 struct ContentView: View {
     @EnvironmentObject private var appState: AppState
@@ -64,7 +66,7 @@ struct ContentView: View {
                     }
                 }
             } catch {
-                print("Failed to restore state: \(error)")
+                appLogger.error("Failed to restore state: \(String(describing: error))")
             }
         }
     }
@@ -72,10 +74,10 @@ struct ContentView: View {
     private func saveState() {
         Task {
             do {
-                let snapshot = appState.snapshot()
+                let snapshot = await MainActor.run { appState.snapshot() }
                 try await lifecycleManager.saveState(snapshot, forKey: "appState")
             } catch {
-                print("Failed to save state: \(error)")
+                appLogger.error("Failed to save state: \(String(describing: error))")
             }
         }
     }
@@ -85,53 +87,32 @@ struct ContentView: View {
 
 struct SidebarView: View {
     @EnvironmentObject private var appState: AppState
+
+    private var selectionBinding: Binding<AppSection?> {
+        Binding(
+            get: { appState.selectedSection },
+            set: { newValue in
+                if let newValue {
+                    appState.selectedSection = newValue
+                }
+            }
+        )
+    }
     
     var body: some View {
-        VStack(spacing: 0) {
-            // Header
-            VStack(alignment: .leading, spacing: FSpacing.s8) {
-                Text(AppInfo.displayName)
-                    .font(FType.title())
-                    .foregroundStyle(FColor.textPrimary)
-                
-                Text("Native macOS Application")
-                    .font(FType.caption())
-                    .foregroundStyle(FColor.textSecondary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(FSpacing.s16)
-            
-            SettingsDivider()
-            
-            // Navigation
-            ScrollView {
-                VStack(spacing: FSpacing.s4) {
-                    ForEach(AppSection.allCases) { section in
-                        ListItemView(
-                            systemIcon: section.systemImage,
-                            title: section.title,
-                            isSelected: appState.selectedSection == section
-                        ) {
-                            appState.selectedSection = section
-                        }
-                    }
+        List(selection: selectionBinding) {
+            Section {
+                ForEach(AppSection.allCases) { section in
+                    Label(section.title, systemImage: section.systemImage)
+                        .tag(section)
                 }
-                .padding(FSpacing.s8)
-            }
-            
-            Spacer()
-            
-            // Footer
-            SettingsDivider()
-            
-            VStack(spacing: FSpacing.s8) {
+            } footer: {
                 Text("Version \(AppInfo.versionString)")
-                    .font(FType.footnote())
-                    .foregroundStyle(FColor.textTertiary)
             }
-            .frame(maxWidth: .infinity)
-            .padding(FSpacing.s12)
         }
+        .listStyle(.sidebar)
+        .navigationTitle(AppInfo.displayName)
+        .navigationSubtitle("Native macOS Application")
     }
 }
 
@@ -152,6 +133,8 @@ struct DetailView: View {
             switch appState.selectedSection {
             case .chat:
                 ChatView(mcpClient: mcpClient)
+            case .templates:
+                TemplatesView()
             case .tools:
                 ToolsView(mcpClient: mcpClient)
             case .settings:
@@ -170,6 +153,7 @@ private struct ErrorBannerView: View {
         HStack(spacing: FSpacing.s8) {
             Image(systemName: "exclamationmark.triangle.fill")
                 .foregroundStyle(FColor.accentRed)
+                .accessibilityHidden(true)
             Text(message)
                 .font(FType.caption())
                 .foregroundStyle(FColor.textSecondary)

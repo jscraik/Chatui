@@ -1,3 +1,4 @@
+// Generated from src/tokens/index.dtcg.json. Do not edit by hand.
 export const typographyTokens = {
   fontFamily: "SF Pro",
   heading1: {

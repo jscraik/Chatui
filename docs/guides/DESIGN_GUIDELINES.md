@@ -2,6 +2,17 @@
 
 These guidelines keep the UI consistent across ChatGPT widgets and standalone apps.
 
+## Table of contents
+- [Core principles](#core-principles)
+- [Component usage](#component-usage)
+- [Layout and spacing](#layout-and-spacing)
+- [Colors and typography](#colors-and-typography)
+- [Icons and imagery](#icons-and-imagery)
+- [Accessibility checklist](#accessibility-checklist)
+- [Review standard](#review-standard)
+- [Verify](#verify)
+- [Related docs](#related-docs)
+
 ## Core principles
 
 - **Use Apps SDK UI first.** Prefer `@openai/apps-sdk-ui` components and `@chatui/ui` wrappers.

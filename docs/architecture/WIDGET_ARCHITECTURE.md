@@ -37,6 +37,12 @@ Widget IDs are defined by folder names in `packages/widgets/src`:
 
 - `auth-demo`
 - `chat-view`
+- `chat-template`
+- `chat-header`
+- `chat-sidebar`
+- `chat-messages`
+- `chat-input`
+- `compose-view`
 - `dashboard-widget`
 - `enhanced-example-widget`
 - `example-widget`

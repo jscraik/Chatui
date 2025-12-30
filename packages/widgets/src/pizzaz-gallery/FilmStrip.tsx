@@ -28,8 +28,8 @@ export default function FilmStrip({ album, selectedIndex, onSelect }: FilmStripP
           className={
             "block w-full p-[1px] pointer-events-auto rounded-[10px] cursor-pointer border transition-[colors,opacity] " +
             (idx === selectedIndex
-              ? "border-strong"
-              : "border-transparent hover:border-subtle opacity-60 hover:opacity-100")
+              ? "border-foundation-accent-blue"
+              : "border-transparent hover:border-foundation-bg-light-3 dark:hover:border-foundation-bg-dark-3 opacity-70 hover:opacity-100")
           }
         >
           <div className="aspect-[5/3] rounded-lg overflow-hidden w-full">

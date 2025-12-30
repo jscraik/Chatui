@@ -2,6 +2,31 @@
 
 Reusable SwiftUI primitives that mirror React component APIs with compile-time safety.
 
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Quickstart](#quickstart)
+- [Overview](#overview)
+- [Installation](#installation)
+- [Components](#components)
+- [Verify](#verify)
+- [Troubleshooting](#troubleshooting)
+
+## Prerequisites
+
+- Xcode 15+
+- Swift 5.9
+- iOS 15+ / macOS 13+ / visionOS 1+
+
+## Quickstart
+
+```swift
+import ChatUIComponents
+
+SettingsCardView {
+    SettingRowView(title: "Example")
+}
+```
+
 ## Overview
 
 ChatUIComponents provides reusable SwiftUI primitives that mirror React component APIs, enabling developers to build native iOS, macOS, and visionOS applications with familiar patterns and consistent behavior. All components use ChatUIFoundation tokens exclusively and support automatic light/dark mode.
@@ -44,6 +69,23 @@ Then add it to your target dependencies:
 > ContentView()
 >     .chatUITheme(.chatgpt) // or .default
 > ```
+
+### ChatShell (slot-based layouts)
+
+Compose chat variants with consistent spacing and theming:
+
+```swift
+ChatVariantSplitSidebar(
+    sidebar: { SidebarView() },
+    header: { HeaderView() },
+    messages: { MessagesView() },
+    composer: { ComposerView() }
+)
+```
+
+Also available:
+- `ChatVariantCompact` (no sidebar)
+- `ChatVariantContextRail` (right-side context panel)
 
 ### SettingsDivider
 
@@ -197,6 +239,17 @@ struct MySettings: View {
 - Smooth 0.15s animation on toggle
 - White circle with subtle shadow
 - Accessibility label ("On"/"Off")
+
+## Verify
+
+- Build the package: `cd swift/ChatUIComponents && swift build`
+- Open `apps/macos/ComponentGallery` and confirm settings primitives render.
+
+## Troubleshooting
+
+### Symptom: Components render without theme styling
+Cause: No theme applied to the environment.
+Fix: Apply `.chatUITheme(.chatgpt)` or `.chatUITheme(.default)` at the root.
 
 ### SettingToggleView
 

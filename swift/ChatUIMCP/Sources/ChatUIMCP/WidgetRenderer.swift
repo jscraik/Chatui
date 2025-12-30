@@ -6,15 +6,18 @@ import ChatUIComponents
 public struct WidgetRenderer: View {
     private let widgetData: WidgetData?
     private let toolResult: MCPToolCallResult?
+    private let onAction: ((String) -> Void)?
 
-    public init(widgetData: WidgetData) {
+    public init(widgetData: WidgetData, onAction: ((String) -> Void)? = nil) {
         self.widgetData = widgetData
         self.toolResult = nil
+        self.onAction = onAction
     }
 
-    public init(result: MCPToolCallResult) {
+    public init(result: MCPToolCallResult, onAction: ((String) -> Void)? = nil) {
         self.widgetData = nil
         self.toolResult = result
+        self.onAction = onAction
     }
 
     public var body: some View {
@@ -67,7 +70,10 @@ public struct WidgetRenderer: View {
     private func renderList(_ widgetData: WidgetData) -> some View {
         SettingsCardView {
             VStack(spacing: 0) {
-                if let items = widgetData.items {
+                let items = widgetData.items ?? []
+                if items.isEmpty {
+                    emptyState(text: "No items available")
+                } else {
                     ForEach(items) { item in
                         SettingRowView(
                             icon: item.icon.map { iconName in
@@ -79,10 +85,9 @@ public struct WidgetRenderer: View {
                             title: item.title,
                             subtitle: item.subtitle,
                             trailing: item.action != nil ? .chevron : .none,
-                            action: item.action != nil ? {
-                                // Handle action
-                                print("Action: \(item.action!)")
-                            } : nil
+                            action: item.action.map { action in
+                                { onAction?(action) }
+                            }
                         )
                         
                         if item.id != items.last?.id {
@@ -105,31 +110,8 @@ public struct WidgetRenderer: View {
                         .font(FType.title())
                         .foregroundStyle(FColor.textPrimary)
                 }
-                
-                // Placeholder for chart rendering
-                // In production, this would use Swift Charts or similar
-                Text("Chart rendering not yet implemented")
-                    .font(FType.caption())
-                    .foregroundStyle(FColor.textTertiary)
-                    .padding(FSpacing.s24)
-            }
-            .padding(FSpacing.s16)
-        }
-    }
-    
-    // MARK: - Table Rendering
-    
-    @ViewBuilder
-    private func renderTable(_ widgetData: WidgetData) -> some View {
-        SettingsCardView {
-            VStack(alignment: .leading, spacing: FSpacing.s16) {
-                if let title = widgetData.title {
-                    Text(title)
-                        .font(FType.title())
-                        .foregroundStyle(FColor.textPrimary)
-                }
-                
-                if let items = widgetData.items {
+
+                if let items = widgetData.items, !items.isEmpty {
                     VStack(spacing: 0) {
                         ForEach(items) { item in
                             HStack {
@@ -153,6 +135,57 @@ public struct WidgetRenderer: View {
                             }
                         }
                     }
+                } else if let content = widgetData.content, !content.isEmpty {
+                    Text(content)
+                        .font(FType.rowTitle())
+                        .foregroundStyle(FColor.textSecondary)
+                        .tracking(FType.trackingRow())
+                } else {
+                    emptyState(text: "No chart data available")
+                }
+            }
+            .padding(FSpacing.s16)
+        }
+    }
+    
+    // MARK: - Table Rendering
+    
+    @ViewBuilder
+    private func renderTable(_ widgetData: WidgetData) -> some View {
+        SettingsCardView {
+            VStack(alignment: .leading, spacing: FSpacing.s16) {
+                if let title = widgetData.title {
+                    Text(title)
+                        .font(FType.title())
+                        .foregroundStyle(FColor.textPrimary)
+                }
+                
+                if let items = widgetData.items, !items.isEmpty {
+                    VStack(spacing: 0) {
+                        ForEach(items) { item in
+                            HStack {
+                                Text(item.title)
+                                    .font(FType.rowTitle())
+                                    .foregroundStyle(FColor.textPrimary)
+                                
+                                Spacer()
+                                
+                                if let subtitle = item.subtitle {
+                                    Text(subtitle)
+                                        .font(FType.rowValue())
+                                        .foregroundStyle(FColor.textSecondary)
+                                }
+                            }
+                            .padding(.horizontal, FSpacing.s12)
+                            .padding(.vertical, FSpacing.s8)
+                            
+                            if item.id != items.last?.id {
+                                SettingsDivider()
+                            }
+                        }
+                    }
+                } else {
+                    emptyState(text: "No rows available")
                 }
             }
             .padding(FSpacing.s16)
@@ -171,15 +204,39 @@ public struct WidgetRenderer: View {
                         .foregroundStyle(FColor.textPrimary)
                 }
                 
-                if let content = widgetData.content {
+                if let content = widgetData.content, !content.isEmpty {
                     Text(content)
                         .font(FType.rowTitle())
                         .foregroundStyle(FColor.textSecondary)
+                        .tracking(FType.trackingRow())
                 }
-                
-                Text("Custom widget rendering")
-                    .font(FType.caption())
-                    .foregroundStyle(FColor.textTertiary)
+
+                if let items = widgetData.items, !items.isEmpty {
+                    VStack(spacing: 0) {
+                        ForEach(items) { item in
+                            SettingRowView(
+                                icon: item.icon.map { iconName in
+                                    AnyView(
+                                        Image(systemName: iconName)
+                                            .foregroundStyle(FColor.iconSecondary)
+                                    )
+                                },
+                                title: item.title,
+                                subtitle: item.subtitle,
+                                trailing: item.action != nil ? .chevron : .none,
+                                action: item.action.map { action in
+                                    { onAction?(action) }
+                                }
+                            )
+                            
+                            if item.id != items.last?.id {
+                                SettingsDivider()
+                            }
+                        }
+                    }
+                } else if widgetData.content == nil || widgetData.content?.isEmpty == true {
+                    emptyState(text: "No custom content available")
+                }
             }
             .padding(FSpacing.s16)
         }
@@ -213,6 +270,14 @@ public struct WidgetRenderer: View {
         } else {
             MCPContentBlocksView(blocks: result.content)
         }
+    }
+
+    private func emptyState(text: String) -> some View {
+        Text(text)
+            .font(FType.caption())
+            .foregroundStyle(FColor.textTertiary)
+            .padding(.vertical, FSpacing.s12)
+            .frame(maxWidth: .infinity, alignment: .center)
     }
 }
 

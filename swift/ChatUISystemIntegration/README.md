@@ -2,6 +2,32 @@
 
 Native macOS and iOS system integration package providing file system access, notifications, sharing, Spotlight search, and app lifecycle management.
 
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Quickstart](#quickstart)
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Platform support](#platform-support)
+- [Verify](#verify)
+- [Troubleshooting](#troubleshooting)
+
+## Prerequisites
+
+- Xcode 15+
+- Swift 5.9
+- macOS 13+ / iOS 15+
+
+## Quickstart
+
+```swift
+import ChatUISystemIntegration
+
+let notificationManager = NotificationManager()
+_ = try await notificationManager.requestPermission()
+```
+
 ## Overview
 
 ChatUISystemIntegration provides a comprehensive set of managers for integrating with native macOS and iOS system features. This package handles platform-specific APIs and provides a unified interface for common system integration tasks.
@@ -299,6 +325,21 @@ swift test --filter FileSystemManagerTests
 # Run with verbose output
 swift test --verbose
 ```
+
+## Verify
+
+- Build: `cd swift/ChatUISystemIntegration && swift build`
+- Request notifications and confirm the permission prompt appears.
+
+## Troubleshooting
+
+### Symptom: Notifications never appear
+Cause: Permission denied.
+Fix: Re-enable notifications in System Settings and re-run `requestPermission()`.
+
+### Symptom: Spotlight search returns no results
+Cause: Items not indexed or query terms not escaped.
+Fix: Call `indexChatMessage` before searching and use simple query terms.
 
 ## Requirements
 

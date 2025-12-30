@@ -2,13 +2,32 @@
 
 A comprehensive React UI component library built for ChatGPT Apps SDK and standalone applications.
 
-## 🚀 Quick Start
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Install](#install)
+- [Quick start](#quick-start)
+- [Verify](#verify)
+- [What's included](#-whats-included)
+- [Theming and styling](#-theming--styling)
+- [Advanced usage](#-advanced-usage)
+- [Troubleshooting](#troubleshooting)
+- [Related docs](#related-docs)
+
+## Prerequisites
+
+- Node.js 18+
+- React 19.x
+- pnpm (recommended) or npm
+
+## Install
 
 ```bash
-npm install @chatui/ui
-# or
 pnpm add @chatui/ui
+# or
+npm install @chatui/ui
 ```
+
+## 🚀 Quick Start
 
 ```tsx
 import { ChatUIRoot, Button, ModelSelector } from "@chatui/ui";
@@ -24,6 +43,11 @@ function App() {
   );
 }
 ```
+
+## Verify
+
+- Run Storybook (`pnpm dev:storybook`) and confirm the UI stories render.
+- In your app, confirm the button renders with Apps SDK UI styling.
 
 ### Dev/demo exports
 
@@ -43,6 +67,10 @@ import { ChatUIApp, DesignSystemPage } from "@chatui/ui/dev";
 - `ChatMessages` - Message display with actions
 - `ChatInput` - Input area with attachments and tools
 - `ComposeView` - Compose interface for new conversations
+- `ChatShell` - Slot-based layout container for chat variants
+- `ChatVariantSplitSidebar` - Desktop-style sidebar layout
+- `ChatVariantCompact` - Compact layout for small surfaces
+- `ChatVariantContextRail` - Right-rail context panel layout
 
 ### UI Components Library
 
@@ -132,6 +160,33 @@ function ChatApp() {
   );
 }
 ```
+
+## Troubleshooting
+
+### Symptom: Components render without styling
+Cause: CSS not imported.
+Fix:
+```ts
+import "@chatui/ui/styles.css";
+```
+
+### Symptom: Icons render incorrectly
+Cause: Direct `lucide-react` imports instead of the adapter.
+Fix: In this repo, use the icon adapter in `packages/ui/src/icons` as the source of truth.
+
+### Symptom: Storybook tests fail
+Cause: UI package not built or mismatched dependencies.
+Fix:
+```bash
+pnpm -C packages/ui build
+pnpm -C apps/storybook test
+```
+
+## Related docs
+
+- `packages/runtime/README.md` for host integration.
+- `packages/tokens/README.md` for token usage.
+- `apps/storybook/README.md` for component QA.
 
 ### Custom Hooks
 

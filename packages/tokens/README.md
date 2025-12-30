@@ -4,8 +4,23 @@ Design tokens for ChatUI. This package provides CSS variables, a Tailwind preset
 
 Note: For production UI code, prefer Apps SDK UI components and tokens. Use these foundations as an audit/extension layer.
 
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Install](#install)
+- [Quick start](#quick-start)
+- [Generate tokens](#generate-tokens)
+- [Validate tokens](#validate-tokens)
+- [Verify](#verify)
+- [Troubleshooting](#troubleshooting)
+
+## Prerequisites
+
+- Node.js 18+
+- pnpm 9.15.0 (for repo scripts)
+
 ## What this package contains
 
+- `src/tokens/index.dtcg.json` - Canonical DTCG token source of truth
 - `src/foundations.css` - Foundation tokens (audit/extension only)
 - `src/tokens.css` - App-level tokens
 - `tailwind.preset.ts` - Tailwind preset for consuming apps
@@ -17,7 +32,7 @@ Note: For production UI code, prefer Apps SDK UI components and tokens. Use thes
 pnpm add @chatui/tokens
 ```
 
-## Usage
+## Quick start
 
 ### CSS
 
@@ -45,10 +60,16 @@ From the repo root:
 pnpm generate:tokens
 ```
 
+To regenerate TypeScript token exports from the canonical DTCG bundle:
+
+```bash
+pnpm -C packages/tokens tokens:sync
+```
+
 Watch for changes:
 
 ```bash
-pnpm -C packages/tokens tokens:watch
+pnpm -C packages/tokens generate:watch
 ```
 
 ## Validate tokens

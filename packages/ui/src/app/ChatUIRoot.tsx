@@ -340,7 +340,7 @@ export function ChatUIRoot({
     if (mode === "dashboard") {
       return (
         <div className="flex-1 flex flex-col">
-          <div className="p-4 text-foundation-text-light-secondary dark:text-white/80">
+          <div className="p-4 text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
             Dashboard template placeholder
           </div>
         </div>

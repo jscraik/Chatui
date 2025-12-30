@@ -33,19 +33,19 @@ export default function App() {
         <div className="fixed bottom-4 right-4 flex gap-2">
           <button type="button"
             onClick={() => setCurrentView("typography")}
-            className="rounded-lg bg-white px-4 py-2 text-sm font-semibold shadow-lg hover:bg-gray-100"
+            className="rounded-lg bg-foundation-bg-light-1 px-4 py-2 text-sm font-semibold text-foundation-text-light-primary shadow-lg hover:bg-foundation-bg-light-3"
           >
             Typography
           </button>
           <button type="button"
             onClick={() => setCurrentView("spacing")}
-            className="rounded-lg bg-white px-4 py-2 text-sm font-semibold shadow-lg hover:bg-gray-100"
+            className="rounded-lg bg-foundation-bg-light-1 px-4 py-2 text-sm font-semibold text-foundation-text-light-primary shadow-lg hover:bg-foundation-bg-light-3"
           >
             Spacing
           </button>
           <button type="button"
             onClick={() => setCurrentView("chat")}
-            className="rounded-lg bg-foundation-bg-dark-1 px-4 py-2 text-sm font-semibold text-white shadow-lg hover:bg-foundation-bg-dark-2"
+            className="rounded-lg bg-foundation-bg-dark-1 px-4 py-2 text-sm font-semibold text-foundation-text-dark-primary shadow-lg hover:bg-foundation-bg-dark-2"
           >
             ← Back to Chat
           </button>
@@ -61,19 +61,19 @@ export default function App() {
         <div className="fixed bottom-4 right-4 flex gap-2">
           <button type="button"
             onClick={() => setCurrentView("design-system")}
-            className="rounded-lg bg-white px-4 py-2 text-sm font-semibold shadow-lg hover:bg-gray-100"
+            className="rounded-lg bg-foundation-bg-light-1 px-4 py-2 text-sm font-semibold text-foundation-text-light-primary shadow-lg hover:bg-foundation-bg-light-3"
           >
             ← Overview
           </button>
           <button type="button"
             onClick={() => setCurrentView("spacing")}
-            className="rounded-lg bg-white px-4 py-2 text-sm font-semibold shadow-lg hover:bg-gray-100"
+            className="rounded-lg bg-foundation-bg-light-1 px-4 py-2 text-sm font-semibold text-foundation-text-light-primary shadow-lg hover:bg-foundation-bg-light-3"
           >
             View Spacing →
           </button>
           <button type="button"
             onClick={() => setCurrentView("chat")}
-            className="rounded-lg bg-foundation-bg-dark-1 px-4 py-2 text-sm font-semibold text-white shadow-lg hover:bg-foundation-bg-dark-2"
+            className="rounded-lg bg-foundation-bg-dark-1 px-4 py-2 text-sm font-semibold text-foundation-text-dark-primary shadow-lg hover:bg-foundation-bg-dark-2"
           >
             ← Back to Chat
           </button>
@@ -89,19 +89,19 @@ export default function App() {
         <div className="fixed bottom-4 right-4 flex gap-2">
           <button type="button"
             onClick={() => setCurrentView("design-system")}
-            className="rounded-lg bg-white px-4 py-2 text-sm font-semibold shadow-lg hover:bg-gray-100"
+            className="rounded-lg bg-foundation-bg-light-1 px-4 py-2 text-sm font-semibold text-foundation-text-light-primary shadow-lg hover:bg-foundation-bg-light-3"
           >
             ← Overview
           </button>
           <button type="button"
             onClick={() => setCurrentView("chat")}
-            className="rounded-lg bg-foundation-bg-dark-1 px-4 py-2 text-sm font-semibold text-white shadow-lg hover:bg-foundation-bg-dark-2"
+            className="rounded-lg bg-foundation-bg-dark-1 px-4 py-2 text-sm font-semibold text-foundation-text-dark-primary shadow-lg hover:bg-foundation-bg-dark-2"
           >
             ← Back to Chat
           </button>
           <button type="button"
             onClick={() => setCurrentView("typography")}
-            className="rounded-lg bg-white px-4 py-2 text-sm font-semibold shadow-lg hover:bg-gray-100"
+            className="rounded-lg bg-foundation-bg-light-1 px-4 py-2 text-sm font-semibold text-foundation-text-light-primary shadow-lg hover:bg-foundation-bg-light-3"
           >
             ← View Typography
           </button>

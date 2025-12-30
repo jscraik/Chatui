@@ -61,9 +61,9 @@ export const AllIcons: Story = {
             key={name}
             name={name}
             Icon={Icon}
-            iconClassName="size-6 text-gray-900"
-            labelClassName="text-xs text-gray-600"
-            cardClassName="flex items-center gap-3 rounded-md border border-gray-200 bg-white px-3 py-2"
+            iconClassName="size-6 text-foundation-text-light-primary dark:text-foundation-text-dark-primary"
+            labelClassName="text-xs text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary"
+            cardClassName="flex items-center gap-3 rounded-md border border-foundation-text-light-primary/10 dark:border-foundation-text-dark-primary/10 bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 px-3 py-2"
           />
         ))}
       </div>
@@ -78,15 +78,19 @@ export const Sizes: Story = {
       <div className="w-full max-w-4xl space-y-4">
         {sizes.map((size) => (
           <div key={size} className="flex flex-wrap items-center gap-4">
-            <span className="w-16 text-xs font-medium text-gray-500">{size}</span>
+            <span className="w-16 text-xs font-medium text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary">
+              {size}
+            </span>
             <div className="flex flex-wrap items-center gap-4">
               {sizeSamples.map(([name, Icon]) => (
                 <div
                   key={`${size}-${name}`}
-                  className="flex items-center gap-2 rounded-md border border-gray-200 bg-white px-3 py-2"
+                  className="flex items-center gap-2 rounded-md border border-foundation-text-light-primary/10 dark:border-foundation-text-dark-primary/10 bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 px-3 py-2"
                 >
-                  <Icon className={`${size} text-gray-900`} />
-                  <span className="text-xs text-gray-600">{name}</span>
+                  <Icon className={`${size} text-foundation-text-light-primary dark:text-foundation-text-dark-primary`} />
+                  <span className="text-xs text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+                    {name}
+                  </span>
                 </div>
               ))}
             </div>
@@ -99,16 +103,16 @@ export const Sizes: Story = {
 
 export const Muted: Story = {
   render: () => (
-    <div className="w-full max-w-6xl rounded-lg bg-gray-900 p-6">
+    <div className="w-full max-w-6xl rounded-lg bg-foundation-bg-dark-1 p-6">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {sortedIcons.map(([name, Icon]) => (
           <IconTile
             key={name}
             name={name}
             Icon={Icon}
-            iconClassName="size-6 text-white/60"
-            labelClassName="text-xs text-white/60"
-            cardClassName="flex items-center gap-3 rounded-md border border-white/10 bg-gray-900/60 px-3 py-2"
+            iconClassName="size-6 text-foundation-text-dark-secondary"
+            labelClassName="text-xs text-foundation-text-dark-secondary"
+            cardClassName="flex items-center gap-3 rounded-md border border-foundation-text-dark-primary/10 bg-foundation-bg-dark-2 px-3 py-2"
           />
         ))}
       </div>
@@ -184,8 +188,10 @@ export const KeyboardShortcuts: Story = {
     return (
       <div className="w-full max-w-6xl">
         <div className="mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Keyboard Shortcut Icons</h3>
-          <p className="text-sm text-gray-600">
+          <h3 className="text-lg font-semibold text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
+            Keyboard Shortcut Icons
+          </h3>
+          <p className="text-sm text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
             Icons for keyboard keys and modifiers used in shortcut displays
           </p>
         </div>
@@ -193,10 +199,12 @@ export const KeyboardShortcuts: Story = {
           {keyboardIcons.map(([name, Icon]) => (
             <div
               key={name}
-              className="flex flex-col items-center gap-2 rounded-md border border-gray-200 bg-white p-3"
+              className="flex flex-col items-center gap-2 rounded-md border border-foundation-text-light-primary/10 dark:border-foundation-text-dark-primary/10 bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 p-3"
             >
-              <Icon className="size-8 text-gray-900" />
-              <span className="text-xs text-gray-600">{name}</span>
+              <Icon className="size-8 text-foundation-text-light-primary dark:text-foundation-text-dark-primary" />
+              <span className="text-xs text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+                {name}
+              </span>
             </div>
           ))}
         </div>

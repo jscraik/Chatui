@@ -1,6 +1,11 @@
-# Guides
+# Guides for common developer tasks
 
-Step-by-step guides for common development tasks.
+Use these when you want step-by-step workflows, not API reference.
+
+## Start here
+
+- First time adding a page? Read **PAGES_QUICK_START.md**.
+- Shipping? Use **RELEASE_CHECKLIST.md**.
 
 ## Documents
 

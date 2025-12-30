@@ -10,53 +10,82 @@ struct ToolsView: View {
     @State private var isLoading = false
     @State private var errorMessage: String?
     @State private var selectedTool: ToolInfo?
+    @State private var loadTask: Task<Void, Never>?
     
     var body: some View {
-        VStack(spacing: 0) {
-            // Header
-            ToolsHeaderView()
-            
-            SettingsDivider()
-            
-            // Content
-            if isLoading {
-                LoadingView()
-            } else if let error = errorMessage {
-                ErrorView(message: error)
-            } else if availableTools.isEmpty {
-                EmptyToolsView()
-            } else {
-                ToolsListView(
-                    tools: availableTools,
-                    selectedTool: $selectedTool
-                )
+        content
+            .navigationTitle("MCP Tools")
+            .navigationSubtitle("Available tools and integrations")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button(action: loadTools) {
+                        Image(systemName: "arrow.clockwise")
+                            .foregroundStyle(FColor.iconSecondary)
+                    }
+                    .accessibilityLabel("Refresh tools")
+                    .accessibilityHint("Reload available MCP tools")
+                }
             }
-        }
-        .onAppear {
-            loadTools()
+            .onAppear {
+                loadTools()
+            }
+            .onDisappear {
+                loadTask?.cancel()
+            }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        if isLoading {
+            LoadingView()
+        } else if let error = errorMessage {
+            ErrorView(message: error)
+        } else if availableTools.isEmpty {
+            EmptyToolsView()
+        } else {
+            ToolsListView(
+                tools: availableTools,
+                selectedTool: $selectedTool
+            )
         }
     }
     
     private func loadTools() {
-        // Placeholder for loading available MCP tools
-        // In a real implementation, this would query the MCP server
-        availableTools = [
-            ToolInfo(
-                name: "display_chat",
-                description: "Display a chat message with optional widget",
-                category: "Display"
-            ),
-            ToolInfo(
-                name: "display_table",
-                description: "Display data in a table format",
-                category: "Display"
-            ),
-            ToolInfo(
-                name: "add_to_cart",
-                description: "Add an item to the shopping cart",
-                category: "E-commerce"
-            )
-        ]
+        loadTask?.cancel()
+        guard let mcpClient else {
+            availableTools = []
+            errorMessage = "MCP client unavailable"
+            isLoading = false
+            return
+        }
+        
+        isLoading = true
+        errorMessage = nil
+        
+        loadTask = Task {
+            do {
+                let tools = try await mcpClient.listToolInfo()
+                guard !Task.isCancelled else { return }
+                let mapped = tools.map { tool in
+                    ToolInfo(
+                        name: tool.name,
+                        description: tool.description ?? "No description provided",
+                        category: tool.annotations?.readOnlyHint == true ? "Read-only" : "Actions"
+                    )
+                }
+                await MainActor.run {
+                    availableTools = mapped
+                    isLoading = false
+                }
+            } catch {
+                guard !Task.isCancelled else { return }
+                await MainActor.run {
+                    availableTools = []
+                    errorMessage = error.localizedDescription
+                    isLoading = false
+                }
+            }
+        }
     }
 }
 
@@ -70,32 +99,6 @@ struct ToolInfo: Identifiable {
 }
 
 // MARK: - Subviews
-
-struct ToolsHeaderView: View {
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: FSpacing.s4) {
-                Text("MCP Tools")
-                    .font(FType.title())
-                    .foregroundStyle(FColor.textPrimary)
-                
-                Text("Available tools and integrations")
-                    .font(FType.caption())
-                    .foregroundStyle(FColor.textSecondary)
-            }
-            
-            Spacer()
-            
-            Button(action: {}) {
-                Image(systemName: "arrow.clockwise")
-                    .font(.system(size: 18))
-                    .foregroundStyle(FColor.iconSecondary)
-            }
-            .buttonStyle(.plain)
-        }
-        .padding(FSpacing.s16)
-    }
-}
 
 struct LoadingView: View {
     var body: some View {
@@ -118,6 +121,7 @@ struct ErrorView: View {
             Image(systemName: "exclamationmark.triangle")
                 .font(.system(size: 48))
                 .foregroundStyle(FColor.accentRed)
+                .accessibilityHidden(true)
             
             Text("Error Loading Tools")
                 .font(FType.title())
@@ -139,6 +143,7 @@ struct EmptyToolsView: View {
             Image(systemName: "hammer")
                 .font(.system(size: 48))
                 .foregroundStyle(FColor.iconTertiary)
+                .accessibilityHidden(true)
             
             Text("No Tools Available")
                 .font(FType.title())
@@ -159,54 +164,28 @@ struct ToolsListView: View {
     @Binding var selectedTool: ToolInfo?
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: FSpacing.s12) {
-                ForEach(groupedTools.keys.sorted(), id: \.self) { category in
-                    ToolCategorySection(
-                        category: category,
-                        tools: groupedTools[category] ?? [],
-                        selectedTool: $selectedTool
-                    )
-                }
-            }
-            .padding(FSpacing.s16)
-        }
-    }
-    
-    private var groupedTools: [String: [ToolInfo]] {
-        Dictionary(grouping: tools, by: { $0.category })
-    }
-}
-
-struct ToolCategorySection: View {
-    let category: String
-    let tools: [ToolInfo]
-    @Binding var selectedTool: ToolInfo?
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: FSpacing.s8) {
-            Text(category)
-                .font(FType.sectionTitle())
-                .foregroundStyle(FColor.textPrimary)
-                .padding(.horizontal, FSpacing.s4)
-            
-            SettingsCardView {
-                VStack(spacing: 0) {
-                    ForEach(tools) { tool in
+        List {
+            ForEach(groupedTools.keys.sorted(), id: \.self) { category in
+                Section {
+                    ForEach(groupedTools[category] ?? []) { tool in
                         ToolRow(
                             tool: tool,
                             isSelected: selectedTool?.id == tool.id
                         ) {
                             selectedTool = tool
                         }
-                        
-                        if tool.id != tools.last?.id {
-                            SettingsDivider()
-                        }
                     }
+                } header: {
+                    Text(category)
+                        .font(FType.sectionTitle())
+                        .foregroundStyle(FColor.textPrimary)
                 }
             }
         }
+    }
+    
+    private var groupedTools: [String: [ToolInfo]] {
+        Dictionary(grouping: tools, by: { $0.category })
     }
 }
 

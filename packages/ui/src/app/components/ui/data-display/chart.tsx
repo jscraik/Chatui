@@ -33,6 +33,12 @@ const escapeCssSelector = (value: string) => {
   return value.replace(/[^a-zA-Z0-9_-]/g, "\\$&");
 };
 
+const toSafeCssVarKey = (value: string) => {
+  const sanitized = value.toLowerCase().replace(/[^a-z0-9_-]/g, "-").replace(/-+/g, "-");
+  const trimmed = sanitized.replace(/^-+/, "").replace(/-+$/, "");
+  return trimmed || "series";
+};
+
 export type ChartConfig = {
   [k in string]: {
     label?: React.ReactNode;
@@ -109,7 +115,8 @@ ${colorConfig
   .map(([key, itemConfig]) => {
     const rawColor = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color;
     const color = getSafeColor(rawColor);
-    return color ? `  --color-${key}: ${color};` : null;
+    const safeKey = toSafeCssVarKey(key);
+    return color ? `  --color-${safeKey}: ${color};` : null;
   })
   .join("\n")}
 }

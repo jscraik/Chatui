@@ -13,6 +13,8 @@ export * from "./app/components/chat/ChatHeader";
 export * from "./app/components/chat/ChatInput";
 export * from "./app/components/chat/ChatMessages";
 export * from "./app/components/chat/ChatSidebar";
+export * from "./app/components/chat/ChatShell";
+export * from "./app/components/chat/chat-variants";
 export * from "./app/components/chat/ComposeView";
 
 // UI Components (prioritized over vendor)

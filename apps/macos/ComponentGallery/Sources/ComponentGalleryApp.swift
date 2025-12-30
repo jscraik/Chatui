@@ -71,6 +71,7 @@ struct ComponentGalleryiOSApp: App {
 
 // MARK: - Gallery State
 
+@MainActor
 class GalleryState: ObservableObject {
     @Published var selectedCategory: ComponentCategory = .foundation
     @Published var searchQuery: String = ""
@@ -106,11 +107,12 @@ extension Notification.Name {
 
 // MARK: - Component Categories
 
-enum ComponentCategory: String, CaseIterable, Identifiable {
+enum ComponentCategory: String, CaseIterable, Identifiable, Sendable {
     case foundation = "Foundation"
     case settings = "Settings"
     case buttons = "Buttons"
     case inputs = "Inputs"
+    case chatVariants = "Chat Variants"
     case navigation = "Navigation"
     case themes = "Themes"
     case accessibility = "Accessibility"
@@ -123,6 +125,7 @@ enum ComponentCategory: String, CaseIterable, Identifiable {
         case .settings: return "gearshape"
         case .buttons: return "button.programmable"
         case .inputs: return "keyboard"
+        case .chatVariants: return "bubble.left.and.bubble.right"
         case .navigation: return "arrow.triangle.turn.up.right.diamond"
         case .themes: return "paintpalette"
         case .accessibility: return "accessibility"

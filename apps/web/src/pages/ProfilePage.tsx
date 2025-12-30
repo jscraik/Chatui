@@ -34,9 +34,9 @@ export function ProfilePage({
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--foundation-bg-dark-1)]">
+    <div className="min-h-screen bg-foundation-bg-dark-1">
       {/* Header */}
-      <div className="border-b border-white/10 bg-[var(--foundation-bg-dark-2)]">
+      <div className="border-b border-foundation-bg-dark-3 bg-foundation-bg-dark-2">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-3">
             <IconButton
@@ -45,7 +45,7 @@ export function ProfilePage({
               title="Back to Chat"
               variant="ghost"
             />
-            <h1 className="text-xl font-semibold text-white">Profile</h1>
+            <h1 className="text-xl font-semibold text-foundation-text-dark-primary">Profile</h1>
           </div>
 
           <Button
@@ -95,9 +95,11 @@ export function ProfilePage({
                 </div>
               ) : (
                 <div>
-                  <h2 className="text-2xl font-bold text-white">{name}</h2>
-                  <p className="text-white/80">{email}</p>
-                  <p className="text-white/60 mt-2">{bio}</p>
+                  <h2 className="text-2xl font-bold text-foundation-text-dark-primary">
+                    {name}
+                  </h2>
+                  <p className="text-foundation-text-dark-secondary">{email}</p>
+                  <p className="text-foundation-text-dark-tertiary mt-2">{bio}</p>
                   <div className="flex gap-2 mt-3">
                     <Badge variant="secondary">Pro User</Badge>
                     <Badge variant="outline">Verified</Badge>
@@ -112,21 +114,29 @@ export function ProfilePage({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {stats.map((stat) => (
             <Card key={stat.label} className="p-4 text-center">
-              <div className="text-2xl font-bold text-white">{stat.value}</div>
-              <div className="text-white/60 text-sm">{stat.label}</div>
+              <div className="text-2xl font-bold text-foundation-text-dark-primary">
+                {stat.value}
+              </div>
+              <div className="text-foundation-text-dark-tertiary text-sm">{stat.label}</div>
             </Card>
           ))}
         </div>
 
         {/* Recent Activity */}
         <Card className="p-6">
-          <h3 className="text-lg font-semibold text-white mb-4">Recent Activity</h3>
+          <h3 className="text-lg font-semibold text-foundation-text-dark-primary mb-4">
+            Recent Activity
+          </h3>
           <div className="space-y-1">
             {recentActivity.map((activity) => (
               <ListItem
                 key={activity.id}
                 label={activity.action}
-                right={<span className="text-white/60 text-sm">{activity.time}</span>}
+                right={
+                  <span className="text-foundation-text-dark-tertiary text-sm">
+                    {activity.time}
+                  </span>
+                }
               />
             ))}
           </div>

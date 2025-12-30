@@ -52,13 +52,18 @@ export function SecurityPanel({ onBack }: SettingsPanelProps) {
               className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${mfaEnabled ? "bg-foundation-accent-green" : "bg-foundation-bg-dark-3"}`}
             >
               <span
-                className={`inline-block size-4 transform rounded-full bg-white transition-transform ${mfaEnabled ? "translate-x-[18px]" : "translate-x-0.5"}`}
+                className={`inline-block size-4 transform rounded-full bg-foundation-bg-light-1 transition-transform ${mfaEnabled ? "translate-x-[18px]" : "translate-x-0.5"}`}
               />
             </button>
           </div>
           <p className="text-[13px] leading-[18px] tracking-[-0.32px] text-foundation-text-dark-tertiary px-3 mt-1">
             You'll only be able to log in using Google while this is on.{" "}
-            <button type="button" className="text-foundation-accent-blue hover:underline">Learn more</button>
+            <button
+              type="button"
+              className="text-foundation-text-light-primary dark:text-foundation-text-dark-primary underline decoration-foundation-accent-blue underline-offset-2 hover:decoration-foundation-accent-blue/70"
+            >
+              Learn more
+            </button>
           </p>
         </div>
       </div>

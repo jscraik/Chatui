@@ -120,7 +120,7 @@ export function ArchivedChatsPanel({ onBack }: SettingsPanelProps) {
               type="text"
               placeholder="Search Archive"
               aria-label="Search archived chats"
-              className="w-full pl-10 pr-4 py-2 bg-foundation-bg-dark-2 border border-white/10 rounded-lg text-[14px] text-foundation-text-dark-primary placeholder:text-foundation-text-dark-tertiary focus:outline-none focus:ring-1 focus:ring-white/20"
+              className="w-full pl-10 pr-4 py-2 bg-foundation-bg-dark-2 border border-foundation-bg-dark-3 rounded-lg text-[14px] text-foundation-text-dark-primary placeholder:text-foundation-text-dark-tertiary focus:outline-none focus:ring-2 focus:ring-foundation-accent-blue/50 focus:border-foundation-accent-blue"
             />
           </div>
         </div>

@@ -1,5 +1,4 @@
 import SwiftUI
-import Combine
 
 /**
  * Component debugging tools for ChatUISwift development
@@ -188,13 +187,19 @@ public enum StateChangeType: String, CaseIterable {
 public struct PerformanceMonitor<Content: View>: View {
     let content: Content
     let componentName: String
+    let renderKey: AnyHashable?
     @State private var renderCount = 0
     @State private var lastRenderTime = Date()
     @State private var averageRenderTime: TimeInterval = 0
     @State private var renderTimes: [TimeInterval] = []
     
-    public init(componentName: String, @ViewBuilder content: () -> Content) {
+    public init(
+        componentName: String,
+        renderKey: AnyHashable? = nil,
+        @ViewBuilder content: () -> Content
+    ) {
         self.componentName = componentName
+        self.renderKey = renderKey
         self.content = content()
     }
     
@@ -206,7 +211,7 @@ public struct PerformanceMonitor<Content: View>: View {
                     .onAppear {
                         trackRender()
                     }
-                    .onChange(of: renderCount) { _ in
+                    .onChange(of: renderKey) { _ in
                         trackRender()
                     }
             )
@@ -244,6 +249,7 @@ public struct PerformanceMonitor<Content: View>: View {
     }
     
     private func trackRender() {
+        guard DebugConfig.isEnabled else { return }
         let now = Date()
         let renderTime = now.timeIntervalSince(lastRenderTime)
         
@@ -275,8 +281,8 @@ extension View {
     }
     
     /// Adds performance monitoring overlay
-    public func debugPerformance(componentName: String) -> some View {
-        PerformanceMonitor(componentName: componentName) {
+    public func debugPerformance(componentName: String, renderKey: AnyHashable? = nil) -> some View {
+        PerformanceMonitor(componentName: componentName, renderKey: renderKey) {
             self
         }
     }

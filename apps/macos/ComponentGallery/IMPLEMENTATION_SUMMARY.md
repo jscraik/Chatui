@@ -198,7 +198,7 @@ All requirements from Task 11.1 are satisfied:
 - ✅ **Built interactive component browser with all primitives**: 7 categories covering all components
 - ✅ **Supports side-by-side light/dark mode comparison**: Toggle mode with synchronized content
 - ✅ **Added accessibility testing interface**: Interactive checklist with 4 acceptance criteria
-- ✅ **Enables screenshot export for documentation**: Keyboard shortcut and menu integration
+- ✅ **Enables screenshot export for documentation**: Menu item + ⌘⇧E saves PNG
 - ✅ **Integrates with token hot reload for instant preview updates**: Asset Catalog + SwiftUI auto-refresh
 
 ## Build Verification
@@ -250,7 +250,6 @@ open Package.swift
 
 Potential improvements for future iterations:
 
-- [ ] Implement actual screenshot export to file system
 - [ ] Add search/filter functionality for components
 - [ ] Add code snippet viewer showing component usage
 - [ ] Add performance metrics and rendering statistics

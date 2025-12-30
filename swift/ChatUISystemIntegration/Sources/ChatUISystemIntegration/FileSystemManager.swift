@@ -107,7 +107,7 @@ public class FileSystemManager {
         }
         #else
         // iOS uses different security model
-        return Data()
+        throw FileSystemError.bookmarkCreationFailed
         #endif
     }
     
@@ -162,7 +162,16 @@ public class FileSystemManager {
         }
         
         do {
-            return try Data(contentsOf: url)
+            return try await withCheckedThrowingContinuation { continuation in
+                DispatchQueue.global(qos: .utility).async {
+                    do {
+                        let data = try Data(contentsOf: url)
+                        continuation.resume(returning: data)
+                    } catch {
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
         } catch {
             throw FileSystemError.readFailed(error)
         }
@@ -171,7 +180,16 @@ public class FileSystemManager {
     /// Write data to file with proper error handling
     public func writeFile(data: Data, to url: URL) async throws {
         do {
-            try data.write(to: url, options: .atomic)
+            try await withCheckedThrowingContinuation { continuation in
+                DispatchQueue.global(qos: .utility).async {
+                    do {
+                        try data.write(to: url, options: .atomic)
+                        continuation.resume()
+                    } catch {
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
         } catch {
             throw FileSystemError.writeFailed(error)
         }

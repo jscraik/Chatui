@@ -2,6 +2,10 @@
 
 Technical architecture and design decisions for the ChatUI system.
 
+## Table of contents
+- [Documents](#documents)
+- [Related documentation](#related-documentation)
+
 ## Documents
 
 ### Core Architecture
@@ -13,6 +17,11 @@ Technical architecture and design decisions for the ChatUI system.
 ### Analysis & Planning
 
 - **[APPS_SDK_GAP_ANALYSIS.md](./APPS_SDK_GAP_ANALYSIS.md)** - Analysis of gaps between Apps SDK UI and ChatGPT design system requirements
+
+### Templates
+
+- **[template-library.md](./template-library.md)** - Template library layout, parity rules, and viewing checklist
+- **[template-api.md](./template-api.md)** - Internal template/block API and registries
 
 ## Related Documentation
 

@@ -9,9 +9,16 @@ import SwiftUI
 import ChatUIFoundation
 import ChatUIComponents
 import ChatUIThemes
+#if os(macOS)
+import AppKit
+#endif
 
 struct ContentView: View {
     @EnvironmentObject var galleryState: GalleryState
+#if os(macOS)
+    @State private var showingScreenshotError = false
+    @State private var screenshotErrorMessage: String?
+#endif
     
     var body: some View {
         NavigationSplitView {
@@ -25,8 +32,71 @@ struct ContentView: View {
             }
         }
         .navigationSplitViewStyle(.balanced)
+        .environment(\.accessibilityReduceMotion, galleryState.reducedMotionMode)
+        .environment(\.colorSchemeContrast, galleryState.highContrastMode ? .increased : .standard)
+#if os(macOS)
+        .onReceive(NotificationCenter.default.publisher(for: .exportScreenshot)) { _ in
+            exportScreenshot()
+        }
+        .alert("Unable to Export Screenshot", isPresented: $showingScreenshotError) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(screenshotErrorMessage ?? "Unknown error.")
+        }
+#endif
     }
 }
+
+#if os(macOS)
+private extension ContentView {
+    @MainActor
+    func exportScreenshot() {
+        guard let window = NSApp.keyWindow else {
+            screenshotErrorMessage = "No active window to capture."
+            showingScreenshotError = true
+            return
+        }
+        guard let contentView = window.contentView else {
+            screenshotErrorMessage = "Window content is unavailable."
+            showingScreenshotError = true
+            return
+        }
+        guard let rep = contentView.bitmapImageRepForCachingDisplay(in: contentView.bounds) else {
+            screenshotErrorMessage = "Unable to create image buffer."
+            showingScreenshotError = true
+            return
+        }
+
+        contentView.cacheDisplay(in: contentView.bounds, to: rep)
+        guard let data = rep.representation(using: .png, properties: [:]) else {
+            screenshotErrorMessage = "Unable to encode PNG."
+            showingScreenshotError = true
+            return
+        }
+
+        let panel = NSSavePanel()
+        panel.allowedContentTypes = [.png]
+        panel.canCreateDirectories = true
+        panel.nameFieldStringValue = "component-gallery-\(Self.timestampString()).png"
+
+        panel.begin { response in
+            guard response == .OK, let url = panel.url else { return }
+            do {
+                try data.write(to: url, options: .atomic)
+            } catch {
+                screenshotErrorMessage = error.localizedDescription
+                showingScreenshotError = true
+            }
+        }
+    }
+
+    static func timestampString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd-HHmmss"
+        return formatter.string(from: Date())
+    }
+}
+#endif
 
 // MARK: - Sidebar View
 
@@ -120,6 +190,8 @@ struct DetailView: View {
             ButtonsGallery()
         case .inputs:
             InputsGallery()
+        case .chatVariants:
+            ChatVariantsGallery()
         case .navigation:
             NavigationGallery()
         case .themes:

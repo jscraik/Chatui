@@ -37,6 +37,12 @@ A shared design system library that you can use across all your projects:
 - [Using in Other Projects](#using-in-other-projects)
 - [Development Workflow](#development-workflow)
 
+## Prerequisites
+
+- Node.js 18+
+- pnpm 9.15.0 (see `packageManager` in `package.json`)
+- macOS app work (optional): macOS 13+ + Xcode 15+
+
 ## 🚀 Quick Start
 
 ```bash
@@ -95,6 +101,51 @@ Comprehensive documentation is organized in the [`docs/`](./docs) directory:
 - **[Guides](./docs/guides)** - How-to guides and quick starts
 
 See [docs/README.md](./docs/README.md) for the complete documentation index.
+
+## Doc Index
+
+| Area | Doc |
+| --- | --- |
+| Project overview | `README.md` |
+| Docs index | `docs/README.md` |
+| Guides index | `docs/guides/README.md` |
+| Architecture | `docs/architecture/README.md` |
+| Build pipeline | `docs/BUILD_PIPELINE.md` |
+| Swift integration | `docs/SWIFT_INTEGRATION.md` |
+| Swift packages overview | `swift/README.md` |
+| macOS app | `apps/macos/ChatUIApp/README.md` |
+| Web app | `apps/web/README.md` |
+| Storybook | `apps/storybook/README.md` |
+| MCP server | `apps/mcp/README.md` |
+| Tokens | `packages/tokens/README.md` |
+| UI components (React) | `packages/ui/README.md` |
+| Runtime host | `packages/runtime/README.md` |
+| Widgets | `packages/widgets/README.md` |
+
+## Troubleshooting
+
+### Symptom: `pnpm: command not found`
+Cause: pnpm is not installed.
+Fix:
+```bash
+npm install -g pnpm
+```
+
+### Symptom: MCP tools fail to load in the app
+Cause: MCP server is not running or the URL is wrong.
+Fix:
+```bash
+pnpm mcp:start
+```
+Then confirm the MCP URL in the macOS app Settings (default `http://localhost:8787`).
+
+### Symptom: Storybook or web app doesn’t start
+Cause: Dependencies not installed or Node version mismatch.
+Fix:
+```bash
+pnpm install
+node -v
+```
 
 ## Rules of the road
 

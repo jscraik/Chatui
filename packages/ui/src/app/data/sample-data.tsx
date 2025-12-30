@@ -50,19 +50,19 @@ export const sampleProjects: SidebarItem[] = [
     id: "alpha",
     label: "Project Alpha",
     icon: <IconWriting className="size-4" />,
-    color: "text-foundation-accent-blue",
+    colorId: "blue",
   },
   {
     id: "beta",
     label: "Project Beta",
     icon: <IconBarChart className="size-4" />,
-    color: "text-foundation-accent-green",
+    colorId: "green",
   },
   {
     id: "gamma",
     label: "Project Gamma",
     icon: <IconFolder className="size-4" />,
-    color: "text-foundation-accent-orange",
+    colorId: "orange",
   },
 ];
 
@@ -71,8 +71,8 @@ export const sampleGroupChats: SidebarItem[] = [
     id: "group-1",
     label: "Summarize chat exchange",
     icon: (
-      <div className="size-6 rounded-full bg-foundation-accent-red flex items-center justify-center flex-shrink-0">
-        <IconChat className="size-3 text-white" />
+      <div className="size-6 rounded-full bg-foundation-accent-red-light dark:bg-foundation-accent-red flex items-center justify-center flex-shrink-0">
+        <IconChat className="size-3 text-foundation-text-dark-primary dark:text-foundation-text-light-primary" />
       </div>
     ),
   },
@@ -98,22 +98,23 @@ export const sampleCategoryIcons = {
 
 export const sampleCategoryColors = {
   Investing:
-    "bg-foundation-accent-green/20 text-foundation-accent-green border-foundation-accent-green/30",
+    "bg-foundation-accent-green/20 text-foundation-text-light-primary dark:text-foundation-text-dark-primary border-foundation-accent-green/30",
   Homework:
-    "bg-foundation-accent-blue/20 text-foundation-accent-blue border-foundation-accent-blue/30",
+    "bg-foundation-accent-blue/20 text-foundation-text-light-primary dark:text-foundation-text-dark-primary border-foundation-accent-blue/30",
   Writing:
-    "bg-foundation-accent-orange/20 text-foundation-accent-orange border-foundation-accent-orange/30",
-  Coding: "bg-foundation-accent-red/20 text-foundation-accent-red border-foundation-accent-red/30",
+    "bg-foundation-accent-orange/20 text-foundation-text-light-primary dark:text-foundation-text-dark-primary border-foundation-accent-orange/30",
+  Coding:
+    "bg-foundation-accent-red/20 text-foundation-text-light-primary dark:text-foundation-text-dark-primary border-foundation-accent-red/30",
   Research:
-    "bg-foundation-accent-blue/20 text-foundation-accent-blue border-foundation-accent-blue/30",
+    "bg-foundation-accent-blue/20 text-foundation-text-light-primary dark:text-foundation-text-dark-primary border-foundation-accent-blue/30",
 };
 
 export const sampleCategoryIconColors = {
-  Investing: "text-foundation-accent-green",
-  Homework: "text-foundation-accent-blue",
-  Writing: "text-foundation-accent-orange",
-  Coding: "text-foundation-accent-red",
-  Research: "text-foundation-accent-blue",
+  Investing: "text-foundation-text-light-primary dark:text-foundation-text-dark-primary",
+  Homework: "text-foundation-text-light-primary dark:text-foundation-text-dark-primary",
+  Writing: "text-foundation-text-light-primary dark:text-foundation-text-dark-primary",
+  Coding: "text-foundation-text-light-primary dark:text-foundation-text-dark-primary",
+  Research: "text-foundation-text-light-primary dark:text-foundation-text-dark-primary",
 };
 
 export const sampleUser: ChatSidebarUser = {

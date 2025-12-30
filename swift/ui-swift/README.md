@@ -2,6 +2,36 @@
 
 A native macOS SwiftUI component library that uses design tokens for visual consistency with the React ChatUI system.
 
+> Legacy package. For new development, prefer the modular Swift packages under `swift/`.
+
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Quickstart](#quickstart)
+- [Overview](#overview)
+- [Features](#features)
+- [Usage](#usage)
+- [Development](#development)
+- [Testing](#testing)
+- [Troubleshooting](#troubleshooting)
+
+## Prerequisites
+
+- macOS 13+
+- Xcode 15+
+- Swift 5.9+
+
+## Quickstart
+
+```bash
+open swift/ui-swift/Package.swift
+```
+
+```swift
+import ChatUISwift
+
+ChatUIButton("Hello") { }
+```
+
 ## Overview
 
 ChatUISwift provides native macOS components that consume the same design tokens as the React web application, ensuring visual consistency across platforms while delivering truly native macOS experiences.
@@ -197,6 +227,12 @@ This is Phase 1 of the Native macOS Bridge implementation. Future phases will ad
 - Runtime abstraction layer
 
 ## Contributing
+
+## Troubleshooting
+
+### Symptom: Previews do not render
+Cause: Xcode package dependencies are stale.
+Fix: Use **File → Packages → Reset Package Caches** and rebuild.
 
 When adding new components:
 

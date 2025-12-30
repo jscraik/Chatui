@@ -210,7 +210,7 @@ function PaginationButton({ isActive, className, ...props }: PaginationButtonPro
       className={cn(
         "size-9",
         isActive &&
-          "bg-foundation-accent-blue text-white hover:bg-foundation-accent-blue/90 pointer-events-none",
+          "bg-foundation-accent-blue text-foundation-text-light-primary hover:bg-foundation-accent-blue/90 pointer-events-none",
         className,
       )}
       {...props}

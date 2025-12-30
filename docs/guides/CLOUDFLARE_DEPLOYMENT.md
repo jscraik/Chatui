@@ -17,6 +17,12 @@ This guide shows how to deploy the ChatUI widget library to Cloudflare Workers, 
 9. [Troubleshooting](#troubleshooting)
 10. [Next Steps](#next-steps)
 
+## Prerequisites
+
+- Node.js 18+
+- pnpm
+- Cloudflare account with Wrangler configured (`npx wrangler login`)
+
 ## What You Get
 
 - **Edge deployment** on Cloudflare's global network

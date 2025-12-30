@@ -19,7 +19,8 @@ const buttonVariants = cva(
           "bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 text-foundation-text-light-primary dark:text-foundation-text-dark-primary hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3",
         ghost:
           "bg-transparent text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3 hover:text-foundation-text-light-primary dark:hover:text-foundation-text-dark-primary",
-        link: "text-foundation-accent-blue underline-offset-4 hover:underline",
+        link:
+          "text-foundation-text-light-primary dark:text-foundation-text-dark-primary underline decoration-foundation-accent-blue underline-offset-4 hover:decoration-foundation-accent-blue/70",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

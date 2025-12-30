@@ -58,20 +58,21 @@ public struct ListItemView: View {
         #endif
         .background(itemBackground)
         .clipShape(RoundedRectangle(cornerRadius: theme.rowCornerRadius, style: .continuous))
-        .padding(.horizontal, 6) // Inset for "floating" appearance
-        .accessibilityElement(children: .combine)
+        .padding(.horizontal, FSpacing.s4) // Inset for "floating" appearance
+        .accessibilityElement(children: shouldCombineAccessibility ? .combine : .contain)
         .accessibilityAddTraits(isSelected ? [.isSelected] : [])
     }
     
     private var itemContent: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: FSpacing.s12) {
             if let icon {
                 icon
                     .frame(width: theme.rowIconSize, height: theme.rowIconSize)
                     .foregroundStyle(isSelected ? FColor.accentBlue : FColor.iconSecondary)
+                    .accessibilityHidden(true)
             }
             
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: FSpacing.s2) {
                 Text(title)
                     .font(FType.rowTitle())
                     .foregroundStyle(isSelected ? FColor.textPrimary : FColor.textSecondary)
@@ -104,6 +105,7 @@ public struct ListItemView: View {
             Image(systemName: "chevron.right")
                 .font(.system(size: theme.rowChevronSize, weight: .semibold))
                 .foregroundStyle(FColor.iconTertiary)
+                .accessibilityHidden(true)
         case .badge(let count):
             if count > 0 {
                 Text("\(count)")
@@ -138,6 +140,15 @@ public struct ListItemView: View {
             } else {
                 Color.clear
             }
+        }
+    }
+
+    private var shouldCombineAccessibility: Bool {
+        switch trailing {
+        case .custom:
+            return false
+        case .none, .chevron, .badge:
+            return true
         }
     }
 }

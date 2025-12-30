@@ -7,6 +7,7 @@ import * as React from "react";
 
 import {
   Button,
+  ChatVariantSplitSidebar,
   ChatUIRoot,
   ContextTag,
   IconButton,
@@ -59,11 +60,15 @@ export function SettingsPanelExample() {
   return (
     <ChatUIRoot>
       <div className="p-6 space-y-6 max-w-md">
-        <h2 className="text-lg font-semibold text-white">Settings</h2>
+        <h2 className="text-lg font-semibold text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
+          Settings
+        </h2>
 
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-white/80">Dark Mode</span>
+            <span className="text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+              Dark Mode
+            </span>
             <Toggle checked={darkMode} onChange={setDarkMode} />
           </div>
 
@@ -77,7 +82,9 @@ export function SettingsPanelExample() {
           />
 
           <div className="space-y-2">
-            <label className="text-white/80 text-sm">Quality</label>
+            <label className="text-sm text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+              Quality
+            </label>
             <SegmentedControl
               value={quality}
               options={[
@@ -98,7 +105,7 @@ export function SettingsPanelExample() {
 export function ActionBarExample() {
   return (
     <ChatUIRoot>
-      <div className="p-4 flex items-center gap-2 bg-[var(--foundation-bg-dark-2)] rounded-lg">
+      <div className="p-4 flex items-center gap-2 bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 rounded-lg">
         <IconButton icon={<span>📋</span>} title="Copy" variant="ghost" />
         <IconButton icon={<span>👍</span>} title="Like" variant="ghost" />
         <IconButton icon={<span>👎</span>} title="Dislike" variant="ghost" />
@@ -109,5 +116,22 @@ export function ActionBarExample() {
         </Button>
       </div>
     </ChatUIRoot>
+  );
+}
+
+// 4. Slot-based Chat Variant Example
+export function ChatVariantExample() {
+  return (
+    <ChatVariantSplitSidebar
+      messages={[
+        {
+          id: "1",
+          role: "assistant",
+          content: "This layout is composed from slots.",
+          timestamp: new Date(),
+        },
+      ]}
+      projects={[{ id: "general", label: "General", icon: <span>💬</span> }]}
+    />
   );
 }

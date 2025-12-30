@@ -10,7 +10,7 @@ const alertVariants = cva(
       variant: {
         default: "",
         destructive:
-          "border-foundation-accent-red/50 bg-foundation-accent-red/10 [&>svg]:text-foundation-accent-red *:data-[slot=alert-description]:text-foundation-accent-red/90",
+          "border-foundation-accent-red/50 bg-foundation-accent-red/10 [&>svg]:text-foundation-accent-red",
       },
     },
     defaultVariants: {

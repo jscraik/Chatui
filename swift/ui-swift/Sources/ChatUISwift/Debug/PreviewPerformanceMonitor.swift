@@ -1,5 +1,4 @@
 import SwiftUI
-import Combine
 
 /**
  * Performance monitoring tools specifically designed for SwiftUI Previews
@@ -32,12 +31,18 @@ public struct PreviewPerformanceConfig {
 public struct PreviewPerformanceMonitor<Content: View>: View {
     let content: Content
     let previewName: String
+    let renderKey: AnyHashable?
     
     @StateObject private var metrics = PreviewMetrics()
     @State private var isMetricsVisible = PreviewPerformanceConfig.showMetricsOverlay
     
-    public init(previewName: String, @ViewBuilder content: () -> Content) {
+    public init(
+        previewName: String,
+        renderKey: AnyHashable? = nil,
+        @ViewBuilder content: () -> Content
+    ) {
         self.previewName = previewName
+        self.renderKey = renderKey
         self.content = content()
     }
     
@@ -49,7 +54,8 @@ public struct PreviewPerformanceMonitor<Content: View>: View {
                     // Invisible performance tracker
                     PerformanceTracker(
                         previewName: previewName,
-                        metrics: metrics
+                        metrics: metrics,
+                        renderKey: renderKey
                     )
                 )
             
@@ -131,6 +137,7 @@ public struct PreviewPerformanceMonitor<Content: View>: View {
 private struct PerformanceTracker: View {
     let previewName: String
     let metrics: PreviewMetrics
+    let renderKey: AnyHashable?
     
     @State private var lastUpdateTime = Date()
     
@@ -139,12 +146,13 @@ private struct PerformanceTracker: View {
             .onAppear {
                 trackUpdate()
             }
-            .onChange(of: metrics.renderCount) { _ in
+            .onChange(of: renderKey) { _ in
                 trackUpdate()
             }
     }
     
     private func trackUpdate() {
+        guard PreviewPerformanceConfig.isEnabled else { return }
         let now = Date()
         let timeSinceLastUpdate = now.timeIntervalSince(lastUpdateTime)
         
@@ -175,6 +183,7 @@ public class PreviewMetrics: ObservableObject {
     private var frameCount = 0
     
     public func startMonitoring(previewName: String) {
+        guard PreviewPerformanceConfig.isEnabled else { return }
         // Start FPS monitoring
         fpsTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             self.updateFPS()
@@ -198,6 +207,7 @@ public class PreviewMetrics: ObservableObject {
     }
     
     public func recordRender(duration: TimeInterval) {
+        guard PreviewPerformanceConfig.isEnabled else { return }
         DispatchQueue.main.async {
             self.renderCount += 1
             self.frameCount += 1
@@ -213,9 +223,14 @@ public class PreviewMetrics: ObservableObject {
     }
     
     public func recordStateUpdate() {
+        guard PreviewPerformanceConfig.isEnabled else { return }
         DispatchQueue.main.async {
             self.stateUpdateCount += 1
         }
+    }
+
+    deinit {
+        stopMonitoring()
     }
     
     private func updateFPS() {
@@ -260,14 +275,16 @@ public class PreviewMetrics: ObservableObject {
 public struct PreviewWithPerformanceMonitoring<Content: View>: View {
     let content: Content
     let name: String
+    let renderKey: AnyHashable?
     
-    public init(_ name: String, @ViewBuilder content: () -> Content) {
+    public init(_ name: String, renderKey: AnyHashable? = nil, @ViewBuilder content: () -> Content) {
         self.name = name
+        self.renderKey = renderKey
         self.content = content()
     }
     
     public var body: some View {
-        PreviewPerformanceMonitor(previewName: name) {
+        PreviewPerformanceMonitor(previewName: name, renderKey: renderKey) {
             content
         }
     }
@@ -277,8 +294,8 @@ public struct PreviewWithPerformanceMonitoring<Content: View>: View {
 
 extension View {
     /// Adds performance monitoring to a SwiftUI preview
-    public func previewPerformance(name: String) -> some View {
-        PreviewPerformanceMonitor(previewName: name) {
+    public func previewPerformance(name: String, renderKey: AnyHashable? = nil) -> some View {
+        PreviewPerformanceMonitor(previewName: name, renderKey: renderKey) {
             self
         }
     }
@@ -297,9 +314,10 @@ extension View {
 /// Convenience function for creating performance-monitored previews
 public func PreviewWithMonitoring<Content: View>(
     _ name: String,
+    renderKey: AnyHashable? = nil,
     @ViewBuilder content: () -> Content
 ) -> some View {
-    PreviewWithPerformanceMonitoring(name, content: content)
+    PreviewWithPerformanceMonitoring(name, renderKey: renderKey, content: content)
 }
 
 // MARK: - Performance Benchmark

@@ -25,7 +25,7 @@ public struct GlassBackgroundView: View {
 
     public var body: some View {
         #if os(macOS)
-        if FAccessibility.prefersReducedTransparency || theme.surfaceStyle == .solid {
+        if FAccessibility.prefersReducedTransparency || FAccessibility.prefersHighContrast || theme.surfaceStyle == .solid {
             fallbackBackground
         } else {
             VisualEffectView(material: materialForRole, blendingMode: .behindWindow)

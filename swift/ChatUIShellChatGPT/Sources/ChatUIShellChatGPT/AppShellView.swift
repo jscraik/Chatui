@@ -31,7 +31,7 @@ public struct AppShellView<SidebarContent: View, DetailContent: View>: View {
     private var sidebarBackground: some View {
         #if os(macOS)
         if theme.surfaceStyle == .glass {
-            GlassBackgroundView(role: .sidebar)
+            Color.clear
         } else {
             FColor.bgApp
         }
@@ -44,7 +44,7 @@ public struct AppShellView<SidebarContent: View, DetailContent: View>: View {
     private var detailBackground: some View {
         #if os(macOS)
         if theme.surfaceStyle == .glass {
-            GlassBackgroundView(role: .content)
+            Color.clear
         } else {
             FColor.bgApp
         }

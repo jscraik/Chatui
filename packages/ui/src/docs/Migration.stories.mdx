@@ -38,10 +38,14 @@ The `Toggle` component now uses `onChange` instead of `onCheckedChange` for cons
       return (
         <div className="p-4 space-y-4">
           <div>
-            <h4 className="text-white mb-2">New API (recommended):</h4>
+            <h4 className="text-foundation-text-light-primary dark:text-foundation-text-dark-primary mb-2">
+              New API (recommended):
+            </h4>
             <Toggle checked={checked} onChange={setChecked} />
           </div>
-          <div className="text-white/60 text-sm">Current state: {checked ? "On" : "Off"}</div>
+          <div className="text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary text-sm">
+            Current state: {checked ? "On" : "Off"}
+          </div>
         </div>
       );
     }}
@@ -88,7 +92,9 @@ The `IconButton` component now uses an `active` prop with `activeColor` instead 
               onClick={() => setIsActive(!isActive)}
               title="Toggle active state"
             />
-            <span className="text-white/80">{isActive ? "Active" : "Inactive"}</span>
+            <span className="text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+              {isActive ? "Active" : "Inactive"}
+            </span>
           </div>
         </div>
       );

@@ -1,3 +1,4 @@
+// Generated from src/tokens/index.dtcg.json. Do not edit by hand.
 export const colorTokens = {
   background: {
     light: {
@@ -15,8 +16,8 @@ export const colorTokens = {
     light: {
       primary: "#0D0D0D",
       secondary: "#5D5D5D",
-      tertiary: "#8F8F8F",
-      inverted: "#8F8F8F",
+      tertiary: "#686868",
+      inverted: "#686868",
     },
     dark: {
       primary: "#FFFFFF",
@@ -29,8 +30,8 @@ export const colorTokens = {
     light: {
       primary: "#0D0D0D",
       secondary: "#5D5D5D",
-      tertiary: "#8F8F8F",
-      inverted: "#8F8F8F",
+      tertiary: "#686868",
+      inverted: "#686868",
     },
     dark: {
       primary: "#FFFFFF",

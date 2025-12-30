@@ -26,18 +26,29 @@ public class AppLifecycleManager {
     }
     
     private let stateDirectory: URL
-    private let encoder = JSONEncoder()
-    private let decoder = JSONDecoder()
     
     public init() {
         // Create state directory in Application Support
-        let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        self.stateDirectory = appSupport.appendingPathComponent("ChatUI/State", isDirectory: true)
+        let fileManager = FileManager.default
+        let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
+        let baseDirectory = appSupport ?? fileManager.temporaryDirectory
+        var targetDirectory = baseDirectory.appendingPathComponent("ChatUI/State", isDirectory: true)
         
-        // Create directory if it doesn't exist
-        try? FileManager.default.createDirectory(at: stateDirectory, withIntermediateDirectories: true)
+        do {
+            try fileManager.createDirectory(at: targetDirectory, withIntermediateDirectories: true)
+        } catch {
+            // Fall back to a temporary directory if Application Support is unavailable.
+            targetDirectory = fileManager.temporaryDirectory.appendingPathComponent("ChatUI/State", isDirectory: true)
+            try? fileManager.createDirectory(at: targetDirectory, withIntermediateDirectories: true)
+        }
+        
+        self.stateDirectory = targetDirectory
         
         setupLifecycleObservers()
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: - Lifecycle Observers
@@ -122,11 +133,23 @@ public class AppLifecycleManager {
     public func saveState<T: Codable>(_ state: T, forKey key: String) async throws {
         let stateURL = stateDirectory.appendingPathComponent("\(key).json")
         
+        let data: Data
         do {
-            let data = try encoder.encode(state)
-            try data.write(to: stateURL, options: .atomic)
+            let encoder = JSONEncoder()
+            data = try encoder.encode(state)
         } catch {
             throw LifecycleError.stateSavingFailed(error)
+        }
+
+        try await withCheckedThrowingContinuation { continuation in
+            DispatchQueue.global(qos: .utility).async {
+                do {
+                    try data.write(to: stateURL, options: .atomic)
+                    continuation.resume()
+                } catch {
+                    continuation.resume(throwing: LifecycleError.stateSavingFailed(error))
+                }
+            }
         }
     }
     
@@ -138,8 +161,24 @@ public class AppLifecycleManager {
             return nil
         }
         
+        let data: Data
         do {
-            let data = try Data(contentsOf: stateURL)
+            data = try await withCheckedThrowingContinuation { continuation in
+                DispatchQueue.global(qos: .utility).async {
+                    do {
+                        let data = try Data(contentsOf: stateURL)
+                        continuation.resume(returning: data)
+                    } catch {
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
+        } catch {
+            throw LifecycleError.stateRestorationFailed(error)
+        }
+
+        do {
+            let decoder = JSONDecoder()
             return try decoder.decode(T.self, from: data)
         } catch {
             throw LifecycleError.stateRestorationFailed(error)
@@ -154,10 +193,15 @@ public class AppLifecycleManager {
             return
         }
         
-        do {
-            try FileManager.default.removeItem(at: stateURL)
-        } catch {
-            throw LifecycleError.stateSavingFailed(error)
+        try await withCheckedThrowingContinuation { continuation in
+            DispatchQueue.global(qos: .utility).async {
+                do {
+                    try FileManager.default.removeItem(at: stateURL)
+                    continuation.resume()
+                } catch {
+                    continuation.resume(throwing: LifecycleError.stateSavingFailed(error))
+                }
+            }
         }
     }
     
@@ -186,37 +230,37 @@ public class AppLifecycleManager {
     
     #if os(macOS)
     /// Save window state
+    @MainActor
     public func saveWindowState(window: NSWindow, identifier: String) async throws {
         let state = WindowState(
-            frame: await window.frame,
-            isVisible: await window.isVisible,
-            isMiniaturized: await window.isMiniaturized,
-            isZoomed: await window.isZoomed
+            frame: window.frame,
+            isVisible: window.isVisible,
+            isMiniaturized: window.isMiniaturized,
+            isZoomed: window.isZoomed
         )
         
         try await saveState(state, forKey: "window_\(identifier)")
     }
     
     /// Restore window state
+    @MainActor
     public func restoreWindowState(for window: NSWindow, identifier: String) async throws {
         guard let state = try await restoreState(forKey: "window_\(identifier)", as: WindowState.self) else {
             return
         }
         
-        DispatchQueue.main.async {
-            window.setFrame(state.frame, display: true)
-            
-            if state.isMiniaturized {
-                window.miniaturize(nil)
-            }
-            
-            if state.isZoomed {
-                window.zoom(nil)
-            }
-            
-            if state.isVisible {
-                window.makeKeyAndOrderFront(nil)
-            }
+        window.setFrame(state.frame, display: true)
+        
+        if state.isMiniaturized {
+            window.miniaturize(nil)
+        }
+        
+        if state.isZoomed {
+            window.zoom(nil)
+        }
+        
+        if state.isVisible {
+            window.makeKeyAndOrderFront(nil)
         }
     }
     #endif
@@ -248,9 +292,6 @@ public class AppLifecycleManager {
         return sessions.sorted { $0.lastModified > $1.lastModified }
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
 }
 
 // MARK: - Supporting Types
@@ -264,7 +305,7 @@ public struct WindowState: Codable, Sendable {
 }
 #endif
 
-public struct ChatSession: Codable {
+public struct ChatSession: Codable, Sendable {
     public let id: String
     public let title: String
     public let messages: [ChatMessage]

@@ -29,13 +29,13 @@
   /* Light text */
   --foundation-text-light-primary: #0D0D0D;
   --foundation-text-light-secondary: #5D5D5D;
-  --foundation-text-light-tertiary: #8F8F8F;
+  --foundation-text-light-tertiary: #686868;
 
   /* Light icon */
   --foundation-icon-light-primary: #0D0D0D;
   --foundation-icon-light-secondary: #5D5D5D;
-  --foundation-icon-light-tertiary: #8F8F8F;
-  --foundation-icon-light-inverted: #8F8F8F;
+  --foundation-icon-light-tertiary: #686868;
+  --foundation-icon-light-inverted: #686868;
 
   /* Dark icon */
   --foundation-icon-dark-primary: #FFFFFF;

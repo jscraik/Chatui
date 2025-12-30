@@ -19,7 +19,10 @@ public struct RoundedAppContainer<Content: View>: View {
     
     public var body: some View {
         ZStack {
-            if useGlassBackground && theme.surfaceStyle == .glass {
+            if useGlassBackground
+                && theme.surfaceStyle == .glass
+                && !FAccessibility.prefersReducedTransparency
+                && !FAccessibility.prefersHighContrast {
                 GlassBackgroundView(role: .chrome, cornerRadius: theme.appCornerRadius)
             }
             content()

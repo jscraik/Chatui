@@ -222,3 +222,14 @@
     scrollbar-width: none; /* Firefox */
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: var(--foundation-animation-duration-reduced) !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: var(--foundation-animation-duration-reduced) !important;
+    scroll-behavior: auto !important;
+  }
+}

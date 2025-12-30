@@ -4,6 +4,22 @@
 
 This guide explains how to open and run the existing ChatUIPlayground Xcode project in this repo.
 
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Quick start](#quick-start)
+- [Package dependencies](#package-dependencies)
+- [Swift Package Manager](#swift-package-manager-command-line)
+- [Using the playground](#using-the-playground)
+- [Troubleshooting](#troubleshooting)
+- [Next steps](#next-steps)
+- [File structure](#file-structure)
+- [Verify](#verify)
+
+## Prerequisites
+
+- macOS 13+
+- Xcode 15+
+
 ## Quick start
 
 1. Open the project:

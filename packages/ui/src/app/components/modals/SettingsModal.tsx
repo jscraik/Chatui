@@ -176,7 +176,7 @@ export function SettingsModal({ isOpen, onClose, account, appInfo }: SettingsMod
           <button
             type="button"
             onClick={onClose}
-            className="size-3 rounded-full bg-foundation-accent-red hover:bg-foundation-accent-red/80 transition-colors focus-visible:ring-2 focus-visible:ring-black/20 dark:focus-visible:ring-white/20"
+            className="size-3 rounded-full bg-foundation-accent-red hover:bg-foundation-accent-red/80 transition-colors focus-visible:ring-2 focus-visible:ring-foundation-accent-blue/50"
             aria-label="Close"
           />
           <div className="size-3 rounded-full bg-foundation-accent-orange" />

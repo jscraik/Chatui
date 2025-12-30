@@ -4,6 +4,15 @@ This guide explains how to connect a deployed ChatUI MCP server to ChatGPT so wi
 
 If you have not deployed the MCP server yet, start with `docs/guides/CLOUDFLARE_DEPLOYMENT.md`.
 
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Connect the MCP server in ChatGPT](#connect-the-mcp-server-in-chatgpt)
+- [Verify the integration](#verify-the-integration)
+- [Refresh metadata after changes](#refresh-metadata-after-changes)
+- [Troubleshooting](#troubleshooting)
+- [Security notes](#security-notes)
+- [Related docs](#related-docs)
+
 ## Prerequisites
 
 - An MCP server reachable over HTTPS (for example: `https://your-app.workers.dev/mcp`).

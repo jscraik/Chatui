@@ -12,9 +12,11 @@ export interface ModelBadgeProps {
 }
 
 const variantStyles = {
-  blue: "text-foundation-accent-blue bg-foundation-accent-blue/10",
-  green: "text-foundation-accent-green bg-foundation-accent-green/10",
-  orange: "text-foundation-accent-orange bg-foundation-accent-orange/10",
+  blue: "text-foundation-text-light-primary dark:text-foundation-text-dark-primary bg-foundation-accent-blue/10 dark:bg-foundation-accent-blue/20",
+  green:
+    "text-foundation-text-light-primary dark:text-foundation-text-dark-primary bg-foundation-accent-green/10 dark:bg-foundation-accent-green/20",
+  orange:
+    "text-foundation-text-light-primary dark:text-foundation-text-dark-primary bg-foundation-accent-orange/10 dark:bg-foundation-accent-orange/20",
   default: "text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary bg-foundation-bg-light-3 dark:bg-foundation-bg-dark-3",
 };
 

@@ -335,6 +335,8 @@ chatui/
 
 ### 3.2 Token Generation Pipeline
 
+**Source of truth:** `packages/tokens/src/tokens/index.dtcg.json` (DTCG/W3C). Platform artifacts (`colors.ts`, `spacing.ts`, `typography.ts`, CSS, Swift) are generated from this bundle.
+
 ```typescript
 // tools/build-tokens.ts
 import { colorTokens, typographyTokens } from '@chatui/tokens';

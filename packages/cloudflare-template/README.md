@@ -2,6 +2,22 @@
 
 Deploy your ChatUI widgets to Cloudflare Workers with automatic widget discovery and MCP server integration.
 
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Quick start](#-quick-start)
+- [Project structure](#-project-structure)
+- [Configuration](#-configuration)
+- [Features](#-features)
+- [Deployment process](#-deployment-process)
+- [Verify](#verify)
+- [Troubleshooting](#-troubleshooting)
+
+## Prerequisites
+
+- Node.js 18+
+- pnpm
+- Cloudflare account + Wrangler configured
+
 ## 🚀 Quick Start
 
 ### 1. Setup
@@ -52,6 +68,12 @@ After deployment, integrate with ChatGPT. UI labels change over time, so follow 
 For full steps and troubleshooting, see `docs/guides/CHATGPT_INTEGRATION.md`.
 
 🎉 **You're done!** Your widgets are now available in ChatGPT.
+
+## Verify
+
+- `wrangler dev` responds at `http://localhost:8787/mcp`.
+- `pnpm build-deploy` completes without errors.
+- The MCP URL serves widgets in ChatGPT after connecting.
 
 ## 📁 Project Structure
 

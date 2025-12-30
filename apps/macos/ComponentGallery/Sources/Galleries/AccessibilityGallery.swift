@@ -12,6 +12,8 @@ import ChatUIThemes
 
 struct AccessibilityGallery: View {
     @State private var testInput = ""
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     
     var body: some View {
         VStack(alignment: .leading, spacing: FSpacing.s24) {
@@ -88,7 +90,7 @@ struct AccessibilityGallery: View {
             
             GallerySection(title: "High Contrast Mode", subtitle: "Enhanced visibility for accessibility") {
                 VStack(alignment: .leading, spacing: FSpacing.s16) {
-                    Text("High contrast mode detected: \(FAccessibility.prefersHighContrast ? "Yes" : "No")")
+                    Text("High contrast mode detected: \(colorSchemeContrast == .increased ? "Yes" : "No")")
                         .font(FType.caption())
                         .foregroundStyle(FColor.textTertiary)
                     
@@ -109,7 +111,7 @@ struct AccessibilityGallery: View {
             
             GallerySection(title: "Reduced Motion", subtitle: "Respecting motion preferences") {
                 VStack(alignment: .leading, spacing: FSpacing.s16) {
-                    Text("Reduced motion detected: \(FAccessibility.prefersReducedMotion ? "Yes" : "No")")
+                    Text("Reduced motion detected: \(reduceMotion ? "Yes" : "No")")
                         .font(FType.caption())
                         .foregroundStyle(FColor.textTertiary)
                     

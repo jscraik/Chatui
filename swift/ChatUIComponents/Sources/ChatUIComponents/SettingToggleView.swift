@@ -27,12 +27,23 @@ public struct SettingToggleView: View {
             subtitle: subtitle,
             trailing: .custom(
                 AnyView(
-                    Toggle("", isOn: $isOn)
-                        .labelsHidden()
-                        .toggleStyle(FoundationSwitchStyle())
+                    toggleView()
                 )
             ),
             action: nil
         )
+    }
+
+    @ViewBuilder
+    private func toggleView() -> some View {
+        let base = Toggle("", isOn: $isOn)
+            .labelsHidden()
+            .toggleStyle(FoundationSwitchStyle())
+            .accessibilityLabel(Text(title))
+        if let subtitle {
+            base.accessibilityHint(Text(subtitle))
+        } else {
+            base
+        }
     }
 }

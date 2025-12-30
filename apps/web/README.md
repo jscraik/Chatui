@@ -2,6 +2,15 @@
 
 This app is the standalone React shell used to preview ChatUI components, pages, and the widget harness outside ChatGPT.
 
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Quick start](#quick-start)
+- [Environment configuration](#environment-configuration)
+- [Common tasks](#common-tasks)
+- [Verify](#verify)
+- [Troubleshooting](#troubleshooting)
+- [Next steps](#next-steps)
+
 ## What this app is for
 
 - Preview the Chat UI and page routing system.
@@ -72,7 +81,7 @@ pnpm -C apps/web build:widget
 
 1. Open `http://localhost:5173`.
 2. Visit `http://localhost:5173/harness` to confirm the widget harness renders.
-3. Check that `/settings`, `/profile`, and `/about` load without errors.
+3. Check that `/settings`, `/profile`, `/about`, `/templates`, and `/variants` load without errors.
 
 ## Troubleshooting
 

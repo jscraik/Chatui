@@ -33,15 +33,16 @@ public struct SettingDropdownView: View {
         )
     }
     
+    @ViewBuilder
     private var menuTrailing: some View {
-        Menu {
+        let menu = Menu {
             ForEach(options, id: \.self) { option in
                 Button(option) {
                     selection = option
                 }
             }
         } label: {
-            HStack(spacing: 8) {
+            HStack(spacing: FSpacing.s8) {
                 Text(selection)
                     .font(FType.rowValue())
                     .foregroundStyle(FColor.textSecondary)
@@ -55,11 +56,19 @@ public struct SettingDropdownView: View {
                     Image(systemName: "chevron.down")
                         .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(FColor.iconSecondary)
+                        .accessibilityHidden(true)
                 }
             }
         }
+        .accessibilityLabel(Text(title))
         #if os(macOS)
         .menuStyle(.borderlessButton)
         #endif
+
+        if let subtitle {
+            menu.accessibilityHint(Text(subtitle))
+        } else {
+            menu
+        }
     }
 }

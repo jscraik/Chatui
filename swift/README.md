@@ -2,6 +2,37 @@
 
 This directory contains the refactored ChatUI Swift packages, transformed from a monolithic `ChatUISwift` package into four specialized, modular packages.
 
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Quickstart](#quickstart)
+- [Package architecture](#package-architecture)
+- [Build verification](#build-verification)
+- [Next steps](#next-steps)
+- [Troubleshooting](#troubleshooting)
+
+## Prerequisites
+
+- macOS 13+ (for macOS apps)
+- Xcode 15+ with Swift 5.9
+
+## Quickstart
+
+### 1) Build all Swift packages
+```bash
+cd swift/ChatUIFoundation && swift build
+cd ../ChatUIThemes && swift build
+cd ../ChatUIComponents && swift build
+cd ../ChatUIShellChatGPT && swift build
+```
+
+### 2) Run Swift tests (optional)
+```bash
+pnpm test:swift
+```
+
+### 3) Verify visually (optional)
+- Open `apps/macos/ComponentGallery` in Xcode to review components.
+
 ## Package Architecture
 
 ### 1. ChatUIFoundation (`swift/ChatUIFoundation/`)
@@ -112,6 +143,20 @@ The original monolithic package at `swift/ui-swift/` has been:
 - Follow `swift/DEVELOPMENT_WORKFLOW.md` for hot reload and test workflows.
 - Use `apps/macos/ComponentGallery` for live component review.
 - See `docs/SWIFT_INTEGRATION.md` for app integration details.
+
+## Troubleshooting
+
+### Symptom: `swift test` fails due to missing XCTest
+Cause: SwiftPM is using the wrong toolchain or Xcode is not selected.
+Fix:
+```bash
+xcode-select -p
+```
+Then ensure Xcode 15+ is selected in Xcode Settings → Locations.
+
+### Symptom: Colors are missing in SwiftUI previews
+Cause: Asset Catalog resources not loaded.
+Fix: Ensure `ChatUIFoundation` includes `Resources/Colors.xcassets` and rebuild the package.
 
 ## Requirements Fulfilled
 

@@ -44,8 +44,8 @@ public enum DesignTokens {
         public enum Text {
             public static let lightPrimary = Color(hex: "#0D0D0D")
             public static let lightSecondary = Color(hex: "#5D5D5D")
-            public static let lightTertiary = Color(hex: "#8F8F8F")
-            public static let lightInverted = Color(hex: "#8F8F8F")
+            public static let lightTertiary = Color(hex: "#686868")
+            public static let lightInverted = Color(hex: "#686868")
 
             public static let darkPrimary = Color(hex: "#FFFFFF")
             public static let darkSecondary = Color(hex: "#CDCDCD")
@@ -64,12 +64,12 @@ public enum DesignTokens {
             )
             
             public static let tertiary = Color.dynamicColor(
-                lightHex: "#8F8F8F",
+                lightHex: "#686868",
                 darkHex: "#AFAFAF"
             )
             
             public static let inverted = Color.dynamicColor(
-                lightHex: "#8F8F8F",
+                lightHex: "#686868",
                 darkHex: "#AFAFAF"
             )
         }
@@ -77,8 +77,8 @@ public enum DesignTokens {
         public enum Icon {
             public static let lightPrimary = Color(hex: "#0D0D0D")
             public static let lightSecondary = Color(hex: "#5D5D5D")
-            public static let lightTertiary = Color(hex: "#8F8F8F")
-            public static let lightInverted = Color(hex: "#8F8F8F")
+            public static let lightTertiary = Color(hex: "#686868")
+            public static let lightInverted = Color(hex: "#686868")
 
             public static let darkPrimary = Color(hex: "#FFFFFF")
             public static let darkSecondary = Color(hex: "#CDCDCD")
@@ -97,12 +97,12 @@ public enum DesignTokens {
             )
             
             public static let tertiary = Color.dynamicColor(
-                lightHex: "#8F8F8F",
+                lightHex: "#686868",
                 darkHex: "#AFAFAF"
             )
             
             public static let inverted = Color.dynamicColor(
-                lightHex: "#8F8F8F",
+                lightHex: "#686868",
                 darkHex: "#AFAFAF"
             )
         }

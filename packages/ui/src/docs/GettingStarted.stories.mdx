@@ -1,5 +1,12 @@
 import { Meta, Canvas, Story, Controls } from "@storybook/blocks";
-import { ChatUIRoot, Button, ModelSelector, ContextTag, MessageActions } from "../index";
+import {
+  ChatUIRoot,
+  ChatVariantSplitSidebar,
+  Button,
+  ModelSelector,
+  ContextTag,
+  MessageActions,
+} from "../index";
 
 <Meta title="Documentation/Getting Started" />
 
@@ -23,7 +30,9 @@ Every ChatUI application should be wrapped with `ChatUIRoot` to provide the nece
   <Story name="Basic Setup">
     <ChatUIRoot>
       <div className="p-4 space-y-4">
-        <h3 className="text-white text-lg">Your ChatUI App</h3>
+        <h3 className="text-foundation-text-light-primary dark:text-foundation-text-dark-primary text-lg">
+          Your ChatUI App
+        </h3>
         <Button>Get Started</Button>
       </div>
     </ChatUIRoot>
@@ -41,6 +50,47 @@ function App() {
         <Button>Get Started</Button>
       </div>
     </ChatUIRoot>
+  );
+}
+```
+
+## Chat Variants (Slot-Based Layouts)
+
+Use `ChatShell` variants when you want to compose your own chat layout from slots:
+
+<Canvas>
+  <Story name="Chat Variant (Split Sidebar)">
+    {() => {
+      const messages = [
+        {
+          id: "1",
+          role: "assistant",
+          content: "Welcome! This is a split-sidebar layout.",
+          timestamp: new Date(),
+        },
+      ];
+      return (
+        <div className="min-h-[520px]">
+          <ChatVariantSplitSidebar
+            messages={messages}
+            projects={[{ id: "default", label: "General", icon: <span>💬</span> }]}
+            chatHistory={["Welcome thread"]}
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+```tsx
+import { ChatVariantSplitSidebar } from "@chatui/ui";
+
+function App() {
+  return (
+    <ChatVariantSplitSidebar
+      messages={[{ id: "1", role: "assistant", content: "Hello!", timestamp: new Date() }]}
+      projects={[{ id: "default", label: "General", icon: <span>💬</span> }]}
+    />
   );
 }
 ```
@@ -103,8 +153,8 @@ The `MessageActions` component provides interaction buttons for chat messages:
   <Story name="Message Actions">
     <ChatUIRoot>
       <div className="p-4">
-        <div className="bg-[var(--foundation-bg-dark-2)] p-4 rounded-lg">
-          <p className="text-white mb-3">
+        <div className="bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 p-4 rounded-lg">
+          <p className="text-foundation-text-light-primary dark:text-foundation-text-dark-primary mb-3">
             This is a sample message that demonstrates the message actions component.
           </p>
           <MessageActions

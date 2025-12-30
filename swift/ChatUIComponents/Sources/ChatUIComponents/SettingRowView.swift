@@ -64,18 +64,19 @@ public struct SettingRowView: View {
         }
         .background(rowBackground)
         .clipShape(RoundedRectangle(cornerRadius: theme.rowCornerRadius, style: .continuous))
-        .padding(.horizontal, 6) // "inset hover" appearance
+        .padding(.horizontal, FSpacing.s4) // "inset hover" appearance
     }
     
     private var rowContent: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: FSpacing.s12) {
             if let icon {
                 icon
                     .frame(width: theme.rowIconSize, height: theme.rowIconSize)
                     .foregroundStyle(FColor.iconSecondary)
+                    .accessibilityHidden(true)
             }
             
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: FSpacing.s2) {
                 Text(title)
                     .font(FType.rowTitle())
                     .foregroundStyle(FColor.textPrimary)
@@ -96,6 +97,7 @@ public struct SettingRowView: View {
         .padding(.horizontal, theme.rowHPadding)
         .padding(.vertical, theme.rowVPadding)
         .contentShape(Rectangle())
+        .accessibilityElement(children: shouldCombineAccessibility ? .combine : .contain)
     }
     
     @ViewBuilder
@@ -107,6 +109,7 @@ public struct SettingRowView: View {
             Image(systemName: "chevron.right")
                 .font(.system(size: theme.rowChevronSize, weight: .semibold))
                 .foregroundStyle(FColor.iconTertiary)
+                .accessibilityHidden(true)
         case .text(let value):
             Text(value)
                 .font(FType.rowValue())
@@ -130,6 +133,15 @@ public struct SettingRowView: View {
             } else {
                 Color.clear
             }
+        }
+    }
+
+    private var shouldCombineAccessibility: Bool {
+        switch trailing {
+        case .custom:
+            return false
+        case .none, .chevron, .text:
+            return true
         }
     }
 }

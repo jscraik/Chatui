@@ -2,6 +2,25 @@
 
 This guide explains how to work with the modular ChatUI Swift packages and the macOS Component Gallery.
 
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Quick start](#quick-start-recommended)
+- [Project structure](#project-structure)
+- [Design tokens](#design-tokens)
+- [Component usage](#component-usage)
+- [Testing](#testing)
+- [Accessibility](#accessibility)
+- [Legacy ui-swift](#legacy-ui-swift-monolithic-package)
+- [Troubleshooting](#troubleshooting)
+- [Verify](#verify)
+- [Next steps](#next-steps)
+
+## Prerequisites
+
+- Xcode 15+
+- Swift 5.9
+- macOS 13+ (for ComponentGallery)
+
 ## Quick start (recommended)
 
 ### 1. Open the Component Gallery

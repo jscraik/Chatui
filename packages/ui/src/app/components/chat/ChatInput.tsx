@@ -225,7 +225,7 @@ export function ChatInput({
                 onClick={toggleSearch}
                 className={`flex items-center gap-1.5 px-2 py-1 rounded-lg transition-colors ${
                   isSearchEnabled
-                    ? "bg-foundation-accent-blue/20 text-foundation-accent-blue"
+                    ? "bg-foundation-accent-blue/20 text-foundation-text-light-primary dark:text-foundation-text-dark-primary"
                     : "hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-2 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary hover:text-foundation-text-light-primary dark:hover:text-foundation-text-dark-primary"
                 }`}
                 title="Browse web"
@@ -246,7 +246,7 @@ export function ChatInput({
                 onClick={toggleResearch}
                 className={`flex items-center gap-1.5 px-2 py-1 rounded-lg transition-colors ${
                   isResearchEnabled
-                    ? "bg-foundation-accent-blue/20 text-foundation-accent-blue"
+                    ? "bg-foundation-accent-blue/20 text-foundation-text-light-primary dark:text-foundation-text-dark-primary"
                     : "hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-2 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary hover:text-foundation-text-light-primary dark:hover:text-foundation-text-dark-primary"
                 }`}
                 title="Research"
@@ -431,12 +431,12 @@ export function ChatInput({
 
                     {/* Notes */}
                     <div className="flex items-center gap-2.5 px-2 py-2 rounded-lg hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-2 transition-colors group">
-                      <div className="flex items-center justify-center size-5">
-                        <svg
-                          className="size-4 text-foundation-accent-orange"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                        >
+                    <div className="flex items-center justify-center size-5">
+                      <svg
+                        className="size-4 text-foundation-accent-orange-light dark:text-foundation-accent-orange"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
                           <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z" />
                         </svg>
                       </div>
@@ -529,11 +529,11 @@ export function ChatInput({
               {/* Advanced features with purple gradient */}
               <button
                 type="button"
-                className="p-2 bg-gradient-to-br from-purple-500 via-purple-600 to-pink-500 rounded-full transition-all hover:opacity-90"
+                className="p-2 bg-foundation-accent-purple-light dark:bg-foundation-accent-purple rounded-full transition-colors hover:bg-foundation-accent-purple-light/90 dark:hover:bg-foundation-accent-purple/90"
                 aria-label="Advanced features"
                 title="Advanced features"
               >
-                <IconHeadphones className="size-4 text-white" />
+                <IconHeadphones className="size-4 text-foundation-text-dark-primary dark:text-foundation-text-light-primary" />
               </button>
 
               {/* Send button */}

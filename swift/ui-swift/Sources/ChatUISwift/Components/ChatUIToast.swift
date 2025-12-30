@@ -1,5 +1,8 @@
 import SwiftUI
 import UserNotifications
+import os
+
+private let toastLogger = Logger(subsystem: "ChatUISwift", category: "ChatUIToast")
 
 /// A native macOS toast notification component with system integration
 public struct ChatUIToast: View {
@@ -28,6 +31,7 @@ public struct ChatUIToast: View {
     
     @State private var isVisible = true
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     
     public init(
         message: String,
@@ -88,10 +92,14 @@ public struct ChatUIToast: View {
                 x: 0,
                 y: 4
             )
-            .transition(.asymmetric(
-                insertion: .move(edge: .top).combined(with: .opacity),
-                removal: .move(edge: .top).combined(with: .opacity)
-            ))
+            .transition(
+                reduceMotion
+                    ? .opacity
+                    : .asymmetric(
+                        insertion: .move(edge: .top).combined(with: .opacity),
+                        removal: .move(edge: .top).combined(with: .opacity)
+                    )
+            )
             .onAppear {
                 // Auto-dismiss after duration
                 if duration > 0 {
@@ -108,12 +116,17 @@ public struct ChatUIToast: View {
     // MARK: - Helpers
     
     private func dismissToast() {
-        withAnimation(.easeInOut(duration: animationDuration)) {
+        if reduceMotion {
             isVisible = false
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
             onDismiss?()
+        } else {
+            withAnimation(.easeInOut(duration: animationDuration)) {
+                isVisible = false
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
+                onDismiss?()
+            }
         }
     }
     
@@ -232,7 +245,7 @@ public class ChatUIToastManager: ObservableObject {
     private init() {}
     
     public struct ToastItem: Identifiable {
-        public let id = UUID()
+        public let id: UUID
         let toast: ChatUIToast
         let position: ChatUIToast.Position
     }
@@ -246,28 +259,29 @@ public class ChatUIToastManager: ObservableObject {
         duration: TimeInterval = 3.0,
         showIcon: Bool = true
     ) {
+        let toastId = UUID()
         let toast = ChatUIToast(
             message: message,
             style: style,
             duration: duration,
             showIcon: showIcon
         ) { [weak self] in
-            self?.removeToast(message: message)
+            self?.removeToast(id: toastId)
         }
         
-        let item = ToastItem(toast: toast.show(), position: position)
+        let item = ToastItem(id: toastId, toast: toast.show(), position: position)
         activeToasts.append(item)
         
         // Auto-remove after duration + animation time
         if duration > 0 {
             DispatchQueue.main.asyncAfter(deadline: .now() + duration + 0.3) {
-                self.removeToast(message: message)
+                self.removeToast(id: toastId)
             }
         }
     }
     
-    private func removeToast(message: String) {
-        activeToasts.removeAll { $0.toast.message == message }
+    private func removeToast(id: UUID) {
+        activeToasts.removeAll { $0.id == id }
     }
     
     // MARK: - System Notifications
@@ -280,7 +294,7 @@ public class ChatUIToastManager: ObservableObject {
             let granted = try await center.requestAuthorization(options: [.alert, .sound, .badge])
             return granted
         } catch {
-            print("Failed to request notification permissions: \(error)")
+            toastLogger.error("Failed to request notification permissions: \(String(describing: error))")
             return false
         }
     }
@@ -297,7 +311,7 @@ public class ChatUIToastManager: ObservableObject {
         // Check permissions
         let settings = await center.notificationSettings()
         guard settings.authorizationStatus == .authorized else {
-            print("Notification permissions not granted")
+            toastLogger.notice("Notification permissions not granted")
             return
         }
         
@@ -323,7 +337,7 @@ public class ChatUIToastManager: ObservableObject {
         do {
             try await center.add(request)
         } catch {
-            print("Failed to schedule notification: \(error)")
+            toastLogger.error("Failed to schedule notification: \(String(describing: error))")
         }
     }
     

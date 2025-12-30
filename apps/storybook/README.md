@@ -2,6 +2,14 @@
 
 Storybook is the primary component documentation and QA surface for `@chatui/ui`.
 
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Quick start](#quick-start)
+- [Common tasks](#common-tasks)
+- [Verify](#verify)
+- [Troubleshooting](#troubleshooting)
+- [Related docs](#related-docs)
+
 ## What this app is for
 
 - Browse and validate UI primitives, overlays, templates, and pages.

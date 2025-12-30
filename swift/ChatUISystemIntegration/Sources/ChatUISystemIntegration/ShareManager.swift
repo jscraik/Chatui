@@ -50,11 +50,14 @@ public class ShareManager {
                     picker.show(relativeTo: view.bounds, of: view, preferredEdge: .minY)
                 } else {
                     // Fallback: show at mouse location
-                    if let window = NSApplication.shared.keyWindow {
+                    if let window = NSApplication.shared.keyWindow, let contentView = window.contentView {
                         let mouseLocation = NSEvent.mouseLocation
                         let windowLocation = window.convertPoint(fromScreen: mouseLocation)
                         let rect = NSRect(origin: windowLocation, size: .zero)
-                        picker.show(relativeTo: rect, of: window.contentView!, preferredEdge: .minY)
+                        picker.show(relativeTo: rect, of: contentView, preferredEdge: .minY)
+                    } else {
+                        continuation.resume(throwing: ShareError.sharingNotAvailable)
+                        return
                     }
                 }
                 
@@ -104,11 +107,7 @@ public class ShareManager {
         
         return try await withCheckedThrowingContinuation { continuation in
             DispatchQueue.main.async {
-                if let view = view, let rect = rect {
-                    service.perform(withItems: items)
-                } else {
-                    service.perform(withItems: items)
-                }
+                service.perform(withItems: items)
                 continuation.resume()
             }
         }
@@ -199,7 +198,16 @@ public class ShareManager {
         let transcript = createChatTranscript(messages: messages)
         
         do {
-            try transcript.write(to: url, atomically: true, encoding: .utf8)
+            try await withCheckedThrowingContinuation { continuation in
+                DispatchQueue.global(qos: .utility).async {
+                    do {
+                        try transcript.write(to: url, atomically: true, encoding: .utf8)
+                        continuation.resume()
+                    } catch {
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
         } catch {
             throw ShareError.shareFailed(error)
         }
@@ -208,7 +216,7 @@ public class ShareManager {
 
 // MARK: - Supporting Types
 
-public struct ChatMessage: Codable {
+public struct ChatMessage: Codable, Sendable {
     public let id: String
     public let sender: String
     public let content: String

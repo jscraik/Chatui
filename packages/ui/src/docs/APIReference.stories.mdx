@@ -144,7 +144,9 @@ Dropdown component for selecting AI models with support for legacy models and de
             label="ChatGPT"
           />
 
-          <div className="text-white/60 text-sm">Selected: {selectedModel}</div>
+          <div className="text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary text-sm">
+            Selected: {selectedModel}
+          </div>
         </div>
       );
     }}
@@ -199,12 +201,16 @@ Switch component for boolean values with consistent styling.
         <div className="p-4 space-y-4">
           <div className="flex items-center gap-4">
             <Toggle checked={enabled} onChange={setEnabled} />
-            <span className="text-white/80">{enabled ? "Enabled" : "Disabled"}</span>
+            <span className="text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+              {enabled ? "Enabled" : "Disabled"}
+            </span>
           </div>
 
           <div className="flex items-center gap-4">
             <Toggle checked={disabled} onChange={setDisabled} disabled />
-            <span className="text-white/60">Disabled state</span>
+            <span className="text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary">
+              Disabled state
+            </span>
           </div>
 
           <div className="flex items-center gap-4">
@@ -275,7 +281,9 @@ Multi-option selector with segmented button appearance.
       return (
         <div className="p-4 space-y-6">
           <div>
-            <label className="text-white/80 text-sm mb-2 block">Quality</label>
+            <label className="text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary text-sm mb-2 block">
+              Quality
+            </label>
             <SegmentedControl
               value={quality}
               options={[
@@ -288,7 +296,9 @@ Multi-option selector with segmented button appearance.
           </div>
 
           <div>
-            <label className="text-white/80 text-sm mb-2 block">Size</label>
+            <label className="text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary text-sm mb-2 block">
+              Size
+            </label>
             <SegmentedControl
               value={size}
               options={[
@@ -316,8 +326,8 @@ Action buttons for chat messages with configurable actions.
 <Canvas>
   <Story name="MessageActions API">
     <div className="p-4">
-      <div className="bg-[var(--foundation-bg-dark-2)] p-4 rounded-lg max-w-md">
-        <p className="text-white mb-3">
+      <div className="bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 p-4 rounded-lg max-w-md">
+        <p className="text-foundation-text-light-primary dark:text-foundation-text-dark-primary mb-3">
           This is a sample message that demonstrates the MessageActions component.
         </p>
         <MessageActions

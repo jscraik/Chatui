@@ -17,7 +17,7 @@ const meta: Meta<typeof ChatInput> = {
     layout: "fullscreen",
   },
   render: (args) => (
-    <div className="min-h-screen bg-[var(--foundation-bg-dark-1)] flex items-end">
+    <div className="min-h-screen bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 flex items-end">
       <div className="w-full">
         <ChatInput {...args} />
       </div>
@@ -31,12 +31,18 @@ type Story = StoryObj<typeof ChatInput>;
 
 export const Default: Story = {};
 
+export const LightTheme: Story = {
+  parameters: {
+    backgrounds: { default: "light" },
+  },
+};
+
 export const WithComposerSlots: Story = {
   args: {
     composerLeft: (
       <button
         type="button"
-        className="px-2 py-1 rounded-md bg-white/5 text-white/70 text-xs hover:bg-white/10 transition-colors"
+        className="px-2 py-1 rounded-md bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary text-xs hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3 transition-colors"
       >
         Quick action
       </button>
@@ -44,7 +50,7 @@ export const WithComposerSlots: Story = {
     composerRight: (
       <button
         type="button"
-        className="px-2 py-1 rounded-md bg-white/5 text-white/70 text-xs hover:bg-white/10 transition-colors"
+        className="px-2 py-1 rounded-md bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary text-xs hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3 transition-colors"
       >
         Save draft
       </button>

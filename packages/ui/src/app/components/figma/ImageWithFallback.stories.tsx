@@ -19,7 +19,7 @@ type Story = StoryObj<typeof ImageWithFallback>;
 function Card({ children }: { children: React.ReactNode }) {
   return (
     <div
-      className="bg-white border border-gray-200 rounded-md shadow-sm p-4"
+      className="bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 border border-foundation-text-light-primary/10 dark:border-foundation-text-dark-primary/10 rounded-md shadow-sm p-4"
       style={{ width: 220 }}
     >
       {children}

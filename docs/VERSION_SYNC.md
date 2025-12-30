@@ -2,6 +2,13 @@
 
 This guide explains how versions are synchronized across npm packages and Swift packages.
 
+## Table of contents
+- [Why this exists](#why-this-exists)
+- [Commands](#commands)
+- [How it works](#how-it-works)
+- [Verify](#verify)
+- [Troubleshooting](#troubleshooting)
+
 ## Why this exists
 
 - NPM packages need matching versions for releases.

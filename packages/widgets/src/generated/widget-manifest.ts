@@ -2,86 +2,86 @@
 export const widgetManifest = {
   "auth-demo": {
     "name": "auth-demo",
-    "uri": "auth-demo.2f6f23af",
-    "hash": "2f6f23af",
+    "uri": "auth-demo.dev-1767036712570",
+    "hash": "dev-1767036712570",
     "originalPath": "src/auth-demo/index.html"
   },
   "chat-view": {
     "name": "chat-view",
-    "uri": "chat-view.844f3b35",
-    "hash": "844f3b35",
+    "uri": "chat-view.dev-1767036712570",
+    "hash": "dev-1767036712570",
     "originalPath": "src/chat-view/index.html"
   },
   "dashboard-widget": {
     "name": "dashboard-widget",
-    "uri": "dashboard-widget.5750ff2d",
-    "hash": "5750ff2d",
+    "uri": "dashboard-widget.dev-1767036712570",
+    "hash": "dev-1767036712570",
     "originalPath": "src/dashboard-widget/index.html"
   },
   "enhanced-example-widget": {
     "name": "enhanced-example-widget",
-    "uri": "enhanced-example-widget.4b9c61dd",
-    "hash": "4b9c61dd",
+    "uri": "enhanced-example-widget.dev-1767036712570",
+    "hash": "dev-1767036712570",
     "originalPath": "src/enhanced-example-widget/index.html"
   },
   "example-widget": {
     "name": "example-widget",
-    "uri": "example-widget.41c09b34",
-    "hash": "41c09b34",
+    "uri": "example-widget.dev-1767036712570",
+    "hash": "dev-1767036712570",
     "originalPath": "src/example-widget/index.html"
   },
   "kitchen-sink-lite": {
     "name": "kitchen-sink-lite",
-    "uri": "kitchen-sink-lite.c6ec9621",
-    "hash": "c6ec9621",
+    "uri": "kitchen-sink-lite.dev-1767036712570",
+    "hash": "dev-1767036712570",
     "originalPath": "src/kitchen-sink-lite/index.html"
   },
   "pizzaz-carousel": {
     "name": "pizzaz-carousel",
-    "uri": "pizzaz-carousel.33b72ebb",
-    "hash": "33b72ebb",
+    "uri": "pizzaz-carousel.dev-1767036712570",
+    "hash": "dev-1767036712570",
     "originalPath": "src/pizzaz-carousel/index.html"
   },
   "pizzaz-gallery": {
     "name": "pizzaz-gallery",
-    "uri": "pizzaz-gallery.9f0fda42",
-    "hash": "9f0fda42",
+    "uri": "pizzaz-gallery.dev-1767036712570",
+    "hash": "dev-1767036712570",
     "originalPath": "src/pizzaz-gallery/index.html"
   },
   "pizzaz-markdown": {
     "name": "pizzaz-markdown",
-    "uri": "pizzaz-markdown.2accb25b",
-    "hash": "2accb25b",
+    "uri": "pizzaz-markdown.dev-1767036712570",
+    "hash": "dev-1767036712570",
     "originalPath": "src/pizzaz-markdown/index.html"
   },
   "pizzaz-shop": {
     "name": "pizzaz-shop",
-    "uri": "pizzaz-shop.73f9199e",
-    "hash": "73f9199e",
+    "uri": "pizzaz-shop.dev-1767036712570",
+    "hash": "dev-1767036712570",
     "originalPath": "src/pizzaz-shop/index.html"
   },
   "pizzaz-table": {
     "name": "pizzaz-table",
-    "uri": "pizzaz-table.fd4ed84a",
-    "hash": "fd4ed84a",
+    "uri": "pizzaz-table.dev-1767036712570",
+    "hash": "dev-1767036712570",
     "originalPath": "src/pizzaz-table/index.html"
   },
   "search-results": {
     "name": "search-results",
-    "uri": "search-results.7946e9d7",
-    "hash": "7946e9d7",
+    "uri": "search-results.dev-1767036712570",
+    "hash": "dev-1767036712570",
     "originalPath": "src/search-results/index.html"
   },
   "shopping-cart": {
     "name": "shopping-cart",
-    "uri": "shopping-cart.6d45c6b6",
-    "hash": "6d45c6b6",
+    "uri": "shopping-cart.dev-1767036712570",
+    "hash": "dev-1767036712570",
     "originalPath": "src/shopping-cart/index.html"
   },
   "solar-system": {
     "name": "solar-system",
-    "uri": "solar-system.fffcf20c",
-    "hash": "fffcf20c",
+    "uri": "solar-system.dev-1767036712570",
+    "hash": "dev-1767036712570",
     "originalPath": "src/solar-system/index.html"
   }
 } as const;

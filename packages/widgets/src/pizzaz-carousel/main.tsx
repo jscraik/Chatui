@@ -57,13 +57,13 @@ function App() {
   };
 
   return (
-    <div className="antialiased relative w-full text-primary py-5 bg-surface">
+    <div className="antialiased relative w-full text-foundation-text-light-primary dark:text-foundation-text-dark-primary py-5 bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1">
       <h1 className="sr-only">Pizzaz Carousel</h1>
       <div className="sr-only" aria-live="polite">
         Carousel updated.
       </div>
       <div
-        className="overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        className="overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foundation-accent-blue/50"
         ref={emblaRef}
         role="region"
         aria-roledescription="carousel"
@@ -86,7 +86,7 @@ function App() {
         }
       >
         <div
-          className="h-full w-full border-l border-subtle bg-gradient-to-r from-[var(--color-surface)] to-transparent opacity-70"
+          className="h-full w-full border-l border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 bg-gradient-to-r from-[var(--foundation-bg-light-1)] dark:from-[var(--foundation-bg-dark-1)] to-transparent opacity-70"
           style={{
             WebkitMaskImage:
               "linear-gradient(to bottom, transparent 0%, white 30%, white 70%, transparent 100%)",
@@ -103,7 +103,7 @@ function App() {
         }
       >
         <div
-          className="h-full w-full border-r border-subtle bg-gradient-to-l from-[var(--color-surface)] to-transparent opacity-70"
+          className="h-full w-full border-r border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 bg-gradient-to-l from-[var(--foundation-bg-light-1)] dark:from-[var(--foundation-bg-dark-1)] to-transparent opacity-70"
           style={{
             WebkitMaskImage:
               "linear-gradient(to bottom, transparent 0%, white 30%, white 70%, transparent 100%)",

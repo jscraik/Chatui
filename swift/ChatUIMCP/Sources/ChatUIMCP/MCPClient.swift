@@ -1,5 +1,4 @@
 import Foundation
-import Combine
 
 /// Client for communicating with MCP (Model Context Protocol) servers
 public class MCPClient {
@@ -77,6 +76,26 @@ public class MCPClient {
 
         return result.tools.map { $0.name }
     }
+
+    /// List available tools with full metadata from the MCP server
+    /// - Returns: Array of tool metadata objects
+    /// - Throws: MCPError if the request fails
+    public func listToolInfo() async throws -> [MCPTool] {
+        let response: MCPJSONRPCResponse<MCPToolListResult> = try await sendRequest(
+            method: "tools/list",
+            params: MCPToolListParams()
+        )
+
+        if let error = response.error {
+            throw MCPError.protocolError(code: error.code, message: error.message)
+        }
+
+        guard let result = response.result else {
+            throw MCPError.invalidResponse
+        }
+
+        return result.tools
+    }
     
     /// Get tool metadata
     /// - Parameter name: Name of the tool
@@ -123,6 +142,7 @@ public class MCPClient {
         var urlRequest = URLRequest(url: endpointURL)
         urlRequest.httpMethod = "POST"
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
 
         if let token = try? authenticator.retrieveToken() {
             urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -133,7 +153,11 @@ public class MCPClient {
         }
 
         let request = MCPJSONRPCRequest(method: method, params: params)
-        urlRequest.httpBody = try JSONEncoder().encode(request)
+        do {
+            urlRequest.httpBody = try JSONEncoder().encode(request)
+        } catch {
+            throw MCPError.invalidToolArguments(error.localizedDescription)
+        }
 
         let (data, response): (Data, URLResponse)
         do {
@@ -158,7 +182,15 @@ public class MCPClient {
             sessionId = newSessionId
         }
 
-        return try JSONDecoder().decode(MCPJSONRPCResponse<Result>.self, from: data)
+        guard !data.isEmpty else {
+            throw MCPError.invalidResponse
+        }
+
+        do {
+            return try JSONDecoder().decode(MCPJSONRPCResponse<Result>.self, from: data)
+        } catch {
+            throw MCPError.invalidResponse
+        }
     }
 }
 

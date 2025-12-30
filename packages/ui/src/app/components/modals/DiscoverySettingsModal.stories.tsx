@@ -11,7 +11,7 @@ const meta: Meta<typeof DiscoverySettingsModal> = {
     layout: "fullscreen",
   },
   render: (args) => (
-    <div className="h-screen bg-[var(--foundation-bg-dark-1)]">
+    <div className="h-screen bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1">
       <DiscoverySettingsModal {...args} />
     </div>
   ),
@@ -29,5 +29,19 @@ export const Default: Story = {
     onPromptEnhancementChange: fn(),
     targetSize: 60,
     onTargetSizeChange: fn(),
+  },
+};
+
+export const LightTheme: Story = {
+  args: {
+    isOpen: true,
+    onClose: fn(),
+    promptEnhancement: "rewrite",
+    onPromptEnhancementChange: fn(),
+    targetSize: 60,
+    onTargetSizeChange: fn(),
+  },
+  parameters: {
+    backgrounds: { default: "light" },
   },
 };

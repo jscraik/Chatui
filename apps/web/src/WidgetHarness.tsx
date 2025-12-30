@@ -29,6 +29,42 @@ const WIDGETS: Widget[] = [
     path: "/widgets/search-results/index.html",
   },
   {
+    id: "compose-view",
+    name: "Compose View",
+    description: "Compose view parity widget",
+    path: "/widgets/compose-view/index.html",
+  },
+  {
+    id: "chat-header",
+    name: "Chat Header",
+    description: "Chat header block widget",
+    path: "/widgets/chat-header/index.html",
+  },
+  {
+    id: "chat-sidebar",
+    name: "Chat Sidebar",
+    description: "Chat sidebar block widget",
+    path: "/widgets/chat-sidebar/index.html",
+  },
+  {
+    id: "chat-messages",
+    name: "Chat Messages",
+    description: "Chat messages block widget",
+    path: "/widgets/chat-messages/index.html",
+  },
+  {
+    id: "chat-input",
+    name: "Chat Input",
+    description: "Chat input block widget",
+    path: "/widgets/chat-input/index.html",
+  },
+  {
+    id: "chat-template",
+    name: "Chat Template",
+    description: "Template shell for chat (messages + composer)",
+    path: "/widgets/chat-template/index.html",
+  },
+  {
     id: "kitchen-sink-lite",
     name: "Kitchen Sink Lite",
     description: "Comprehensive Apps SDK API demo widget",
@@ -60,8 +96,10 @@ export function WidgetHarness() {
   return (
     <div className="flex h-screen">
       {/* Widget List */}
-      <div className="w-80 border-r bg-gray-50 p-4">
-        <h2 className="text-lg font-semibold mb-4">Widget Gallery</h2>
+      <div className="w-80 border-r border-foundation-bg-light-3 bg-foundation-bg-light-2 p-4">
+        <h2 className="text-lg font-semibold mb-4 text-foundation-text-light-primary">
+          Widget Gallery
+        </h2>
         <div className="space-y-2">
           {WIDGETS.map((widget) => (
             <button
@@ -70,33 +108,48 @@ export function WidgetHarness() {
               onClick={() => setSelectedWidget(widget)}
               className={`w-full text-left p-3 rounded-lg border transition-colors ${
                 selectedWidget.id === widget.id
-                  ? "bg-blue-50 border-blue-200"
-                  : "bg-white border-gray-200 hover:bg-gray-50"
+                  ? "bg-foundation-bg-light-1 border-foundation-accent-blue/40"
+                  : "bg-foundation-bg-light-1 border-foundation-bg-light-3 hover:bg-foundation-bg-light-2"
               }`}
             >
-              <div className="font-medium">{widget.name}</div>
-              <div className="text-sm text-gray-600 mt-1">{widget.description}</div>
+              <div className="font-medium text-foundation-text-light-primary">{widget.name}</div>
+              <div className="text-sm text-foundation-text-light-secondary mt-1">
+                {widget.description}
+              </div>
             </button>
           ))}
         </div>
 
-        <div className="mt-6 pt-4 border-t">
-          <h3 className="font-medium mb-2">Keyboard Shortcuts</h3>
-          <div className="text-sm text-gray-600 space-y-1">
+        <div className="mt-6 pt-4 border-t border-foundation-bg-light-3">
+          <h3 className="font-medium mb-2 text-foundation-text-light-primary">
+            Keyboard Shortcuts
+          </h3>
+          <div className="text-sm text-foundation-text-light-secondary space-y-1">
             <div>
-              <kbd className="px-1 py-0.5 bg-gray-200 rounded text-xs">?</kbd> Help
+              <kbd className="px-1 py-0.5 bg-foundation-bg-light-3 rounded text-xs">
+                ?
+              </kbd>{" "}
+              Help
             </div>
             <div>
-              <kbd className="px-1 py-0.5 bg-gray-200 rounded text-xs">G</kbd> Next widget
+              <kbd className="px-1 py-0.5 bg-foundation-bg-light-3 rounded text-xs">
+                G
+              </kbd>{" "}
+              Next widget
             </div>
             <div>
-              <kbd className="px-1 py-0.5 bg-gray-200 rounded text-xs">Esc</kbd> Close modal
+              <kbd className="px-1 py-0.5 bg-foundation-bg-light-3 rounded text-xs">
+                Esc
+              </kbd>{" "}
+              Close modal
             </div>
           </div>
         </div>
 
-        <div className="mt-6 pt-4 border-t">
-          <h3 className="font-medium mb-2">Modal Test Controls</h3>
+        <div className="mt-6 pt-4 border-t border-foundation-bg-light-3">
+          <h3 className="font-medium mb-2 text-foundation-text-light-primary">
+            Modal Test Controls
+          </h3>
           <div className="space-y-2">
             <Button
               size="sm"
@@ -136,9 +189,13 @@ export function WidgetHarness() {
 
       {/* Widget Preview */}
       <div className="flex-1 flex flex-col">
-        <div className="border-b p-4 bg-white">
-          <h1 className="text-xl font-semibold">{selectedWidget.name}</h1>
-          <p className="text-gray-600 mt-1">{selectedWidget.description}</p>
+        <div className="border-b border-foundation-bg-light-3 p-4 bg-foundation-bg-light-1">
+          <h1 className="text-xl font-semibold text-foundation-text-light-primary">
+            {selectedWidget.name}
+          </h1>
+          <p className="text-foundation-text-light-secondary mt-1">
+            {selectedWidget.description}
+          </p>
           <div className="mt-2 flex gap-2">
             <Button
               size="sm"

@@ -1,7 +1,7 @@
 import Foundation
 import CoreSpotlight
-#if canImport(MobileCoreServices)
-import MobileCoreServices
+#if canImport(UniformTypeIdentifiers)
+import UniformTypeIdentifiers
 #endif
 
 /// Manages Spotlight search integration for chat history
@@ -133,7 +133,10 @@ public class SpotlightManager {
     
     /// Search for chat messages in Spotlight
     public func searchChatMessages(query: String, limit: Int = 20) async throws -> [String] {
-        let queryString = "contentDescription == \"*\(query)*\"cd || textContent == \"*\(query)*\"cd"
+        let escapedQuery = query
+            .replacingOccurrences(of: "\\", with: "\\\\")
+            .replacingOccurrences(of: "\"", with: "\\\"")
+        let queryString = "contentDescription == \"*\(escapedQuery)*\"cd || textContent == \"*\(escapedQuery)*\"cd"
         let searchQuery = CSSearchQuery(queryString: queryString, attributes: ["uniqueIdentifier"])
         
         return try await withCheckedThrowingContinuation { continuation in

@@ -2,6 +2,22 @@
 
 A production-ready native macOS application built with SwiftUI, demonstrating the complete ChatUI component library and MCP tool integration.
 
+## Table of contents
+- [Overview](#overview)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Dependencies](#dependencies)
+- [Building](#building)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Keyboard shortcuts](#keyboard-shortcuts)
+- [State persistence](#state-persistence)
+- [MCP integration](#mcp-integration)
+- [Development](#development)
+- [Troubleshooting](#troubleshooting)
+- [Production deployment](#production-deployment)
+- [Related documentation](#related-documentation)
+
 ## Overview
 
 ChatUI is a native macOS application that showcases:
@@ -30,8 +46,9 @@ ChatUI is a native macOS application that showcases:
 ### Settings Panel
 
 - MCP server configuration
-- Appearance customization (dark mode, accent colors)
-- Notification preferences
+- Appearance customization (theme style)
+- Component demo controls (dark mode, accent colors, language) for reusable UI previews
+- Notification preferences (permission-based)
 - Data management
 
 ### Native Integration
@@ -97,6 +114,12 @@ swift run
 2. Select the ChatUIApp scheme
 3. Build and run (⌘R)
 
+### Verify
+
+- App launches and shows Chat/Tools/Settings.
+- Settings → General updates MCP server URL without errors.
+- Tools list loads when MCP server is running.
+
 ## Configuration
 
 ### MCP Server URL
@@ -111,9 +134,8 @@ Configure the MCP server URL in Settings:
 
 Customize the app appearance:
 
-- **Dark Mode**: Toggle in Settings → Appearance
-- **Accent Color**: Choose from Blue, Green, Orange, Red, Purple
-- **Language**: Select interface language
+- **Theme Style**: Switch between ChatGPT and Default styling in Settings → Appearance
+- **Component Demo**: Preview-only controls in Settings → Component Demo
 
 ## Usage
 
@@ -149,8 +171,7 @@ The application automatically saves and restores:
 
 - Selected section (Chat, Tools, Settings)
 - MCP server URL
-- Window position and size (macOS)
-- User preferences
+- Theme style
 
 State is stored in `~/Library/Application Support/ChatUI/`
 
@@ -169,7 +190,7 @@ Widgets are rendered using native SwiftUI components styled with ChatUIFoundatio
 
 - **Card Widgets**: SettingsCardView with custom content
 - **List Widgets**: SettingRowView for each item
-- **Chart Widgets**: Native SwiftUI Charts integration
+- **Chart Widgets**: Rendered as list-style rows (no Swift Charts integration yet)
 - **Custom Widgets**: Flexible rendering system
 
 ## Development

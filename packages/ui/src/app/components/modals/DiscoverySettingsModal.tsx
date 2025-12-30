@@ -152,7 +152,7 @@ export function DiscoverySettingsModal({
                 />
               </svg>
               <svg
-                className="size-3.5 text-foundation-accent-orange"
+                className="size-3.5 text-foundation-accent-orange-light dark:text-foundation-accent-orange"
                 fill="currentColor"
                 viewBox="0 0 24 24"
               >
@@ -236,7 +236,7 @@ export function DiscoverySettingsModal({
               <div className="flex items-start gap-3">
                 <div className="mt-0.5">
                   <svg
-                    className="size-5 text-foundation-accent-green"
+                    className="size-5 text-foundation-accent-green-light dark:text-foundation-accent-green"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -346,7 +346,7 @@ export function DiscoverySettingsModal({
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
           </svg>
           <span className="text-[14px] font-medium leading-[20px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary">{targetSize}k</span>
-          <span className="text-[13px] font-normal leading-[18px] text-foundation-accent-green-light dark:text-foundation-accent-green capitalize">
+          <span className="text-[13px] font-normal leading-[18px] text-foundation-accent-green-light dark:text-foundation-text-dark-primary capitalize">
             {promptEnhancement}
           </span>
         </div>

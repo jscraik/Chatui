@@ -2,6 +2,14 @@
 
 Add a new web app page with routing, navigation, and a starter layout.
 
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Quick start](#quick-start-add-a-simple-page)
+- [Verify](#verify)
+- [Troubleshooting](#troubleshooting)
+- [Examples](#examples)
+- [Next steps](#next-steps)
+
 ## Prerequisites
 
 - `pnpm install` completed

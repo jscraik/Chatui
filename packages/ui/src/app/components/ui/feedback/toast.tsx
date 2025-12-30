@@ -13,12 +13,13 @@ const toastVariants = cva(
         default:
           "border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-2 text-foundation-text-light-primary dark:text-foundation-text-dark-primary",
         success:
-          "border-foundation-accent-green/50 bg-foundation-accent-green/10 text-foundation-accent-green",
+          "border-foundation-accent-green/50 bg-foundation-accent-green/10 text-foundation-text-light-primary dark:text-foundation-text-dark-primary",
         error:
-          "border-foundation-accent-red/50 bg-foundation-accent-red/10 text-foundation-accent-red",
+          "border-foundation-accent-red/50 bg-foundation-accent-red/10 text-foundation-text-light-primary dark:text-foundation-text-dark-primary",
         warning:
-          "border-foundation-accent-orange/50 bg-foundation-accent-orange/10 text-foundation-accent-orange",
-        info: "border-foundation-accent-blue/50 bg-foundation-accent-blue/10 text-foundation-accent-blue",
+          "border-foundation-accent-orange/50 bg-foundation-accent-orange/10 text-foundation-text-light-primary dark:text-foundation-text-dark-primary",
+        info:
+          "border-foundation-accent-blue/50 bg-foundation-accent-blue/10 text-foundation-text-light-primary dark:text-foundation-text-dark-primary",
       },
     },
     defaultVariants: {

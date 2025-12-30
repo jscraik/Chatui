@@ -2,6 +2,23 @@
 
 The enhanced build pipeline provides unified build orchestration for both npm (React/web) and Swift Package Manager (macOS/iOS) platforms with version synchronization, incremental builds, and comprehensive validation.
 
+## Table of contents
+- [Prerequisites](#prerequisites)
+- [Quick start](#quick-start)
+- [Verify](#verify)
+- [Architecture](#architecture)
+- [Build pipeline stages](#build-pipeline-stages)
+- [Incremental builds](#incremental-builds)
+- [CI/CD integration](#cicd-integration)
+- [Configuration](#configuration)
+- [Troubleshooting](#troubleshooting)
+
+## Prerequisites
+
+- Node.js 18+
+- pnpm 9.15.0
+- macOS 13+ + Xcode 15+ for Swift builds (if running `pnpm build:macos` / `pnpm test:swift`)
+
 ## Overview
 
 The build pipeline is designed to:
@@ -237,6 +254,20 @@ let package = Package(
     "build": "tsc && vite build"
   }
 }
+```
+
+## Troubleshooting
+
+### Symptom: Swift builds fail but web builds succeed
+Cause: Xcode toolchain not selected or missing.
+Fix: Open Xcode → Settings → Locations and select Xcode 15+ for Command Line Tools.
+
+### Symptom: Token validation fails after edits
+Cause: Tokens were not regenerated.
+Fix:
+```bash
+pnpm generate:tokens
+pnpm validate:tokens
 ```
 
 ## Token Consistency

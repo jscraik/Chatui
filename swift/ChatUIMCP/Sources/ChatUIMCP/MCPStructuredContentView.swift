@@ -29,24 +29,29 @@ public struct MCPStructuredContentView: View {
                 VStack(spacing: 0) {
                     let keys = content.keys.sorted()
                     ForEach(keys, id: \.self) { key in
-                        let value = content[key]!
-
-                        if let dictValue = value.dictionaryValue {
-                            VStack(alignment: .leading, spacing: FSpacing.s8) {
-                                rowHeader(title: key, subtitle: "\(dictValue.count) fields")
-                                nestedSection(for: dictValue)
-                                    .padding(.leading, FSpacing.s12)
+                        if let value = content[key] {
+                            if let dictValue = value.dictionaryValue {
+                                VStack(alignment: .leading, spacing: FSpacing.s8) {
+                                    rowHeader(title: key, subtitle: "\(dictValue.count) fields")
+                                    nestedSection(for: dictValue)
+                                        .padding(.leading, FSpacing.s12)
+                                }
+                                .padding(.vertical, FSpacing.s8)
+                            } else if let arrayValue = value.arrayValue {
+                                VStack(alignment: .leading, spacing: FSpacing.s8) {
+                                    rowHeader(title: key, subtitle: "\(arrayValue.count) items")
+                                    arraySection(arrayValue)
+                                        .padding(.leading, FSpacing.s12)
+                                }
+                                .padding(.vertical, FSpacing.s8)
+                            } else {
+                                valueRow(title: key, value: value)
+                                if key != keys.last {
+                                    SettingsDivider()
+                                }
                             }
-                            .padding(.vertical, FSpacing.s8)
-                        } else if let arrayValue = value.arrayValue {
-                            VStack(alignment: .leading, spacing: FSpacing.s8) {
-                                rowHeader(title: key, subtitle: "\(arrayValue.count) items")
-                                arraySection(arrayValue)
-                                    .padding(.leading, FSpacing.s12)
-                            }
-                            .padding(.vertical, FSpacing.s8)
                         } else {
-                            valueRow(title: key, value: value)
+                            valueRow(title: key, value: AnyCodable("Unavailable"))
                             if key != keys.last {
                                 SettingsDivider()
                             }
@@ -63,10 +68,16 @@ public struct MCPStructuredContentView: View {
             VStack(spacing: 0) {
                 let keys = content.keys.sorted()
                 ForEach(keys, id: \.self) { key in
-                    let value = content[key]!
-                    valueRow(title: key, value: value)
-                    if key != keys.last {
-                        SettingsDivider()
+                    if let value = content[key] {
+                        valueRow(title: key, value: value)
+                        if key != keys.last {
+                            SettingsDivider()
+                        }
+                    } else {
+                        valueRow(title: key, value: AnyCodable("Unavailable"))
+                        if key != keys.last {
+                            SettingsDivider()
+                        }
                     }
                 }
             }

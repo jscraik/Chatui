@@ -251,7 +251,11 @@ export async function runAxeScan(
   type AxeViolation = { id: string; description: string; nodes: Array<unknown> };
   type AxeRunResult = { violations: AxeViolation[] };
   const builder = new AxeBuilder({ page });
-  if (selector) builder.include(selector);
+  if (selector) {
+    // Ensure target exists before scoping the scan to avoid Axe "No elements found" errors.
+    await page.waitForSelector(selector, { state: "attached" });
+    builder.include(selector);
+  }
   if (excludedRules.length) builder.disableRules(excludedRules);
 
   const results = (await builder.analyze()) as AxeRunResult;

@@ -22,14 +22,14 @@ public struct FoundationSwitchStyle: ToggleStyle {
                     .shadow(color: .black.opacity(0.18), radius: 1, x: 0, y: 1)
                     .frame(width: 18, height: 18)
                     .offset(x: configuration.isOn ? 10 : -10)
-                    .animation(.easeInOut(duration: 0.15), value: configuration.isOn)
+                    .animation(FAccessibility.prefersReducedMotion ? nil : .easeInOut(duration: 0.15), value: configuration.isOn)
             }
             .contentShape(Rectangle())
             .onTapGesture {
                 configuration.isOn.toggle()
             }
-            .accessibilityLabel(Text(configuration.isOn ? "On" : "Off"))
-            .accessibilityAddTraits(.isButton)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityValue(Text(configuration.isOn ? "On" : "Off"))
     }
 }

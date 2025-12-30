@@ -35,6 +35,16 @@ export const Default: Story = {
   },
 };
 
+export const LightTheme: Story = {
+  args: {
+    label: "Work with Terminal Tab",
+    variant: "green",
+  },
+  parameters: {
+    backgrounds: { default: "light" },
+  },
+};
+
 export const WithIcon: Story = {
   args: {
     icon: <IconFolder />,

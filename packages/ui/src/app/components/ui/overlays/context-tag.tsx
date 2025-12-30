@@ -19,22 +19,22 @@ export interface ContextTagProps {
 const variantStyles = {
   green: {
     bg: "bg-foundation-accent-green/20",
-    text: "text-foundation-accent-green",
+    text: "text-foundation-text-light-primary dark:text-foundation-text-dark-primary",
     hover: "hover:bg-foundation-accent-green/30",
   },
   blue: {
     bg: "bg-foundation-accent-blue/20",
-    text: "text-foundation-accent-blue",
+    text: "text-foundation-text-light-primary dark:text-foundation-text-dark-primary",
     hover: "hover:bg-foundation-accent-blue/30",
   },
   orange: {
     bg: "bg-foundation-accent-orange/20",
-    text: "text-foundation-accent-orange",
+    text: "text-foundation-text-light-primary dark:text-foundation-text-dark-primary",
     hover: "hover:bg-foundation-accent-orange/30",
   },
   red: {
     bg: "bg-foundation-accent-red/20",
-    text: "text-foundation-accent-red",
+    text: "text-foundation-text-light-primary dark:text-foundation-text-dark-primary",
     hover: "hover:bg-foundation-accent-red/30",
   },
   default: {

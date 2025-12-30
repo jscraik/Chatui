@@ -12,7 +12,7 @@ const meta: Meta<typeof ModelBadge> = {
   argTypes: {
     variant: {
       control: { type: "select" },
-      options: ["blue", "green", "orange", "purple", "red"],
+      options: ["blue", "green", "orange", "default"],
     },
   },
 };
@@ -47,20 +47,6 @@ export const Orange: Story = {
   },
 };
 
-export const Purple: Story = {
-  args: {
-    name: "Llama",
-    variant: "purple",
-  },
-};
-
-export const Red: Story = {
-  args: {
-    name: "Error",
-    variant: "red",
-  },
-};
-
 export const LongName: Story = {
   args: {
     name: "GPT-4-Turbo-Preview",
@@ -81,8 +67,7 @@ export const AllVariants: Story = {
       <ModelBadge name="GPT-4" variant="blue" />
       <ModelBadge name="Claude" variant="green" />
       <ModelBadge name="Gemini" variant="orange" />
-      <ModelBadge name="Llama" variant="purple" />
-      <ModelBadge name="Error" variant="red" />
+      <ModelBadge name="Default" variant="default" />
     </div>
   ),
 };

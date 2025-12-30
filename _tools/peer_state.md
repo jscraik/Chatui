@@ -2,6 +2,30 @@
 
 ## Current Focus
 
+- **IN PROGRESS: Template library scaffolding (React + SwiftUI + AppKit)**
+  - ✅ Added React ChatTemplate and template registry updates (`packages/ui/src/templates/ChatTemplate.tsx`)
+  - ✅ Added template blocks exports + ComposeView panel refactor (`packages/ui/src/templates/blocks`, `packages/ui/src/app/components/chat/ComposeView.tsx`)
+  - ✅ Added template header/footer blocks (React + SwiftUI) (`packages/ui/src/templates/blocks/TemplateHeaderBar.tsx`, `swift/ChatUIComponents/Sources/ChatUIComponents/Templates/TemplateBars.swift`)
+  - ✅ Added template form field blocks (React + SwiftUI) (`packages/ui/src/templates/blocks/TemplateFormField.tsx`, `swift/ChatUIComponents/Sources/ChatUIComponents/Templates/TemplateFormFieldView.swift`)
+  - ✅ Added template field group blocks (React + SwiftUI) (`packages/ui/src/templates/blocks/TemplateFieldGroup.tsx`, `swift/ChatUIComponents/Sources/ChatUIComponents/Templates/TemplateFieldGroupView.swift`)
+  - ✅ Added chat view blocks + templates for ChatHeader/ChatSidebar/ChatMessages/ChatInput (React) (`packages/ui/src/templates/blocks/ChatHeaderBlock.tsx`, `packages/ui/src/templates/ChatHeaderTemplate.tsx`, etc.)
+  - ✅ Added SwiftUI chat blocks + templates (ChatHeader/Sidebar/Messages/Input) (`swift/ChatUIComponents/Sources/ChatUIComponents/Templates/ChatBlocks.swift`, `swift/ChatUIComponents/Sources/ChatUIComponents/Templates/ChatBlockTemplates.swift`)
+  - ✅ Added Storybook template stories for chat blocks (`packages/ui/src/templates/ChatBlocksTemplate.stories.tsx`)
+  - ✅ Added widget previews for chat header/input (`packages/widgets/src/chat-header`, `packages/widgets/src/chat-input`)
+  - ✅ Added widget previews for chat sidebar/messages (`packages/widgets/src/chat-sidebar`, `packages/widgets/src/chat-messages`)
+  - ✅ Added SwiftUI Xcode previews for chat block templates (`swift/ChatUIComponents/Sources/ChatUIComponents/Templates/ChatBlockTemplates.swift`)
+  - ✅ Added settings panel blocks + templates (React) (`packages/ui/src/templates/*PanelTemplate.tsx`, `packages/ui/src/templates/blocks/Setting*Block.tsx`)
+  - ✅ Added Storybook settings panels gallery (`packages/ui/src/templates/SettingsPanelsTemplate.stories.tsx`)
+  - ✅ Documented template architecture (`docs/architecture/template-library.md`)
+  - ✅ Added web Templates viewer + route (`apps/web/src/pages/TemplatesPage.tsx`, `apps/web/src/Router.tsx`)
+  - ✅ Added macOS Templates section + viewer (`apps/macos/ChatUIApp/Sources/TemplatesView.swift`)
+  - ✅ Added SwiftUI ChatTemplateView + TemplateRegistry entry (`swift/ChatUIComponents/Sources/ChatUIComponents/Templates/ChatTemplateView.swift`)
+  - ✅ Added ChatTemplate widget entry (`packages/widgets/src/chat-template`, `apps/web/src/WidgetHarness.tsx`)
+- **COMPLETED: ComposeView parity (SwiftUI + AppKit + widget)**
+  - ✅ Added SwiftUI ComposeView shell in `swift/ChatUIComponents/Sources/ChatUIComponents/ComposeView.swift`
+  - ✅ Added AppKit wrapper controller in `swift/ChatUIComponents/Sources/ChatUIComponents/ComposeViewController.swift`
+  - ✅ Added widget entry at `packages/widgets/src/compose-view/` and wired into `apps/web/src/WidgetHarness.tsx`
+  - ✅ Saved feature design at `feature/composeview_parity_feature_design.md`
 - **COMPLETED: Work Outstanding Checklist Verification**
   - ✅ Fixed syntax error in `scripts/new-component.mjs` (unterminated template literal)
   - ✅ Verified all 477 unit tests passing in `packages/ui`
@@ -277,6 +301,14 @@
 | Enhanced MCP        | `apps/mcp/enhanced-server.js`             | Auto-discovery MCP server implementation |
 
 ## Session Notes
+
+[2025-12-29]: Implemented ComposeView parity across SwiftUI/AppKit and widgets; added widget harness entry and feature design doc.
+
+- 2025-12-29: Apps/web e2e a11y stabilization
+  - Guarded Axe scans to wait for target selector before running
+  - Stabilized ChatSidebar keyboard test by focusing first sidebar control before tabbing
+  - `pnpm test:e2e:web` passing (43/43)
+  - Removed empty `chatui-modals` chunk split; `pnpm -C apps/web build` clean
 
 - 2025-12-29: Storybook browser test investigation
   - Cleared Storybook cache (`apps/storybook/node_modules/.cache`) and all Vite caches

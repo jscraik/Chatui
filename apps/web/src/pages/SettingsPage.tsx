@@ -37,9 +37,9 @@ export function SettingsPage({
   const [autoSave, setAutoSave] = useState(true);
 
   return (
-    <div className="min-h-screen bg-[var(--foundation-bg-dark-1)]">
+    <div className="min-h-screen bg-foundation-bg-dark-1">
       {/* Header */}
-      <div className="border-b border-white/10 bg-[var(--foundation-bg-dark-2)]">
+      <div className="border-b border-foundation-bg-dark-3 bg-foundation-bg-dark-2">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-3">
             <IconButton
@@ -48,7 +48,7 @@ export function SettingsPage({
               title="Back to Chat"
               variant="ghost"
             />
-            <h1 className="text-xl font-semibold text-white">Settings</h1>
+            <h1 className="text-xl font-semibold text-foundation-text-dark-primary">Settings</h1>
           </div>
 
           <Button variant="outline" size="sm" onClick={onExportSettings}>
@@ -64,8 +64,10 @@ export function SettingsPage({
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-white font-medium">Dark Mode</div>
-                <div className="text-white/60 text-sm">Use dark theme across the application</div>
+                <div className="text-foundation-text-dark-primary font-medium">Dark Mode</div>
+                <div className="text-foundation-text-dark-tertiary text-sm">
+                  Use dark theme across the application
+                </div>
               </div>
               <Toggle checked={darkMode} onChange={setDarkMode} ariaLabel="Dark mode" />
             </div>
@@ -86,8 +88,12 @@ export function SettingsPage({
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-white font-medium">Push Notifications</div>
-                <div className="text-white/60 text-sm">Receive notifications for new messages</div>
+                <div className="text-foundation-text-dark-primary font-medium">
+                  Push Notifications
+                </div>
+                <div className="text-foundation-text-dark-tertiary text-sm">
+                  Receive notifications for new messages
+                </div>
               </div>
               <Toggle
                 checked={notifications}
@@ -119,8 +125,12 @@ export function SettingsPage({
 
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-white font-medium">Auto-save Conversations</div>
-                <div className="text-white/60 text-sm">Automatically save chat history</div>
+                <div className="text-foundation-text-dark-primary font-medium">
+                  Auto-save Conversations
+                </div>
+                <div className="text-foundation-text-dark-tertiary text-sm">
+                  Automatically save chat history
+                </div>
               </div>
               <Toggle
                 checked={autoSave}
@@ -132,7 +142,7 @@ export function SettingsPage({
         </CollapsibleSection>
 
         {/* Actions */}
-        <div className="flex gap-3 pt-6 border-t border-white/10">
+        <div className="flex gap-3 pt-6 border-t border-foundation-bg-dark-3">
           <Button variant="outline" onClick={onResetDefaults}>
             Reset to Defaults
           </Button>

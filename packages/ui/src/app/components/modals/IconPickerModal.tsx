@@ -55,18 +55,18 @@ const colors = [
   },
   {
     id: "green",
-    className: "text-foundation-accent-green",
-    bg: "bg-foundation-accent-green",
+    className: "text-foundation-accent-green-light dark:text-foundation-accent-green",
+    bg: "bg-foundation-accent-green-light dark:bg-foundation-accent-green",
   },
   {
     id: "orange",
-    className: "text-foundation-accent-orange",
-    bg: "bg-foundation-accent-orange",
+    className: "text-foundation-accent-orange-light dark:text-foundation-accent-orange",
+    bg: "bg-foundation-accent-orange-light dark:bg-foundation-accent-orange",
   },
   {
     id: "red",
-    className: "text-foundation-accent-red",
-    bg: "bg-foundation-accent-red",
+    className: "text-foundation-accent-red-light dark:text-foundation-accent-red",
+    bg: "bg-foundation-accent-red-light dark:bg-foundation-accent-red",
   },
 ];
 
@@ -207,7 +207,7 @@ function ModalFooter({ onClose, onSave }: { onClose: () => void; onSave: () => v
       <button
         type="button"
         onClick={onSave}
-        className="px-4 py-2 text-[14px] bg-foundation-accent-green-light text-white hover:bg-foundation-accent-green-light/90 dark:bg-foundation-accent-green dark:text-foundation-text-light-primary dark:hover:bg-foundation-accent-green/90 rounded-lg transition-colors font-medium leading-[20px] tracking-[-0.3px]"
+        className="px-4 py-2 text-[14px] bg-foundation-accent-green-light text-foundation-text-dark-primary hover:bg-foundation-accent-green-light/90 dark:bg-foundation-accent-green dark:text-foundation-text-light-primary dark:hover:bg-foundation-accent-green/90 rounded-lg transition-colors font-medium leading-[20px] tracking-[-0.3px]"
       >
         Done
       </button>

@@ -1,6 +1,7 @@
 import { Meta, Canvas, Story } from "@storybook/blocks";
 import {
   ChatUIRoot,
+  ChatVariantSplitSidebar,
   Button,
   IconButton,
   ModelSelector,
@@ -33,12 +34,16 @@ A common pattern for creating settings interfaces using form components:
       return (
         <ChatUIRoot>
           <div className="p-6 max-w-md space-y-6">
-            <h2 className="text-lg font-semibold text-white">Settings</h2>
+            <h2 className="text-lg font-semibold text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
+              Settings
+            </h2>
 
             <CollapsibleSection title="Appearance" defaultOpen>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-white/80">Dark Mode</span>
+                  <span className="text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+                    Dark Mode
+                  </span>
                   <Toggle checked={darkMode} onChange={setDarkMode} />
                 </div>
 
@@ -67,7 +72,9 @@ A common pattern for creating settings interfaces using form components:
 
             <CollapsibleSection title="Notifications">
               <div className="flex items-center justify-between">
-                <span className="text-white/80">Enable Notifications</span>
+                <span className="text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
+                  Enable Notifications
+                </span>
                 <Toggle checked={notifications} onChange={setNotifications} />
               </div>
             </CollapsibleSection>
@@ -107,7 +114,7 @@ Create action bars with consistent spacing and interaction patterns:
   <Story name="Action Bar">
     <ChatUIRoot>
       <div className="p-4">
-        <div className="flex items-center gap-2 p-3 bg-[var(--foundation-bg-dark-2)] rounded-lg">
+        <div className="flex items-center gap-2 p-3 bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 rounded-lg">
           <IconButton icon={<span>📋</span>} title="Copy" variant="ghost" />
           <IconButton icon={<span>👍</span>} title="Like" variant="ghost" />
           <IconButton icon={<span>👎</span>} title="Dislike" variant="ghost" />
@@ -142,8 +149,12 @@ Combine `ListItem` components with actions for navigation lists:
             }
           >
             <div>
-              <div className="text-white font-medium">Current Chat</div>
-              <div className="text-white/60 text-sm">Active conversation</div>
+              <div className="text-foundation-text-light-primary dark:text-foundation-text-dark-primary font-medium">
+                Current Chat
+              </div>
+              <div className="text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary text-sm">
+                Active conversation
+              </div>
             </div>
           </ListItem>
 
@@ -181,7 +192,9 @@ Use `ContextTag` for managing active contexts or filters:
       return (
         <ChatUIRoot>
           <div className="p-4 space-y-3">
-            <h3 className="text-white font-medium">Active Context</h3>
+            <h3 className="text-foundation-text-light-primary dark:text-foundation-text-dark-primary font-medium">
+              Active Context
+            </h3>
             <div className="flex flex-wrap gap-2">
               {tags.map((tag) => (
                 <ContextTag
@@ -192,11 +205,41 @@ Use `ContextTag` for managing active contexts or filters:
                 />
               ))}
             </div>
-            {tags.length === 0 && <p className="text-white/60 text-sm">No active context</p>}
+            {tags.length === 0 && (
+              <p className="text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary text-sm">
+                No active context
+              </p>
+            )}
           </div>
         </ChatUIRoot>
       );
     }}
+
+  </Story>
+</Canvas>
+
+## 💬 Chat Layout Variants
+
+Compose chat surfaces with slot-based variants:
+
+<Canvas>
+  <Story name="Chat Variant - Split Sidebar">
+    {() => (
+      <div className="min-h-[520px]">
+        <ChatVariantSplitSidebar
+          messages={[
+            {
+              id: "1",
+              role: "assistant",
+              content: "Slot-based layout keeps UI consistent across platforms.",
+              timestamp: new Date(),
+            },
+          ]}
+          projects={[{ id: "general", label: "General", icon: <span>💬</span> }]}
+          chatHistory={["Welcome thread"]}
+        />
+      </div>
+    )}
 
   </Story>
 </Canvas>
@@ -214,7 +257,7 @@ Always use CSS custom properties for consistent theming:
 </div>
 
 // ❌ Avoid - Hard-coded colors
-<div className="bg-gray-900 text-white">
+<div className="bg-slate-900 text-slate-100">
   Content
 </div>
 ```

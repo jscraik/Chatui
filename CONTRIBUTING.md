@@ -2,12 +2,23 @@
 
 Thanks for helping improve ChatUI. This repo is a library-first monorepo with Apps SDK UI as the design system.
 
+## Prerequisites
+
+- Node.js 18+
+- pnpm 9.15.0 (see `packageManager` in `package.json`)
+- macOS app work (optional): macOS 13+ + Xcode 15+
+
 ## Development setup
 
 ```bash
 pnpm install
 pnpm dev
 ```
+
+### Verify
+
+- Web app: <http://localhost:5173/>
+- Storybook: <http://localhost:6006/>
 
 ## Project structure
 
@@ -26,9 +37,10 @@ pnpm dev
 
 ## Tests
 
-- `pnpm -C packages/ui type-check`
-- `pnpm -C packages/ui build`
-- `pnpm -C packages/widgets build`
+- `pnpm test` (UI unit tests)
+- `pnpm test:swift` (all Swift packages + macOS app)
+- `pnpm test:mcp-contract` (MCP tool contract test)
+- `pnpm test:visual:web` (Playwright visual tests for web)
 
 ## Commit conventions (recommended)
 
@@ -43,5 +55,6 @@ Use Conventional Commits where possible:
 
 - [ ] Lint passes (`pnpm lint`)
 - [ ] Format check passes (`pnpm format:check`)
-- [ ] Build succeeds (`pnpm -C packages/ui build`, `pnpm -C packages/widgets build`)
-- [ ] Update docs if API surface changes
+- [ ] Build succeeds (`pnpm build`)
+- [ ] Tests run for the area you changed
+- [ ] Docs updated if the public API or workflows changed

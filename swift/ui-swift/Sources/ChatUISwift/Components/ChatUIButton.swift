@@ -198,6 +198,8 @@ public struct ChatUIButton<Content: View>: View {
 struct ChatUIButtonStyle: ButtonStyle {
     let variant: ChatUIButtonVariant
     let size: ChatUIButtonSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.isEnabled) private var isEnabled
     
     func makeBody(configuration: Configuration) -> some View {
         let animationDuration = DesignTokens.Accessibility.Animation.duration()
@@ -210,8 +212,9 @@ struct ChatUIButtonStyle: ButtonStyle {
                 RoundedRectangle(cornerRadius: cornerRadiusForSize(size))
                     .stroke(borderColorForVariant(variant, prefersHighContrast: prefersHighContrast), lineWidth: borderWidthForVariant(variant))
             )
-            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
-            .animation(.easeInOut(duration: animationDuration), value: configuration.isPressed)
+            .scaleEffect(reduceMotion ? 1.0 : (configuration.isPressed ? 0.98 : 1.0))
+            .opacity(isEnabled ? 1.0 : 0.55)
+            .animation(reduceMotion ? nil : .easeInOut(duration: animationDuration), value: configuration.isPressed)
     }
     
     private func backgroundForVariant(_ variant: ChatUIButtonVariant, isPressed: Bool, prefersHighContrast: Bool) -> Color {

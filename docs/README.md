@@ -1,8 +1,8 @@
-# Documentation
+# Documentation index for developers
 
-This directory contains project documentation organized by category and by workflow.
+This index helps you find the right doc fast. Start here, then jump into the category you need.
 
-## Directory Structure
+## Directory structure
 
 ```
 docs/
@@ -11,7 +11,13 @@ docs/
 └── guides/          # How-to guides and quick starts
 ```
 
-## Architecture
+## Start here
+
+- New to the repo? Read the root [README.md](../README.md) first.
+- Working on Swift? Start with [SWIFT_INTEGRATION.md](./SWIFT_INTEGRATION.md).
+- Releasing? Use [RELEASE_CHECKLIST.md](./guides/RELEASE_CHECKLIST.md).
+
+## Architecture docs
 
 Technical architecture and design decisions.
 
@@ -19,8 +25,10 @@ Technical architecture and design decisions.
 - **[APPS_SDK_GAP_ANALYSIS.md](./architecture/APPS_SDK_GAP_ANALYSIS.md)** - Apps SDK integration analysis
 - **[CROSS_PLATFORM.md](./architecture/CROSS_PLATFORM.md)** - Cross-platform architecture notes (legacy context included)
 - **[WIDGET_SYSTEM_ENHANCEMENTS.md](./architecture/WIDGET_SYSTEM_ENHANCEMENTS.md)** - Widget infrastructure enhancements
+- **[template-library.md](./architecture/template-library.md)** - Template library layout and parity rules
+- **[template-api.md](./architecture/template-api.md)** - Template and block API (internal)
 
-## Audits
+## Audit reports
 
 Design system compliance audits and color reference documentation.
 
@@ -40,7 +48,7 @@ Step-by-step guides for common tasks.
 - **[CLOUDFLARE_DEPLOYMENT.md](./guides/CLOUDFLARE_DEPLOYMENT.md)** - Deploy widgets to Cloudflare Workers
 - **[RELEASE_CHECKLIST.md](./guides/RELEASE_CHECKLIST.md)** - Release checklist
 
-## Root Documentation
+## Root documentation
 
 Key project documentation remains at the repository root:
 
@@ -51,7 +59,7 @@ Key project documentation remains at the repository root:
 - **[ATTRIBUTIONS.md](../ATTRIBUTIONS.md)** - Third-party attributions
 - **[AGENTS.md](../AGENTS.md)** - AI agent system instructions
 
-## Workflow Docs
+## Workflow docs
 
 - **[BUILD_PIPELINE.md](./BUILD_PIPELINE.md)** - Build pipeline architecture and usage
 - **[VERSION_SYNC.md](./VERSION_SYNC.md)** - Version synchronization across packages

@@ -82,11 +82,11 @@ const getProjectIcon = (iconId: string) =>
 // Color ID to CSS class mapping
 const getColorClass = (colorId: string): string => {
   const colorClassMap: Record<string, string> = {
-    gray: "text-foundation-icon-light-tertiary dark:text-foundation-text-dark-tertiary",
+    gray: "text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary",
     blue: "text-foundation-accent-blue",
-    green: "text-foundation-accent-green",
-    orange: "text-foundation-accent-orange",
-    red: "text-foundation-accent-red",
+    green: "text-foundation-accent-green-light dark:text-foundation-accent-green",
+    orange: "text-foundation-accent-orange-light dark:text-foundation-accent-orange",
+    red: "text-foundation-accent-red-light dark:text-foundation-accent-red",
   };
   return colorClassMap[colorId] || colorClassMap.gray;
 };
@@ -202,7 +202,7 @@ function ProjectSettingsModal({
               className={`w-full text-left p-4 rounded-xl mb-3 border-2 transition-all ${
                 memoryOption === "default"
                   ? "bg-foundation-accent-green/20 border-foundation-accent-green/40"
-                  : "bg-transparent border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 hover:border-foundation-bg-light-3/70 dark:hover:border-white/20"
+                  : "bg-transparent border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 hover:border-foundation-bg-light-3/70 dark:hover:border-foundation-bg-dark-3/70"
               }`}
             >
               <div className="flex items-start justify-between mb-2">
@@ -219,7 +219,7 @@ function ProjectSettingsModal({
               className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
                 memoryOption === "project-only"
                   ? "bg-foundation-accent-green/20 border-foundation-accent-green/40"
-                  : "bg-transparent border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 hover:border-foundation-bg-light-3/70 dark:hover:border-white/20"
+                  : "bg-transparent border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 hover:border-foundation-bg-light-3/70 dark:hover:border-foundation-bg-dark-3/70"
               }`}
             >
               <div className="flex items-start justify-between mb-2">
@@ -237,7 +237,7 @@ function ProjectSettingsModal({
         <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-foundation-bg-light-3 dark:border-foundation-bg-dark-3">
           <button type="button"
             onClick={onClose}
-            className="px-4 py-2 text-[14px] text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary hover:text-foundation-text-light-primary dark:hover:text-white hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-2 rounded-lg transition-colors font-normal leading-[20px] tracking-[-0.3px]"
+            className="px-4 py-2 text-[14px] text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary hover:text-foundation-text-light-primary dark:hover:text-foundation-text-dark-primary hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-2 rounded-lg transition-colors font-normal leading-[20px] tracking-[-0.3px]"
           >
             Cancel
           </button>
@@ -433,7 +433,7 @@ export function ChatSidebar({
           }`}
         >
           {!isCollapsed && (
-            <div className="size-8 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center flex-shrink-0">
+            <div className="size-8 rounded-full bg-foundation-accent-blue-light dark:bg-foundation-accent-blue flex items-center justify-center flex-shrink-0 text-foundation-text-dark-primary">
               <IconCloseBold className="size-4" />
             </div>
           )}
@@ -751,7 +751,7 @@ export function ChatSidebar({
                       <button type="button"
                         onClick={handleCreateProject}
                         disabled={!projectName.trim()}
-                        className="w-full bg-foundation-accent-green hover:bg-foundation-accent-green/80 disabled:bg-foundation-bg-light-3 dark:disabled:bg-foundation-bg-dark-3 disabled:text-foundation-text-light-tertiary dark:disabled:text-white/30 disabled:cursor-not-allowed text-white py-3 rounded-lg transition-all text-[14px] font-normal leading-[20px] tracking-[-0.3px]"
+                        className="w-full bg-foundation-accent-green-light dark:bg-foundation-accent-green hover:bg-foundation-accent-green-light/90 dark:hover:bg-foundation-accent-green/90 disabled:bg-foundation-bg-light-3 dark:disabled:bg-foundation-bg-dark-3 disabled:text-foundation-text-light-tertiary dark:disabled:text-foundation-text-dark-tertiary disabled:cursor-not-allowed text-foundation-text-dark-primary dark:text-foundation-text-light-primary py-3 rounded-lg transition-all text-[14px] font-normal leading-[20px] tracking-[-0.3px]"
                       >
                         Create project
                       </button>
@@ -852,7 +852,7 @@ export function ChatSidebar({
             }`}
             title={isCollapsed ? resolvedUser.name : ""}
           >
-            <div className="size-7 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center flex-shrink-0">
+            <div className="size-7 rounded-full bg-foundation-accent-blue-light dark:bg-foundation-accent-blue flex items-center justify-center flex-shrink-0 text-foundation-text-dark-primary">
               <IconCloseBold className="size-4" />
             </div>
             {!isCollapsed && (

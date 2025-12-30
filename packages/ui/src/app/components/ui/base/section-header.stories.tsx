@@ -32,7 +32,8 @@ export const WithCustomDescription: Story = {
     title: "Token Budgets",
     description:
       "Sets the target size for your final prompt. Use 60k for ChatGPT (lite Pro context), higher for CLI/API tools with larger context windows.",
-    descriptionClassName: "text-[13px] font-normal leading-[18px] text-white/60 mb-4",
+    descriptionClassName:
+      "text-[13px] font-normal leading-[18px] text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary mb-4",
   },
 };
 
@@ -64,6 +65,7 @@ export const ClarifyingQuestionsExample: Story = {
     title: "Clarifying Questions",
     description:
       "Allow the agent to ask you questions during discovery to better understand your intent.",
-    descriptionClassName: "text-[13px] font-normal leading-[18px] text-white/60 mb-4",
+    descriptionClassName:
+      "text-[13px] font-normal leading-[18px] text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary mb-4",
   },
 };

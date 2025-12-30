@@ -41,3 +41,19 @@ export const Default: Story = {
     </ChartContainer>
   ),
 };
+
+export const LightTheme: Story = {
+  parameters: {
+    backgrounds: { default: "light" },
+  },
+  render: () => (
+    <ChartContainer config={chartConfig} className="h-[220px] w-[360px]">
+      <RechartsPrimitive.BarChart data={chartData} margin={{ left: 8, right: 8 }}>
+        <RechartsPrimitive.CartesianGrid vertical={false} />
+        <RechartsPrimitive.XAxis dataKey="day" tickLine={false} axisLine={false} />
+        <ChartTooltip content={<ChartTooltipContent />} />
+        <RechartsPrimitive.Bar dataKey="visits" fill="var(--color-visits)" radius={[4, 4, 0, 0]} />
+      </RechartsPrimitive.BarChart>
+    </ChartContainer>
+  ),
+};

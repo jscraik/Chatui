@@ -48,9 +48,9 @@ export function AboutPage({ onNavigate, onOpenGithub }: AboutPageProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--foundation-bg-dark-1)]">
+    <div className="min-h-screen bg-foundation-bg-dark-1">
       {/* Header */}
-      <div className="border-b border-white/10 bg-[var(--foundation-bg-dark-2)]">
+      <div className="border-b border-foundation-bg-dark-3 bg-foundation-bg-dark-2">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-3">
             <IconButton
@@ -59,7 +59,9 @@ export function AboutPage({ onNavigate, onOpenGithub }: AboutPageProps) {
               title="Back to Chat"
               variant="ghost"
             />
-            <h1 className="text-xl font-semibold text-white">About ChatUI</h1>
+            <h1 className="text-xl font-semibold text-foundation-text-dark-primary">
+              About ChatUI
+            </h1>
           </div>
         </div>
       </div>
@@ -68,8 +70,8 @@ export function AboutPage({ onNavigate, onOpenGithub }: AboutPageProps) {
       <div className="text-center py-16 px-6">
         <div className="max-w-3xl mx-auto">
           <div className="text-6xl mb-6">💬</div>
-          <h1 className="text-4xl font-bold text-white mb-4">ChatUI</h1>
-          <p className="text-xl text-white/80 mb-6">
+          <h1 className="text-4xl font-bold text-foundation-text-dark-primary mb-4">ChatUI</h1>
+          <p className="text-xl text-foundation-text-dark-secondary mb-6">
             A modern, accessible, and extensible chat interface built for the future of AI
             conversations.
           </p>
@@ -89,13 +91,19 @@ export function AboutPage({ onNavigate, onOpenGithub }: AboutPageProps) {
 
       {/* Features */}
       <div className="max-w-6xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold text-white text-center mb-12">Features</h2>
+        <h2 className="text-3xl font-bold text-foundation-text-dark-primary text-center mb-12">
+          Features
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature) => (
             <Card key={feature.title} className="p-6 text-center">
               <div className="text-4xl mb-4">{feature.icon}</div>
-              <h3 className="text-lg font-semibold text-white mb-2">{feature.title}</h3>
-              <p className="text-white/60 text-sm">{feature.description}</p>
+              <h3 className="text-lg font-semibold text-foundation-text-dark-primary mb-2">
+                {feature.title}
+              </h3>
+              <p className="text-foundation-text-dark-tertiary text-sm">
+                {feature.description}
+              </p>
             </Card>
           ))}
         </div>
@@ -103,13 +111,17 @@ export function AboutPage({ onNavigate, onOpenGithub }: AboutPageProps) {
 
       {/* Team */}
       <div className="max-w-4xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold text-white text-center mb-12">Built With ❤️</h2>
+        <h2 className="text-3xl font-bold text-foundation-text-dark-primary text-center mb-12">
+          Built With ❤️
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {team.map((member) => (
             <Card key={member.name} className="p-6 text-center">
               <div className="text-4xl mb-4">{member.avatar}</div>
-              <h3 className="text-lg font-semibold text-white mb-1">{member.name}</h3>
-              <p className="text-white/60 text-sm">{member.role}</p>
+              <h3 className="text-lg font-semibold text-foundation-text-dark-primary mb-1">
+                {member.name}
+              </h3>
+              <p className="text-foundation-text-dark-tertiary text-sm">{member.role}</p>
             </Card>
           ))}
         </div>
@@ -117,7 +129,9 @@ export function AboutPage({ onNavigate, onOpenGithub }: AboutPageProps) {
 
       {/* Tech Stack */}
       <div className="max-w-4xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold text-white text-center mb-8">Built With Modern Tech</h2>
+        <h2 className="text-3xl font-bold text-foundation-text-dark-primary text-center mb-8">
+          Built With Modern Tech
+        </h2>
         <div className="flex flex-wrap justify-center gap-3">
           {[
             "React",
@@ -137,8 +151,10 @@ export function AboutPage({ onNavigate, onOpenGithub }: AboutPageProps) {
       </div>
 
       {/* Footer */}
-      <div className="border-t border-white/10 bg-[var(--foundation-bg-dark-2)] p-6 text-center">
-        <p className="text-white/60 text-sm">Made with 💜 for the AI community</p>
+      <div className="border-t border-foundation-bg-dark-3 bg-foundation-bg-dark-2 p-6 text-center">
+        <p className="text-foundation-text-dark-tertiary text-sm">
+          Made with 💜 for the AI community
+        </p>
       </div>
     </div>
   );

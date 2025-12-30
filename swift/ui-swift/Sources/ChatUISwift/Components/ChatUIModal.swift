@@ -18,6 +18,8 @@ public struct ChatUIModal<Content: View>: View {
     
     @FocusState private var isContentFocused: Bool
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     
     public init(
         isPresented: Binding<Bool>,
@@ -37,7 +39,7 @@ public struct ChatUIModal<Content: View>: View {
         ZStack {
             if isPresented {
                 // Backdrop
-                Color.black.opacity(0.4)
+                backdropColor.opacity(backdropOpacity)
                     .ignoresSafeArea()
                     .onTapGesture {
                         dismissModal()
@@ -74,21 +76,30 @@ public struct ChatUIModal<Content: View>: View {
                     RoundedRectangle(cornerRadius: DesignTokens.CornerRadius.large)
                         .stroke(borderColor, lineWidth: 1)
                 )
-                .transition(.asymmetric(
-                    insertion: .scale(scale: 0.9).combined(with: .opacity),
-                    removal: .scale(scale: 0.95).combined(with: .opacity)
-                ))
+                .transition(
+                    reduceMotion
+                        ? .opacity
+                        : .asymmetric(
+                            insertion: .scale(scale: 0.9).combined(with: .opacity),
+                            removal: .scale(scale: 0.95).combined(with: .opacity)
+                        )
+                )
                 .onAppear {
                     // Focus content when modal appears
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         isContentFocused = true
                     }
                 }
+                #if os(macOS)
+                .onExitCommand {
+                    dismissModal()
+                }
+                #endif
                 .accessibilityElement(children: .contain)
                 .accessibilityAddTraits(.isModal)
             }
         }
-        .animation(.easeInOut(duration: animationDuration), value: isPresented)
+        .animation(reduceMotion ? nil : .easeInOut(duration: animationDuration), value: isPresented)
     }
     
     // MARK: - Header
@@ -162,6 +173,15 @@ public struct ChatUIModal<Content: View>: View {
         return prefersHighContrast 
             ? DesignTokens.Accessibility.HighContrast.borderContrast
             : DesignTokens.Colors.Background.tertiary
+    }
+
+    private var backdropColor: Color {
+        let prefersHighContrast = DesignTokens.Accessibility.AccessibilityPreferences.prefersHighContrast
+        return prefersHighContrast ? DesignTokens.Accessibility.HighContrast.backgroundContrast : Color.black
+    }
+
+    private var backdropOpacity: Double {
+        reduceTransparency ? 0.8 : 0.4
     }
     
     private var animationDuration: Double {

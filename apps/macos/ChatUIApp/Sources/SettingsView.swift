@@ -1,16 +1,22 @@
 import SwiftUI
+import AppKit
 import ChatUIFoundation
 import ChatUIComponents
+import ChatUISystemIntegration
 
 struct SettingsView: View {
     @EnvironmentObject private var appState: AppState
     
-    @State private var notificationsEnabled = true
-    @State private var darkModeEnabled = false
-    @State private var selectedAccent = "Blue"
-    @State private var selectedLanguage = "English"
+    @AppStorage("settings.notificationsEnabled") private var notificationsEnabled = true
+    @AppStorage("settings.darkModeEnabled") private var darkModeEnabled = false
+    @AppStorage("settings.selectedAccent") private var selectedAccent = "Blue"
+    @AppStorage("settings.selectedLanguage") private var selectedLanguage = "English"
     @State private var showingMCPConfig = false
     @State private var mcpURLDraft = ""
+    @State private var showingClearDataAlert = false
+    @State private var showingSettingsError = false
+    @State private var settingsErrorMessage: String?
+    private let notificationManager = NotificationManager()
     
     let accentOptions = ["Blue", "Green", "Orange", "Red", "Purple"]
     let languageOptions = ["English", "Spanish", "French", "German", "Japanese"]
@@ -26,162 +32,103 @@ struct SettingsView: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: FSpacing.s24) {
-                // Header
-                SettingsHeaderView()
-                
-                // General Settings
-                VStack(alignment: .leading, spacing: FSpacing.s12) {
-                    Text("General")
-                        .font(FType.sectionTitle())
-                        .foregroundStyle(FColor.textPrimary)
-                        .padding(.horizontal, FSpacing.s4)
-                    
-                    SettingsCardView {
-                        VStack(spacing: 0) {
-                        SettingRowView(
-                            icon: AnyView(
-                                Image(systemName: "network")
-                                    .foregroundStyle(FColor.iconSecondary)
-                            ),
-                            title: "MCP Server URL",
-                            subtitle: appState.mcpBaseURLString,
-                            trailing: .chevron
-                        ) {
-                            mcpURLDraft = appState.mcpBaseURLString
-                            showingMCPConfig = true
-                        }
-                            
-                            SettingsDivider()
-                            
-                            SettingToggleView(
-                                icon: AnyView(
-                                    Image(systemName: "bell.fill")
-                                        .foregroundStyle(FColor.iconSecondary)
-                                ),
-                                title: "Notifications",
-                                subtitle: "Receive alerts for new messages",
-                                isOn: $notificationsEnabled
-                            )
-                            
-                            SettingsDivider()
-                            
-                        SettingRowView(
-                            icon: AnyView(
-                                Image(systemName: "info.circle")
-                                    .foregroundStyle(FColor.iconSecondary)
-                            ),
-                            title: "About",
-                            subtitle: "Version \(AppInfo.versionString)",
-                            trailing: .chevron
-                        ) {
-                            // Show about dialog
-                        }
-                        }
+        Form {
+            Section("General") {
+                Button {
+                    mcpURLDraft = appState.mcpBaseURLString
+                    showingMCPConfig = true
+                } label: {
+                    LabeledContent("MCP Server URL") {
+                        Text(appState.mcpBaseURLString)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
                     }
                 }
-                
-                // Appearance Settings
-                VStack(alignment: .leading, spacing: FSpacing.s12) {
-                    Text("Appearance")
-                        .font(FType.sectionTitle())
-                        .foregroundStyle(FColor.textPrimary)
-                        .padding(.horizontal, FSpacing.s4)
-                    
-                    SettingsCardView {
-                        VStack(spacing: 0) {
-                        SettingToggleView(
-                            icon: AnyView(
-                                Image(systemName: "moon.fill")
-                                    .foregroundStyle(FColor.iconSecondary)
-                            ),
-                            title: "Dark Mode",
-                            subtitle: "Use dark color scheme",
-                            isOn: $darkModeEnabled
-                        )
-                        
-                        SettingsDivider()
+                .accessibilityHint("Configure the MCP server URL")
 
-                        SettingDropdownView(
-                            icon: AnyView(
-                                Image(systemName: "paintbrush.pointed")
-                                    .foregroundStyle(FColor.iconSecondary)
-                            ),
-                            title: "Theme Style",
-                            subtitle: "Switch between ChatGPT and native",
-                            options: themeOptions,
-                            selection: themeSelection
-                        )
+                Toggle("Notifications", isOn: $notificationsEnabled)
+                    .accessibilityHint("Receive alerts for new messages")
 
-                        SettingsDivider()
-                        
-                        SettingDropdownView(
-                            icon: AnyView(
-                                Image(systemName: "paintpalette.fill")
-                                    .foregroundStyle(FColor.iconSecondary)
-                                ),
-                                title: "Accent Color",
-                                subtitle: "Choose your preferred accent",
-                                options: accentOptions,
-                                selection: $selectedAccent
-                            )
-                        }
-                    }
-                }
-                
-                // Advanced Settings
-                VStack(alignment: .leading, spacing: FSpacing.s12) {
-                    Text("Advanced")
-                        .font(FType.sectionTitle())
-                        .foregroundStyle(FColor.textPrimary)
-                        .padding(.horizontal, FSpacing.s4)
-                    
-                    SettingsCardView {
-                        VStack(spacing: 0) {
-                            SettingDropdownView(
-                                icon: AnyView(
-                                    Image(systemName: "globe")
-                                        .foregroundStyle(FColor.iconSecondary)
-                                ),
-                                title: "Language",
-                                subtitle: "Interface language",
-                                options: languageOptions,
-                                selection: $selectedLanguage
-                            )
-                            
-                            SettingsDivider()
-                            
-                            SettingRowView(
-                                icon: AnyView(
-                                    Image(systemName: "folder.fill")
-                                        .foregroundStyle(FColor.iconSecondary)
-                                ),
-                                title: "Data Location",
-                                subtitle: "~/Library/Application Support/ChatUI",
-                                trailing: .chevron
-                            ) {
-                                // Open data folder
-                            }
-                            
-                            SettingsDivider()
-                            
-                            SettingRowView(
-                                icon: AnyView(
-                                    Image(systemName: "trash.fill")
-                                        .foregroundStyle(FColor.accentRed)
-                                ),
-                                title: "Clear All Data",
-                                subtitle: "Remove all stored messages and settings",
-                                trailing: .none
-                            ) {
-                                // Show confirmation dialog
-                            }
-                        }
+                Button(action: openAboutPanel) {
+                    LabeledContent("About") {
+                        Text("Version \(AppInfo.versionString)")
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
-            .padding(FSpacing.s16)
+
+            Section("Appearance") {
+                Picker("Theme Style", selection: themeSelection) {
+                    ForEach(themeOptions, id: \.self) { option in
+                        Text(option).tag(option)
+                    }
+                }
+                .accessibilityHint("Switch between ChatGPT and native")
+            }
+
+            Section("Component Demo") {
+                Toggle("Dark Mode", isOn: $darkModeEnabled)
+                    .accessibilityHint("Preview component demo")
+
+                Picker("Accent Color", selection: $selectedAccent) {
+                    ForEach(accentOptions, id: \.self) { option in
+                        Text(option).tag(option)
+                    }
+                }
+                .accessibilityHint("Preview component demo")
+
+                Picker("Language", selection: $selectedLanguage) {
+                    ForEach(languageOptions, id: \.self) { option in
+                        Text(option).tag(option)
+                    }
+                }
+                .accessibilityHint("Preview component demo")
+            } footer: {
+                Text("Preview / Component demo")
+            }
+
+            Section("Advanced") {
+                Button(action: openDataLocation) {
+                    LabeledContent("Data Location") {
+                        Text(dataLocationDisplay)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
+                    }
+                }
+                .accessibilityHint("Open the data folder in Finder")
+
+                Button(role: .destructive) {
+                    showingClearDataAlert = true
+                } label: {
+                    Text("Clear All Data")
+                }
+                .accessibilityHint("Remove all stored messages and settings")
+            }
+        }
+        .navigationTitle("Settings")
+        .navigationSubtitle("Configure your ChatUI experience")
+        .onChange(of: notificationsEnabled) { newValue in
+            guard newValue else { return }
+            Task {
+                do {
+                    let granted = try await notificationManager.requestPermission()
+                    if !granted {
+                        await MainActor.run {
+                            notificationsEnabled = false
+                            settingsErrorMessage = "Notifications are disabled in System Settings."
+                            showingSettingsError = true
+                        }
+                    }
+                } catch {
+                    await MainActor.run {
+                        notificationsEnabled = false
+                        settingsErrorMessage = error.localizedDescription
+                        showingSettingsError = true
+                    }
+                }
+            }
         }
         .sheet(isPresented: $showingMCPConfig) {
             MCPServerSheet(
@@ -193,21 +140,61 @@ struct SettingsView: View {
                 }
             )
         }
+        .alert("Clear All Data?", isPresented: $showingClearDataAlert) {
+            Button("Clear All Data", role: .destructive) {
+                clearAllData()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("This action cannot be undone.")
+        }
+        .alert("Unable to Complete Action", isPresented: $showingSettingsError) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(settingsErrorMessage ?? "Unknown error.")
+        }
     }
 }
 
-struct SettingsHeaderView: View {
-    var body: some View {
-        VStack(alignment: .leading, spacing: FSpacing.s8) {
-            Text("Settings")
-                .font(FType.title())
-                .foregroundStyle(FColor.textPrimary)
-            
-            Text("Configure your ChatUI experience")
-                .font(FType.caption())
-                .foregroundStyle(FColor.textSecondary)
+private extension SettingsView {
+    var dataLocationURL: URL? {
+        FileManager.default
+            .urls(for: .applicationSupportDirectory, in: .userDomainMask)
+            .first?
+            .appendingPathComponent("ChatUI", isDirectory: true)
+    }
+
+    var dataLocationDisplay: String {
+        dataLocationURL?.path ?? "~/Library/Application Support/ChatUI"
+    }
+
+    func openAboutPanel() {
+        NSApp.orderFrontStandardAboutPanel(nil)
+    }
+
+    func openDataLocation() {
+        guard let url = dataLocationURL else { return }
+        do {
+            if !FileManager.default.fileExists(atPath: url.path) {
+                try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+            }
+            NSWorkspace.shared.open(url)
+        } catch {
+            settingsErrorMessage = error.localizedDescription
+            showingSettingsError = true
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    func clearAllData() {
+        guard let url = dataLocationURL else { return }
+        do {
+            if FileManager.default.fileExists(atPath: url.path) {
+                try FileManager.default.removeItem(at: url)
+            }
+        } catch {
+            settingsErrorMessage = error.localizedDescription
+            showingSettingsError = true
+        }
     }
 }
 

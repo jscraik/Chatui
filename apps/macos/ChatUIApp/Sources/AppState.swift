@@ -1,8 +1,9 @@
 import Foundation
 import SwiftUI
 
-enum AppSection: String, CaseIterable, Identifiable {
+enum AppSection: String, CaseIterable, Identifiable, Sendable {
     case chat
+    case templates
     case tools
     case settings
 
@@ -12,6 +13,8 @@ enum AppSection: String, CaseIterable, Identifiable {
         switch self {
         case .chat:
             return "Chat"
+        case .templates:
+            return "Templates"
         case .tools:
             return "Tools"
         case .settings:
@@ -23,6 +26,8 @@ enum AppSection: String, CaseIterable, Identifiable {
         switch self {
         case .chat:
             return "bubble.left.and.bubble.right"
+        case .templates:
+            return "square.grid.2x2"
         case .tools:
             return "hammer"
         case .settings:
@@ -31,7 +36,7 @@ enum AppSection: String, CaseIterable, Identifiable {
     }
 }
 
-enum ThemeStyle: String, CaseIterable, Identifiable {
+enum ThemeStyle: String, CaseIterable, Identifiable, Sendable {
     case chatgpt
     case `default`
 
@@ -47,12 +52,13 @@ enum ThemeStyle: String, CaseIterable, Identifiable {
     }
 }
 
-struct AppStateSnapshot: Codable {
+struct AppStateSnapshot: Codable, Sendable {
     let selectedSectionRawValue: String
     let mcpBaseURLString: String
     let themeStyleRawValue: String
 }
 
+@MainActor
 final class AppState: ObservableObject {
     @Published var selectedSection: AppSection = .chat
     @Published var mcpBaseURLString: String = "http://localhost:8787"

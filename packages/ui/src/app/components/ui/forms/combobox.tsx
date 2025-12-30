@@ -220,10 +220,10 @@ function Combobox({
                   aria-selected={value === option.value}
                   aria-disabled={option.disabled}
                   onClick={() => !option.disabled && handleSelect(option.value)}
-                  className={cn(
-                    "relative flex cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none transition-colors",
+                    className={cn(
+                      "relative flex cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none transition-colors",
                     value === option.value &&
-                      "bg-foundation-accent-blue/10 text-foundation-accent-blue",
+                      "bg-foundation-accent-blue/10 text-foundation-text-light-primary dark:text-foundation-text-dark-primary",
                     highlightedIndex === index &&
                       value !== option.value &&
                       "bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-3",

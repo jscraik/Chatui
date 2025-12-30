@@ -21,6 +21,7 @@ public struct ChatUITable<Data: RandomAccessCollection, RowContent: View>: View 
     private let columns: [Column]
     private let rowContent: (Data.Element) -> RowContent
     private let onRowTap: ((Data.Element) -> Void)?
+    private let sortComparator: ((Data.Element, Data.Element, Int, Bool) -> Bool)?
     
     @State private var sortColumn: Int?
     @State private var sortAscending = true
@@ -29,11 +30,13 @@ public struct ChatUITable<Data: RandomAccessCollection, RowContent: View>: View 
     public init(
         data: Data,
         columns: [Column],
+        sortComparator: ((Data.Element, Data.Element, Int, Bool) -> Bool)? = nil,
         onRowTap: ((Data.Element) -> Void)? = nil,
         @ViewBuilder rowContent: @escaping (Data.Element) -> RowContent
     ) {
         self.data = data
         self.columns = columns
+        self.sortComparator = sortComparator
         self.onRowTap = onRowTap
         self.rowContent = rowContent
     }
@@ -46,7 +49,7 @@ public struct ChatUITable<Data: RandomAccessCollection, RowContent: View>: View 
             // Rows
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    ForEach(Array(data.enumerated()), id: \.element.id) { index, item in
+                    ForEach(Array(sortedItems.enumerated()), id: \.element.id) { index, item in
                         tableRow(for: item, at: index)
                     }
                 }
@@ -65,27 +68,7 @@ public struct ChatUITable<Data: RandomAccessCollection, RowContent: View>: View 
     private var tableHeader: some View {
         HStack(spacing: 0) {
             ForEach(Array(columns.enumerated()), id: \.offset) { index, column in
-                Button {
-                    toggleSort(for: index)
-                } label: {
-                    HStack(spacing: DesignTokens.Spacing.xs) {
-                        Text(column.title)
-                            .font(.system(size: scaledFontSize(14), weight: .semibold))
-                            .foregroundColor(DesignTokens.Colors.Text.primary)
-                        
-                        if sortColumn == index {
-                            Image(systemName: sortAscending ? "chevron.up" : "chevron.down")
-                                .font(.system(size: 10))
-                                .foregroundColor(DesignTokens.Colors.Text.secondary)
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: alignmentForColumn(column))
-                }
-                .buttonStyle(.plain)
-                .padding(.horizontal, DesignTokens.Spacing.sm)
-                .padding(.vertical, DesignTokens.Spacing.xs)
-                .accessibilityLabel("\(column.title) column header")
-                .accessibilityHint("Tap to sort by \(column.title)")
+                tableHeaderColumn(column, index: index)
                 
                 if index < columns.count - 1 {
                     Rectangle()
@@ -107,15 +90,22 @@ public struct ChatUITable<Data: RandomAccessCollection, RowContent: View>: View 
     
     @ViewBuilder
     private func tableRow(for item: Data.Element, at index: Int) -> some View {
-        Button {
-            onRowTap?(item)
-        } label: {
-            rowContent(item)
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, DesignTokens.Spacing.sm)
-                .padding(.vertical, DesignTokens.Spacing.xs)
+        let content = rowContent(item)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, DesignTokens.Spacing.sm)
+            .padding(.vertical, DesignTokens.Spacing.xs)
+        Group {
+            if let onRowTap {
+                Button {
+                    onRowTap(item)
+                } label: {
+                    content
+                }
+                .buttonStyle(.plain)
+            } else {
+                content
+            }
         }
-        .buttonStyle(.plain)
         .background(
             index % 2 == 0 
                 ? DesignTokens.Colors.Background.primary
@@ -133,7 +123,44 @@ public struct ChatUITable<Data: RandomAccessCollection, RowContent: View>: View 
     
     // MARK: - Helpers
     
+    @ViewBuilder
+    private func tableHeaderColumn(_ column: Column, index: Int) -> some View {
+        let headerContent = HStack(spacing: DesignTokens.Spacing.xs) {
+            Text(column.title)
+                .font(.system(size: scaledFontSize(14), weight: .semibold))
+                .foregroundColor(DesignTokens.Colors.Text.primary)
+            
+                        if sortColumn == index {
+                            Image(systemName: sortAscending ? "chevron.up" : "chevron.down")
+                                .font(.system(size: 10))
+                                .foregroundColor(DesignTokens.Colors.Text.secondary)
+                                .accessibilityHidden(true)
+                        }
+        }
+        .frame(maxWidth: .infinity, alignment: alignmentForColumn(column))
+        
+        if sortComparator != nil {
+            Button {
+                toggleSort(for: index)
+            } label: {
+                headerContent
+            }
+            .buttonStyle(.plain)
+            .padding(.horizontal, DesignTokens.Spacing.sm)
+            .padding(.vertical, DesignTokens.Spacing.xs)
+            .accessibilityLabel("\(column.title) column header")
+            .accessibilityHint("Tap to sort by \(column.title)")
+        } else {
+            headerContent
+                .padding(.horizontal, DesignTokens.Spacing.sm)
+                .padding(.vertical, DesignTokens.Spacing.xs)
+                .accessibilityLabel("\(column.title) column header")
+                .accessibilityAddTraits(.isHeader)
+        }
+    }
+    
     private func toggleSort(for columnIndex: Int) {
+        guard sortComparator != nil else { return }
         if sortColumn == columnIndex {
             sortAscending.toggle()
         } else {
@@ -164,6 +191,14 @@ public struct ChatUITable<Data: RandomAccessCollection, RowContent: View>: View 
     
     private func scaledFontSize(_ baseSize: CGFloat) -> CGFloat {
         ChatUIInput.scaledFontSize(baseSize, dynamicTypeSize: dynamicTypeSize)
+    }
+    
+    private var sortedItems: [Data.Element] {
+        let items = Array(data)
+        guard let sortColumn, let comparator = sortComparator else {
+            return items
+        }
+        return items.sorted { comparator($0, $1, sortColumn, sortAscending) }
     }
 }
 
@@ -214,14 +249,21 @@ public struct ChatUIList<Data: RandomAccessCollection, Content: View>: View wher
     
     @ViewBuilder
     private func listItem(for item: Data.Element) -> some View {
-        Button {
-            onItemTap?(item)
-        } label: {
-            content(item)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(itemPaddingForStyle(style))
+        let row = content(item)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(itemPaddingForStyle(style))
+        Group {
+            if let onItemTap {
+                Button {
+                    onItemTap(item)
+                } label: {
+                    row
+                }
+                .buttonStyle(.plain)
+            } else {
+                row
+            }
         }
-        .buttonStyle(.plain)
         .background(itemBackgroundForStyle(style))
         .cornerRadius(itemCornerRadiusForStyle(style))
         .accessibilityElement(children: .combine)
@@ -387,12 +429,18 @@ public struct ChatUIGrid<Data: RandomAccessCollection, Content: View>: View wher
     
     @ViewBuilder
     private func gridItem(for item: Data.Element) -> some View {
-        Button {
-            onItemTap?(item)
-        } label: {
-            content(item)
+        Group {
+            if let onItemTap {
+                Button {
+                    onItemTap(item)
+                } label: {
+                    content(item)
+                }
+                .buttonStyle(.plain)
+            } else {
+                content(item)
+            }
         }
-        .buttonStyle(.plain)
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(onItemTap != nil ? .isButton : [])
     }

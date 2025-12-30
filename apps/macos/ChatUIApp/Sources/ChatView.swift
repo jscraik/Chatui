@@ -11,17 +11,16 @@ struct ChatView: View {
     @State private var inputText = ""
     @State private var isProcessing = false
     @State private var errorMessage: String?
+
+    private var canSendMessage: Bool {
+        !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !isProcessing
+    }
     
     var body: some View {
         VStack(spacing: 0) {
-            // Header
-            ChatHeaderView()
-            
-            SettingsDivider()
-            
             // Messages
             ScrollView {
-                VStack(spacing: FSpacing.s16) {
+                LazyVStack(spacing: FSpacing.s16) {
                     if messages.isEmpty {
                         EmptyStateView()
                     } else {
@@ -50,15 +49,32 @@ struct ChatView: View {
                 onSend: sendMessage
             )
         }
+        .navigationTitle("Chat")
+        .navigationSubtitle("Powered by MCP Tools")
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button(action: {}) {
+                    Image(systemName: "ellipsis.circle")
+                        .foregroundStyle(FColor.iconSecondary)
+                }
+                .accessibilityLabel("More options")
+                .accessibilityHint("Chat actions and settings")
+            }
+        }
     }
     
     private func sendMessage() {
-        guard !inputText.isEmpty, let client = mcpClient else { return }
+        let trimmedMessage = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedMessage.isEmpty else { return }
+        guard let client = mcpClient else {
+            errorMessage = "MCP client unavailable"
+            return
+        }
         
-        let userMessage = ChatMessage(role: .user, content: inputText)
+        let userMessage = ChatMessage(role: .user, content: trimmedMessage)
         messages.append(userMessage)
         
-        let messageText = inputText
+        let messageText = trimmedMessage
         inputText = ""
         isProcessing = true
         errorMessage = nil
@@ -128,38 +144,13 @@ struct ChatMessage: Identifiable {
 
 // MARK: - Subviews
 
-struct ChatHeaderView: View {
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: FSpacing.s4) {
-                Text("Chat")
-                    .font(FType.title())
-                    .foregroundStyle(FColor.textPrimary)
-                
-                Text("Powered by MCP Tools")
-                    .font(FType.caption())
-                    .foregroundStyle(FColor.textSecondary)
-            }
-            
-            Spacer()
-            
-            Button(action: {}) {
-                Image(systemName: "ellipsis.circle")
-                    .font(.system(size: 18))
-                    .foregroundStyle(FColor.iconSecondary)
-            }
-            .buttonStyle(.plain)
-        }
-        .padding(FSpacing.s16)
-    }
-}
-
 struct EmptyStateView: View {
     var body: some View {
         VStack(spacing: FSpacing.s16) {
             Image(systemName: "bubble.left.and.bubble.right")
                 .font(.system(size: 48))
                 .foregroundStyle(FColor.iconTertiary)
+                .accessibilityHidden(true)
             
             Text("Start a conversation")
                 .font(FType.title())
@@ -186,17 +177,22 @@ struct MessageRow: View {
                     Image(systemName: message.role == .user ? "person.fill" : "sparkles")
                         .font(.system(size: 14))
                         .foregroundStyle(.white)
+                        .accessibilityHidden(true)
                 )
             
             // Content
             VStack(alignment: .leading, spacing: FSpacing.s8) {
-                Text(message.role == .user ? "You" : "Assistant")
-                    .font(FType.sectionTitle())
-                    .foregroundStyle(FColor.textPrimary)
-                
-                Text(message.content)
-                    .font(FType.rowTitle())
-                    .foregroundStyle(FColor.textSecondary)
+                VStack(alignment: .leading, spacing: FSpacing.s8) {
+                    Text(message.role == .user ? "You" : "Assistant")
+                        .font(FType.sectionTitle())
+                        .foregroundStyle(FColor.textPrimary)
+                    
+                    Text(message.content)
+                        .font(FType.rowTitle())
+                        .foregroundStyle(FColor.textSecondary)
+                        .textSelection(.enabled)
+                }
+                .accessibilityElement(children: .combine)
                 
                 // Widget if present
                 if let widgetData = message.widgetData {
@@ -221,6 +217,8 @@ struct ProcessingIndicator: View {
                 .foregroundStyle(FColor.textTertiary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Processing")
     }
 }
 
@@ -232,6 +230,7 @@ struct ErrorMessageView: View {
         HStack(spacing: FSpacing.s12) {
             Image(systemName: "exclamationmark.triangle.fill")
                 .foregroundStyle(FColor.accentRed)
+                .accessibilityHidden(true)
             
             Text(message)
                 .font(FType.caption())
@@ -240,6 +239,8 @@ struct ErrorMessageView: View {
         .padding(FSpacing.s12)
         .background(FColor.accentRed.opacity(0.1))
         .clipShape(RoundedRectangle(cornerRadius: theme.cardCornerRadius))
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Error: \(message)")
     }
 }
 
@@ -247,6 +248,10 @@ struct ChatInputView: View {
     @Binding var text: String
     let isProcessing: Bool
     let onSend: () -> Void
+
+    private var canSendMessage: Bool {
+        !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !isProcessing
+    }
     
     var body: some View {
         HStack(spacing: FSpacing.s12) {
@@ -264,7 +269,7 @@ struct ChatInputView: View {
                 systemName: "arrow.up",
                 variant: .default,
                 size: .icon,
-                isDisabled: text.isEmpty || isProcessing,
+                isDisabled: !canSendMessage,
                 accessibilityLabel: "Send"
             ) {
                 onSend()
