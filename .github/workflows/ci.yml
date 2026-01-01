@@ -79,7 +79,7 @@ jobs:
         run: node scripts/build-pipeline.mjs --platforms ${{ matrix.platform }}
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: build-artifacts-${{ matrix.platform }}
           path: |
@@ -187,7 +187,7 @@ jobs:
 
       - name: Upload screenshot artifacts (on failure)
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: visual-screenshots-diff
           path: |
