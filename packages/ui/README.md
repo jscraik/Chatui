@@ -3,6 +3,7 @@
 A comprehensive React UI component library built for ChatGPT Apps SDK and standalone applications.
 
 ## Table of contents
+
 - [Prerequisites](#prerequisites)
 - [Install](#install)
 - [Quick start](#quick-start)
@@ -164,29 +165,34 @@ function ChatApp() {
 ## Troubleshooting
 
 ### Symptom: Components render without styling
+
 Cause: CSS not imported.
 Fix:
+
 ```ts
 import "@chatui/ui/styles.css";
 ```
 
 ### Symptom: Icons render incorrectly
+
 Cause: Direct `lucide-react` imports instead of the adapter.
 Fix: In this repo, use the icon adapter in `packages/ui/src/icons` as the source of truth.
 
 ### Symptom: Storybook tests fail
+
 Cause: UI package not built or mismatched dependencies.
 Fix:
+
 ```bash
 pnpm -C packages/ui build
-pnpm -C apps/storybook test
+pnpm -C platforms/web/apps/storybook test
 ```
 
 ## Related docs
 
 - `packages/runtime/README.md` for host integration.
 - `packages/tokens/README.md` for token usage.
-- `apps/storybook/README.md` for component QA.
+- `platforms/web/apps/storybook/README.md` for component QA.
 
 ### Custom Hooks
 

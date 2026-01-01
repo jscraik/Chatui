@@ -8,12 +8,12 @@
 
 ## 🏗️ What Was Built
 
-### 1. ChatUISwift Package (`swift/ui-swift/`)
+### 1. ChatUISwift Package (`platforms/apple/swift/ui-swift/`)
 
 **Package Structure:**
 
 ```
-swift/ui-swift/
+platforms/apple/swift/ui-swift/
 ├── Package.swift                     # Swift Package Manager manifest
 ├── Sources/ChatUISwift/              # Source code
 │   ├── DesignTokens.swift           # Design token constants matching React tokens
@@ -37,12 +37,12 @@ swift/ui-swift/
 - ✅ Comprehensive SwiftUI previews
 - ✅ Proper Swift Package Manager structure
 
-### 2. ChatUIPlayground App (`apps/macos/ChatUIPlayground/`)
+### 2. ChatUIPlayground App (`platforms/apple/apps/macos/ChatUIPlayground/`)
 
 **App Structure:**
 
 ```
-apps/macos/ChatUIPlayground/
+platforms/apple/apps/macos/ChatUIPlayground/
 ├── ChatUIPlayground.xcodeproj/       # Xcode project
 └── ChatUIPlayground/                 # App source
     ├── ChatUIPlaygroundApp.swift    # App entry point
@@ -158,10 +158,10 @@ DesignTokens.Spacing.md                  // 32pt
 
 Due to SwiftUI preview limitations with Swift Package Manager executables, the playground app needs to be created as a proper Xcode project. Follow these steps:
 
-1. **Follow Setup Guide**: See `apps/macos/SETUP_GUIDE.md` for detailed instructions
+1. **Follow Setup Guide**: See `platforms/apple/apps/macos/SETUP_GUIDE.md` for detailed instructions
 2. **Create Xcode Project**: Use Xcode to create a new macOS SwiftUI app
-3. **Add Local Package**: Reference `../../../swift/ui-swift` as a local package dependency
-4. **Copy Source Files**: Use the provided source files in `apps/macos/ChatUIPlayground/Sources/`
+3. **Add Local Package**: Reference `../../../platforms/apple/swift/ui-swift` as a local package dependency
+4. **Copy Source Files**: Use the provided source files in `platforms/apple/apps/macos/ChatUIPlayground/Sources/`
 
 **Once Set Up:**
 
@@ -172,7 +172,7 @@ Due to SwiftUI preview limitations with Swift Package Manager executables, the p
 **Integration Ready:**
 
 - Swift package can be added to any Xcode project
-- Local package reference: `../../../swift/ui-swift`
+- Local package reference: `../../../platforms/apple/swift/ui-swift`
 - Import with: `import ChatUISwift`
 - All components and design tokens are public APIs
 

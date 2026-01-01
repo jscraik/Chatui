@@ -3,6 +3,7 @@
 Host adapters and helpers for ChatGPT Apps SDK widgets.
 
 ## Table of contents
+
 - [Prerequisites](#prerequisites)
 - [Install](#install)
 - [Quick start](#quick-start)
@@ -68,10 +69,12 @@ when the widget unmounts.
 ## Troubleshooting
 
 ### Symptom: `window.openai` is undefined
+
 Cause: You are not running inside the ChatGPT Apps SDK host.
 Fix: Use `createStandaloneHost()` and wrap your app in `HostProvider`.
 
 ### Symptom: `toolResponseMetadata` is empty
+
 Cause: The MCP server is not returning `_meta` with `openai/widgetSessionId`.
 Fix: Update the tool response to include `_meta["openai/widgetSessionId"]`.
 

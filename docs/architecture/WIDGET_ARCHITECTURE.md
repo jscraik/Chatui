@@ -10,7 +10,7 @@ Your codebase now supports both **standalone React apps** and **ChatGPT widget i
 
 - **Apps SDK UI** as the foundation (`@openai/apps-sdk-ui`)
 - **Consistent styling** across all deployment targets
-- **Component adapter layer** in `packages/ui/src/vendor/appsSdkUi.ts`
+- **Component adapter layer** in `packages/ui/src/integrations/apps-sdk/index.ts`
 
 ### 2. Host Abstraction ✅
 
@@ -27,13 +27,13 @@ Your codebase now supports both **standalone React apps** and **ChatGPT widget i
 
 ### 4. Development Tools ✅
 
-- **Widget harness** (`apps/web/harness`) - Preview widgets in iframe
+- **Widget harness** (`platforms/web/apps/web/harness`) - Preview widgets in iframe
 - **MCP server** - Serves widgets to ChatGPT
 - **Storybook** - Component development
 
 ## Current Widgets
 
-Widget IDs are defined by folder names in `packages/widgets/src`:
+Widget IDs are defined by the leaf folder names under `packages/widgets/src/widgets/**`:
 
 - `auth-demo`
 - `chat-view`

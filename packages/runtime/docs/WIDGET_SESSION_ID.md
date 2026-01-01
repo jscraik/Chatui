@@ -3,6 +3,7 @@
 This document explains the `widgetSessionId` pattern for maintaining state across widget instances in ChatGPT Apps SDK.
 
 ## Table of contents
+
 - [Overview](#overview)
 - [How it works](#how-it-works)
 - [Use cases](#use-cases)

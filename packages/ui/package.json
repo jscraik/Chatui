@@ -8,30 +8,34 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./icons": {
+      "types": "./dist/icons/index.d.ts",
+      "import": "./dist/icons/index.js"
+    },
     "./styles.css": "./dist/ui.css",
     "./dist/ui.css": "./dist/ui.css",
     "./forms": {
-      "types": "./dist/app/components/ui/forms/index.d.ts",
+      "types": "./dist/components/ui/forms/index.d.ts",
       "import": "./dist/forms.js"
     },
     "./chat": {
-      "types": "./dist/app/components/ui/chat/index.d.ts",
+      "types": "./dist/components/ui/chat/index.d.ts",
       "import": "./dist/chat.js"
     },
     "./layout": {
-      "types": "./dist/app/components/ui/layout/index.d.ts",
+      "types": "./dist/components/ui/layout/index.d.ts",
       "import": "./dist/layout.js"
     },
     "./modals": {
-      "types": "./dist/app/components/modals/index.d.ts",
+      "types": "./dist/app/modals/index.d.ts",
       "import": "./dist/modals.js"
     },
     "./settings": {
-      "types": "./dist/app/components/settings/index.d.ts",
+      "types": "./dist/app/settings/index.d.ts",
       "import": "./dist/settings.js"
     },
     "./showcase": {
-      "types": "./dist/app/components/showcase/index.d.ts",
+      "types": "./dist/design-system/showcase/index.d.ts",
       "import": "./dist/showcase.js"
     },
     "./templates": {
@@ -123,7 +127,7 @@
   },
   "devDependencies": {
     "@storybook/react-vite": "^10.1.10",
-    "@storybook/test": "^8.6.15",
+    "@storybook/test": "^10.1.10",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",

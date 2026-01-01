@@ -26,8 +26,8 @@ pnpm dev
 - `packages/runtime` — host adapters + mocks
 - `packages/tokens` — design tokens (CSS + TS)
 - `packages/widgets` — standalone widget bundles
-- `apps/web` — reference app
-- `apps/storybook` — component docs
+- `platforms/web/apps/web` — reference app
+- `platforms/web/apps/storybook` — component docs
 - `apps/mcp` — MCP integration harness
 
 ## Code style

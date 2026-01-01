@@ -19,29 +19,39 @@ A shared design system library that you can use across all your projects:
 
 ## Reference Harnesses
 
-- `apps/web` - Standalone reference app with page routing system
-- `apps/storybook` - Component documentation and development
+- `platforms/web/apps/web` - Standalone reference app with page routing system
+- `platforms/web/apps/storybook` - Component documentation and development
 - `apps/mcp` - MCP server for ChatGPT integration
 - `packages/widgets` - Standalone widget bundles for ChatGPT
 
 ## Contents
 
-- [Quick Start](#-quick-start)
-- [Pages & Navigation](#-pages--navigation)
-- [Documentation](#-documentation)
+- [Quick Start](#quick-start)
+- [Verify](#verify)
+- [Common tasks](#common-tasks)
+- [Pages & Navigation](#pages--navigation)
+- [Documentation](#documentation)
+- [Troubleshooting](#troubleshooting)
 - [Rules of the road](#rules-of-the-road)
 - [Apps SDK UI integration](#apps-sdk-ui-integration)
 - [Library exports](#library-exports)
 - [Compatibility matrix](#compatibility-matrix)
-- [Commands](#commands)
 - [Using in Other Projects](#using-in-other-projects)
 - [Development Workflow](#development-workflow)
+- [Architecture](#architecture)
 
 ## Prerequisites
 
 - Node.js 18+
 - pnpm 9.15.0 (see `packageManager` in `package.json`)
 - macOS app work (optional): macOS 13+ + Xcode 15+
+
+## Compatibility matrix
+
+- **React**: 19.x (required by `@chatui/ui` peerDependencies)
+- **TypeScript**: 5.9+ (workspace devDependency)
+- **Node.js**: 18+ (runtime baseline)
+- **Apps SDK UI**: ^0.2.1 (from `@chatui/ui` dependencies)
 
 ## 🚀 Quick Start
 
@@ -66,6 +76,25 @@ pnpm build:widget          # Single-file widget HTML (for MCP harness)
 - Web app: open <http://localhost:5173/>
 - Storybook: open <http://localhost:6006/>
 
+## Common tasks
+
+Core scripts you will use often:
+
+```bash
+# Run MCP server (local dev)
+pnpm mcp:dev
+
+# Run unit tests (UI package)
+pnpm test
+
+# Run lint and formatting
+pnpm lint
+pnpm format
+
+# Build a single-file widget HTML (for MCP harness)
+pnpm build:widget
+```
+
 ## 📄 Pages & Navigation
 
 The web app includes a flexible page system with URL-based routing:
@@ -82,66 +111,56 @@ See [PAGES_QUICK_START.md](./docs/guides/PAGES_QUICK_START.md) for a 5-minute gu
 
 ## 📚 Documentation
 
-Comprehensive documentation is organized in the [`docs/`](./docs) directory:
+Use this table to jump to the canonical doc surface. For more detail, see
+[`docs/README.md`](./docs/README.md).
 
-- **[Architecture](./docs/architecture)** - System design and technical architecture
-- **[Audits](./docs/audits)** - Design system compliance and color audits
-- **[Guides](./docs/guides)** - Step-by-step development guides
-
-### Key Documents
-
-- **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Contribution guidelines
-- **[CHANGELOG.md](./CHANGELOG.md)** - Version history
-- **[SECURITY.md](./SECURITY.md)** - Security policies
-
-### AI Assistant Guidance
-
-- **[AGENTS.md](./AGENTS.md)** - System instructions for AI agents
-- **[CLAUDE.md](./CLAUDE.md)** - Project guidance for Claude AI
-- **[Guides](./docs/guides)** - How-to guides and quick starts
-
-See [docs/README.md](./docs/README.md) for the complete documentation index.
-
-## Doc Index
-
-| Area | Doc |
-| --- | --- |
-| Project overview | `README.md` |
-| Docs index | `docs/README.md` |
-| Guides index | `docs/guides/README.md` |
-| Architecture | `docs/architecture/README.md` |
-| Build pipeline | `docs/BUILD_PIPELINE.md` |
-| Swift integration | `docs/SWIFT_INTEGRATION.md` |
-| Swift packages overview | `swift/README.md` |
-| macOS app | `apps/macos/ChatUIApp/README.md` |
-| Web app | `apps/web/README.md` |
-| Storybook | `apps/storybook/README.md` |
-| MCP server | `apps/mcp/README.md` |
-| Tokens | `packages/tokens/README.md` |
-| UI components (React) | `packages/ui/README.md` |
-| Runtime host | `packages/runtime/README.md` |
-| Widgets | `packages/widgets/README.md` |
+| Area                    | Doc                              |
+| ----------------------- | -------------------------------- |
+| Project overview        | `README.md`                      |
+| Docs index              | `docs/README.md`                 |
+| Guides index            | `docs/guides/README.md`          |
+| Architecture            | `docs/architecture/README.md`    |
+| Repo map                | `docs/architecture/repo-map.md`  |
+| Build pipeline          | `docs/BUILD_PIPELINE.md`         |
+| Swift integration       | `docs/SWIFT_INTEGRATION.md`      |
+| Restructure migration   | `docs/guides/repo-structure-migration.md` |
+| Swift packages overview | `platforms/apple/swift/README.md`                |
+| macOS app               | `platforms/apple/apps/macos/ChatUIApp/README.md` |
+| Web app                 | `platforms/web/apps/web/README.md`             |
+| Storybook               | `platforms/web/apps/storybook/README.md`       |
+| MCP server              | `apps/mcp/README.md`             |
+| Tokens                  | `packages/tokens/README.md`      |
+| UI components (React)   | `packages/ui/README.md`          |
+| Runtime host            | `packages/runtime/README.md`     |
+| Widgets                 | `packages/widgets/README.md`     |
 
 ## Troubleshooting
 
 ### Symptom: `pnpm: command not found`
+
 Cause: pnpm is not installed.
 Fix:
+
 ```bash
 npm install -g pnpm
 ```
 
 ### Symptom: MCP tools fail to load in the app
+
 Cause: MCP server is not running or the URL is wrong.
 Fix:
+
 ```bash
 pnpm mcp:start
 ```
+
 Then confirm the MCP URL in the macOS app Settings (default `http://localhost:8787`).
 
 ### Symptom: Storybook or web app doesn’t start
+
 Cause: Dependencies not installed or Node version mismatch.
 Fix:
+
 ```bash
 pnpm install
 node -v
@@ -166,7 +185,7 @@ node -v
   ✅ `createStandaloneHost()` uses your API/mocks  
   ❌ No UI components
 
-- **apps/web / apps/storybook**  
+- **platforms/web/apps/web / platforms/web/apps/storybook**  
   ✅ Reference shells + preview  
   ✅ Provide host adapters  
   ❌ No reusable UI source
@@ -198,7 +217,7 @@ See: <https://developers.openai.com/apps-sdk/>
 - `packages/tokens/src/foundations.css` (CSS variables)
 - `packages/tokens/src/*.ts` (TS exports for Storybook foundations pages)
 
-Source PDFs live in `context/foundations/`.
+Source PDFs live in `docs/foundations/chatgpt-apps/`.
 
 These tokens are **audit/extension only**. Use Apps SDK UI classes/components in UI.
 
@@ -274,56 +293,6 @@ import { ChatFullWidthTemplate } from "@chatui/ui/experimental";
 - Figma – figma utilities
 - Pages – full pages
 - Templates – application templates
-
-## Prerequisites
-
-- Node.js 18+
-- pnpm
-
-## Compatibility matrix
-
-- **React**: 19.x (required by `@chatui/ui` via Apps SDK UI)
-- **TypeScript**: 5.9+
-- **Node.js**: 18+
-- **Apps SDK UI**: ^0.2.1
-
-## Commands
-
-Install deps:
-
-```bash
-pnpm install
-```
-
-Dev (web + storybook):
-
-```bash
-pnpm dev
-```
-
-Standalone dev (web only):
-
-```bash
-pnpm dev:web
-```
-
-Storybook:
-
-```bash
-pnpm dev:storybook
-```
-
-Build all targets:
-
-```bash
-pnpm build
-```
-
-Build a single-file widget HTML (for the MCP harness):
-
-```bash
-pnpm build:widget
-```
 
 ## Release & versioning
 

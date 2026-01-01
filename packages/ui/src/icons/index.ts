@@ -1,3 +1,77 @@
+// ============================================================================
+// CHATUI CANONICAL ICON SYSTEM
+// ============================================================================
+// This is the SINGLE SOURCE OF TRUTH for all icons across the entire ChatUI
+// repository. All apps (web, storybook, templates-gallery) must import icons
+// from this file only.
+//
+// Icon System Breakdown:
+// - 350+ ChatGPT icons (hardcoded SVG from Figma)
+// - Lucide React icons (convenience re-exports)
+// - Brand icons (GitHub, Notion, Slack, etc.)
+// - Apps SDK UI icons (Download, Sparkles)
+//
+// Usage: import { IconCheckmark, IconSettings } from "@chatui/ui/icons"
+// ============================================================================
+
+import { chatGPTIconSizes } from "./ChatGPTIconSizes";
+
+// ----------------------------------------------------------------------------
+// CHATGPT ICONS (350+ production-ready icons from Figma)
+// ----------------------------------------------------------------------------
+
+// Core ChatGPT icons with hardcoded SVG paths
+export * from "./chatgpt/ChatGPTIconsFixed";
+
+// Additional ChatGPT icons (chevrons, arrows, specialized)
+// Note: Some icons may overlap with ChatGPTIconsFixed - they're exported as is
+export * from "./chatgpt/additional-icons";
+
+// Missing ChatGPT icons
+export * from "./chatgpt/missing-icons";
+export { IconOperator } from "./legacy/chatgpt/misc";
+export {
+  IconArrowCurvedRight,
+  IconArrowDownLg,
+  IconArrowRotateCw,
+  IconArrowTopRightSm,
+  IconChevronUpDown,
+  IconExpandLg,
+  IconRegenerateStar,
+  IconReply,
+  IconShuffle,
+} from "./legacy/chatgpt/arrows";
+
+// Common icon aliases for consistency (not already in NAMED EXPORTS section)
+export { ArrowUp as IconArrowUp } from "lucide-react";
+export { Clock as IconClock } from "lucide-react";
+export { Globe as IconGlobe, Globe as IconPublic } from "lucide-react";
+export { Headphones as IconHeadphones } from "lucide-react";
+export { Mic as IconMic } from "lucide-react";
+export { Paperclip as IconPaperclip } from "lucide-react";
+export { Plus as IconPlusComposer } from "lucide-react";
+
+// ----------------------------------------------------------------------------
+// BRAND ICONS
+// ----------------------------------------------------------------------------
+
+export {
+  CanvaIcon,
+  DropboxIcon,
+  FigmaIcon,
+  GitHubIcon,
+  LinearIcon,
+  MicrosoftIcon,
+  NotionIcon,
+  SharePointIcon,
+  SlackIcon,
+  TeamsIcon,
+} from "./brands";
+
+// ----------------------------------------------------------------------------
+// LUCIDE REACT ICONS (convenience re-exports)
+// ----------------------------------------------------------------------------
+
 import {
   Archive,
   ArrowLeft,
@@ -32,44 +106,18 @@ import {
   X,
 } from "lucide-react";
 
-import { Download, Sparkles } from "../vendor/appsSdkUi";
+// ----------------------------------------------------------------------------
+// APPS SDK UI ICONS
+// ----------------------------------------------------------------------------
 
-// Import custom ChatGPT icons for arrow variants
-export {
-  IconArrowBottomLeftSm,
-  IconArrowBottomRightSm,
-  IconArrowCurvedLeft,
-  IconArrowCurvedRight,
-  IconArrowCurvedRightXs,
-  IconArrowDownLg,
-  IconArrowLeftLg,
-  IconArrowRightLg,
-  IconArrowRotateCcw,
-  IconArrowRotateCw,
-  IconArrowTopLeftSm,
-  IconArrowTopRightSm,
-  IconArrowUpLg,
-  IconChevronDownLg,
-  IconChevronDownUp,
-  IconChevronLeftLg,
-  IconChevronRightLg,
-  IconChevronUpDown,
-  IconChevronUpLg,
-  IconCollapseLg,
-  IconCollapseSm,
-  IconExpandLg,
-  IconExpandMd,
-  IconExpandSm,
-  IconRedo,
-  IconRegenerateOff,
-  IconRegenerateStar,
-  IconReply,
-  IconShuffle,
-  IconUndo,
-} from "../app/components/icons/ChatGPTIcons";
+export { Download, Sparkles } from "../integrations/apps-sdk";
+export { Download as IconDownload, Sparkles as IconSparkles } from "../integrations/apps-sdk";
 
-export { Download, Sparkles };
+// ----------------------------------------------------------------------------
+// NAMED EXPORTS (Icon* prefix for consistency)
+// ----------------------------------------------------------------------------
 
+// These provide convenient aliases with Icon* prefix
 export {
   Archive as IconArchive,
   ArrowLeft as IconArrowLeftSm,
@@ -78,6 +126,7 @@ export {
   MessageSquare as IconChat,
   CheckCircle as IconCheckCircle,
   Check as IconCheckmark,
+  Check as IconCheck,
   ChevronDown as IconChevronDownMd,
   ChevronLeft as IconChevronLeftMd,
   ChevronRight as IconChevronRightMd,
@@ -96,6 +145,7 @@ export {
   Plus as IconPlusSm,
   Radio as IconRadio,
   RefreshCw as IconRegenerate,
+  RefreshCw as IconRefresh,
   Search as IconSearch,
   Settings as IconSettings,
   Share as IconShare,
@@ -105,3 +155,24 @@ export {
   ThumbsUp as IconThumbUp,
   X as IconX,
 };
+
+// ----------------------------------------------------------------------------
+// ICON CATALOG (for browsing all icons)
+// ----------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------
+// SIZE UTILITIES
+// ----------------------------------------------------------------------------
+
+export { chatGPTIconSizes, getSizeClass } from "./ChatGPTIconSizes";
+export type { ChatGPTIconSizes } from "./ChatGPTIconSizes";
+
+// ----------------------------------------------------------------------------
+// ICON PROPS TYPE
+// ----------------------------------------------------------------------------
+
+export interface IconProps {
+  className?: string;
+  size?: keyof typeof chatGPTIconSizes;
+}

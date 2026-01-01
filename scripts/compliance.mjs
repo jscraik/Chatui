@@ -6,17 +6,18 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const uiRoot = path.join(root, "packages/ui/src");
 const allowedHexRoots = [
   path.join(root, "packages/tokens"),
-  path.join(root, "packages/ui/src/docs"),
+  path.join(root, "packages/ui/src/storybook/docs"),
   path.join(root, "packages/ui/src/imports"),
 ];
 const allowedLucideRoots = [path.join(root, "packages/ui/src/icons")];
-const allowedRadixRoot = path.join(root, "packages/ui/src/app/components/ui");
+const allowedRadixRoot = path.join(root, "packages/ui/src/components/ui");
 
 const exts = new Set([".ts", ".tsx", ".css"]);
 const hexRegex = /#[0-9a-fA-F]{3,8}/g;
 const lucideRegex = /from\s+["']lucide-react["']/g;
 const muiRegex = /from\s+["']@mui\//g;
 const radixRegex = /from\s+["']@radix-ui\//g;
+const MAX_FILE_LINES = 300;
 
 function walk(dir, files = []) {
   if (!fs.existsSync(dir)) return files;
@@ -34,6 +35,19 @@ function walk(dir, files = []) {
 
 function isUnderAllowedHexDir(filePath) {
   return allowedHexRoots.some((allowed) => filePath.startsWith(allowed));
+}
+
+function checkFileLength(filePath) {
+  const content = fs.readFileSync(filePath, "utf8");
+  const lines = content.split("\n").length;
+  if (lines > MAX_FILE_LINES) {
+    return {
+      type: "file-length",
+      file: path.relative(root, filePath),
+      detail: `${lines} lines (max: ${MAX_FILE_LINES})`,
+    };
+  }
+  return null;
 }
 
 const warnings = [];
@@ -76,8 +90,13 @@ for (const file of walk(uiRoot)) {
     warnings.push({
       type: "radix",
       file: rel,
-      detail: "@radix-ui import outside app/components/ui/",
+      detail: "@radix-ui import outside components/ui/",
     });
+  }
+
+  const fileLengthWarning = checkFileLength(file);
+  if (fileLengthWarning) {
+    warnings.push(fileLengthWarning);
   }
 }
 

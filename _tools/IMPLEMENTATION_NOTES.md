@@ -8,7 +8,7 @@ Building on the initial widget infrastructure, we've implemented additional high
 
 ### 1. **Advanced OpenAI Integration Hooks**
 
-*Inspired by `src/app/openai/hooks/` in Toolbase-AI template*
+_Inspired by `src/app/openai/hooks/` in Toolbase-AI template_
 
 **Created:** `packages/widgets/src/shared/openai-hooks.ts`
 
@@ -31,7 +31,7 @@ Building on the initial widget infrastructure, we've implemented additional high
 
 ### 2. **Enhanced Scrollbar Styling**
 
-*Inspired by `src/app/index.css` scrollbar utilities*
+_Inspired by `src/app/index.css` scrollbar utilities_
 
 **Enhanced:** `packages/widgets/src/styles.css`
 
@@ -64,7 +64,7 @@ Building on the initial widget infrastructure, we've implemented additional high
 
 ### 3. **Development Middleware & Hot Reloading**
 
-*Inspired by `configureServer` middleware in their plugin*
+_Inspired by `configureServer` middleware in their plugin_
 
 **Enhanced:** `packages/widgets/src/plugins/widget-manifest.ts`
 
@@ -90,7 +90,7 @@ configureServer: {
 
 ### 4. **Environment Configuration System**
 
-*Inspired by their environment validation patterns*
+_Inspired by their environment validation patterns_
 
 **Created:** `packages/widgets/src/shared/env-config.ts`
 
@@ -113,7 +113,7 @@ export function createEnvironmentMeta() {
 
 ### 5. **Enhanced Error Boundaries**
 
-*Inspired by their error handling patterns*
+_Inspired by their error handling patterns_
 
 **Enhanced:** `packages/widgets/src/shared/widget-base.tsx`
 
@@ -152,7 +152,7 @@ export class WidgetErrorBoundary extends React.Component {
 
 ### 6. **Enhanced Example Widget**
 
-*Demonstrating all new patterns*
+_Demonstrating all new patterns_
 
 **Created:** `packages/widgets/src/enhanced-example-widget/`
 

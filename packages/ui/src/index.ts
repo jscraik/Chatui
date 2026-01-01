@@ -1,29 +1,29 @@
 // Core App Components
-export { ChatUIRoot } from "./app/ChatUIRoot";
+export { ChatUIRoot } from "./app/chat/ChatUIRoot";
 
 // Hooks
-export * from "./app/components/hooks/useFocusTrap";
-export * from "./app/hooks/useControllableState";
+export * from "./hooks/useFocusTrap";
+export * from "./hooks/useControllableState";
 
 // Slots
-export * from "./app/slots";
+export * from "./app/chat/slots";
 
 // Main Chat Components
-export * from "./app/components/chat/ChatHeader";
-export * from "./app/components/chat/ChatInput";
-export * from "./app/components/chat/ChatMessages";
-export * from "./app/components/chat/ChatSidebar";
-export * from "./app/components/chat/ChatShell";
-export * from "./app/components/chat/chat-variants";
-export * from "./app/components/chat/ComposeView";
+export * from "./app/chat/ChatHeader";
+export * from "./app/chat/ChatInput";
+export * from "./app/chat/ChatMessages";
+export * from "./app/chat/ChatSidebar";
+export * from "./app/chat/ChatShell";
+export * from "./app/chat/chat-variants";
+export * from "./app/chat/ComposeView";
 
 // UI Components (prioritized over vendor)
-export * from "./app/components/ui";
+export * from "./components/ui";
 
 // Organized component exports for better tree-shaking
-export * from "./app/components/ui/chat";
-export * from "./app/components/ui/forms";
-export * from "./app/components/ui/layout";
+export * from "./components/ui/chat";
+export * from "./components/ui/forms";
+export * from "./components/ui/layout";
 
 // Vendor Components (explicit exports with AppsSDK prefix to avoid conflicts)
 export {
@@ -38,14 +38,14 @@ export {
   Textarea as AppsSDKTextarea,
   Download as AppsSDKDownloadIcon,
   Sparkles as AppsSDKSparklesIcon,
-} from "./vendor/appsSdkUi";
+} from "./integrations/apps-sdk";
 
-// Icons (ChatGPT icons take precedence, avoid conflicts)
-export * from "./app/components/icons/ChatGPTIcons";
-export { IconGrid3x3 } from "./icons";
+// Icons (canonical source - 350+ icons from Figma)
+export * from "./icons";
 
 // Utils
-export * from "./app/components/ui/utils";
-export * from "./app/utils/theme";
+export * from "./components/ui/utils";
+export * from "./utils/theme";
 
-// Templates (use @chatui/ui/experimental or @chatui/ui/templates)
+// Templates (canonical source)
+export * from "./templates";

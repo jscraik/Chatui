@@ -3,6 +3,7 @@
 Add a new web app page with routing, navigation, and a starter layout.
 
 ## Table of contents
+
 - [Prerequisites](#prerequisites)
 - [Quick start](#quick-start-add-a-simple-page)
 - [Verify](#verify)
@@ -19,7 +20,7 @@ Add a new web app page with routing, navigation, and a starter layout.
 
 ### 1) Create the page file
 
-Create `apps/web/src/pages/MyPage.tsx`:
+Create `platforms/web/apps/web/src/pages/MyPage.tsx`:
 
 ```tsx
 import { Button, Card, IconButton, SectionHeader } from "@chatui/ui";
@@ -45,10 +46,7 @@ export function MyPage({ onNavigate }: MyPageProps) {
       </div>
       <div className="mx-auto max-w-4xl p-6">
         <Card className="p-6">
-          <SectionHeader
-            title="Welcome to My Page"
-            description="Add your content here."
-          />
+          <SectionHeader title="Welcome to My Page" description="Add your content here." />
         </Card>
       </div>
     </div>
@@ -58,7 +56,7 @@ export function MyPage({ onNavigate }: MyPageProps) {
 
 ### 2) Register the route
 
-Update `apps/web/src/Router.tsx` in these places:
+Update `platforms/web/apps/web/src/app/Router.tsx` in these places:
 
 ```tsx
 // Add to Route type

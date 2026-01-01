@@ -3,6 +3,7 @@
 The enhanced build pipeline provides unified build orchestration for both npm (React/web) and Swift Package Manager (macOS/iOS) platforms with version synchronization, incremental builds, and comprehensive validation.
 
 ## Table of contents
+
 - [Prerequisites](#prerequisites)
 - [Quick start](#quick-start)
 - [Verify](#verify)
@@ -97,8 +98,8 @@ pnpm generate:tokens
 **Outputs:**
 
 - `packages/tokens/src/foundations.css` - CSS custom properties
-- `swift/ChatUIFoundation/Sources/ChatUIFoundation/Resources/Colors.xcassets/` - Swift Asset Catalog
-- `packages/tokens/outputs/manifest.json` - Validation manifest
+- `platforms/apple/swift/ChatUIFoundation/Sources/ChatUIFoundation/Resources/Colors.xcassets/` - Swift Asset Catalog
+- `packages/tokens/docs/outputs/manifest.json` - Validation manifest
 
 ### 3. Token Validation
 
@@ -131,10 +132,10 @@ Builds all npm packages:
 
 Builds all Swift packages:
 
-- `swift/ChatUIFoundation` - Foundation tokens and utilities
-- `swift/ChatUIComponents` - SwiftUI components
-- `swift/ChatUIThemes` - Theme presets
-- `swift/ChatUIShellChatGPT` - Optional shell layouts
+- `platforms/apple/swift/ChatUIFoundation` - Foundation tokens and utilities
+- `platforms/apple/swift/ChatUIComponents` - SwiftUI components
+- `platforms/apple/swift/ChatUIThemes` - Theme presets
+- `platforms/apple/swift/ChatUIShellChatGPT` - Optional shell layouts
 
 ### 5. Testing
 
@@ -230,7 +231,7 @@ Options:
 **Swift Packages:**
 
 ```swift
-// swift/ChatUIFoundation/Package.swift
+// platforms/apple/swift/ChatUIFoundation/Package.swift
 // swift-tools-version: 5.9
 // Version: 0.0.0  // Synchronized by build pipeline
 
@@ -249,7 +250,7 @@ let package = Package(
 ```json
 {
   "name": "@chatui/ui",
-  "version": "0.0.0",  // Synchronized by build pipeline
+  "version": "0.0.0", // Synchronized by build pipeline
   "scripts": {
     "build": "tsc && vite build"
   }
@@ -259,12 +260,15 @@ let package = Package(
 ## Troubleshooting
 
 ### Symptom: Swift builds fail but web builds succeed
+
 Cause: Xcode toolchain not selected or missing.
 Fix: Open Xcode → Settings → Locations and select Xcode 15+ for Command Line Tools.
 
 ### Symptom: Token validation fails after edits
+
 Cause: Tokens were not regenerated.
 Fix:
+
 ```bash
 pnpm generate:tokens
 pnpm validate:tokens
@@ -336,7 +340,7 @@ pnpm test:swift:foundation
 pnpm test:swift:components
 
 # Clean Swift build artifacts
-rm -rf swift/*/.build/
+rm -rf platforms/apple/swift/*/.build/
 ```
 
 ## Performance
@@ -369,6 +373,6 @@ rm -rf swift/*/.build/
 ## Related Documentation
 
 - [Token Generation](../packages/tokens/README.md)
-- [Swift Package Structure](../swift/README.md)
+- [Swift Package Structure](../platforms/apple/swift/README.md)
 - [CI/CD Workflow](../.github/workflows/ci.yml)
 - [Version Synchronization](./VERSION_SYNC.md)

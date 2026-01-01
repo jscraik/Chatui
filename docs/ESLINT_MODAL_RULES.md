@@ -33,75 +33,81 @@ module.exports = [
             // RULE 1: Infrastructure CANNOT import from feature modals
             {
               target: [
-                "packages/ui/src/app/components/hooks/useFocusTrap.ts",
-                "packages/ui/src/app/components/ui/overlays/modal.tsx",
+                "packages/ui/src/hooks/useFocusTrap.ts",
+                "packages/ui/src/components/ui/overlays/modal.tsx",
               ],
-              from: "packages/ui/src/app/components/modals/**",
-              message: "Infrastructure (useFocusTrap, ModalDialog) MUST NOT import from feature modals. See: docs/MODAL_BOUNDARIES.md",
+              from: "packages/ui/src/app/modals/**",
+              message:
+                "Infrastructure (useFocusTrap, ModalDialog) MUST NOT import from feature modals. See: docs/MODAL_BOUNDARIES.md",
             },
 
             // RULE 2: Infrastructure CANNOT import from settings components
             {
               target: [
-                "packages/ui/src/app/components/hooks/useFocusTrap.ts",
-                "packages/ui/src/app/components/ui/overlays/modal.tsx",
+                "packages/ui/src/hooks/useFocusTrap.ts",
+                "packages/ui/src/components/ui/overlays/modal.tsx",
               ],
-              from: "packages/ui/src/app/components/settings/**",
-              message: "Infrastructure (useFocusTrap, ModalDialog) MUST NOT import from settings. Keep infrastructure stateless.",
+              from: "packages/ui/src/app/settings/**",
+              message:
+                "Infrastructure (useFocusTrap, ModalDialog) MUST NOT import from settings. Keep infrastructure stateless.",
             },
 
             // RULE 3: Settings components CANNOT import from modals
             {
               target: [
-                "packages/ui/src/app/components/settings/SettingRow.tsx",
-                "packages/ui/src/app/components/settings/SettingToggle.tsx",
-                "packages/ui/src/app/components/settings/SettingDropdown.tsx",
+                "packages/ui/src/app/settings/SettingRow.tsx",
+                "packages/ui/src/app/settings/SettingToggle.tsx",
+                "packages/ui/src/app/settings/SettingDropdown.tsx",
               ],
-              from: "packages/ui/src/app/components/modals/**",
-              message: "Settings components (SettingRow, SettingToggle, SettingDropdown) MUST NOT import from modals. See: docs/MODAL_BOUNDARIES.md",
+              from: "packages/ui/src/app/modals/**",
+              message:
+                "Settings components (SettingRow, SettingToggle, SettingDropdown) MUST NOT import from modals. See: docs/MODAL_BOUNDARIES.md",
             },
 
             // RULE 4: Settings components CANNOT import from panels
             {
               target: [
-                "packages/ui/src/app/components/settings/SettingRow.tsx",
-                "packages/ui/src/app/components/settings/SettingToggle.tsx",
-                "packages/ui/src/app/components/settings/SettingDropdown.tsx",
+                "packages/ui/src/app/settings/SettingRow.tsx",
+                "packages/ui/src/app/settings/SettingToggle.tsx",
+                "packages/ui/src/app/settings/SettingDropdown.tsx",
               ],
               from: [
-                "packages/ui/src/app/components/settings/PersonalizationPanel.tsx",
-                "packages/ui/src/app/components/settings/SecurityPanel.tsx",
-                "packages/ui/src/app/components/settings/ManageAppsPanel.tsx",
-                "packages/ui/src/app/components/settings/AudioSettingsPanel.tsx",
+                "packages/ui/src/app/settings/PersonalizationPanel.tsx",
+                "packages/ui/src/app/settings/SecurityPanel.tsx",
+                "packages/ui/src/app/settings/ManageAppsPanel.tsx",
+                "packages/ui/src/app/settings/AudioSettingsPanel.tsx",
               ],
-              message: "Settings components MUST NOT import from panels. Panels are higher-level views.",
+              message:
+                "Settings components MUST NOT import from panels. Panels are higher-level views.",
             },
 
             // RULE 5: Panels CANNOT import ModalDialog directly
             {
               target: [
-                "packages/ui/src/app/components/settings/PersonalizationPanel.tsx",
-                "packages/ui/src/app/components/settings/SecurityPanel.tsx",
-                "packages/ui/src/app/components/settings/ManageAppsPanel.tsx",
-                "packages/ui/src/app/components/settings/AudioSettingsPanel.tsx",
+                "packages/ui/src/app/settings/PersonalizationPanel.tsx",
+                "packages/ui/src/app/settings/SecurityPanel.tsx",
+                "packages/ui/src/app/settings/ManageAppsPanel.tsx",
+                "packages/ui/src/app/settings/AudioSettingsPanel.tsx",
               ],
-              from: "packages/ui/src/app/components/ui/overlays/modal.tsx",
-              message: "Panels MUST NOT import ModalDialog directly. Use parent SettingsModal's modal context instead.",
+              from: "packages/ui/src/components/ui/overlays/modal.tsx",
+              message:
+                "Panels MUST NOT import ModalDialog directly. Use parent SettingsModal's modal context instead.",
             },
 
             // RULE 6: Infrastructure CANNOT import from panels
             {
               target: [
-                "packages/ui/src/app/components/hooks/useFocusTrap.ts",
-                "packages/ui/src/app/components/ui/overlays/modal.tsx",
+                "packages/ui/src/hooks/useFocusTrap.ts",
+                "packages/ui/src/components/ui/overlays/modal.tsx",
               ],
               from: [
-                "packages/ui/src/app/components/settings/PersonalizationPanel.tsx",
-                "packages/ui/src/app/components/settings/SecurityPanel.tsx",
-                "packages/ui/src/app/components/settings/ManageAppsPanel.tsx",
-                "packages/ui/src/app/components/settings/AudioSettingsPanel.tsx",
+                "packages/ui/src/app/settings/PersonalizationPanel.tsx",
+                "packages/ui/src/app/settings/SecurityPanel.tsx",
+                "packages/ui/src/app/settings/ManageAppsPanel.tsx",
+                "packages/ui/src/app/settings/AudioSettingsPanel.tsx",
               ],
-              message: "Infrastructure MUST NOT import from panel components. Panels belong to feature layer.",
+              message:
+                "Infrastructure MUST NOT import from panel components. Panels belong to feature layer.",
             },
           ],
         },
@@ -125,11 +131,12 @@ module.exports = {
           // Same zones as above
           {
             target: [
-              "packages/ui/src/app/components/hooks/useFocusTrap.ts",
-              "packages/ui/src/app/components/ui/overlays/modal.tsx",
+              "packages/ui/src/hooks/useFocusTrap.ts",
+              "packages/ui/src/components/ui/overlays/modal.tsx",
             ],
-            from: "packages/ui/src/app/components/modals/**",
-            message: "Infrastructure (useFocusTrap, ModalDialog) MUST NOT import from feature modals.",
+            from: "packages/ui/src/app/modals/**",
+            message:
+              "Infrastructure (useFocusTrap, ModalDialog) MUST NOT import from feature modals.",
           },
           // ... add remaining zones from above
         ],
@@ -151,35 +158,35 @@ module.exports = {
       // ===== INFRASTRUCTURE RESTRICTIONS =====
       {
         target: [
-          "packages/ui/src/app/components/hooks/useFocusTrap.ts",
-          "packages/ui/src/app/components/ui/overlays/modal.tsx",
+          "packages/ui/src/hooks/useFocusTrap.ts",
+          "packages/ui/src/components/ui/overlays/modal.tsx",
         ],
-        from: "packages/ui/src/app/components/modals/**",
+        from: "packages/ui/src/app/modals/**",
         message: "Infrastructure (useFocusTrap, ModalDialog) MUST NOT import from feature modals.",
       },
       {
         target: [
-          "packages/ui/src/app/components/hooks/useFocusTrap.ts",
-          "packages/ui/src/app/components/ui/overlays/modal.tsx",
+          "packages/ui/src/hooks/useFocusTrap.ts",
+          "packages/ui/src/components/ui/overlays/modal.tsx",
         ],
-        from: "packages/ui/src/app/components/settings/**",
+        from: "packages/ui/src/app/settings/**",
         message: "Infrastructure (useFocusTrap, ModalDialog) MUST NOT import from settings components.",
       },
       {
         target: [
-          "packages/ui/src/app/components/hooks/useFocusTrap.ts",
-          "packages/ui/src/app/components/ui/overlays/modal.tsx",
+          "packages/ui/src/hooks/useFocusTrap.ts",
+          "packages/ui/src/components/ui/overlays/modal.tsx",
         ],
         from: [
-          "packages/ui/src/app/components/settings/PersonalizationPanel.tsx",
-          "packages/ui/src/app/components/settings/SecurityPanel.tsx",
-          "packages/ui/src/app/components/settings/ManageAppsPanel.tsx",
-          "packages/ui/src/app/components/settings/AudioSettingsPanel.tsx",
-          "packages/ui/src/app/components/settings/NotificationsPanel.tsx",
-          "packages/ui/src/app/components/settings/AppsPanel.tsx",
-          "packages/ui/src/app/components/settings/DataControlsPanel.tsx",
-          "packages/ui/src/app/components/settings/ArchivedChatsPanel.tsx",
-          "packages/ui/src/app/components/settings/CheckForUpdatesPanel.tsx",
+          "packages/ui/src/app/settings/PersonalizationPanel.tsx",
+          "packages/ui/src/app/settings/SecurityPanel.tsx",
+          "packages/ui/src/app/settings/ManageAppsPanel.tsx",
+          "packages/ui/src/app/settings/AudioSettingsPanel.tsx",
+          "packages/ui/src/app/settings/NotificationsPanel.tsx",
+          "packages/ui/src/app/settings/AppsPanel.tsx",
+          "packages/ui/src/app/settings/DataControlsPanel.tsx",
+          "packages/ui/src/app/settings/ArchivedChatsPanel.tsx",
+          "packages/ui/src/app/settings/CheckForUpdatesPanel.tsx",
         ],
         message: "Infrastructure MUST NOT import from panel components.",
       },
@@ -187,29 +194,29 @@ module.exports = {
       // ===== SETTINGS COMPONENTS RESTRICTIONS =====
       {
         target: [
-          "packages/ui/src/app/components/settings/SettingRow.tsx",
-          "packages/ui/src/app/components/settings/SettingToggle.tsx",
-          "packages/ui/src/app/components/settings/SettingDropdown.tsx",
+          "packages/ui/src/app/settings/SettingRow.tsx",
+          "packages/ui/src/app/settings/SettingToggle.tsx",
+          "packages/ui/src/app/settings/SettingDropdown.tsx",
         ],
-        from: "packages/ui/src/app/components/modals/**",
+        from: "packages/ui/src/app/modals/**",
         message: "Settings components (SettingRow, SettingToggle, SettingDropdown) MUST NOT import from modals.",
       },
       {
         target: [
-          "packages/ui/src/app/components/settings/SettingRow.tsx",
-          "packages/ui/src/app/components/settings/SettingToggle.tsx",
-          "packages/ui/src/app/components/settings/SettingDropdown.tsx",
+          "packages/ui/src/app/settings/SettingRow.tsx",
+          "packages/ui/src/app/settings/SettingToggle.tsx",
+          "packages/ui/src/app/settings/SettingDropdown.tsx",
         ],
         from: [
-          "packages/ui/src/app/components/settings/PersonalizationPanel.tsx",
-          "packages/ui/src/app/components/settings/SecurityPanel.tsx",
-          "packages/ui/src/app/components/settings/ManageAppsPanel.tsx",
-          "packages/ui/src/app/components/settings/AudioSettingsPanel.tsx",
-          "packages/ui/src/app/components/settings/NotificationsPanel.tsx",
-          "packages/ui/src/app/components/settings/AppsPanel.tsx",
-          "packages/ui/src/app/components/settings/DataControlsPanel.tsx",
-          "packages/ui/src/app/components/settings/ArchivedChatsPanel.tsx",
-          "packages/ui/src/app/components/settings/CheckForUpdatesPanel.tsx",
+          "packages/ui/src/app/settings/PersonalizationPanel.tsx",
+          "packages/ui/src/app/settings/SecurityPanel.tsx",
+          "packages/ui/src/app/settings/ManageAppsPanel.tsx",
+          "packages/ui/src/app/settings/AudioSettingsPanel.tsx",
+          "packages/ui/src/app/settings/NotificationsPanel.tsx",
+          "packages/ui/src/app/settings/AppsPanel.tsx",
+          "packages/ui/src/app/settings/DataControlsPanel.tsx",
+          "packages/ui/src/app/settings/ArchivedChatsPanel.tsx",
+          "packages/ui/src/app/settings/CheckForUpdatesPanel.tsx",
         ],
         message: "Settings components MUST NOT import from panels.",
       },
@@ -217,17 +224,17 @@ module.exports = {
       // ===== PANELS RESTRICTIONS =====
       {
         target: [
-          "packages/ui/src/app/components/settings/PersonalizationPanel.tsx",
-          "packages/ui/src/app/components/settings/SecurityPanel.tsx",
-          "packages/ui/src/app/components/settings/ManageAppsPanel.tsx",
-          "packages/ui/src/app/components/settings/AudioSettingsPanel.tsx",
-          "packages/ui/src/app/components/settings/NotificationsPanel.tsx",
-          "packages/ui/src/app/components/settings/AppsPanel.tsx",
-          "packages/ui/src/app/components/settings/DataControlsPanel.tsx",
-          "packages/ui/src/app/components/settings/ArchivedChatsPanel.tsx",
-          "packages/ui/src/app/components/settings/CheckForUpdatesPanel.tsx",
+          "packages/ui/src/app/settings/PersonalizationPanel.tsx",
+          "packages/ui/src/app/settings/SecurityPanel.tsx",
+          "packages/ui/src/app/settings/ManageAppsPanel.tsx",
+          "packages/ui/src/app/settings/AudioSettingsPanel.tsx",
+          "packages/ui/src/app/settings/NotificationsPanel.tsx",
+          "packages/ui/src/app/settings/AppsPanel.tsx",
+          "packages/ui/src/app/settings/DataControlsPanel.tsx",
+          "packages/ui/src/app/settings/ArchivedChatsPanel.tsx",
+          "packages/ui/src/app/settings/CheckForUpdatesPanel.tsx",
         ],
-        from: "packages/ui/src/app/components/ui/overlays/modal.tsx",
+        from: "packages/ui/src/components/ui/overlays/modal.tsx",
         message: "Panels MUST NOT import ModalDialog directly. Use parent SettingsModal instead.",
       },
     ],
@@ -241,13 +248,15 @@ module.exports = {
 
 ### ❌ Violation: Infrastructure importing from modals
 
-**File:** `packages/ui/src/app/components/ui/overlays/modal.tsx`
+**File:** `packages/ui/src/components/ui/overlays/modal.tsx`
+
 ```tsx
 // BAD: Creates circular dependency
 import { DiscoverySettingsModal } from "../../modals/DiscoverySettingsModal";
 ```
 
 **Error:**
+
 ```
 error  Infrastructure (useFocusTrap, ModalDialog) MUST NOT import from feature modals  import/no-restricted-paths
 ```
@@ -258,13 +267,15 @@ error  Infrastructure (useFocusTrap, ModalDialog) MUST NOT import from feature m
 
 ### ❌ Violation: Settings component importing from modals
 
-**File:** `packages/ui/src/app/components/settings/SettingRow.tsx`
+**File:** `packages/ui/src/app/settings/SettingRow.tsx`
+
 ```tsx
 // BAD: Creates circular dependency
 import { SettingsModal } from "../../modals/SettingsModal";
 ```
 
 **Error:**
+
 ```
 error  Settings components (SettingRow, SettingToggle, SettingDropdown) MUST NOT import from modals  import/no-restricted-paths
 ```
@@ -275,7 +286,8 @@ error  Settings components (SettingRow, SettingToggle, SettingDropdown) MUST NOT
 
 ### ❌ Violation: Panel importing ModalDialog directly
 
-**File:** `packages/ui/src/app/components/settings/PersonalizationPanel.tsx`
+**File:** `packages/ui/src/app/settings/PersonalizationPanel.tsx`
+
 ```tsx
 // BAD: Bypasses parent SettingsModal
 import { ModalDialog } from "../../ui/overlays/modal";
@@ -288,6 +300,7 @@ export function PersonalizationPanel() {
 ```
 
 **Error:**
+
 ```
 error  Panels MUST NOT import ModalDialog directly. Use parent SettingsModal instead.  import/no-restricted-paths
 ```
@@ -311,7 +324,7 @@ Look for `import/no-restricted-paths` in the loaded rules.
 Create a test file to verify rules work:
 
 ```tsx
-// packages/ui/src/app/components/ui/overlays/modal-bad-test.tsx
+// packages/ui/src/components/ui/overlays/modal-bad-test.tsx
 // This should trigger an error
 import { DiscoverySettingsModal } from "../../modals/DiscoverySettingsModal";
 
@@ -321,8 +334,9 @@ export function BadModal() {
 ```
 
 Run:
+
 ```bash
-pnpm lint packages/ui/src/app/components/ui/overlays/modal-bad-test.tsx
+pnpm lint packages/ui/src/components/ui/overlays/modal-bad-test.tsx
 ```
 
 ### 3. Test allowed imports
@@ -351,6 +365,7 @@ import { SettingToggle } from "./SettingToggle";
 ### Rule not firing?
 
 1. **Check plugin is installed:**
+
    ```bash
    pnpm list eslint-plugin-import
    ```
@@ -368,8 +383,8 @@ import { SettingToggle } from "./SettingToggle";
 2. **Add exceptions sparingly:**
    ```js
    {
-     target: "packages/ui/src/app/components/hooks/useFocusTrap.ts",
-     from: "packages/ui/src/app/components/modals/**",
+     target: "packages/ui/src/hooks/useFocusTrap.ts",
+     from: "packages/ui/src/app/modals/**",
      // Only allow for test files
      except: ["**/*.test.ts", "**/*.spec.ts"],
    }
@@ -379,13 +394,14 @@ import { SettingToggle } from "./SettingToggle";
 
 ## Summary Table
 
-| Layer | Cannot Import From | Reason |
-|-------|-------------------|--------|
-| **Infrastructure** (`useFocusTrap`, `ModalDialog`) | Modals, Settings, Panels | Keep stateless, avoid cycles |
-| **Settings Components** (`SettingRow`, `SettingToggle`, `SettingDropdown`) | Modals, Panels | Leaf nodes, reusable |
-| **Panels** (`PersonalizationPanel`, `SecurityPanel`, etc.) | `ModalDialog`, Settings | Parent manages modal |
+| Layer                                                                      | Cannot Import From       | Reason                       |
+| -------------------------------------------------------------------------- | ------------------------ | ---------------------------- |
+| **Infrastructure** (`useFocusTrap`, `ModalDialog`)                         | Modals, Settings, Panels | Keep stateless, avoid cycles |
+| **Settings Components** (`SettingRow`, `SettingToggle`, `SettingDropdown`) | Modals, Panels           | Leaf nodes, reusable         |
+| **Panels** (`PersonalizationPanel`, `SecurityPanel`, etc.)                 | `ModalDialog`, Settings  | Parent manages modal         |
 
 **Allowed flows:**
+
 - ✅ Infrastructure ← (nothing, it's the base)
 - ✅ Modals ← Infrastructure, Settings
 - ✅ Settings ← Icons, Utils

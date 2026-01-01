@@ -19,7 +19,7 @@ const widgets = [
 test.describe("widget a11y", () => {
   for (const widget of widgets) {
     test(`${widget.id} passes axe checks`, async ({ page }) => {
-      await page.goto(`/src/${widget.id}/index.html`);
+      await page.goto(`/${widget.id}`);
       await page.waitForLoadState("networkidle");
       await page.waitForTimeout(300);
 

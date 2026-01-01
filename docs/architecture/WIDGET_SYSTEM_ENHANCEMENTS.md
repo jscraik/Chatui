@@ -31,16 +31,18 @@ Successfully implemented an enhanced widget infrastructure inspired by the [Tool
 
 ```
 packages/widgets/src/
-├── plugins/
-│   └── widget-manifest.ts          # Auto-discovery Vite plugin
+├── sdk/
+│   ├── plugins/
+│   │   └── widget-manifest.ts      # Auto-discovery Vite plugin
+│   └── generated/
+│       └── widget-manifest.ts      # Auto-generated manifest (build-time)
 ├── shared/
 │   ├── widget-registry.ts          # Tool creation helpers
 │   └── widget-base.tsx             # Base components & mounting
-├── generated/
-│   └── widget-manifest.ts          # Auto-generated manifest (build-time)
-└── example-widget/                 # Example using new patterns
-    ├── index.html
-    └── main.tsx
+└── widgets/
+    └── examples/example-widget/    # Example using new patterns
+        ├── index.html
+        └── main.tsx
 
 apps/mcp/
 └── enhanced-server.js              # MCP server using new registry
@@ -64,10 +66,10 @@ export function widgetManifest(): Plugin {
 ```typescript
 export const widgetManifest = {
   "auth-demo": {
-    "name": "auth-demo",
-    "uri": "auth-demo.df302ead",    // Content hash for cache busting
-    "hash": "df302ead",
-    "originalPath": "src/auth-demo/index.html"
+    name: "auth-demo",
+    uri: "auth-demo.df302ead", // Content hash for cache busting
+    hash: "df302ead",
+    originalPath: "src/widgets/examples/auth-demo/index.html",
   },
   // ... 13 more widgets
 } as const;
@@ -85,8 +87,10 @@ const widgetTools = createWidgetTools([
       description: "Interactive dashboard with analytics",
       accessible: false,
     },
-    handler: async (args) => { /* tool logic */ }
-  }
+    handler: async (args) => {
+      /* tool logic */
+    },
+  },
 ]);
 ```
 
@@ -120,7 +124,7 @@ mountWidget(<MyWidget />);
 ## Verify
 
 1. Build widgets: `pnpm build:widgets`.
-2. Confirm `packages/widgets/src/generated/widget-manifest.ts` is updated.
+2. Confirm `packages/widgets/src/sdk/generated/widget-manifest.ts` is updated.
 3. Start MCP server: `pnpm mcp:start`.
 
 ## 🚀 Benefits Achieved

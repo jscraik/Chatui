@@ -2,45 +2,51 @@
 
 /**
  * Enhanced Monorepo Build Pipeline
- * 
+ *
  * Supports cross-platform builds for both npm and Swift Package Manager
  * with version synchronization, incremental builds, and multi-platform testing.
  */
 
-import { execSync, spawn } from 'child_process';
-import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'fs';
-import { mkdir } from 'fs/promises';
-import { dirname, join } from 'path';
+import { execSync, spawn } from "child_process";
+import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "fs";
+import { mkdir } from "fs/promises";
+import { createServer } from "net";
+import { dirname, join } from "path";
 
 // Configuration
 const CONFIG = {
-  platforms: ['web', 'macos'],
+  platforms: ["web", "macos"],
   packages: {
-    npm: ['packages/ui', 'packages/runtime', 'packages/tokens', 'packages/widgets'],
+    npm: ["packages/ui", "packages/runtime", "packages/tokens", "packages/widgets"],
     swift: [
-      'swift/ChatUIFoundation',
-      'swift/ChatUIComponents',
-      'swift/ChatUIThemes',
-      'swift/ChatUIShellChatGPT',
-      'swift/ChatUISystemIntegration',
-      'swift/ChatUIMCP',
-      'apps/macos/ChatUIApp'
+      "platforms/apple/swift/ChatUIFoundation",
+      "platforms/apple/swift/ChatUIComponents",
+      "platforms/apple/swift/ChatUIThemes",
+      "platforms/apple/swift/ChatUIShellChatGPT",
+      "platforms/apple/swift/ChatUISystemIntegration",
+      "platforms/apple/swift/ChatUIMCP",
+      "platforms/apple/apps/macos/ChatUIApp",
     ],
   },
   outputs: {
-    web: ['packages/ui/dist', 'packages/runtime/dist', 'packages/tokens/dist', 'packages/widgets/dist'],
+    web: [
+      "packages/ui/dist",
+      "packages/runtime/dist",
+      "packages/tokens/dist",
+      "packages/widgets/dist",
+    ],
     macos: [
-      'swift/ChatUIFoundation/.build',
-      'swift/ChatUIComponents/.build',
-      'swift/ChatUIThemes/.build',
-      'swift/ChatUIShellChatGPT/.build',
-      'swift/ChatUISystemIntegration/.build',
-      'swift/ChatUIMCP/.build',
-      'apps/macos/ChatUIApp/.build'
+      "platforms/apple/swift/ChatUIFoundation/.build",
+      "platforms/apple/swift/ChatUIComponents/.build",
+      "platforms/apple/swift/ChatUIThemes/.build",
+      "platforms/apple/swift/ChatUIShellChatGPT/.build",
+      "platforms/apple/swift/ChatUISystemIntegration/.build",
+      "platforms/apple/swift/ChatUIMCP/.build",
+      "platforms/apple/apps/macos/ChatUIApp/.build",
     ],
   },
-  cacheDir: '.build-cache',
-  manifestFile: '.build-cache/build-manifest.json',
+  cacheDir: ".build-cache",
+  manifestFile: ".build-cache/build-manifest.json",
 };
 
 class BuildPipeline {
@@ -55,11 +61,11 @@ class BuildPipeline {
    */
   async build(options = {}) {
     const { platforms = CONFIG.platforms, incremental = true, skipTests = false } = options;
-    
-    console.log('🚀 Enhanced Monorepo Build Pipeline');
-    console.log(`Platforms: ${platforms.join(', ')}`);
-    console.log(`Incremental: ${incremental ? 'enabled' : 'disabled'}`);
-    console.log('='.repeat(60));
+
+    console.log("🚀 Enhanced Monorepo Build Pipeline");
+    console.log(`Platforms: ${platforms.join(", ")}`);
+    console.log(`Incremental: ${incremental ? "enabled" : "disabled"}`);
+    console.log("=".repeat(60));
 
     try {
       // Step 1: Version synchronization
@@ -83,9 +89,8 @@ class BuildPipeline {
 
       this.printSummary();
       return { success: true, results: this.results };
-
     } catch (error) {
-      console.error('❌ Build failed:', error.message);
+      console.error("❌ Build failed:", error.message);
       return { success: false, error: error.message, results: this.results };
     }
   }
@@ -94,19 +99,19 @@ class BuildPipeline {
    * Synchronize versions across npm and Swift Package Manager using agvtool
    */
   async synchronizeVersions() {
-    console.log('\n📋 Synchronizing versions...');
-    
-    const rootPackageJson = JSON.parse(readFileSync('package.json', 'utf8'));
-    const version = rootPackageJson.version || '0.1.0';
+    console.log("\n📋 Synchronizing versions...");
+
+    const rootPackageJson = JSON.parse(readFileSync("package.json", "utf8"));
+    const version = rootPackageJson.version || "0.1.0";
 
     // Update npm packages
     for (const packagePath of CONFIG.packages.npm) {
-      const packageJsonPath = join(packagePath, 'package.json');
+      const packageJsonPath = join(packagePath, "package.json");
       if (existsSync(packageJsonPath)) {
-        const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
+        const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
         if (packageJson.version !== version) {
           packageJson.version = version;
-          writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n');
+          writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + "\n");
           console.log(`  ✅ Updated ${packagePath} to v${version}`);
         }
       }
@@ -114,28 +119,30 @@ class BuildPipeline {
 
     // Update Swift packages using agvtool
     for (const swiftPath of CONFIG.packages.swift) {
-      if (existsSync(join(swiftPath, 'Package.swift'))) {
+      if (existsSync(join(swiftPath, "Package.swift"))) {
         try {
           // Use agvtool for version management (if available)
           if (this.hasAgvtool()) {
-            execSync(`cd ${swiftPath} && agvtool new-marketing-version ${version}`, { stdio: 'pipe' });
+            execSync(`cd ${swiftPath} && agvtool new-marketing-version ${version}`, {
+              stdio: "pipe",
+            });
             console.log(`  ✅ Updated ${swiftPath} to v${version} (agvtool)`);
           } else {
             // Fallback: update Package.swift version comment
-            const packageSwiftPath = join(swiftPath, 'Package.swift');
-            let content = readFileSync(packageSwiftPath, 'utf8');
-            
+            const packageSwiftPath = join(swiftPath, "Package.swift");
+            let content = readFileSync(packageSwiftPath, "utf8");
+
             // Add or update version comment
             const versionComment = `// Version: ${version}`;
-            if (content.includes('// Version:')) {
+            if (content.includes("// Version:")) {
               content = content.replace(/\/\/ Version: .+/, versionComment);
             } else {
               content = content.replace(
                 /^(\/\/ swift-tools-version: .+)$/m,
-                `$1\n${versionComment}`
+                `$1\n${versionComment}`,
               );
             }
-            
+
             writeFileSync(packageSwiftPath, content);
             console.log(`  ✅ Updated ${swiftPath} to v${version} (Package.swift comment)`);
           }
@@ -145,32 +152,32 @@ class BuildPipeline {
       }
     }
 
-    this.results.push({ step: 'version-sync', success: true, version });
+    this.results.push({ step: "version-sync", success: true, version });
   }
 
   /**
    * Generate design tokens for all platforms
    */
   async generateTokens(incremental = true) {
-    console.log('\n🎨 Generating design tokens...');
+    console.log("\n🎨 Generating design tokens...");
 
     const needsRegeneration = incremental ? this.needsTokenRegeneration() : true;
 
     if (!needsRegeneration) {
-      console.log('  ⏭️  Tokens up to date, skipping generation');
-      this.results.push({ step: 'token-generation', success: true, skipped: true });
+      console.log("  ⏭️  Tokens up to date, skipping generation");
+      this.results.push({ step: "token-generation", success: true, skipped: true });
       return;
     }
 
     try {
       // Generate tokens using existing script
-      await this.runCommand('pnpm', ['generate:tokens'], { cwd: process.cwd() });
-      
+      await this.runCommand("pnpm", ["generate:tokens"], { cwd: process.cwd() });
+
       // Verify outputs exist
       const expectedOutputs = [
-        'packages/tokens/src/foundations.css',
-        'swift/ChatUIFoundation/Sources/ChatUIFoundation/Resources/Colors.xcassets',
-        'packages/tokens/outputs/manifest.json'
+        "packages/tokens/src/foundations.css",
+        "platforms/apple/swift/ChatUIFoundation/Sources/ChatUIFoundation/Resources/Colors.xcassets",
+        "packages/tokens/docs/outputs/manifest.json",
       ];
 
       for (const output of expectedOutputs) {
@@ -182,11 +189,10 @@ class BuildPipeline {
       // Validate Swift Asset Catalog colors match CSS custom properties
       await this.validateTokenConsistency();
 
-      console.log('  ✅ Token generation complete');
-      this.results.push({ step: 'token-generation', success: true });
-
+      console.log("  ✅ Token generation complete");
+      this.results.push({ step: "token-generation", success: true });
     } catch (error) {
-      console.error('  ❌ Token generation failed:', error.message);
+      console.error("  ❌ Token generation failed:", error.message);
       throw error;
     }
   }
@@ -198,10 +204,10 @@ class BuildPipeline {
     console.log(`\n🔨 Building ${platform} platform...`);
 
     switch (platform) {
-      case 'web':
+      case "web":
         await this.buildWebPlatform(incremental);
         break;
-      case 'macos':
+      case "macos":
         await this.buildMacOSPlatform(incremental);
         break;
       default:
@@ -216,13 +222,13 @@ class BuildPipeline {
     const packages = CONFIG.packages.npm;
 
     for (const packagePath of packages) {
-      if (!existsSync(join(packagePath, 'package.json'))) {
+      if (!existsSync(join(packagePath, "package.json"))) {
         console.log(`  ⏭️  Skipping ${packagePath} (no package.json)`);
         continue;
       }
 
       const needsBuild = incremental ? this.needsPackageBuild(packagePath) : true;
-      
+
       if (!needsBuild) {
         console.log(`  ⏭️  ${packagePath} up to date, skipping build`);
         continue;
@@ -230,15 +236,14 @@ class BuildPipeline {
 
       try {
         console.log(`  🔨 Building ${packagePath}...`);
-        await this.runCommand('pnpm', ['build'], { cwd: packagePath });
+        await this.runCommand("pnpm", ["build"], { cwd: packagePath });
         console.log(`  ✅ ${packagePath} build complete`);
-        
-        this.results.push({ 
-          step: 'web-build', 
-          package: packagePath, 
-          success: true 
-        });
 
+        this.results.push({
+          step: "web-build",
+          package: packagePath,
+          success: true,
+        });
       } catch (error) {
         console.error(`  ❌ ${packagePath} build failed:`, error.message);
         throw error;
@@ -253,13 +258,13 @@ class BuildPipeline {
     const swiftPackages = CONFIG.packages.swift;
 
     for (const packagePath of swiftPackages) {
-      if (!existsSync(join(packagePath, 'Package.swift'))) {
+      if (!existsSync(join(packagePath, "Package.swift"))) {
         console.log(`  ⏭️  Skipping ${packagePath} (no Package.swift)`);
         continue;
       }
 
       const needsBuild = incremental ? this.needsSwiftBuild(packagePath) : true;
-      
+
       if (!needsBuild) {
         console.log(`  ⏭️  ${packagePath} up to date, skipping build`);
         continue;
@@ -267,17 +272,16 @@ class BuildPipeline {
 
       try {
         console.log(`  🔨 Building ${packagePath}...`);
-        
-        // Build Swift package
-        await this.runCommand('swift', ['build'], { cwd: packagePath });
-        console.log(`  ✅ ${packagePath} build complete`);
-        
-        this.results.push({ 
-          step: 'macos-build', 
-          package: packagePath, 
-          success: true 
-        });
 
+        // Build Swift package
+        await this.runCommand("swift", ["build"], { cwd: packagePath });
+        console.log(`  ✅ ${packagePath} build complete`);
+
+        this.results.push({
+          step: "macos-build",
+          package: packagePath,
+          success: true,
+        });
       } catch (error) {
         console.error(`  ❌ ${packagePath} build failed:`, error.message);
         throw error;
@@ -289,38 +293,62 @@ class BuildPipeline {
    * Run tests for specified platforms
    */
   async runTests(platforms) {
-    console.log('\n🧪 Running tests...');
+    console.log("\n🧪 Running tests...");
 
     const testSuites = [];
 
-    if (platforms.includes('web')) {
+    if (platforms.includes("web")) {
+      const { webPort, widgetsPort } = await this.resolvePlaywrightPorts();
+      const playwrightEnv = {
+        ...process.env,
+        PLAYWRIGHT_WEB_PORT: String(webPort),
+        PLAYWRIGHT_WIDGETS_PORT: String(widgetsPort),
+      };
+
       testSuites.push(
-        { name: 'Unit Tests', command: 'pnpm', args: ['test'], cwd: 'packages/ui' },
-        { name: 'MCP Contract Tests', command: 'pnpm', args: ['test:mcp-contract'], cwd: process.cwd() },
-        { name: 'E2E Tests', command: 'pnpm', args: ['test:e2e:web'], cwd: process.cwd() },
-        { name: 'A11y Tests', command: 'pnpm', args: ['test:a11y:widgets'], cwd: process.cwd() }
+        { name: "Unit Tests", command: "pnpm", args: ["test"], cwd: "packages/ui" },
+        {
+          name: "MCP Contract Tests",
+          command: "pnpm",
+          args: ["test:mcp-contract"],
+          cwd: process.cwd(),
+        },
+        {
+          name: "E2E Tests",
+          command: "pnpm",
+          args: ["test:e2e:web"],
+          cwd: process.cwd(),
+          env: playwrightEnv,
+        },
+        {
+          name: "A11y Tests",
+          command: "pnpm",
+          args: ["test:a11y:widgets"],
+          cwd: process.cwd(),
+          env: playwrightEnv,
+        },
       );
     }
 
-    if (platforms.includes('macos')) {
+    if (platforms.includes("macos")) {
       // Swift tests for all four packages
       const swiftPackages = [
-        'swift/ChatUIFoundation',
-        'swift/ChatUIComponents',
-        'swift/ChatUIThemes',
-        'swift/ChatUIShellChatGPT',
-        'swift/ChatUISystemIntegration',
-        'swift/ChatUIMCP',
-        'apps/macos/ChatUIApp'
+        "platforms/apple/swift/ChatUIFoundation",
+        "platforms/apple/swift/ChatUIComponents",
+        "platforms/apple/swift/ChatUIThemes",
+        "platforms/apple/swift/ChatUIShellChatGPT",
+        "platforms/apple/swift/ChatUISystemIntegration",
+        "platforms/apple/swift/ChatUIMCP",
+        "platforms/apple/apps/macos/ChatUIApp",
       ];
-      
+
       for (const packagePath of swiftPackages) {
-        const packageName = packagePath.split('/').pop();
+        const packageName = packagePath.split("/").pop();
         testSuites.push({
           name: `Swift Tests (${packageName})`,
-          command: 'swift',
-          args: ['test'],
-          cwd: packagePath
+          command: "swift",
+          args: ["test"],
+          cwd: packagePath,
         });
       }
     }
@@ -328,32 +356,34 @@ class BuildPipeline {
     for (const suite of testSuites) {
       try {
         console.log(`  🧪 Running ${suite.name}...`);
-        await this.runCommand(suite.command, suite.args, { cwd: suite.cwd });
-        console.log(`  ✅ ${suite.name} passed`);
-        
-        this.results.push({ 
-          step: 'test', 
-          suite: suite.name, 
-          success: true 
+        await this.runCommand(suite.command, suite.args, {
+          cwd: suite.cwd,
+          env: suite.env ?? process.env,
         });
+        console.log(`  ✅ ${suite.name} passed`);
 
+        this.results.push({
+          step: "test",
+          suite: suite.name,
+          success: true,
+        });
       } catch (error) {
         console.error(`  ❌ ${suite.name} failed:`, error.message);
-        this.results.push({ 
-          step: 'test', 
-          suite: suite.name, 
-          success: false, 
-          error: error.message 
+        this.results.push({
+          step: "test",
+          suite: suite.name,
+          success: false,
+          error: error.message,
         });
         // Continue with other tests
       }
     }
 
     const failedSuites = this.results.filter(
-      (result) => result.step === 'test' && result.success === false
+      (result) => result.step === "test" && result.success === false,
     );
     if (failedSuites.length > 0) {
-      const failedList = failedSuites.map((suite) => suite.suite).join(', ');
+      const failedList = failedSuites.map((suite) => suite.suite).join(", ");
       throw new Error(`Test failures: ${failedList}`);
     }
   }
@@ -362,62 +392,119 @@ class BuildPipeline {
    * Validate that Swift Asset Catalog colors match CSS custom properties
    */
   async validateTokenConsistency() {
-    console.log('  🔍 Validating token consistency...');
+    console.log("  🔍 Validating token consistency...");
 
     try {
       const normalizeHex = (value) => value.trim().toLowerCase();
       const componentsToHex = (components) => {
         const toInt = (v) => Math.round(parseFloat(v) * 255);
-        const toHex = (v) => v.toString(16).padStart(2, '0');
+        const toHex = (v) => v.toString(16).padStart(2, "0");
         return `#${toHex(toInt(components.red))}${toHex(toInt(components.green))}${toHex(toInt(components.blue))}`;
       };
 
       // Read CSS custom properties
-      const cssPath = 'packages/tokens/src/foundations.css';
-      const cssContent = readFileSync(cssPath, 'utf8');
-      
+      const cssPath = "packages/tokens/src/foundations.css";
+      const cssContent = readFileSync(cssPath, "utf8");
+
       // Extract CSS color variables
       const cssColors = new Map();
       const cssColorRegex = /--foundation-([\w-]+):\s*([^;]+);/g;
       let match;
-      
+
       while ((match = cssColorRegex.exec(cssContent)) !== null) {
         const [, name, value] = match;
-        cssColors.set(name, value.trim());
+        cssColors.set(`foundation-${name}`, value.trim());
       }
 
       // Read Swift Asset Catalog colorsets
-      const assetCatalogPath = 'swift/ChatUIFoundation/Sources/ChatUIFoundation/Resources/Colors.xcassets';
+      const assetCatalogPath =
+        "platforms/apple/swift/ChatUIFoundation/Sources/ChatUIFoundation/Resources/Colors.xcassets";
       const swiftColors = new Map();
-      
+
       // Read all .colorset directories
       const colorsets = readdirSync(assetCatalogPath, { withFileTypes: true })
-        .filter(dirent => dirent.isDirectory() && dirent.name.endsWith('.colorset'))
-        .map(dirent => dirent.name.replace('.colorset', ''));
+        .filter((dirent) => dirent.isDirectory() && dirent.name.endsWith(".colorset"))
+        .map((dirent) => dirent.name.replace(".colorset", ""));
 
       for (const colorset of colorsets) {
-        const contentsPath = join(assetCatalogPath, `${colorset}.colorset`, 'Contents.json');
+        const contentsPath = join(assetCatalogPath, `${colorset}.colorset`, "Contents.json");
         if (existsSync(contentsPath)) {
-          const contents = JSON.parse(readFileSync(contentsPath, 'utf8'));
+          const contents = JSON.parse(readFileSync(contentsPath, "utf8"));
           swiftColors.set(colorset, contents);
         }
       }
 
       const catalogToCss = [
-        { asset: 'foundation-bg-app', light: 'foundation-bg-light-1', dark: 'foundation-bg-dark-1' },
-        { asset: 'foundation-bg-card', light: 'foundation-bg-light-2', dark: 'foundation-bg-dark-2' },
-        { asset: 'foundation-bg-card-alt', light: 'foundation-bg-light-3', dark: 'foundation-bg-dark-3' },
-        { asset: 'foundation-text-primary', light: 'foundation-text-light-primary', dark: 'foundation-text-dark-primary' },
-        { asset: 'foundation-text-secondary', light: 'foundation-text-light-secondary', dark: 'foundation-text-dark-secondary' },
-        { asset: 'foundation-text-tertiary', light: 'foundation-text-light-tertiary', dark: 'foundation-text-dark-tertiary' },
-        { asset: 'foundation-icon-primary', light: 'foundation-icon-light-primary', dark: 'foundation-icon-dark-primary' },
-        { asset: 'foundation-icon-secondary', light: 'foundation-icon-light-secondary', dark: 'foundation-icon-dark-secondary' },
-        { asset: 'foundation-icon-tertiary', light: 'foundation-icon-light-tertiary', dark: 'foundation-icon-dark-tertiary' },
-        { asset: 'foundation-accent-blue', light: 'foundation-accent-blue-light', dark: 'foundation-accent-blue' },
-        { asset: 'foundation-accent-red', light: 'foundation-accent-red-light', dark: 'foundation-accent-red' },
-        { asset: 'foundation-accent-orange', light: 'foundation-accent-orange-light', dark: 'foundation-accent-orange' },
-        { asset: 'foundation-accent-green', light: 'foundation-accent-green-light', dark: 'foundation-accent-green' },
-        { asset: 'foundation-divider', light: 'foundation-bg-light-3', dark: 'foundation-bg-dark-3' },
+        {
+          asset: "foundation-bg-app",
+          light: "foundation-bg-light-1",
+          dark: "foundation-bg-dark-1",
+        },
+        {
+          asset: "foundation-bg-card",
+          light: "foundation-bg-light-2",
+          dark: "foundation-bg-dark-2",
+        },
+        {
+          asset: "foundation-bg-card-alt",
+          light: "foundation-bg-light-3",
+          dark: "foundation-bg-dark-3",
+        },
+        {
+          asset: "foundation-text-primary",
+          light: "foundation-text-light-primary",
+          dark: "foundation-text-dark-primary",
+        },
+        {
+          asset: "foundation-text-secondary",
+          light: "foundation-text-light-secondary",
+          dark: "foundation-text-dark-secondary",
+        },
+        {
+          asset: "foundation-text-tertiary",
+          light: "foundation-text-light-tertiary",
+          dark: "foundation-text-dark-tertiary",
+        },
+        {
+          asset: "foundation-icon-primary",
+          light: "foundation-icon-light-primary",
+          dark: "foundation-icon-dark-primary",
+        },
+        {
+          asset: "foundation-icon-secondary",
+          light: "foundation-icon-light-secondary",
+          dark: "foundation-icon-dark-secondary",
+        },
+        {
+          asset: "foundation-icon-tertiary",
+          light: "foundation-icon-light-tertiary",
+          dark: "foundation-icon-dark-tertiary",
+        },
+        {
+          asset: "foundation-accent-blue",
+          light: "foundation-accent-blue-light",
+          dark: "foundation-accent-blue",
+        },
+        {
+          asset: "foundation-accent-red",
+          light: "foundation-accent-red-light",
+          dark: "foundation-accent-red",
+        },
+        {
+          asset: "foundation-accent-orange",
+          light: "foundation-accent-orange-light",
+          dark: "foundation-accent-orange",
+        },
+        {
+          asset: "foundation-accent-green",
+          light: "foundation-accent-green-light",
+          dark: "foundation-accent-green",
+        },
+        {
+          asset: "foundation-divider",
+          light: "foundation-bg-light-3",
+          dark: "foundation-bg-dark-3",
+        },
       ];
 
       // Validate consistency
@@ -442,40 +529,92 @@ class BuildPipeline {
         }
 
         const lightEntry = swiftContents.colors?.find((entry) => !entry.appearances);
-        const darkEntry = swiftContents.colors?.find((entry) => entry.appearances?.some((appearance) => appearance.value === 'dark'));
+        const darkEntry = swiftContents.colors?.find((entry) =>
+          entry.appearances?.some((appearance) => appearance.value === "dark"),
+        );
 
         if (!lightEntry || !darkEntry) {
           mismatches.push(`Swift colorset '${mapping.asset}' is missing light/dark variants`);
           continue;
         }
 
-        if (lightValue && normalizeHex(lightValue) !== componentsToHex(lightEntry.color.components)) {
-          mismatches.push(`Light mismatch for '${mapping.asset}': CSS ${mapping.light}=${lightValue} != Swift ${componentsToHex(lightEntry.color.components)}`);
+        if (
+          lightValue &&
+          normalizeHex(lightValue) !== componentsToHex(lightEntry.color.components)
+        ) {
+          mismatches.push(
+            `Light mismatch for '${mapping.asset}': CSS ${mapping.light}=${lightValue} != Swift ${componentsToHex(lightEntry.color.components)}`,
+          );
         }
         if (darkValue && normalizeHex(darkValue) !== componentsToHex(darkEntry.color.components)) {
-          mismatches.push(`Dark mismatch for '${mapping.asset}': CSS ${mapping.dark}=${darkValue} != Swift ${componentsToHex(darkEntry.color.components)}`);
+          mismatches.push(
+            `Dark mismatch for '${mapping.asset}': CSS ${mapping.dark}=${darkValue} != Swift ${componentsToHex(darkEntry.color.components)}`,
+          );
         }
       }
 
       if (mismatches.length > 0 || missing.length > 0) {
-        console.error('  ❌ Token consistency validation failed:');
+        console.error("  ❌ Token consistency validation failed:");
         for (const error of [...mismatches, ...missing]) {
           console.error(`     ${error}`);
         }
-        throw new Error('Token consistency validation failed');
+        throw new Error("Token consistency validation failed");
       }
 
       console.log(`  ✅ Validated ${catalogToCss.length} colorsets across CSS and Swift`);
-      this.results.push({ 
-        step: 'token-validation', 
-        success: true, 
-        colorCount: catalogToCss.length 
+      this.results.push({
+        step: "token-validation",
+        success: true,
+        colorCount: catalogToCss.length,
       });
-
     } catch (error) {
-      console.error('  ❌ Token validation failed:', error.message);
+      console.error("  ❌ Token validation failed:", error.message);
       throw error;
     }
+  }
+
+  /**
+   * Resolve non-conflicting ports for Playwright webServer usage.
+   */
+  async resolvePlaywrightPorts() {
+    const envWebPort = this.parseEnvPort("PLAYWRIGHT_WEB_PORT");
+    const envWidgetsPort = this.parseEnvPort("PLAYWRIGHT_WIDGETS_PORT");
+
+    const webPort = envWebPort ?? (await this.findAvailablePort(5174, 25)) ?? 5174;
+    const widgetsBase = envWidgetsPort ?? webPort + 1;
+    const widgetsPort = envWidgetsPort ?? (await this.findAvailablePort(widgetsBase, 25)) ?? widgetsBase;
+
+    return { webPort, widgetsPort };
+  }
+
+  /**
+   * Parse a port from environment variables.
+   */
+  parseEnvPort(name) {
+    const value = process.env[name];
+    if (!value) return null;
+    const parsed = Number.parseInt(value, 10);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  /**
+   * Find an available TCP port starting from a base.
+   */
+  async findAvailablePort(startPort, attempts = 10, host = "127.0.0.1") {
+    for (let port = startPort; port < startPort + attempts; port += 1) {
+      const available = await new Promise((resolve) => {
+        const server = createServer();
+        server.once("error", () => resolve(false));
+        server.once("listening", () => {
+          server.close(() => resolve(true));
+        });
+        server.listen(port, host);
+      });
+
+      if (available) return port;
+    }
+
+    return null;
   }
 
   /**
@@ -483,16 +622,16 @@ class BuildPipeline {
    */
   needsTokenRegeneration() {
     const sourceFiles = [
-      'packages/tokens/src/colors.ts',
-      'packages/tokens/src/spacing.ts',
-      'packages/tokens/src/typography.ts',
-      'packages/tokens/src/generator.ts'
+      "packages/tokens/src/colors.ts",
+      "packages/tokens/src/spacing.ts",
+      "packages/tokens/src/typography.ts",
+      "packages/tokens/src/generator.ts",
     ];
 
     const outputFiles = [
-      'packages/tokens/src/foundations.css',
-      'swift/ChatUIFoundation/Sources/ChatUIFoundation/DesignTokens.swift',
-      'swift/ChatUIFoundation/Sources/ChatUIFoundation/Resources/Colors.xcassets'
+      "packages/tokens/src/foundations.css",
+      "platforms/apple/swift/ChatUIFoundation/Sources/ChatUIFoundation/DesignTokens.swift",
+      "platforms/apple/swift/ChatUIFoundation/Sources/ChatUIFoundation/Resources/Colors.xcassets",
     ];
 
     return this.needsRebuild(sourceFiles, outputFiles);
@@ -503,20 +642,20 @@ class BuildPipeline {
    */
   needsPackageBuild(packagePath) {
     const sourceGlobs = [
-      join(packagePath, 'src/**/*'),
-      join(packagePath, 'package.json'),
-      join(packagePath, 'tsconfig.json')
+      join(packagePath, "src/**/*"),
+      join(packagePath, "package.json"),
+      join(packagePath, "tsconfig.json"),
     ];
 
-    const outputDir = join(packagePath, 'dist');
-    
+    const outputDir = join(packagePath, "dist");
+
     if (!existsSync(outputDir)) {
       return true;
     }
 
     // Simple heuristic: check if any source file is newer than dist directory
     const distStat = statSync(outputDir);
-    
+
     for (const glob of sourceGlobs) {
       try {
         const files = this.expandGlob(glob);
@@ -543,19 +682,19 @@ class BuildPipeline {
    */
   needsSwiftBuild(packagePath) {
     const sourceFiles = [
-      join(packagePath, 'Sources/**/*.swift'),
-      join(packagePath, 'Package.swift')
+      join(packagePath, "Sources/**/*.swift"),
+      join(packagePath, "Package.swift"),
     ];
 
-    const buildDir = join(packagePath, '.build');
-    
+    const buildDir = join(packagePath, ".build");
+
     if (!existsSync(buildDir)) {
       return true;
     }
 
     // Check if any source file is newer than build directory
     const buildStat = statSync(buildDir);
-    
+
     for (const glob of sourceFiles) {
       try {
         const files = this.expandGlob(glob);
@@ -582,13 +721,13 @@ class BuildPipeline {
   expandGlob(pattern) {
     // This is a simplified implementation
     // In production, you'd use a proper glob library
-    if (pattern.includes('**/*')) {
-      const baseDir = pattern.split('**/*')[0];
+    if (pattern.includes("**/*")) {
+      const baseDir = pattern.split("**/*")[0];
       if (existsSync(baseDir)) {
         return this.getAllFiles(baseDir);
       }
     }
-    
+
     return existsSync(pattern) ? [pattern] : [];
   }
 
@@ -598,7 +737,7 @@ class BuildPipeline {
   getAllFiles(dir) {
     const files = [];
     try {
-      const items = require('fs').readdirSync(dir);
+      const items = require("fs").readdirSync(dir);
       for (const item of items) {
         const fullPath = join(dir, item);
         const stat = statSync(fullPath);
@@ -652,7 +791,7 @@ class BuildPipeline {
    */
   hasAgvtool() {
     try {
-      execSync('which agvtool', { stdio: 'pipe' });
+      execSync("which agvtool", { stdio: "pipe" });
       return true;
     } catch (error) {
       void error;
@@ -666,17 +805,17 @@ class BuildPipeline {
   loadManifest() {
     if (existsSync(CONFIG.manifestFile)) {
       try {
-        return JSON.parse(readFileSync(CONFIG.manifestFile, 'utf8'));
+        return JSON.parse(readFileSync(CONFIG.manifestFile, "utf8"));
       } catch (error) {
-        console.warn('Warning: Could not load build manifest, starting fresh');
+        console.warn("Warning: Could not load build manifest, starting fresh");
         void error;
       }
     }
-    
+
     return {
-      version: '1.0.0',
+      version: "1.0.0",
       builds: {},
-      lastBuild: null
+      lastBuild: null,
     };
   }
 
@@ -685,12 +824,12 @@ class BuildPipeline {
    */
   async updateManifest() {
     await mkdir(dirname(CONFIG.manifestFile), { recursive: true });
-    
+
     this.manifest.lastBuild = {
       timestamp: new Date().toISOString(),
       duration: Date.now() - this.startTime,
       results: this.results,
-      success: this.results.every(r => r.success !== false)
+      success: this.results.every((r) => r.success !== false),
     };
 
     writeFileSync(CONFIG.manifestFile, JSON.stringify(this.manifest, null, 2));
@@ -702,20 +841,20 @@ class BuildPipeline {
   runCommand(command, args, options = {}) {
     return new Promise((resolve, reject) => {
       const child = spawn(command, args, {
-        stdio: 'inherit',
+        stdio: "inherit",
         shell: true,
-        ...options
+        ...options,
       });
 
-      child.on('close', (code) => {
+      child.on("close", (code) => {
         if (code === 0) {
           resolve();
         } else {
-          reject(new Error(`Command failed with exit code ${code}: ${command} ${args.join(' ')}`));
+          reject(new Error(`Command failed with exit code ${code}: ${command} ${args.join(" ")}`));
         }
       });
 
-      child.on('error', (error) => {
+      child.on("error", (error) => {
         reject(error);
       });
     });
@@ -726,22 +865,22 @@ class BuildPipeline {
    */
   printSummary() {
     const duration = Date.now() - this.startTime;
-    const successful = this.results.filter(r => r.success === true).length;
-    const failed = this.results.filter(r => r.success === false).length;
-    const skipped = this.results.filter(r => r.skipped === true).length;
+    const successful = this.results.filter((r) => r.success === true).length;
+    const failed = this.results.filter((r) => r.success === false).length;
+    const skipped = this.results.filter((r) => r.skipped === true).length;
 
-    console.log('\n' + '='.repeat(60));
-    console.log('📊 Build Summary');
-    console.log('='.repeat(60));
+    console.log("\n" + "=".repeat(60));
+    console.log("📊 Build Summary");
+    console.log("=".repeat(60));
     console.log(`Duration: ${(duration / 1000).toFixed(2)}s`);
     console.log(`Successful: ${successful}`);
     console.log(`Failed: ${failed}`);
     console.log(`Skipped: ${skipped}`);
-    
+
     if (failed === 0) {
-      console.log('\n✅ Build completed successfully!');
+      console.log("\n✅ Build completed successfully!");
     } else {
-      console.log('\n❌ Build completed with errors.');
+      console.log("\n❌ Build completed with errors.");
     }
   }
 }
@@ -754,16 +893,16 @@ async function main() {
   // Parse command line arguments
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case '--platforms':
-        options.platforms = args[++i]?.split(',') || CONFIG.platforms;
+      case "--platforms":
+        options.platforms = args[++i]?.split(",") || CONFIG.platforms;
         break;
-      case '--no-incremental':
+      case "--no-incremental":
         options.incremental = false;
         break;
-      case '--skip-tests':
+      case "--skip-tests":
         options.skipTests = true;
         break;
-      case '--help':
+      case "--help":
         console.log(`
 Enhanced Monorepo Build Pipeline
 
@@ -796,8 +935,8 @@ export { BuildPipeline };
 
 // Run if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  main().catch(error => {
-    console.error('Fatal error:', error);
+  main().catch((error) => {
+    console.error("Fatal error:", error);
     process.exit(1);
   });
 }

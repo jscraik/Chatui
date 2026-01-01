@@ -1,0 +1,5 @@
+@import "tailwindcss";
+@import "@chatui/tokens/foundations.css";
+
+/* Tailwind v4 scanning */
+@source "../../../../../../packages/ui/src";

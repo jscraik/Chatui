@@ -1,15 +1,20 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
+
 This is a pnpm workspace monorepo. Key locations:
-- `apps/` — runnable apps and harnesses (`apps/web`, `apps/storybook`, `apps/mcp`, macOS apps under `apps/macos/`).
+
+- `apps/` — runnable apps and harnesses (`platforms/web/apps/web`, `platforms/web/apps/storybook`, `apps/mcp`, macOS apps under `platforms/apple/apps/macos/`).
 - `packages/` — reusable libraries (`ui`, `runtime`, `tokens`, `widgets`, `cloudflare-template`).
-- `swift/` — Swift packages and macOS/iOS components; legacy Swift package lives in `swift/ui-swift/`.
+- `platforms/apple/apps/macos/` — macOS apps (Xcode/SwiftPM).
+- `platforms/apple/swift/` — Swift packages and macOS/iOS components; legacy Swift package lives in `platforms/apple/swift/ui-swift/`.
 - `docs/` — architecture, guides, audits, and build pipeline docs.
 - `scripts/` — build pipeline, version sync, and compliance tooling.
 
 ## Build, Test, and Development Commands
+
 Common commands (from root `package.json`):
+
 - `pnpm install` — install workspace dependencies.
 - `pnpm dev` — run web app + Storybook.
 - `pnpm dev:web` / `pnpm dev:storybook` — run only one surface.
@@ -20,17 +25,21 @@ Common commands (from root `package.json`):
 - `pnpm test:swift` (or `test:swift:*`) — Swift package + macOS app tests.
 
 ## Coding Style & Naming Conventions
+
 - JS/TS: ESLint (`eslint.config.js`) + Prettier (`prettier.config.cjs`). Keep files formatted via `pnpm format`.
-- React components live in `packages/ui/src/app/components/**`; Storybook stories use `*.stories.tsx`.
-- Swift: follow existing patterns in `swift/*`; centralize platform differences in `Platform.swift` where used.
+- React components live in `packages/ui/src/components/**`; Storybook stories use `*.stories.tsx`.
+- Swift: follow existing patterns in `platforms/apple/swift/*`; centralize platform differences in `Platform.swift` where used.
 
 ## Testing Guidelines
+
 - Web/UI: Vitest in `packages/ui`, Playwright for e2e/a11y/visual.
-- Swift: XCTest via `swift test` in each Swift package (`swift/*/Tests`).
-- macOS apps: see `apps/macos/SETUP_GUIDE.md` for Xcode workflow.
+- Swift: XCTest via `swift test` in each Swift package (`platforms/apple/swift/*/Tests`).
+- macOS apps: see `platforms/apple/apps/macos/SETUP_GUIDE.md` for Xcode workflow.
 
 ## Commit & Pull Request Guidelines
+
 Recent history follows Conventional Commits: `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`. PRs should include a clear summary, relevant test results, and updates to docs when public APIs or workflows change. Use the checklist in `CONTRIBUTING.md` (lint, format check, build, and tests for touched areas).
 
 ## Security & Configuration
+
 Use local `.env` only; never commit secrets. Review `SECURITY.md` for policies. For tokens and cross‑platform parity, follow `docs/architecture/` and `docs/BUILD_PIPELINE.md`.

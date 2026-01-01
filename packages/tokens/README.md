@@ -5,11 +5,13 @@ Design tokens for ChatUI. This package provides CSS variables, a Tailwind preset
 Note: For production UI code, prefer Apps SDK UI components and tokens. Use these foundations as an audit/extension layer.
 
 ## Table of contents
+
 - [Prerequisites](#prerequisites)
 - [Install](#install)
 - [Quick start](#quick-start)
 - [Generate tokens](#generate-tokens)
 - [Validate tokens](#validate-tokens)
+- [Docs](#docs)
 - [Verify](#verify)
 - [Troubleshooting](#troubleshooting)
 
@@ -25,6 +27,11 @@ Note: For production UI code, prefer Apps SDK UI components and tokens. Use thes
 - `src/tokens.css` - App-level tokens
 - `tailwind.preset.ts` - Tailwind preset for consuming apps
 - `dist/` - TypeScript exports for tooling and docs
+
+## Docs
+
+- `docs/FIGMA_EXPORT_GUIDE.md` - Figma export workflow and handoff
+- `docs/outputs/manifest.json` - Generated validation manifest (token build output)
 
 ## Install
 
@@ -83,7 +90,7 @@ pnpm validate:tokens
 After generation:
 
 - `packages/tokens/src/foundations.css` updates
-- `swift/ChatUIFoundation/Sources/ChatUIFoundation/Resources/Colors.xcassets/` updates
+- `platforms/apple/swift/ChatUIFoundation/Sources/ChatUIFoundation/Resources/Colors.xcassets/` updates
 
 ## Troubleshooting
 

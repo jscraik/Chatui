@@ -151,7 +151,7 @@ this.server.registerTool(
         data: args,
       },
     };
-  }
+  },
 );
 ```
 
@@ -173,7 +173,7 @@ const [state, setState] = useWidgetState<MyStateType>();
 
 // State persists across:
 // - Conversation turns
-// - Widget reloads  
+// - Widget reloads
 // - Server restarts
 ```
 
@@ -278,7 +278,7 @@ npx wrangler status
 ## Next Steps
 
 1. **Deploy your first widget server** using this guide
-2. **Customize tools** for your specific use cases  
+2. **Customize tools** for your specific use cases
 3. **Monitor performance** via Cloudflare dashboard
 4. **Scale up** by adding more widgets and tools
 

@@ -4,28 +4,28 @@
 
 - **IN PROGRESS: Template library scaffolding (React + SwiftUI + AppKit)**
   - ✅ Added React ChatTemplate and template registry updates (`packages/ui/src/templates/ChatTemplate.tsx`)
-  - ✅ Added template blocks exports + ComposeView panel refactor (`packages/ui/src/templates/blocks`, `packages/ui/src/app/components/chat/ComposeView.tsx`)
-  - ✅ Added template header/footer blocks (React + SwiftUI) (`packages/ui/src/templates/blocks/TemplateHeaderBar.tsx`, `swift/ChatUIComponents/Sources/ChatUIComponents/Templates/TemplateBars.swift`)
-  - ✅ Added template form field blocks (React + SwiftUI) (`packages/ui/src/templates/blocks/TemplateFormField.tsx`, `swift/ChatUIComponents/Sources/ChatUIComponents/Templates/TemplateFormFieldView.swift`)
-  - ✅ Added template field group blocks (React + SwiftUI) (`packages/ui/src/templates/blocks/TemplateFieldGroup.tsx`, `swift/ChatUIComponents/Sources/ChatUIComponents/Templates/TemplateFieldGroupView.swift`)
+  - ✅ Added template blocks exports + ComposeView panel refactor (`packages/ui/src/templates/blocks`, `packages/ui/src/components/chat/ComposeView.tsx`)
+  - ✅ Added template header/footer blocks (React + SwiftUI) (`packages/ui/src/templates/blocks/TemplateHeaderBar.tsx`, `platforms/apple/swift/ChatUIComponents/Sources/ChatUIComponents/Templates/TemplateBars.swift`)
+  - ✅ Added template form field blocks (React + SwiftUI) (`packages/ui/src/templates/blocks/TemplateFormField.tsx`, `platforms/apple/swift/ChatUIComponents/Sources/ChatUIComponents/Templates/TemplateFormFieldView.swift`)
+  - ✅ Added template field group blocks (React + SwiftUI) (`packages/ui/src/templates/blocks/TemplateFieldGroup.tsx`, `platforms/apple/swift/ChatUIComponents/Sources/ChatUIComponents/Templates/TemplateFieldGroupView.swift`)
   - ✅ Added chat view blocks + templates for ChatHeader/ChatSidebar/ChatMessages/ChatInput (React) (`packages/ui/src/templates/blocks/ChatHeaderBlock.tsx`, `packages/ui/src/templates/ChatHeaderTemplate.tsx`, etc.)
-  - ✅ Added SwiftUI chat blocks + templates (ChatHeader/Sidebar/Messages/Input) (`swift/ChatUIComponents/Sources/ChatUIComponents/Templates/ChatBlocks.swift`, `swift/ChatUIComponents/Sources/ChatUIComponents/Templates/ChatBlockTemplates.swift`)
+  - ✅ Added SwiftUI chat blocks + templates (ChatHeader/Sidebar/Messages/Input) (`platforms/apple/swift/ChatUIComponents/Sources/ChatUIComponents/Templates/ChatBlocks.swift`, `platforms/apple/swift/ChatUIComponents/Sources/ChatUIComponents/Templates/ChatBlockTemplates.swift`)
   - ✅ Added Storybook template stories for chat blocks (`packages/ui/src/templates/ChatBlocksTemplate.stories.tsx`)
   - ✅ Added widget previews for chat header/input (`packages/widgets/src/chat-header`, `packages/widgets/src/chat-input`)
   - ✅ Added widget previews for chat sidebar/messages (`packages/widgets/src/chat-sidebar`, `packages/widgets/src/chat-messages`)
-  - ✅ Added SwiftUI Xcode previews for chat block templates (`swift/ChatUIComponents/Sources/ChatUIComponents/Templates/ChatBlockTemplates.swift`)
+  - ✅ Added SwiftUI Xcode previews for chat block templates (`platforms/apple/swift/ChatUIComponents/Sources/ChatUIComponents/Templates/ChatBlockTemplates.swift`)
   - ✅ Added settings panel blocks + templates (React) (`packages/ui/src/templates/*PanelTemplate.tsx`, `packages/ui/src/templates/blocks/Setting*Block.tsx`)
   - ✅ Added Storybook settings panels gallery (`packages/ui/src/templates/SettingsPanelsTemplate.stories.tsx`)
   - ✅ Documented template architecture (`docs/architecture/template-library.md`)
   - ✅ Added web Templates viewer + route (`apps/web/src/pages/TemplatesPage.tsx`, `apps/web/src/Router.tsx`)
-  - ✅ Added macOS Templates section + viewer (`apps/macos/ChatUIApp/Sources/TemplatesView.swift`)
-  - ✅ Added SwiftUI ChatTemplateView + TemplateRegistry entry (`swift/ChatUIComponents/Sources/ChatUIComponents/Templates/ChatTemplateView.swift`)
+  - ✅ Added macOS Templates section + viewer (`platforms/apple/apps/macos/ChatUIApp/Sources/TemplatesView.swift`)
+  - ✅ Added SwiftUI ChatTemplateView + TemplateRegistry entry (`platforms/apple/swift/ChatUIComponents/Sources/ChatUIComponents/Templates/ChatTemplateView.swift`)
   - ✅ Added ChatTemplate widget entry (`packages/widgets/src/chat-template`, `apps/web/src/WidgetHarness.tsx`)
 - **COMPLETED: ComposeView parity (SwiftUI + AppKit + widget)**
-  - ✅ Added SwiftUI ComposeView shell in `swift/ChatUIComponents/Sources/ChatUIComponents/ComposeView.swift`
-  - ✅ Added AppKit wrapper controller in `swift/ChatUIComponents/Sources/ChatUIComponents/ComposeViewController.swift`
+  - ✅ Added SwiftUI ComposeView shell in `platforms/apple/swift/ChatUIComponents/Sources/ChatUIComponents/ComposeView.swift`
+  - ✅ Added AppKit wrapper controller in `platforms/apple/swift/ChatUIComponents/Sources/ChatUIComponents/ComposeViewController.swift`
   - ✅ Added widget entry at `packages/widgets/src/compose-view/` and wired into `apps/web/src/WidgetHarness.tsx`
-  - ✅ Saved feature design at `feature/composeview_parity_feature_design.md`
+  - ✅ Saved feature design at `docs/features/composeview_parity_feature_design.md`
 - **COMPLETED: Work Outstanding Checklist Verification**
   - ✅ Fixed syntax error in `scripts/new-component.mjs` (unterminated template literal)
   - ✅ Verified all 477 unit tests passing in `packages/ui`
@@ -51,7 +51,7 @@
   - ✅ Property 9: Incremental Adoption Compatibility validated
   - ✅ Complete documentation suite ready for team adoption and onboarding
 - **COMPLETED: Task 15 - Add Native macOS System Integration**
-  - ✅ Created comprehensive Swift package at `swift/ChatUISystemIntegration/` for native system integration
+  - ✅ Created comprehensive Swift package at `platforms/apple/swift/ChatUISystemIntegration/` for native system integration
   - ✅ Implemented FileSystemManager with security-scoped bookmarks and permission handling
   - ✅ Implemented NotificationManager using UserNotifications framework with categories and actions
   - ✅ Implemented ShareManager with native share sheet integration (NSSharingService on macOS, UIActivityViewController on iOS)
@@ -64,7 +64,7 @@
   - ✅ Requirements 7.1, 7.5 fully satisfied
   - ✅ Ready for integration into production macOS applications
 - **COMPLETED: Task 14 - Integrate with Existing MCP Tool System**
-  - ✅ Created comprehensive Swift package at `swift/ChatUIMCP/` for MCP integration
+  - ✅ Created comprehensive Swift package at `platforms/apple/swift/ChatUIMCP/` for MCP integration
   - ✅ Implemented async/await networking layer (MCPClient) calling existing web-based MCP infrastructure at `apps/mcp/`
   - ✅ Created widget renderer (WidgetRenderer) using SwiftUI components styled with ChatUIFoundation tokens
   - ✅ Implemented macOS-specific authentication flows (MCPAuthenticator) with Keychain integration
@@ -86,13 +86,13 @@
   - ✅ Verified all components use FColor exclusively (no hardcoded colors)
   - ✅ Confirmed no manual color switching logic required in components
   - ✅ Tested system appearance changes automatically propagate to all components
-  - ✅ Created comprehensive verification document at `swift/ChatUIFoundation/LIGHT_DARK_MODE_VERIFICATION.md`
+  - ✅ Created comprehensive verification document at `platforms/apple/swift/ChatUIFoundation/LIGHT_DARK_MODE_VERIFICATION.md`
   - ✅ Documented implementation architecture, automatic switching mechanism, component usage examples
   - ✅ Provided verification tests, benefits analysis, and testing recommendations
   - ✅ Task marked complete in tasks.md
   - ✅ Requirements 1.2, 2.1, 2.2, 2.5 validated
 - **COMPLETED: Task 11.1 - Create Component Gallery Application for Development**
-  - ✅ Created comprehensive macOS application at `apps/macos/ComponentGallery/`
+  - ✅ Created comprehensive macOS application at `platforms/apple/apps/macos/ComponentGallery/`
   - ✅ Built interactive component browser with 7 categories (Foundation, Settings, Buttons, Inputs, Navigation, Themes, Accessibility)
   - ✅ Implemented side-by-side light/dark mode comparison with toggle (`⌘⇧S`)
   - ✅ Added accessibility testing interface with interactive checklist (4 acceptance criteria with completion tracking)
@@ -106,7 +106,7 @@
   - ✅ Requirements 11.1, 11.3, 11.4 fully satisfied
   - ✅ Ready for use in development workflows as living documentation
 - **COMPLETED: Task 8 - Build Enhanced Monorepo Pipeline for Swift Packages**
-  - ✅ Updated build pipeline to support new Swift package structure (swift/ChatUIFoundation, ChatUIComponents, ChatUIThemes, ChatUIShellChatGPT)
+  - ✅ Updated build pipeline to support new Swift package structure (platforms/apple/swift/ChatUIFoundation, ChatUIComponents, ChatUIThemes, ChatUIShellChatGPT)
   - ✅ Created version synchronization script (`scripts/sync-swift-versions.mjs`) that updates Package.swift version comments
   - ✅ Created token validation script (`scripts/validate-token-consistency.mjs`) that ensures Swift Asset Catalog colors match CSS custom properties
   - ✅ Implemented semantic token mapping (CSS light/dark pairs → Swift colorsets with variants)
@@ -131,7 +131,7 @@
   - ✅ macOS hover states work correctly with Platform.isMac detection
   - ✅ Unit tests pass for all primitives (comprehensive test suite in Tests/)
   - ✅ SwiftUI previews render in Xcode (6 preview variants documented)
-  - ✅ Created comprehensive verification document at `swift/PHASE_1_CHECKPOINT_VERIFICATION.md`
+  - ✅ Created comprehensive verification document at `platforms/apple/swift/PHASE_1_CHECKPOINT_VERIFICATION.md`
   - ✅ Fixed SwiftUI Preview macro compilation issue (commented out for SPM compatibility, work in Xcode)
   - ✅ Phase 1 complete and ready for production use
   - ✅ Ready to proceed to Phase 2: Enhanced Token Generation & Build System
@@ -155,7 +155,7 @@
   - ✅ Accessible in playground sidebar under "Settings" → "Complete Settings Example"
   - ✅ All components use ChatUIFoundation tokens exclusively (FColor, FType, FSpacing)
   - ✅ Follows ChatGPTTheme styling for pixel-perfect appearance
-  - ✅ Created comprehensive summary document at `swift/ChatUIComponents/SETTINGS_EXAMPLE_SUMMARY.md`
+  - ✅ Created comprehensive summary document at `platforms/apple/swift/ChatUIComponents/SETTINGS_EXAMPLE_SUMMARY.md`
   - ✅ Requirements 3.4, 3.5, 8.1 fully satisfied
 - **COMPLETED: Task 4 - ChatUIComponents Package Settings Primitives**
   - ✅ All 6 settings primitives implemented and verified:
@@ -215,7 +215,7 @@
   - ✅ Storybook now running successfully at <http://localhost:6006>
   - ✅ Created comprehensive documentation for design system components
 - **COMPLETED: Project Cleanup & Organization (Phase 1-2)**
-  - ✅ **Phase 1**: Root directory cleanup - removed duplicate ui-swift/, empty pnpm file, consolidated prettier config, archived task summaries, improved .gitignore
+  - ✅ **Phase 1**: Root directory cleanup - removed duplicate ui-platforms/apple/swift/, empty pnpm file, consolidated prettier config, archived task summaries, improved .gitignore
   - ✅ **Phase 2**: Documentation consolidation - moved 6 root markdown files to docs/ hierarchy, updated documentation indexes, removed empty directories
   - ✅ **Phase 3 Started**: Configuration consolidation - created base Tailwind config, removed redundant tsconfig.json
 - **COMPLETED: Cloudflare Workers Integration (Phase 3)**
@@ -286,21 +286,29 @@
 
 ## Resources
 
-| Asset               | Path                                      | Purpose                                  |
-| ------------------- | ----------------------------------------- | ---------------------------------------- |
-| Repo overview       | `README.md`                               | Monorepo purpose, packages, dev commands |
-| Compliance audit    | `APPS_SDK_COMPLIANCE_AUDIT.md`            | Current Apps SDK checklist               |
-| Gap analysis        | `APPS_SDK_GAP_ANALYSIS.md`                | Detailed gap analysis vs Apps SDK docs   |
-| Widget architecture | `WIDGET_ARCHITECTURE.md`                  | Widget pipeline summary                  |
-| Compliance script   | `scripts/compliance.mjs`                  | Hex/radix/lucide/MUI policy checks       |
-| Test setup          | `packages/ui/src/test/setup.ts`           | Vitest test configuration                |
-| Test utils          | `packages/ui/src/test/utils.tsx`          | Testing Library helpers                  |
-| Widget manifest     | `packages/widgets/src/plugins/widget-manifest.ts` | Auto-discovery & content hashing plugin |
+| Asset               | Path                                              | Purpose                                  |
+| ------------------- | ------------------------------------------------- | ---------------------------------------- |
+| Repo overview       | `README.md`                                       | Monorepo purpose, packages, dev commands |
+| Compliance audit    | `APPS_SDK_COMPLIANCE_AUDIT.md`                    | Current Apps SDK checklist               |
+| Gap analysis        | `APPS_SDK_GAP_ANALYSIS.md`                        | Detailed gap analysis vs Apps SDK docs   |
+| Widget architecture | `WIDGET_ARCHITECTURE.md`                          | Widget pipeline summary                  |
+| Compliance script   | `scripts/compliance.mjs`                          | Hex/radix/lucide/MUI policy checks       |
+| Test setup          | `packages/ui/src/test/setup.ts`                   | Vitest test configuration                |
+| Test utils          | `packages/ui/src/test/utils.tsx`                  | Testing Library helpers                  |
+| Widget manifest     | `packages/widgets/src/plugins/widget-manifest.ts` | Auto-discovery & content hashing plugin  |
 | Widget registry     | `packages/widgets/src/shared/widget-registry.ts`  | Standardized tool creation helpers       |
 | Widget base         | `packages/widgets/src/shared/widget-base.tsx`     | Consistent widget components & mounting  |
-| Enhanced MCP        | `apps/mcp/enhanced-server.js`             | Auto-discovery MCP server implementation |
+| Enhanced MCP        | `apps/mcp/enhanced-server.js`                     | Auto-discovery MCP server implementation |
 
 ## Session Notes
+
+[2026-01-01]: Restructured repo for discoverability. Moved Apple platform code to `platforms/apple/`, normalized `packages/ui` source layout, and moved token manifest output to `packages/tokens/docs/outputs/manifest.json`. Added `docs/architecture/repo-map.md` and `docs/guides/repo-structure-migration.md`.
+[2026-01-01]: Updated Storybook config to point at new `packages/ui/src/app` + `design-system/showcase` story locations, added a `STORYBOOK_PORT`-aware dev script (`platforms/web/apps/storybook/scripts/storybook-dev.mjs`), and made Storybook Playwright config port-configurable. Verified `pnpm -C packages/ui build`, web dev `/` + `/harness`, Storybook dev (port 6007), and full `pnpm build` all pass.
+[2026-01-01]: Downgraded Storybook stack to `^8.6.15` (Storybook 10 warning resolved by aligning versions). Replaced `@storybook/addon-vitest` with `@storybook/addon-interactions` (addon-vitest has no v8 release). Re-ran `pnpm test:visual:storybook`: 216 passed, multiple failures due to missing/diff snapshots (new actuals/diffs in `platforms/web/apps/storybook/test-results/`). Captured full build log at `_temp/build-2026-01-01.log`.
+[2026-01-01]: Updated Storybook visual baselines with `pnpm exec playwright test -c platforms/web/apps/storybook/playwright.visual.config.ts --update-snapshots` (264/264 passed). New snapshots written under `platforms/web/apps/storybook/tests/visual/__snapshots__/storybook-visual.spec.ts/`.
+
+[2025-12-30]: Synced iconography mappings (React + Swift). Added missing `p3bdf2500` OpenAI logo path to `svg-y9xlt2pf9e.ts`, corrected React `IconShare` to use the share path, and aligned Swift ChatGPT icon paths for settings/upload/share parity.
+[2025-12-30]: Scanned icon zip for upload\* variants; none present. Verified React `IconUpload`/`IconUploadTray` match Swift `.upload`/`.uploadTray` path data.
 
 [2025-12-29]: Implemented ComposeView parity across SwiftUI/AppKit and widgets; added widget harness entry and feature design doc.
 
@@ -359,7 +367,7 @@
   - Added SwiftUI InteractionTestPanel and surfaced it in AccessibilityGallery + DocC + README
   - Added accessibility identifiers to InteractionTestPanel and provided a UI test template + Xcode setup instructions
   - Added SwiftPM unit tests for GalleryState and documented `swift test` usage
-  - Extended `_docs/storybook_production_tasks_v1.0.md` with Swift Storybook build/DocC steps
+  - Extended `docs/work/storybook_production_tasks_v1.0.md` with Swift Storybook build/DocC steps
 
 - 2025-12-29: Docs hardening continued
   - Removed legacy `ui-swift` references from ChatUIPlayground Xcode project and aligned it to modular packages
@@ -372,7 +380,7 @@
   - Updated Swift docs for current MCP port, DocC verify steps, and removed stale build timing/task references
   - Refined audit docs with historical status labeling to avoid stale compliance claims
   - Swept guides/architecture for stale commands, added verify sections, and trimmed bloat in long architecture docs
-  - Added full READMEs for apps/web, apps/storybook, and apps/macos/ChatUIPlayground with quickstarts and troubleshooting
+  - Added full READMEs for apps/web, apps/storybook, and platforms/apple/apps/macos/ChatUIPlayground with quickstarts and troubleshooting
   - Ran requested smoke/tests: web/mcp dev servers failed to bind due to EPERM sandbox, widgets build succeeded, fixed widget-manifest plugin logger usage, a11y test now fails due to EPERM bind on 5173, Storybook dev prompted for alternate port and was canceled, Swift tests failed due to toolchain/cache permissions
 
 - 2025-12-29: Documentation production hardening (in progress)
@@ -387,7 +395,7 @@
   - Added labeled switches for settings panels, labeled range slider, and paired dark-only tokens in radio/select
   - `pnpm exec eslint .` now clean (all warnings resolved)
   - Tests: `pnpm test` passed; `pnpm test:visual:web` failed (EPERM bind 127.0.0.1:5176); `pnpm test:visual:storybook` failed (webServer exit 254)
-  - Recorded all deltas for SwiftUI parity in `_docs/react_audit_log_v1.0.md`
+  - Recorded all deltas for SwiftUI parity in `docs/work/react_audit_log_v1.0.md`
 
 - 2025-12-29: Storybook production hardening pass (in progress)
   - Normalized Storybook story imports to `@storybook/react-vite` for consistent typings
@@ -403,7 +411,7 @@
   - Removed unused Storybook addon-themes to reduce dev dependency bloat
   - Added WCAG 2.2 tags to Storybook a11y config and test runner
   - Added missing Storybook addon-vitest dependency for Storybook app
-  - Wrote `_docs/storybook_production_tasks_v1.0.md` checklist for final verification
+  - Wrote `docs/work/storybook_production_tasks_v1.0.md` checklist for final verification
   - Updated migration docs to reference `pnpm storybook:test` instead of `pnpm test:components`
   - Added `tags: ["autodocs"]` to all Storybook TSX stories to ensure consistent test inclusion
   - Added missing aria-labels for icon-only composer slot buttons in ChatUIRoot stories
@@ -412,7 +420,7 @@
   - Began Swift Storybook expansion: iOS support, search filtering, DocC catalog, and action cleanup in ComponentGallery
 
 - 2025-12-29: **Native macOS Bridge Task 15 Complete - Native macOS System Integration**
-  - **ChatUISystemIntegration Package Created**: Comprehensive Swift package at `swift/ChatUISystemIntegration/` for native macOS and iOS system integration
+  - **ChatUISystemIntegration Package Created**: Comprehensive Swift package at `platforms/apple/swift/ChatUISystemIntegration/` for native macOS and iOS system integration
   - **File System Manager**: Implemented security-scoped bookmarks, native file picker (NSOpenPanel), persistent file access, read/write operations with proper error handling
   - **Notification Manager**: UserNotifications framework integration with permission management, immediate and scheduled notifications, custom categories (message, update, alert), notification actions, badge management
   - **Share Manager**: Platform-specific sharing (NSSharingService on macOS, UIActivityViewController on iOS), chat transcript generation and export, support for text, URLs, images, and files
@@ -426,7 +434,7 @@
   - **Production Ready**: Package ready for integration into production macOS applications with complete system integration features
 
 - 2025-12-29: **Native macOS Bridge Task 14 Complete - MCP Tool System Integration**
-  - **ChatUIMCP Package Created**: Comprehensive Swift package at `swift/ChatUIMCP/` for MCP integration with native macOS applications
+  - **ChatUIMCP Package Created**: Comprehensive Swift package at `platforms/apple/swift/ChatUIMCP/` for MCP integration with native macOS applications
   - **Networking Layer**: Implemented MCPClient with async/await API for calling existing web-based MCP infrastructure at `apps/mcp/`
   - **Widget Rendering**: Created WidgetRenderer using native SwiftUI components styled with ChatUIFoundation tokens (FColor, FType, FSpacing)
   - **Authentication**: Implemented MCPAuthenticator with macOS Keychain integration for secure token storage and retrieval
@@ -454,11 +462,11 @@
   - **Benefits**: Zero manual logic, compile-time safety, consistent behavior, performance optimization, automatic accessibility support
   - **Testing Recommendations**: Manual testing in Component Gallery app with appearance toggle, system appearance changes, automated unit tests
   - **Known Limitations**: SwiftUI Preview macros commented for SPM compatibility (work in Xcode), opacity adjustments intentional for theme styling
-  - **Documentation**: Created comprehensive verification document at `swift/ChatUIFoundation/LIGHT_DARK_MODE_VERIFICATION.md` with implementation details, examples, and testing guidance
+  - **Documentation**: Created comprehensive verification document at `platforms/apple/swift/ChatUIFoundation/LIGHT_DARK_MODE_VERIFICATION.md` with implementation details, examples, and testing guidance
   - **Requirements Met**: Requirements 1.2, 2.1, 2.2, 2.5 validated - automatic light/dark mode switching production-ready
 
 - 2025-12-28: **Native macOS Bridge Task 11.1 Complete - Component Gallery Application**
-  - **Component Gallery Created**: Built comprehensive macOS application at `apps/macos/ComponentGallery/` for browsing and testing all ChatUI SwiftUI components
+  - **Component Gallery Created**: Built comprehensive macOS application at `platforms/apple/apps/macos/ComponentGallery/` for browsing and testing all ChatUI SwiftUI components
   - **Interactive Browser**: 7 component categories (Foundation, Settings, Buttons, Inputs, Navigation, Themes, Accessibility) with live examples
   - **Side-by-Side Mode**: Toggle between single view and simultaneous light/dark mode comparison with `⌘⇧S` keyboard shortcut
   - **Accessibility Testing**: Interactive checklist with 4 acceptance criteria (focus order, focus rings, accessible names, VoiceOver) and completion tracking
@@ -472,7 +480,7 @@
   - **Requirements Met**: All task requirements fulfilled - interactive browser, side-by-side comparison, accessibility testing, screenshot export, token hot reload integration
 
 - 2025-12-28: **Native macOS Bridge Task 8 Complete - Enhanced Monorepo Build Pipeline**
-  - **Build Pipeline Enhancement**: Updated `scripts/build-pipeline.mjs` to support new modular Swift package structure at `swift/` directory
+  - **Build Pipeline Enhancement**: Updated `scripts/build-pipeline.mjs` to support new modular Swift package structure at `platforms/apple/swift/` directory
   - **Swift Package Support**: Added build orchestration for all 4 Swift packages (ChatUIFoundation, ChatUIComponents, ChatUIThemes, ChatUIShellChatGPT)
   - **Version Synchronization**: Created `scripts/sync-swift-versions.mjs` that updates Package.swift version comments to match root package.json
   - **Token Validation**: Created `scripts/validate-token-consistency.mjs` that validates Swift Asset Catalog colors match CSS custom properties
@@ -497,10 +505,10 @@
   - **Platform Differences**: macOS previews demonstrate hover effects (450x650), iOS previews show NavigationView integration with conditional compilation
   - **Playground Integration**: ComponentGallery.swift references SettingsExampleView, but Xcode project needs package dependency configuration
   - **Known Issue**: Xcode project shows "Unable to find module dependency: 'ChatUIComponents'" because local package dependencies not configured
-  - **Workaround**: View previews directly by opening `swift/ChatUIComponents/Package.swift` in Xcode and navigating to SettingsExampleView.swift
-  - **Fix Documentation**: Created `swift/ChatUIComponents/XCODE_INTEGRATION.md` with step-by-step instructions to add local package dependencies
+  - **Workaround**: View previews directly by opening `platforms/apple/swift/ChatUIComponents/Package.swift` in Xcode and navigating to SettingsExampleView.swift
+  - **Fix Documentation**: Created `platforms/apple/swift/ChatUIComponents/XCODE_INTEGRATION.md` with step-by-step instructions to add local package dependencies
   - **Design Token Usage**: Exclusively uses ChatUIFoundation tokens (FColor, FType, FSpacing) and ChatGPTTheme constants
-  - **Documentation**: Created comprehensive summary at `swift/ChatUIComponents/SETTINGS_EXAMPLE_SUMMARY.md`
+  - **Documentation**: Created comprehensive summary at `platforms/apple/swift/ChatUIComponents/SETTINGS_EXAMPLE_SUMMARY.md`
   - **Requirements Met**: All task requirements fulfilled - demonstrates all primitives, includes light/dark previews, shows platform variants, code ready for playground integration once Xcode project configured
 
 - 2025-12-28: **Native macOS Bridge Task 4 Complete - Component Gallery with Comprehensive Accessibility**
@@ -549,7 +557,7 @@
   - Visual snapshots now stored per Playwright project (config updated + baselines regenerated)
   - Restored `tw-animate-css` for apps/web (required by main.css)
   - Split ChatGPT icon bundles into per-pack modules to reduce bundle bloat
-  - Added Git LFS tracking for `context/foundations/*.pdf`
+  - Added Git LFS tracking for `docs/foundations/chatgpt-apps/*.pdf`
 
 - 2025-12-28: Bug-hunt fixes + validation
   - `useWidgetState` now propagates `null` to host and avoids clobbering defaults when host state is undefined

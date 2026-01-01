@@ -8,6 +8,114 @@ const typographyPath = new URL("../src/typography.ts", import.meta.url);
 const banner = "// Generated from src/tokens/index.dtcg.json. Do not edit by hand.\n";
 
 type DtcgToken = { value: string | number; type?: string };
+type DtcgRoot = {
+  color: {
+    background: {
+      light: { primary: DtcgToken; secondary: DtcgToken; tertiary: DtcgToken };
+      dark: { primary: DtcgToken; secondary: DtcgToken; tertiary: DtcgToken };
+    };
+    text: {
+      light: {
+        primary: DtcgToken;
+        secondary: DtcgToken;
+        tertiary: DtcgToken;
+        inverted: DtcgToken;
+      };
+      dark: {
+        primary: DtcgToken;
+        secondary: DtcgToken;
+        tertiary: DtcgToken;
+        inverted: DtcgToken;
+      };
+    };
+    icon: {
+      light: {
+        primary: DtcgToken;
+        secondary: DtcgToken;
+        tertiary: DtcgToken;
+        inverted: DtcgToken;
+      };
+      dark: {
+        primary: DtcgToken;
+        secondary: DtcgToken;
+        tertiary: DtcgToken;
+        inverted: DtcgToken;
+      };
+    };
+    accent: {
+      light: {
+        gray: DtcgToken;
+        red: DtcgToken;
+        orange: DtcgToken;
+        yellow: DtcgToken;
+        green: DtcgToken;
+        blue: DtcgToken;
+        purple: DtcgToken;
+        pink: DtcgToken;
+        foreground: DtcgToken;
+      };
+      dark: {
+        gray: DtcgToken;
+        red: DtcgToken;
+        orange: DtcgToken;
+        yellow: DtcgToken;
+        green: DtcgToken;
+        blue: DtcgToken;
+        purple: DtcgToken;
+        pink: DtcgToken;
+        foreground: DtcgToken;
+      };
+    };
+    interactive: {
+      light: { ring: DtcgToken };
+      dark: { ring: DtcgToken };
+    };
+  };
+  space: Record<string, DtcgToken>;
+  type: {
+    fontFamily: DtcgToken;
+    web: {
+      heading1: {
+        size: DtcgToken;
+        lineHeight: DtcgToken;
+        weight: DtcgToken;
+        tracking: DtcgToken;
+      };
+      heading2: {
+        size: DtcgToken;
+        lineHeight: DtcgToken;
+        weight: DtcgToken;
+        tracking: DtcgToken;
+      };
+      heading3: {
+        size: DtcgToken;
+        lineHeight: DtcgToken;
+        weight: DtcgToken;
+        tracking: DtcgToken;
+      };
+      body: {
+        size: DtcgToken;
+        lineHeight: DtcgToken;
+        weight: DtcgToken;
+        emphasisWeight: DtcgToken;
+        tracking: DtcgToken;
+      };
+      bodySmall: {
+        size: DtcgToken;
+        lineHeight: DtcgToken;
+        weight: DtcgToken;
+        emphasisWeight: DtcgToken;
+        tracking: DtcgToken;
+      };
+      caption: {
+        size: DtcgToken;
+        lineHeight: DtcgToken;
+        weight: DtcgToken;
+        tracking: DtcgToken;
+      };
+    };
+  };
+};
 
 function getValue(token: DtcgToken, path: string) {
   if (!token || token.value === undefined) {
@@ -16,7 +124,7 @@ function getValue(token: DtcgToken, path: string) {
   return token.value;
 }
 
-function buildColors(dtcg: any) {
+function buildColors(dtcg: DtcgRoot) {
   const c = dtcg.color;
   return {
     background: {
@@ -61,24 +169,40 @@ function buildColors(dtcg: any) {
     },
     accent: {
       light: {
-        blue: getValue(c.accent.light.blue, "color.accent.light.blue"),
+        gray: getValue(c.accent.light.gray, "color.accent.light.gray"),
         red: getValue(c.accent.light.red, "color.accent.light.red"),
         orange: getValue(c.accent.light.orange, "color.accent.light.orange"),
+        yellow: getValue(c.accent.light.yellow, "color.accent.light.yellow"),
         green: getValue(c.accent.light.green, "color.accent.light.green"),
+        blue: getValue(c.accent.light.blue, "color.accent.light.blue"),
         purple: getValue(c.accent.light.purple, "color.accent.light.purple"),
+        pink: getValue(c.accent.light.pink, "color.accent.light.pink"),
+        foreground: getValue(c.accent.light.foreground, "color.accent.light.foreground"),
       },
       dark: {
-        blue: getValue(c.accent.dark.blue, "color.accent.dark.blue"),
+        gray: getValue(c.accent.dark.gray, "color.accent.dark.gray"),
         red: getValue(c.accent.dark.red, "color.accent.dark.red"),
         orange: getValue(c.accent.dark.orange, "color.accent.dark.orange"),
+        yellow: getValue(c.accent.dark.yellow, "color.accent.dark.yellow"),
         green: getValue(c.accent.dark.green, "color.accent.dark.green"),
+        blue: getValue(c.accent.dark.blue, "color.accent.dark.blue"),
         purple: getValue(c.accent.dark.purple, "color.accent.dark.purple"),
+        pink: getValue(c.accent.dark.pink, "color.accent.dark.pink"),
+        foreground: getValue(c.accent.dark.foreground, "color.accent.dark.foreground"),
+      },
+    },
+    interactive: {
+      light: {
+        ring: getValue(c.interactive.light.ring, "color.interactive.light.ring"),
+      },
+      dark: {
+        ring: getValue(c.interactive.dark.ring, "color.interactive.dark.ring"),
       },
     },
   } as const;
 }
 
-function buildSpacing(dtcg: any) {
+function buildSpacing(dtcg: DtcgRoot) {
   const space = dtcg.space;
   return [
     getValue(space.s128, "space.s128"),
@@ -96,48 +220,50 @@ function buildSpacing(dtcg: any) {
   ] as const;
 }
 
-function buildTypography(dtcg: any) {
+function buildTypography(dtcg: DtcgRoot) {
   const t = dtcg.type;
+  // Use web platform values as default
+  const web = t.web;
   return {
     fontFamily: getValue(t.fontFamily, "type.fontFamily"),
     heading1: {
-      size: getValue(t.heading1.size, "type.heading1.size"),
-      lineHeight: getValue(t.heading1.lineHeight, "type.heading1.lineHeight"),
-      weight: getValue(t.heading1.weight, "type.heading1.weight"),
-      tracking: getValue(t.heading1.tracking, "type.heading1.tracking"),
+      size: getValue(web.heading1.size, "type.web.heading1.size"),
+      lineHeight: getValue(web.heading1.lineHeight, "type.web.heading1.lineHeight"),
+      weight: getValue(web.heading1.weight, "type.web.heading1.weight"),
+      tracking: getValue(web.heading1.tracking, "type.web.heading1.tracking"),
     },
     heading2: {
-      size: getValue(t.heading2.size, "type.heading2.size"),
-      lineHeight: getValue(t.heading2.lineHeight, "type.heading2.lineHeight"),
-      weight: getValue(t.heading2.weight, "type.heading2.weight"),
-      tracking: getValue(t.heading2.tracking, "type.heading2.tracking"),
+      size: getValue(web.heading2.size, "type.web.heading2.size"),
+      lineHeight: getValue(web.heading2.lineHeight, "type.web.heading2.lineHeight"),
+      weight: getValue(web.heading2.weight, "type.web.heading2.weight"),
+      tracking: getValue(web.heading2.tracking, "type.web.heading2.tracking"),
     },
     heading3: {
-      size: getValue(t.heading3.size, "type.heading3.size"),
-      lineHeight: getValue(t.heading3.lineHeight, "type.heading3.lineHeight"),
-      weight: getValue(t.heading3.weight, "type.heading3.weight"),
-      tracking: getValue(t.heading3.tracking, "type.heading3.tracking"),
+      size: getValue(web.heading3.size, "type.web.heading3.size"),
+      lineHeight: getValue(web.heading3.lineHeight, "type.web.heading3.lineHeight"),
+      weight: getValue(web.heading3.weight, "type.web.heading3.weight"),
+      tracking: getValue(web.heading3.tracking, "type.web.heading3.tracking"),
     },
     body: {
-      size: getValue(t.body.size, "type.body.size"),
-      lineHeight: getValue(t.body.lineHeight, "type.body.lineHeight"),
-      weight: getValue(t.body.weight, "type.body.weight"),
-      emphasisWeight: getValue(t.body.emphasisWeight, "type.body.emphasisWeight"),
-      tracking: getValue(t.body.tracking, "type.body.tracking"),
+      size: getValue(web.body.size, "type.web.body.size"),
+      lineHeight: getValue(web.body.lineHeight, "type.web.body.lineHeight"),
+      weight: getValue(web.body.weight, "type.web.body.weight"),
+      emphasisWeight: getValue(web.body.emphasisWeight, "type.web.body.emphasisWeight"),
+      tracking: getValue(web.body.tracking, "type.web.body.tracking"),
     },
     bodySmall: {
-      size: getValue(t.bodySmall.size, "type.bodySmall.size"),
-      lineHeight: getValue(t.bodySmall.lineHeight, "type.bodySmall.lineHeight"),
-      weight: getValue(t.bodySmall.weight, "type.bodySmall.weight"),
-      emphasisWeight: getValue(t.bodySmall.emphasisWeight, "type.bodySmall.emphasisWeight"),
-      tracking: getValue(t.bodySmall.tracking, "type.bodySmall.tracking"),
+      size: getValue(web.bodySmall.size, "type.web.bodySmall.size"),
+      lineHeight: getValue(web.bodySmall.lineHeight, "type.web.bodySmall.lineHeight"),
+      weight: getValue(web.bodySmall.weight, "type.web.bodySmall.weight"),
+      emphasisWeight: getValue(web.bodySmall.emphasisWeight, "type.web.bodySmall.emphasisWeight"),
+      tracking: getValue(web.bodySmall.tracking, "type.web.bodySmall.tracking"),
     },
     caption: {
-      size: getValue(t.caption.size, "type.caption.size"),
-      lineHeight: getValue(t.caption.lineHeight, "type.caption.lineHeight"),
-      weight: getValue(t.caption.weight, "type.caption.weight"),
-      emphasisWeight: getValue(t.caption.emphasisWeight, "type.caption.emphasisWeight"),
-      tracking: getValue(t.caption.tracking, "type.caption.tracking"),
+      size: getValue(web.caption.size, "type.web.caption.size"),
+      lineHeight: getValue(web.caption.lineHeight, "type.web.caption.lineHeight"),
+      weight: getValue(web.caption.weight, "type.web.caption.weight"),
+      emphasisWeight: getValue(web.caption.emphasisWeight, "type.web.caption.emphasisWeight"),
+      tracking: getValue(web.caption.tracking, "type.web.caption.tracking"),
     },
   } as const;
 }

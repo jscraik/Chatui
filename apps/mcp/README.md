@@ -3,6 +3,7 @@
 Local MCP server used to expose ChatUI widgets and tool contracts for ChatGPT integration.
 
 ## Table of contents
+
 - [Prerequisites](#prerequisites)
 - [Quick start](#quick-start)
 - [Verify](#verify)
@@ -30,7 +31,7 @@ The server listens on `PORT` (defaults to `8787`).
 ## Verify
 
 - Open `http://localhost:8787` (or your `PORT`) and confirm the server responds.
-- Run a widget harness in `apps/web` and verify widgets render.
+- Run a widget harness in `platforms/web/apps/web` and verify widgets render.
 
 ## Tests
 
@@ -46,15 +47,19 @@ pnpm test:mcp-contract
 ## Troubleshooting
 
 ### Symptom: Server fails to start
+
 Cause: Port already in use.
 Fix:
+
 ```bash
 PORT=8790 pnpm mcp:dev
 ```
 
 ### Symptom: Widgets do not render
+
 Cause: Widget bundles are not built.
 Fix:
+
 ```bash
 pnpm build:widgets
 ```

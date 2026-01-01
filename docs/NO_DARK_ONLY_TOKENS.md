@@ -92,12 +92,14 @@ The rule scans for `dark:` prefixed classes and checks if there's a correspondin
 The rule **automatically allows**:
 
 1. **Foundation tokens** (indicates proper pairing):
+
    ```tsx
    // ✅ ALLOWED: Foundation tokens are properly paired by definition
    <div className="dark:text-foundation-text-dark-primary">OK</div>
    ```
 
 2. **Valid dark-only tokens** (intentionally dark-only):
+
    ```tsx
    // ✅ ALLOWED: These are intentionally dark-only (whitelisted)
    <div className="dark:divide-white/10">OK</div>
@@ -211,9 +213,7 @@ If you need to allow specific patterns (not recommended):
 
 ```tsx
 // After (paired)
-<span className="text-foundation-text-light-primary dark:text-white">
-  Hello
-</span>
+<span className="text-foundation-text-light-primary dark:text-white">Hello</span>
 ```
 
 ### Step 3: Or use a utility pair

@@ -3,6 +3,7 @@
 Technical architecture and design decisions for the ChatUI system.
 
 ## Table of contents
+
 - [Documents](#documents)
 - [Related documentation](#related-documentation)
 
@@ -10,6 +11,7 @@ Technical architecture and design decisions for the ChatUI system.
 
 ### Core Architecture
 
+- **[repo-map.md](./repo-map.md)** - High-level map of the repository structure
 - **[WIDGET_ARCHITECTURE.md](./WIDGET_ARCHITECTURE.md)** - Widget system architecture, build system, and ChatGPT integration patterns
 - **[CROSS_PLATFORM.md](./CROSS_PLATFORM.md)** - Cross-platform architecture and design decisions
 - **[WIDGET_SYSTEM_ENHANCEMENTS.md](./WIDGET_SYSTEM_ENHANCEMENTS.md)** - Enhanced widget infrastructure implementation details
@@ -25,5 +27,5 @@ Technical architecture and design decisions for the ChatUI system.
 
 ## Related Documentation
 
-- [Component Organization](../../packages/ui/src/app/components/README.md)
+- [Component Organization](../../packages/ui/src/components/README.md)
 - [Page Development Guide](../../.kiro/steering/page-development.md)

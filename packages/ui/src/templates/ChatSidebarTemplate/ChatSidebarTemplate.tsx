@@ -1,0 +1,35 @@
+import { useState } from "react";
+
+import {
+  sampleCategories,
+  sampleCategoryColors,
+  sampleCategoryIconColors,
+  sampleCategoryIcons,
+  sampleChatHistory,
+  sampleGroupChats,
+  sampleProjects,
+  sampleUser,
+} from "../../fixtures/sample-data";
+
+import { ChatSidebarBlock } from "../blocks/ChatSidebarBlock";
+
+export function ChatSidebarTemplate() {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <div className="min-h-[640px] bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1">
+      <ChatSidebarBlock
+        isOpen={isOpen}
+        onToggle={() => setIsOpen((prev) => !prev)}
+        projects={sampleProjects}
+        chatHistory={sampleChatHistory}
+        groupChats={sampleGroupChats}
+        categories={sampleCategories}
+        categoryIcons={sampleCategoryIcons}
+        categoryColors={sampleCategoryColors}
+        categoryIconColors={sampleCategoryIconColors}
+        user={sampleUser}
+      />
+    </div>
+  );
+}

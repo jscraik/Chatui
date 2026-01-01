@@ -98,3 +98,22 @@ declare global {
     [SET_GLOBALS_EVENT_TYPE]: SetGlobalsEvent;
   }
 }
+
+// Re-export shared data types for convenience
+export type {
+  Photo,
+  Album,
+  CartItem,
+  ShopView,
+  CartWidgetState,
+  ShopWidgetState,
+} from "./data-types";
+
+export type {
+  BaseToolOutput,
+  CartToolOutput,
+  ShopToolOutput,
+  DashboardToolOutput,
+  ExampleToolOutput,
+  SearchToolOutput,
+} from "./tool-output-types";

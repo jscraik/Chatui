@@ -3,6 +3,7 @@
 Deploy your ChatUI widgets to Cloudflare Workers with automatic widget discovery and MCP server integration.
 
 ## Table of contents
+
 - [Prerequisites](#prerequisites)
 - [Quick start](#-quick-start)
 - [Project structure](#-project-structure)
@@ -92,10 +93,10 @@ packages/cloudflare-template/
 
 ### Environment Variables
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `WORKER_DOMAIN_BASE` | Yes | Your Cloudflare Workers domain |
-| `WIDGET_DOMAIN` | No | Domain shown to users in ChatGPT |
+| Variable             | Required | Description                      |
+| -------------------- | -------- | -------------------------------- |
+| `WORKER_DOMAIN_BASE` | Yes      | Your Cloudflare Workers domain   |
+| `WIDGET_DOMAIN`      | No       | Domain shown to users in ChatGPT |
 
 ### Wrangler Configuration
 
@@ -127,7 +128,7 @@ this.server.registerTool(
       content: [{ type: "text", text: "Tool executed!" }],
       structuredContent: args,
     };
-  }
+  },
 );
 ```
 

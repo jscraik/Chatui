@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -8,18 +8,59 @@ import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/
 import { z } from "zod";
 
 // Import the new widget registry system
-import { createResourceMeta, createWidgetTools } from "../../packages/widgets/src/shared/widget-registry.js";
+import {
+  createResourceMeta,
+  createWidgetTools,
+} from "../../packages/widgets/src/shared/widget-registry.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Rate limiting configuration
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX_REQUESTS = 100; // 100 requests per minute per IP
+const rateLimitStore = new Map();
+
+// Rate limiting middleware
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const key = ip || "unknown";
+  const record = rateLimitStore.get(key) || { count: 0, resetAt: now + RATE_LIMIT_WINDOW_MS };
+
+  // Reset if window expired
+  if (now > record.resetAt) {
+    record.count = 0;
+    record.resetAt = now + RATE_LIMIT_WINDOW_MS;
+  }
+
+  // Check limit
+  if (record.count >= RATE_LIMIT_MAX_REQUESTS) {
+    return false;
+  }
+
+  // Increment counter
+  record.count++;
+  rateLimitStore.set(key, record);
+
+  // Cleanup old entries periodically
+  if (Math.random() < 0.01) {
+    // 1% chance to cleanup
+    for (const [k, v] of rateLimitStore.entries()) {
+      if (now > v.resetAt + RATE_LIMIT_WINDOW_MS) {
+        rateLimitStore.delete(k);
+      }
+    }
+  }
+
+  return true;
+}
 const widgetHtmlPath = process.env.WEB_WIDGET_HTML
   ? path.resolve(process.env.WEB_WIDGET_HTML)
   : path.resolve(__dirname, "../web/dist/widget.html");
 const widgetsDistPath = process.env.WIDGETS_DIST
   ? path.resolve(process.env.WIDGETS_DIST)
-  : path.resolve(__dirname, "../../packages/widgets/dist");
+  : path.resolve(__dirname, "../../packages/widgets/dist/src");
 const CORS_ORIGIN = process.env.MCP_CORS_ORIGIN ?? "*";
-const DNS_REBINDING_PROTECTION =
-  process.env.MCP_DNS_REBINDING_PROTECTION === "true";
+const DNS_REBINDING_PROTECTION = process.env.MCP_DNS_REBINDING_PROTECTION === "true";
 const ALLOWED_HOSTS = (process.env.MCP_ALLOWED_HOSTS ?? "")
   .split(",")
   .map((host) => host.trim())
@@ -32,14 +73,54 @@ const WIDGET_DOMAIN = process.env.WIDGET_DOMAIN;
 function readWidgetHtml() {
   if (!existsSync(widgetHtmlPath)) {
     throw new Error(
-      "Widget HTML not found. Build the web widget first (pnpm -C apps/web build:widget) or set WEB_WIDGET_HTML.",
+      "Widget HTML not found. Build the web widget first (pnpm -C platforms/web/apps/web build:widget) or set WEB_WIDGET_HTML.",
     );
   }
   return readFileSync(widgetHtmlPath, "utf8");
 }
 
+const widgetIndex = new Map();
+
+function buildWidgetIndex(rootDir) {
+  widgetIndex.clear();
+
+  const stack = [rootDir];
+  while (stack.length > 0) {
+    const currentDir = stack.pop();
+    if (!currentDir) continue;
+
+    let entries = [];
+    try {
+      entries = readdirSync(currentDir, { withFileTypes: true });
+    } catch {
+      continue;
+    }
+
+    for (const entry of entries) {
+      const entryPath = path.join(currentDir, entry.name);
+      if (entry.isDirectory()) {
+        stack.push(entryPath);
+        continue;
+      }
+      if (entry.isFile() && entry.name === "index.html") {
+        const widgetId = path.basename(path.dirname(entryPath));
+        if (!widgetIndex.has(widgetId)) {
+          widgetIndex.set(widgetId, entryPath);
+        }
+      }
+    }
+  }
+}
+
+function resolveWidgetPath(widgetName) {
+  if (widgetIndex.size === 0) {
+    buildWidgetIndex(widgetsDistPath);
+  }
+  return widgetIndex.get(widgetName) ?? path.join(widgetsDistPath, widgetName, "index.html");
+}
+
 function readWidgetBundle(widgetName) {
-  const widgetPath = path.join(widgetsDistPath, `${widgetName}.html`);
+  const widgetPath = resolveWidgetPath(widgetName);
   if (!existsSync(widgetPath)) {
     throw new Error(
       `Widget bundle not found: ${widgetName}. Build widgets first (pnpm -C packages/widgets build) or set WIDGETS_DIST.`,
@@ -51,7 +132,10 @@ function readWidgetBundle(widgetName) {
 // Import widget manifest (will be auto-generated)
 let widgetManifest;
 try {
-  const manifestPath = path.resolve(__dirname, "../../packages/widgets/src/generated/widget-manifest.js");
+  const manifestPath = path.resolve(
+    __dirname,
+    "../../packages/widgets/src/sdk/generated/widget-manifest.js",
+  );
   if (existsSync(manifestPath)) {
     widgetManifest = await import(manifestPath);
   }
@@ -62,17 +146,41 @@ try {
     widgetManifest: {
       "auth-demo": { name: "auth-demo", uri: "auth-demo.fallback", hash: "fallback" },
       "chat-view": { name: "chat-view", uri: "chat-view.fallback", hash: "fallback" },
-      "dashboard-widget": { name: "dashboard-widget", uri: "dashboard-widget.fallback", hash: "fallback" },
-      "kitchen-sink-lite": { name: "kitchen-sink-lite", uri: "kitchen-sink-lite.fallback", hash: "fallback" },
-      "pizzaz-carousel": { name: "pizzaz-carousel", uri: "pizzaz-carousel.fallback", hash: "fallback" },
-      "pizzaz-gallery": { name: "pizzaz-gallery", uri: "pizzaz-gallery.fallback", hash: "fallback" },
-      "pizzaz-markdown": { name: "pizzaz-markdown", uri: "pizzaz-markdown.fallback", hash: "fallback" },
+      "dashboard-widget": {
+        name: "dashboard-widget",
+        uri: "dashboard-widget.fallback",
+        hash: "fallback",
+      },
+      "kitchen-sink-lite": {
+        name: "kitchen-sink-lite",
+        uri: "kitchen-sink-lite.fallback",
+        hash: "fallback",
+      },
+      "pizzaz-carousel": {
+        name: "pizzaz-carousel",
+        uri: "pizzaz-carousel.fallback",
+        hash: "fallback",
+      },
+      "pizzaz-gallery": {
+        name: "pizzaz-gallery",
+        uri: "pizzaz-gallery.fallback",
+        hash: "fallback",
+      },
+      "pizzaz-markdown": {
+        name: "pizzaz-markdown",
+        uri: "pizzaz-markdown.fallback",
+        hash: "fallback",
+      },
       "pizzaz-shop": { name: "pizzaz-shop", uri: "pizzaz-shop.fallback", hash: "fallback" },
       "pizzaz-table": { name: "pizzaz-table", uri: "pizzaz-table.fallback", hash: "fallback" },
-      "search-results": { name: "search-results", uri: "search-results.fallback", hash: "fallback" },
+      "search-results": {
+        name: "search-results",
+        uri: "search-results.fallback",
+        hash: "fallback",
+      },
       "shopping-cart": { name: "shopping-cart", uri: "shopping-cart.fallback", hash: "fallback" },
       "solar-system": { name: "solar-system", uri: "solar-system.fallback", hash: "fallback" },
-    }
+    },
   };
 }
 
@@ -177,7 +285,7 @@ function createEnhancedChatUiServer() {
   // Auto-register widget resources using manifest
   Object.entries(widgetManifest.widgetManifest).forEach(([widgetName, widgetInfo]) => {
     const uri = `ui://widget/${widgetInfo.uri}`;
-    
+
     server.registerResource(`${widgetName}-widget`, uri, {}, async () => ({
       contents: [
         {
@@ -189,7 +297,7 @@ function createEnhancedChatUiServer() {
             "openai/widgetDescription": `Interactive ${widgetName} component with auto-generated cache busting`,
             "openai/widgetCSP": resourceMeta["openai/widgetCSP"],
             ...(resourceMeta["openai/widgetDomain"] && {
-              "openai/widgetDomain": resourceMeta["openai/widgetDomain"]
+              "openai/widgetDomain": resourceMeta["openai/widgetDomain"],
             }),
           },
         },
@@ -209,7 +317,7 @@ function createEnhancedChatUiServer() {
           "openai/widgetDescription": "Interactive chat interface with Apps SDK UI components",
           "openai/widgetCSP": resourceMeta["openai/widgetCSP"],
           ...(resourceMeta["openai/widgetDomain"] && {
-            "openai/widgetDomain": resourceMeta["openai/widgetDomain"]
+            "openai/widgetDomain": resourceMeta["openai/widgetDomain"],
           }),
         },
       },
@@ -420,7 +528,7 @@ function createEnhancedChatUiServer() {
         annotations: getAnnotationsForTool(name), // Helper function to get appropriate annotations
         _meta: config._meta,
       },
-      handler
+      handler,
     );
   });
 
@@ -442,9 +550,15 @@ function getInputSchemaForTool(toolName) {
 }
 
 function getAnnotationsForTool(toolName) {
-  const readOnlyTools = ["chat-view", "search-results", "pizzaz-table", "dashboard-widget", "kitchen-sink-lite"];
+  const readOnlyTools = [
+    "chat-view",
+    "search-results",
+    "pizzaz-table",
+    "dashboard-widget",
+    "kitchen-sink-lite",
+  ];
   const isReadOnly = readOnlyTools.includes(toolName);
-  
+
   return {
     readOnlyHint: isReadOnly,
     destructiveHint: false,
@@ -466,6 +580,23 @@ if (isDirectRun) {
   const httpServer = createServer(async (req, res) => {
     if (!req.url) {
       res.writeHead(400).end("Missing URL");
+      return;
+    }
+
+    // Rate limiting check
+    const clientIp =
+      req.headers["x-forwarded-for"]?.toString().split(",")[0] ||
+      req.headers["x-real-ip"]?.toString() ||
+      req.socket.remoteAddress ||
+      "unknown";
+
+    if (!checkRateLimit(clientIp)) {
+      res.writeHead(429, {
+        "Content-Type": "application/json",
+        "Retry-After": "60",
+        "Access-Control-Allow-Origin": CORS_ORIGIN,
+      });
+      res.end(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }));
       return;
     }
 
@@ -531,6 +662,8 @@ if (isDirectRun) {
     console.log(`ChatUI Enhanced MCP server listening on http://localhost:${port}${MCP_PATH}`);
     console.log(`Widget source: ${widgetHtmlPath}`);
     console.log(`Widget bundles: ${widgetsDistPath}`);
-    console.log(`Auto-discovery: ${Object.keys(widgetManifest.widgetManifest).length} widgets found`);
+    console.log(
+      `Auto-discovery: ${Object.keys(widgetManifest.widgetManifest).length} widgets found`,
+    );
   });
 }

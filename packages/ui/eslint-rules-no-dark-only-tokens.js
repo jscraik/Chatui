@@ -187,7 +187,10 @@ const noDarkOnlyTokensRule = {
           }
         }
         // Handle template literals className={`...`}
-        else if (value.type === "JSXExpressionContainer" && value.expression.type === "TemplateLiteral") {
+        else if (
+          value.type === "JSXExpressionContainer" &&
+          value.expression.type === "TemplateLiteral"
+        ) {
           for (const quasi of value.expression.quasis) {
             const classValue = quasi.value.cooked;
             if (!classValue) continue;
@@ -205,7 +208,10 @@ const noDarkOnlyTokensRule = {
           }
         }
         // Handle ternary operators
-        else if (value.type === "JSXExpressionContainer" && value.expression.type === "ConditionalExpression") {
+        else if (
+          value.type === "JSXExpressionContainer" &&
+          value.expression.type === "ConditionalExpression"
+        ) {
           const checkExpression = (expr) => {
             if (expr.type === "Literal" && typeof expr.value === "string") {
               const unpaired = findUnpairedDarkTokens(expr.value);

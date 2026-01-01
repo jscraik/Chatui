@@ -4,6 +4,8 @@ import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import importPlugin from "eslint-plugin-import";
 import jsxA11y from "eslint-plugin-jsx-a11y";
+import sonarjs from "eslint-plugin-sonarjs";
+import complexity from "eslint-plugin-complexity";
 
 import noDarkOnlyTokensRule from "./packages/ui/eslint-rules-no-dark-only-tokens.js";
 
@@ -12,7 +14,7 @@ export default [
     ignores: [
       "**/node_modules/**",
       "**/dist/**",
-      "apps/storybook/storybook-static/**",
+      "platforms/web/apps/storybook/storybook-static/**",
       "**/*.mdx",
       "scripts/new-component.mjs",
       "**/.*/**",
@@ -28,6 +30,8 @@ export default [
       "react-hooks": reactHooks,
       import: importPlugin,
       "jsx-a11y": jsxA11y,
+      sonarjs,
+      complexity,
       "@chatui-dark-only-tokens": noDarkOnlyTokensRule,
     },
     languageOptions: {
@@ -59,6 +63,13 @@ export default [
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
       "@typescript-eslint/no-explicit-any": "warn",
+      // Complexity rules (warnings initially, can be escalated to errors)
+      "sonarjs/cognitive-complexity": ["warn", 25],
+      "complexity": ["warn", 15],
+      "sonarjs/max-switch-cases": ["warn", 15],
+      "sonarjs/no-duplicate-string": "warn",
+      "sonarjs/no-identical-conditions": "error",
+      "sonarjs/no-identical-expressions": "error",
       // Prevent dark-only token usage (media mode)
       "@chatui-dark-only-tokens/no-dark-only-tokens": [
         "error",
@@ -73,6 +84,17 @@ export default [
     files: ["**/*.stories.*"],
     rules: {
       "react-hooks/rules-of-hooks": "off",
+      // Allow higher complexity for stories
+      "sonarjs/cognitive-complexity": ["off"],
+      "sonarjs/no-duplicate-string": ["off"],
+    },
+  },
+  // Allow higher complexity for tests
+  {
+    files: ["**/*.{test,spec}.{js,jsx,ts,tsx,mjs,cjs}"],
+    rules: {
+      "sonarjs/cognitive-complexity": ["off"],
+      "complexity": ["off"],
     },
   },
   {
@@ -88,10 +110,7 @@ export default [
       },
     },
     rules: {
-      "no-unused-vars": [
-        "warn",
-        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
-      ],
+      "no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
       "@typescript-eslint/no-require-imports": "off",
     },
   },

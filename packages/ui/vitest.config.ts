@@ -8,33 +8,45 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
-    setupFiles: ["./src/test/setup.ts"],
+    setupFiles: ["./src/testing/setup.ts"],
     include: ["src/**/*.test.{ts,tsx}"],
     exclude: ["**/node_modules/**", "**/dist/**", "**/*.stories.*"],
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],
-      include: ["src/app/components/**/*.tsx"],
-      exclude: ["**/*.stories.*", "**/*.test.*", "**/index.ts", "src/vendor/**"],
+      include: ["src/components/**/*.tsx", "src/app/**/*.tsx"],
+      exclude: [
+        "**/*.stories.*",
+        "**/*.test.*",
+        "**/index.ts",
+        "src/integrations/**",
+        "src/testing/**",
+      ],
     },
   },
   resolve: {
     alias: {
       "@chatui/tokens": path.resolve(__dirname, "../tokens/src"),
       // Mock the vendor re-exports to avoid apps-sdk-ui ESM issues
-      "./vendor/appsSdkUi": path.resolve(__dirname, "./src/test/__mocks__/vendor/appsSdkUi.tsx"),
-      "../vendor/appsSdkUi": path.resolve(__dirname, "./src/test/__mocks__/vendor/appsSdkUi.tsx"),
-      "../../vendor/appsSdkUi": path.resolve(
+      "./integrations/apps-sdk/vendor": path.resolve(__dirname, "./src/testing/mocks/appsSdkUi.tsx"),
+      "../integrations/apps-sdk/vendor": path.resolve(__dirname, "./src/testing/mocks/appsSdkUi.tsx"),
+      "../../integrations/apps-sdk/vendor": path.resolve(
         __dirname,
-        "./src/test/__mocks__/vendor/appsSdkUi.tsx",
+        "./src/testing/mocks/appsSdkUi.tsx",
       ),
-      "../../../vendor/appsSdkUi": path.resolve(
+      "../../../integrations/apps-sdk/vendor": path.resolve(
         __dirname,
-        "./src/test/__mocks__/vendor/appsSdkUi.tsx",
+        "./src/testing/mocks/appsSdkUi.tsx",
       ),
+      "./integrations/apps-sdk": path.resolve(__dirname, "./src/testing/mocks/appsSdkUi.tsx"),
+      "../integrations/apps-sdk": path.resolve(__dirname, "./src/testing/mocks/appsSdkUi.tsx"),
+      "../../integrations/apps-sdk": path.resolve(__dirname, "./src/testing/mocks/appsSdkUi.tsx"),
+      "../../../integrations/apps-sdk": path.resolve(__dirname, "./src/testing/mocks/appsSdkUi.tsx"),
       // Alias for test utils - support both old and new paths
-      "../../../test/utils": path.resolve(__dirname, "./src/test/utils.tsx"),
-      "../../../../test/utils": path.resolve(__dirname, "./src/test/utils.tsx"),
+      "../../../test/utils": path.resolve(__dirname, "./src/testing/utils.tsx"),
+      "../../../../test/utils": path.resolve(__dirname, "./src/testing/utils.tsx"),
+      "../../../testing/utils": path.resolve(__dirname, "./src/testing/utils.tsx"),
+      "../../../../testing/utils": path.resolve(__dirname, "./src/testing/utils.tsx"),
     },
   },
 });

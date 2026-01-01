@@ -1,0 +1,46 @@
+import { HostProvider, createEmbeddedHost, ensureMockOpenAI } from "@chatui/runtime";
+import { AppsSDKUIProvider } from "@chatui/ui";
+import { ComposeTemplate } from "@chatui/ui/templates";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+
+import { useMaxHeight, useTheme } from "../../../shared/openai-hooks";
+import "../../../styles.css";
+
+if (import.meta.env.DEV) {
+  ensureMockOpenAI({
+    toolOutput: {
+      instructions: "",
+    },
+  });
+}
+
+function ComposeWidgetCore() {
+  const theme = useTheme();
+  const maxHeight = useMaxHeight();
+  const containerClass = theme === "dark" ? "dark" : "";
+
+  return (
+    <div className={containerClass} style={maxHeight ? { maxHeight: `${maxHeight}px` } : undefined}>
+      <ComposeTemplate />
+    </div>
+  );
+}
+
+function ComposeWidget() {
+  const host = createEmbeddedHost();
+
+  return (
+    <HostProvider host={host}>
+      <AppsSDKUIProvider linkComponent="a">
+        <ComposeWidgetCore />
+      </AppsSDKUIProvider>
+    </HostProvider>
+  );
+}
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <ComposeWidget />
+  </StrictMode>,
+);

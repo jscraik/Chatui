@@ -10,6 +10,7 @@
     },
     "./foundations.css": "./src/foundations.css",
     "./tokens.css": "./src/tokens.css",
+    "./icon-picker-theme.css": "./src/icon-picker-theme.css",
     "./tailwind.preset": "./tailwind.preset.ts",
     "./tokens/index.dtcg.json": "./src/tokens/index.dtcg.json"
   },
@@ -22,7 +23,8 @@
   "types": "./dist/index.d.ts",
   "sideEffects": [
     "./src/foundations.css",
-    "./src/tokens.css"
+    "./src/tokens.css",
+    "./src/icon-picker-theme.css"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",

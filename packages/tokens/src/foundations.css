@@ -17,11 +17,14 @@
   --foundation-text-dark-tertiary: #AFAFAF;
 
   /* Dark accents */
-  --foundation-accent-blue: #0285FF;
+  --foundation-accent-gray: #ABABAB;
   --foundation-accent-red: #FF8583;
   --foundation-accent-orange: #FF9E6C;
+  --foundation-accent-yellow: #FFD666;
   --foundation-accent-green: #40C977;
-  --foundation-accent-purple: #B280E6;
+  --foundation-accent-blue: #5A9FF5;
+  --foundation-accent-purple: #BA8FF7;
+  --foundation-accent-pink: #FF6BC7;
 
   /* Light backgrounds */
   --foundation-bg-light-1: #FFFFFF;
@@ -31,13 +34,13 @@
   /* Light text */
   --foundation-text-light-primary: #0D0D0D;
   --foundation-text-light-secondary: #5D5D5D;
-  --foundation-text-light-tertiary: #686868;
+  --foundation-text-light-tertiary: #8F8F8F;
 
   /* Light icon */
   --foundation-icon-light-primary: #0D0D0D;
   --foundation-icon-light-secondary: #5D5D5D;
-  --foundation-icon-light-tertiary: #686868;
-  --foundation-icon-light-inverted: #686868;
+  --foundation-icon-light-tertiary: #8F8F8F;
+  --foundation-icon-light-inverted: #8F8F8F;
 
   /* Dark icon */
   --foundation-icon-dark-primary: #FFFFFF;
@@ -46,11 +49,14 @@
   --foundation-icon-dark-inverted: #AFAFAF;
 
   /* Light accents */
-  --foundation-accent-blue-light: #0285FF;
+  --foundation-accent-gray-light: #8F8F8F;
   --foundation-accent-red-light: #E02E2A;
   --foundation-accent-orange-light: #E25507;
+  --foundation-accent-yellow-light: #C08C00;
   --foundation-accent-green-light: #008635;
-  --foundation-accent-purple-light: #9966CC;
+  --foundation-accent-blue-light: #0285FF;
+  --foundation-accent-purple-light: #934FF2;
+  --foundation-accent-pink-light: #E3008D;
 
   /* Spacing scale */
   --foundation-space-128: 128px;

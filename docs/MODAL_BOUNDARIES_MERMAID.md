@@ -289,11 +289,11 @@ graph LR
 
 ```mermaid
 graph TB
-    subgraph "packages/ui/src/app/components/"
+    subgraph "packages/ui/src/"
         DIR1["hooks/"]
-        DIR2["ui/overlays/"]
-        DIR3["modals/"]
-        DIR4["settings/"]
+        DIR2["components/ui/overlays/"]
+        DIR3["app/modals/"]
+        DIR4["app/settings/"]
     end
 
     subgraph "Infrastructure Files"

@@ -41,7 +41,10 @@ function normalizeLink(raw) {
   if (link.startsWith("<") && link.endsWith(">")) {
     link = link.slice(1, -1);
   }
-  if ((link.startsWith("\"") && link.endsWith("\"")) || (link.startsWith("'") && link.endsWith("'"))) {
+  if (
+    (link.startsWith('"') && link.endsWith('"')) ||
+    (link.startsWith("'") && link.endsWith("'"))
+  ) {
     link = link.slice(1, -1);
   }
   return link;
@@ -143,7 +146,7 @@ async function main() {
   console.error(`❌ Broken markdown links: ${allErrors.length}`);
   for (const err of allErrors) {
     console.error(
-      `- ${err.file}:${err.line}:${err.column} -> ${err.link} (missing: ${err.target})`
+      `- ${err.file}:${err.line}:${err.column} -> ${err.link} (missing: ${err.target})`,
     );
   }
 

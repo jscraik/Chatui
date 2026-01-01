@@ -2,30 +2,31 @@
 
 /**
  * Validate Token Consistency
- * 
+ *
  * Ensures Swift Asset Catalog colors match CSS custom properties exactly.
  * This prevents drift between React and SwiftUI design tokens.
  */
 
-import { existsSync, readFileSync, readdirSync } from 'fs';
-import { join } from 'path';
+import { existsSync, readFileSync, readdirSync } from "fs";
+import { join } from "path";
 
-const CSS_PATH = 'packages/tokens/src/foundations.css';
-const ASSET_CATALOG_PATH = 'swift/ChatUIFoundation/Sources/ChatUIFoundation/Resources/Colors.xcassets';
+const CSS_PATH = "packages/tokens/src/foundations.css";
+const ASSET_CATALOG_PATH =
+  "platforms/apple/swift/ChatUIFoundation/Sources/ChatUIFoundation/Resources/Colors.xcassets";
 
 function validateTokenConsistency() {
-  console.log('🔍 Validating token consistency between CSS and Swift...\n');
+  console.log("🔍 Validating token consistency between CSS and Swift...\n");
 
   try {
     // Read CSS custom properties
-    const cssContent = readFileSync(CSS_PATH, 'utf8');
+    const cssContent = readFileSync(CSS_PATH, "utf8");
     const cssColors = extractCSSColors(cssContent);
-    
+
     console.log(`Found ${cssColors.size} CSS color tokens`);
 
     // Read Swift Asset Catalog colorsets
     const swiftColors = extractSwiftColors(ASSET_CATALOG_PATH);
-    
+
     console.log(`Found ${swiftColors.size} Swift colorsets\n`);
 
     // Validate consistency
@@ -35,11 +36,11 @@ function validateTokenConsistency() {
     // Swift uses semantic tokens (foundation-text-primary) with light/dark variants
     // CSS uses explicit light/dark tokens (foundation-text-light-primary, foundation-text-dark-primary)
     // We need to map CSS light/dark pairs to Swift semantic tokens
-    
+
     const cssSemanticTokens = new Set();
     for (const cssName of cssColors.keys()) {
       // Extract semantic name by removing -light or -dark suffix
-      const semanticName = cssName.replace(/-(light|dark)-/, '-');
+      const semanticName = cssName.replace(/-(light|dark)-/, "-");
       cssSemanticTokens.add(semanticName);
     }
 
@@ -55,7 +56,9 @@ function validateTokenConsistency() {
     // Check that each CSS semantic token has a Swift colorset
     for (const semanticName of cssSemanticTokens) {
       if (!swiftColors.has(semanticName)) {
-        warnings.push(`⚠️  CSS semantic token '${semanticName}' not found in Swift Asset Catalog (may not be implemented yet)`);
+        warnings.push(
+          `⚠️  CSS semantic token '${semanticName}' not found in Swift Asset Catalog (may not be implemented yet)`,
+        );
       }
     }
 
@@ -68,38 +71,37 @@ function validateTokenConsistency() {
     }
 
     // Print results
-    console.log('='.repeat(60));
-    console.log('📊 Validation Results');
-    console.log('='.repeat(60));
+    console.log("=".repeat(60));
+    console.log("📊 Validation Results");
+    console.log("=".repeat(60));
 
     if (errors.length === 0 && warnings.length === 0) {
-      console.log('✅ All tokens are consistent!');
+      console.log("✅ All tokens are consistent!");
       console.log(`   ${swiftColors.size} colors validated across CSS and Swift`);
       console.log(`   ${cssSemanticTokens.size} semantic tokens mapped correctly`);
       return true;
     }
 
     if (errors.length > 0) {
-      console.log('\n❌ Errors found:');
-      errors.forEach(error => console.log(`   ${error}`));
+      console.log("\n❌ Errors found:");
+      errors.forEach((error) => console.log(`   ${error}`));
     }
 
     if (warnings.length > 0) {
-      console.log('\n⚠️  Warnings (non-blocking):');
-      warnings.forEach(warning => console.log(`   ${warning}`));
+      console.log("\n⚠️  Warnings (non-blocking):");
+      warnings.forEach((warning) => console.log(`   ${warning}`));
     }
 
     if (errors.length > 0) {
-      console.log('\n❌ Token validation failed');
+      console.log("\n❌ Token validation failed");
       process.exit(1);
     } else {
-      console.log('\n✅ Token validation passed');
-      console.log('   Note: Warnings indicate tokens that may not be fully implemented yet');
+      console.log("\n✅ Token validation passed");
+      console.log("   Note: Warnings indicate tokens that may not be fully implemented yet");
       return true;
     }
-
   } catch (error) {
-    console.error('❌ Validation failed:', error.message);
+    console.error("❌ Validation failed:", error.message);
     process.exit(1);
   }
 }
@@ -133,15 +135,15 @@ function extractSwiftColors(assetCatalogPath) {
   }
 
   const entries = readdirSync(assetCatalogPath, { withFileTypes: true });
-  
+
   for (const entry of entries) {
-    if (entry.isDirectory() && entry.name.endsWith('.colorset')) {
-      const colorsetName = entry.name.replace('.colorset', '');
-      const contentsPath = join(assetCatalogPath, entry.name, 'Contents.json');
-      
+    if (entry.isDirectory() && entry.name.endsWith(".colorset")) {
+      const colorsetName = entry.name.replace(".colorset", "");
+      const contentsPath = join(assetCatalogPath, entry.name, "Contents.json");
+
       if (existsSync(contentsPath)) {
         try {
-          const contents = JSON.parse(readFileSync(contentsPath, 'utf8'));
+          const contents = JSON.parse(readFileSync(contentsPath, "utf8"));
           colors.set(colorsetName, contents);
         } catch (error) {
           console.warn(`Warning: Could not parse ${contentsPath}: ${error.message}`);
@@ -166,11 +168,9 @@ function validateColorset(name, colorset) {
   }
 
   // Check for light and dark variants
-  const hasLight = colorset.colors.some(c => 
-    !c.appearances || c.appearances.length === 0
-  );
-  const hasDark = colorset.colors.some(c => 
-    c.appearances && c.appearances.some(a => a.value === 'dark')
+  const hasLight = colorset.colors.some((c) => !c.appearances || c.appearances.length === 0);
+  const hasDark = colorset.colors.some(
+    (c) => c.appearances && c.appearances.some((a) => a.value === "dark"),
   );
 
   if (!hasLight) {
@@ -195,7 +195,7 @@ function validateColorset(name, colorset) {
     }
 
     // Check for required color components
-    const requiredComponents = ['red', 'green', 'blue', 'alpha'];
+    const requiredComponents = ["red", "green", "blue", "alpha"];
     for (const component of requiredComponents) {
       if (components[component] === undefined) {
         errors.push(`❌ Colorset '${name}' missing '${component}' component`);

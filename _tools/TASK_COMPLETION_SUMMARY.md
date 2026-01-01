@@ -24,13 +24,13 @@ The SwiftUI settings primitives have been fully implemented and integrated:
 
 Detailed comparison shows excellent parity between React and SwiftUI implementations:
 
-| Component | React | SwiftUI | Status |
-|-----------|-------|---------|--------|
-| Typography | 14px, -0.3px tracking | 14pt, -0.3 tracking | ✅ Exact match |
-| Row Padding | 12px/10px | 12pt/10pt | ✅ Exact match |
-| Switch Size | 36x20px (code) / 42x22pt (spec) | 42x22pt | ✅ Follows spec |
-| Colors | Semantic tokens | Semantic tokens | ✅ Consistent |
-| Hover States | Platform-appropriate | Platform-appropriate | ✅ Implemented |
+| Component    | React                           | SwiftUI              | Status          |
+| ------------ | ------------------------------- | -------------------- | --------------- |
+| Typography   | 14px, -0.3px tracking           | 14pt, -0.3 tracking  | ✅ Exact match  |
+| Row Padding  | 12px/10px                       | 12pt/10pt            | ✅ Exact match  |
+| Switch Size  | 36x20px (code) / 42x22pt (spec) | 42x22pt              | ✅ Follows spec |
+| Colors       | Semantic tokens                 | Semantic tokens      | ✅ Consistent   |
+| Hover States | Platform-appropriate            | Platform-appropriate | ✅ Implemented  |
 
 **Minor Differences (Within Tolerance):**
 
@@ -51,13 +51,13 @@ These differences are imperceptible and within acceptable tolerance for "pixel-c
 - Testing recommendations
 - Conclusion and checkpoint status
 
-**Location**: `swift/ChatUIComponents/SETTINGS_PARITY_VERIFICATION.md`
+**Location**: `platforms/apple/swift/ChatUIComponents/SETTINGS_PARITY_VERIFICATION.md`
 
 ## How to View
 
 ### Component Gallery (Recommended)
 
-1. Open `apps/macos/ComponentGallery` in Xcode
+1. Open `platforms/apple/apps/macos/ComponentGallery` in Xcode
 2. Run the app (⌘R)
 3. Select "Settings" category in sidebar
 4. Enable "Side-by-Side Mode" to compare light/dark modes
@@ -65,7 +65,7 @@ These differences are imperceptible and within acceptable tolerance for "pixel-c
 
 ### SwiftUI Previews
 
-1. Open `swift/ChatUIComponents/Sources/ChatUIComponents/SettingsExampleView.swift` in Xcode
+1. Open `platforms/apple/swift/ChatUIComponents/Sources/ChatUIComponents/SettingsExampleView.swift` in Xcode
 2. Show Canvas: ⌥⌘⏎ (Option+Command+Enter)
 3. Resume previews: ⌥⌘P
 4. View light/dark mode variants
@@ -96,7 +96,7 @@ The remaining Phase 1 checkpoint items should be verified:
 
 1. Test light/dark mode switching in Component Gallery
 2. Test macOS hover states (requires macOS environment)
-3. Run unit tests: `swift test` in `swift/ChatUIComponents/`
+3. Run unit tests: `swift test` in `platforms/apple/swift/ChatUIComponents/`
 4. Verify SwiftUI previews render in Xcode
 
 ## Conclusion

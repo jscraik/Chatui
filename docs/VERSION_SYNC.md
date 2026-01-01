@@ -3,6 +3,7 @@
 This guide explains how versions are synchronized across npm packages and Swift packages.
 
 ## Table of contents
+
 - [Why this exists](#why-this-exists)
 - [Commands](#commands)
 - [How it works](#how-it-works)
@@ -41,7 +42,7 @@ Use this when you only need to refresh the Swift package comments.
 The scripts read the version from the root `package.json` and update:
 
 - NPM packages: `packages/ui`, `packages/runtime`, `packages/tokens`, `packages/widgets`, `packages/cloudflare-template`
-- Swift packages: `swift/ChatUIFoundation`, `swift/ChatUIComponents`, `swift/ChatUIThemes`, `swift/ChatUIShellChatGPT`, `swift/ChatUIMCP`
+- Swift packages: `platforms/apple/swift/ChatUIFoundation`, `platforms/apple/swift/ChatUIComponents`, `platforms/apple/swift/ChatUIThemes`, `platforms/apple/swift/ChatUIShellChatGPT`, `platforms/apple/swift/ChatUIMCP`
 
 If `agvtool` is available, it is used for Swift packages. Otherwise the scripts update the `// Version:` comment in `Package.swift`.
 
@@ -50,7 +51,7 @@ If `agvtool` is available, it is used for Swift packages. Otherwise the scripts 
 ```bash
 pnpm sync:versions
 rg -n \"\\\"version\\\"\" packages/*/package.json
-rg -n \"// Version:\" swift/*/Package.swift
+rg -n \"// Version:\" platforms/apple/swift/*/Package.swift
 ```
 
 ## Troubleshooting

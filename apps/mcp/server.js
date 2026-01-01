@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -15,8 +15,7 @@ const widgetsDistPath = process.env.WIDGETS_DIST
   ? path.resolve(process.env.WIDGETS_DIST)
   : path.resolve(__dirname, "../../packages/widgets/dist/src");
 const CORS_ORIGIN = process.env.MCP_CORS_ORIGIN ?? "*";
-const DNS_REBINDING_PROTECTION =
-  process.env.MCP_DNS_REBINDING_PROTECTION === "true";
+const DNS_REBINDING_PROTECTION = process.env.MCP_DNS_REBINDING_PROTECTION === "true";
 const ALLOWED_HOSTS = (process.env.MCP_ALLOWED_HOSTS ?? "")
   .split(",")
   .map((host) => host.trim())
@@ -24,6 +23,45 @@ const ALLOWED_HOSTS = (process.env.MCP_ALLOWED_HOSTS ?? "")
 
 // Widget version for cache busting - increment on breaking changes
 const WIDGET_VERSION = "1.0.0";
+
+// Rate limiting configuration
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX_REQUESTS = 100; // 100 requests per minute per IP
+const rateLimitStore = new Map();
+
+// Rate limiting middleware
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const key = ip || "unknown";
+  const record = rateLimitStore.get(key) || { count: 0, resetAt: now + RATE_LIMIT_WINDOW_MS };
+
+  // Reset if window expired
+  if (now > record.resetAt) {
+    record.count = 0;
+    record.resetAt = now + RATE_LIMIT_WINDOW_MS;
+  }
+
+  // Check limit
+  if (record.count >= RATE_LIMIT_MAX_REQUESTS) {
+    return false;
+  }
+
+  // Increment counter
+  record.count++;
+  rateLimitStore.set(key, record);
+
+  // Cleanup old entries periodically
+  if (Math.random() < 0.01) {
+    // 1% chance to cleanup
+    for (const [k, v] of rateLimitStore.entries()) {
+      if (now > v.resetAt + RATE_LIMIT_WINDOW_MS) {
+        rateLimitStore.delete(k);
+      }
+    }
+  }
+
+  return true;
+}
 
 // Generate versioned URI for cache busting
 function versionedUri(widgetId) {
@@ -38,14 +76,54 @@ function outputTemplate(widgetId) {
 function readWidgetHtml() {
   if (!existsSync(widgetHtmlPath)) {
     throw new Error(
-      "Widget HTML not found. Build the web widget first (pnpm -C apps/web build:widget) or set WEB_WIDGET_HTML.",
+      "Widget HTML not found. Build the web widget first (pnpm -C platforms/web/apps/web build:widget) or set WEB_WIDGET_HTML.",
     );
   }
   return readFileSync(widgetHtmlPath, "utf8");
 }
 
+const widgetIndex = new Map();
+
+function buildWidgetIndex(rootDir) {
+  widgetIndex.clear();
+
+  const stack = [rootDir];
+  while (stack.length > 0) {
+    const currentDir = stack.pop();
+    if (!currentDir) continue;
+
+    let entries = [];
+    try {
+      entries = readdirSync(currentDir, { withFileTypes: true });
+    } catch {
+      continue;
+    }
+
+    for (const entry of entries) {
+      const entryPath = path.join(currentDir, entry.name);
+      if (entry.isDirectory()) {
+        stack.push(entryPath);
+        continue;
+      }
+      if (entry.isFile() && entry.name === "index.html") {
+        const widgetId = path.basename(path.dirname(entryPath));
+        if (!widgetIndex.has(widgetId)) {
+          widgetIndex.set(widgetId, entryPath);
+        }
+      }
+    }
+  }
+}
+
+function resolveWidgetPath(widgetId) {
+  if (widgetIndex.size === 0) {
+    buildWidgetIndex(widgetsDistPath);
+  }
+  return widgetIndex.get(widgetId) ?? path.join(widgetsDistPath, widgetId, "index.html");
+}
+
 function readWidgetBundle(widgetId) {
-  const widgetPath = path.join(widgetsDistPath, widgetId, "index.html");
+  const widgetPath = resolveWidgetPath(widgetId);
   if (!existsSync(widgetPath)) {
     throw new Error(
       `Widget bundle not found: ${widgetId}. Build widgets first (pnpm -C packages/widgets build) or set WIDGETS_DIST.`,
@@ -999,6 +1077,23 @@ if (isDirectRun) {
   const httpServer = createServer(async (req, res) => {
     if (!req.url) {
       res.writeHead(400).end("Missing URL");
+      return;
+    }
+
+    // Rate limiting check
+    const clientIp =
+      req.headers["x-forwarded-for"]?.toString().split(",")[0] ||
+      req.headers["x-real-ip"]?.toString() ||
+      req.socket.remoteAddress ||
+      "unknown";
+
+    if (!checkRateLimit(clientIp)) {
+      res.writeHead(429, {
+        "Content-Type": "application/json",
+        "Retry-After": "60",
+        "Access-Control-Allow-Origin": CORS_ORIGIN,
+      });
+      res.end(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }));
       return;
     }
 

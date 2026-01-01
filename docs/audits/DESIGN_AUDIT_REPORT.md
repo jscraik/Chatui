@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Comprehensive audit of all UI components against ChatGPT design standards as defined in `/COLOR_REFERENCE.md` and `/src/app/design-system/DesignTokens.ts`.
+Comprehensive audit of all UI components against ChatGPT design standards as defined in `/COLOR_REFERENCE.md` and `packages/ui/src/storybook/design-system/DesignTokens.ts`.
 
 **Status:** ✅ AUDIT COMPLETE - All critical and high priority issues RESOLVED
 
@@ -56,18 +56,18 @@ Comprehensive audit of all UI components against ChatGPT design standards as def
 
 #### Critical (Must Fix)
 
-**File: `/src/app/components/DiscoverySettingsModal.tsx`**
+**File: `packages/ui/src/app/modals/DiscoverySettingsModal.tsx`**
 
 - **Line 84**: Reset button uses `#4ade80` → Should be `#40C977`
 - **Line 496**: Enhancement label uses `#4ade80` → Should be `#40C977`
 
-**File: `/src/app/components/ChatSidebar.tsx`**
+**File: `packages/ui/src/app/chat/ChatSidebar.tsx`**
 
 - **Line 284**: User menu uses `#2a2a2a` background → Should be `#171717` for modal-type surfaces
 - **Line 328**: Project modal uses `#2a2a2a` → Should be `#171717` (PRIMARY MODAL BG)
 - **Line 457**: Settings modal uses `#2a2a2a` → Should be `#171717` (PRIMARY MODAL BG)
 
-**File: `/src/app/components/SettingsModal.tsx`**
+**File: `packages/ui/src/app/modals/SettingsModal.tsx`**
 
 - **Line 131**: Main modal uses `#2a2a2a` → Should be `#171717` (PRIMARY MODAL BG)
 
@@ -255,7 +255,7 @@ Text:
 
 ## 📝 NOTES
 
-1. **UI Component Files** (shadcn/ui in `/src/app/components/ui/`)
+1. **UI Component Files** (shadcn/ui in `/src/components/ui/`)
    - These are third-party components and use `font-medium` by design
    - Should NOT be modified unless absolutely necessary
    - Focus on custom app components only

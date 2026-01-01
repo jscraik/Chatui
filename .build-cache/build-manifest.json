@@ -2,8 +2,8 @@
   "version": "1.0.0",
   "builds": {},
   "lastBuild": {
-    "timestamp": "2025-12-29T09:11:12.618Z",
-    "duration": 64,
+    "timestamp": "2026-01-01T20:02:38.393Z",
+    "duration": 90013,
     "results": [
       {
         "step": "version-sync",
@@ -14,6 +14,71 @@
         "step": "token-generation",
         "success": true,
         "skipped": true
+      },
+      {
+        "step": "web-build",
+        "package": "packages/runtime",
+        "success": true
+      },
+      {
+        "step": "web-build",
+        "package": "packages/tokens",
+        "success": true
+      },
+      {
+        "step": "test",
+        "suite": "Unit Tests",
+        "success": true
+      },
+      {
+        "step": "test",
+        "suite": "MCP Contract Tests",
+        "success": true
+      },
+      {
+        "step": "test",
+        "suite": "E2E Tests",
+        "success": true
+      },
+      {
+        "step": "test",
+        "suite": "A11y Tests",
+        "success": true
+      },
+      {
+        "step": "test",
+        "suite": "Swift Tests (ChatUIFoundation)",
+        "success": true
+      },
+      {
+        "step": "test",
+        "suite": "Swift Tests (ChatUIComponents)",
+        "success": true
+      },
+      {
+        "step": "test",
+        "suite": "Swift Tests (ChatUIThemes)",
+        "success": true
+      },
+      {
+        "step": "test",
+        "suite": "Swift Tests (ChatUIShellChatGPT)",
+        "success": true
+      },
+      {
+        "step": "test",
+        "suite": "Swift Tests (ChatUISystemIntegration)",
+        "success": true
+      },
+      {
+        "step": "test",
+        "suite": "Swift Tests (ChatUIMCP)",
+        "success": true
+      },
+      {
+        "step": "test",
+        "suite": "Swift Tests (ChatUIApp)",
+        "success": true
       }
     ],
     "success": true

@@ -1,7 +1,7 @@
 # Cross-Platform Architecture: React + Swift + Apps SDK
 
-> Status: This document includes historical proposals that reference the legacy `swift/ui-swift` package.
-> For the current Swift architecture, see `swift/README.md` and `docs/SWIFT_INTEGRATION.md`.
+> Status: This document includes historical proposals that reference the legacy `platforms/apple/swift/ui-swift` package.
+> For the current Swift architecture, see `platforms/apple/swift/README.md` and `docs/SWIFT_INTEGRATION.md`.
 
 ## Executive Summary
 
@@ -25,7 +25,7 @@ export const colorTokens = {
   background: { light: { primary: "#FFFFFF" }, dark: { primary: "#212121" } },
   text: { light: { primary: "#0D0D0D" }, dark: { primary: "#FFFFFF" } },
   // ...
-}
+};
 ```
 
 **Enhanced Multi-Platform Tokens:**
@@ -39,7 +39,7 @@ packages/tokens/
 │   └── semantic.ts         # Semantic token mappings
 ├── outputs/
 │   ├── css/               # CSS custom properties (React)
-│   ├── swift/             # Swift constants (macOS)
+│   ├── platforms/apple/swift/             # Swift constants (macOS)
 │   ├── json/              # Platform-agnostic JSON
 │   └── docs/              # Documentation
 └── build/
@@ -53,39 +53,41 @@ packages/tokens/
 **React Component (Current):**
 
 ```tsx
-// packages/ui/src/app/components/ui/base/button.tsx
+// packages/ui/src/components/ui/base/button.tsx
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-foundation text-body-small font-medium transition-colors disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "bg-foundation-accent-blue text-foundation-text-light-primary hover:bg-foundation-accent-blue/90",
-        destructive: "bg-foundation-accent-red text-foundation-text-light-primary hover:bg-foundation-accent-red/90",
+        default:
+          "bg-foundation-accent-blue text-foundation-text-light-primary hover:bg-foundation-accent-blue/90",
+        destructive:
+          "bg-foundation-accent-red text-foundation-text-light-primary hover:bg-foundation-accent-red/90",
         // ...
-      }
-    }
-  }
+      },
+    },
+  },
 );
 ```
 
 **Swift Component (Proposed):**
 
 ```swift
-// swift/ui-swift/Sources/ChatUISwift/Components/Button.swift
+// platforms/apple/swift/ui-swift/Sources/ChatUISwift/Components/Button.swift
 public struct ChatUIButton: View {
     public enum Variant {
         case `default`, destructive, outline, secondary, ghost, link
     }
-    
+
     public enum Size {
         case `default`, sm, lg, icon
     }
-    
+
     private let variant: Variant
     private let size: Size
     private let action: () -> Void
     private let content: () -> Content
-    
+
     public var body: some View {
         Button(action: action) {
             content()
@@ -97,7 +99,7 @@ public struct ChatUIButton: View {
 struct ChatUIButtonStyle: ButtonStyle {
     let variant: ChatUIButton.Variant
     let size: ChatUIButton.Size
-    
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .padding(paddingForSize(size))
@@ -106,7 +108,7 @@ struct ChatUIButtonStyle: ButtonStyle {
             .font(fontForSize(size))
             .cornerRadius(DesignTokens.cornerRadius.medium)
     }
-    
+
     private func backgroundForVariant(_ variant: ChatUIButton.Variant, isPressed: Bool) -> Color {
         switch variant {
         case .default:
@@ -121,15 +123,15 @@ struct ChatUIButtonStyle: ButtonStyle {
 
 ### 1.3 Component Parity Matrix
 
-| Component | React Status | Swift Status | Shared Logic | Notes |
-|-----------|-------------|-------------|--------------|-------|
-| Button | ✅ Complete | 🔄 Implement | ❌ None | Pure UI, no shared logic needed |
-| Input | ✅ Complete | 🔄 Implement | ✅ Validation | Validation rules can be shared |
-| DatePicker | ✅ Complete | 🔄 Implement | ✅ Formatting | Date formatting/locale logic |
-| Combobox | ✅ Complete | 🔄 Implement | ✅ Filtering | Search/filter algorithms |
-| Toast | ✅ Complete | 🔄 Implement | ✅ Queue Logic | Toast queue management |
-| ChatHeader | ✅ Complete | 🔄 Implement | ✅ State Logic | Chat state management |
-| Pagination | ✅ Complete | 🔄 Implement | ✅ Math Logic | Page calculation logic |
+| Component  | React Status | Swift Status | Shared Logic   | Notes                           |
+| ---------- | ------------ | ------------ | -------------- | ------------------------------- |
+| Button     | ✅ Complete  | 🔄 Implement | ❌ None        | Pure UI, no shared logic needed |
+| Input      | ✅ Complete  | 🔄 Implement | ✅ Validation  | Validation rules can be shared  |
+| DatePicker | ✅ Complete  | 🔄 Implement | ✅ Formatting  | Date formatting/locale logic    |
+| Combobox   | ✅ Complete  | 🔄 Implement | ✅ Filtering   | Search/filter algorithms        |
+| Toast      | ✅ Complete  | 🔄 Implement | ✅ Queue Logic | Toast queue management          |
+| ChatHeader | ✅ Complete  | 🔄 Implement | ✅ State Logic | Chat state management           |
+| Pagination | ✅ Complete  | 🔄 Implement | ✅ Math Logic  | Page calculation logic          |
 
 ## 2. Shared Business Logic Architecture
 
@@ -154,11 +156,11 @@ export interface Host {
 export interface PlatformHost {
   platform: "web" | "macos" | "ios";
   mode: "embedded" | "standalone";
-  
+
   // Core capabilities
   callTool?: (name: string, args?: unknown) => Promise<unknown>;
   sendMessage?: (text: string) => Promise<void>;
-  
+
   // Platform-specific capabilities
   nativeCapabilities?: {
     notifications?: boolean;
@@ -187,31 +189,31 @@ export interface ChatState {
   messages: Message[];
   currentUser: User | null;
   isTyping: boolean;
-  connectionStatus: 'connected' | 'disconnected' | 'reconnecting';
+  connectionStatus: "connected" | "disconnected" | "reconnecting";
 }
 
 export class ChatStateManager {
   private state: ChatState;
   private listeners: Set<(state: ChatState) => void> = new Set();
-  
+
   constructor(private host: PlatformHost) {
     this.state = this.getInitialState();
   }
-  
+
   // Pure business logic - no platform dependencies
   addMessage(message: Message): void {
     this.state = {
       ...this.state,
-      messages: [...this.state.messages, message]
+      messages: [...this.state.messages, message],
     };
     this.notifyListeners();
   }
-  
+
   // Platform-agnostic persistence
   async persistState(): Promise<void> {
     await this.host.setState?.(this.state);
   }
-  
+
   // Can be consumed by both React hooks and Swift ObservableObject
   subscribe(listener: (state: ChatState) => void): () => void {
     this.listeners.add(listener);
@@ -223,37 +225,37 @@ export class ChatStateManager {
 ### 2.3 JavaScript Core Bridge (Swift ↔ TypeScript)
 
 ```swift
-// swift/ui-swift/Sources/ChatUISwift/Runtime/JSBridge.swift
+// platforms/apple/swift/ui-swift/Sources/ChatUISwift/Runtime/JSBridge.swift
 import JavaScriptCore
 
 public class ChatUIJSBridge {
     private let context: JSContext
     private let stateManager: JSValue
-    
+
     public init() throws {
         guard let jsPath = Bundle.module.path(forResource: "chatui-runtime", ofType: "js") else {
             throw ChatUIError.runtimeNotFound
         }
-        
+
         let jsSource = try String(contentsOfFile: jsPath)
         context = JSContext()
-        
+
         // Inject Swift → JS bridge functions
         context.setObject(self.callTool, forKeyedSubscript: "swiftCallTool" as NSString)
         context.setObject(self.sendMessage, forKeyedSubscript: "swiftSendMessage" as NSString)
-        
+
         // Load the shared runtime
         context.evaluateScript(jsSource)
-        
+
         // Get the state manager instance
         stateManager = context.objectForKeyedSubscript("ChatStateManager")
     }
-    
+
     public func addMessage(_ message: ChatMessage) {
         let messageJS = JSValue(object: message.toJSONObject(), in: context)
         stateManager.invokeMethod("addMessage", withArguments: [messageJS])
     }
-    
+
     private let callTool: @convention(block) (String, JSValue) -> JSValue = { name, args in
         // Bridge to Swift MCP client
         // Return Promise-like JSValue
@@ -265,13 +267,13 @@ public class ChatUIJSBridge {
 
 ```typescript
 // packages/runtime/src/validation/schemas.ts
-import { z } from 'zod';
+import { z } from "zod";
 
 export const MessageSchema = z.object({
   id: z.string().uuid(),
   content: z.string().min(1).max(10000),
   timestamp: z.date(),
-  author: z.enum(['user', 'assistant', 'system']),
+  author: z.enum(["user", "assistant", "system"]),
   metadata: z.record(z.unknown()).optional(),
 });
 
@@ -304,10 +306,10 @@ chatui/
 │   │   │   └── native/     # Native bridge helpers
 │   │   └── dist/
 │   │       ├── web/        # Bundled for web
-│   │       ├── swift/      # Bundled for Swift Package
+│   │       ├── platforms/apple/swift/      # Bundled for Swift Package
 │   │       └── node/       # Node.js for build tools
 │   ├── ui/                 # React components
-│   ├── ui-swift/           # Swift/SwiftUI components
+│   ├── platforms/apple/swift/ui-swift/           # Swift/SwiftUI components
 │   │   ├── Sources/
 │   │   │   └── ChatUISwift/
 │   │   │       ├── Components/  # SwiftUI components
@@ -339,10 +341,10 @@ chatui/
 
 ```typescript
 // tools/build-tokens.ts
-import { colorTokens, typographyTokens } from '@chatui/tokens';
+import { colorTokens, typographyTokens } from "@chatui/tokens";
 
 interface TokenBuildConfig {
-  platforms: ('css' | 'swift' | 'json')[];
+  platforms: ("css" | "swift" | "json")[];
   outputDir: string;
 }
 
@@ -352,7 +354,7 @@ export async function buildTokens(config: TokenBuildConfig) {
     swift: generateSwiftTokens,
     json: generateJSONTokens,
   };
-  
+
   for (const platform of config.platforms) {
     await generators[platform](config.outputDir);
   }
@@ -391,8 +393,8 @@ extension Color {
     }
 }
 `;
-  
-  writeFileSync(`${outputDir}/swift/DesignTokens.swift`, swiftCode);
+
+  writeFileSync(`${outputDir}/platforms/apple/swift/DesignTokens.swift`, swiftCode);
 }
 ```
 
@@ -400,40 +402,40 @@ extension Color {
 
 ```typescript
 // tools/build-runtime.ts
-import { build } from 'esbuild';
+import { build } from "esbuild";
 
 export async function buildRuntime() {
   // Web bundle (ESM)
   await build({
-    entryPoints: ['packages/runtime/src/index.tsx'],
+    entryPoints: ["packages/runtime/src/index.tsx"],
     bundle: true,
-    format: 'esm',
-    outfile: 'packages/runtime/dist/web/index.js',
-    external: ['react', 'react-dom'],
-    target: 'es2020',
+    format: "esm",
+    outfile: "packages/runtime/dist/web/index.js",
+    external: ["react", "react-dom"],
+    target: "es2020",
   });
-  
+
   // Swift bundle (IIFE for JavaScriptCore)
   await build({
-    entryPoints: ['packages/runtime/src/core/index.ts'],
+    entryPoints: ["packages/runtime/src/core/index.ts"],
     bundle: true,
-    format: 'iife',
-    globalName: 'ChatUIRuntime',
-    outfile: 'swift/ui-swift/Sources/ChatUISwift/Resources/chatui-runtime.js',
-    target: 'es2017', // JavaScriptCore compatibility
+    format: "iife",
+    globalName: "ChatUIRuntime",
+    outfile: "platforms/apple/swift/ui-swift/Sources/ChatUISwift/Resources/chatui-runtime.js",
+    target: "es2017", // JavaScriptCore compatibility
     define: {
-      'process.env.NODE_ENV': '"production"',
+      "process.env.NODE_ENV": '"production"',
     },
   });
-  
+
   // Node.js bundle (for build tools)
   await build({
-    entryPoints: ['packages/runtime/src/core/index.ts'],
+    entryPoints: ["packages/runtime/src/core/index.ts"],
     bundle: true,
-    format: 'cjs',
-    platform: 'node',
-    outfile: 'packages/runtime/dist/node/index.js',
-    target: 'node16',
+    format: "cjs",
+    platform: "node",
+    outfile: "packages/runtime/dist/node/index.js",
+    target: "node16",
   });
 }
 ```
@@ -441,7 +443,7 @@ export async function buildRuntime() {
 ### 3.4 Swift Package Manager Integration
 
 ```swift
-// swift/ui-swift/Package.swift
+// platforms/apple/swift/ui-swift/Package.swift
 // swift-tools-version: 5.9
 import PackageDescription
 

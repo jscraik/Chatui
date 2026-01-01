@@ -3,6 +3,7 @@
 This guide explains how to work with the modular ChatUI Swift packages and the macOS Component Gallery.
 
 ## Table of contents
+
 - [Prerequisites](#prerequisites)
 - [Quick start](#quick-start-recommended)
 - [Project structure](#project-structure)
@@ -26,7 +27,7 @@ This guide explains how to work with the modular ChatUI Swift packages and the m
 ### 1. Open the Component Gallery
 
 ```bash
-cd apps/macos/ComponentGallery
+cd platforms/apple/apps/macos/ComponentGallery
 open Package.swift
 ```
 
@@ -41,7 +42,7 @@ In Xcode:
 From the command line:
 
 ```bash
-cd apps/macos/ComponentGallery
+cd platforms/apple/apps/macos/ComponentGallery
 swift build
 swift run
 ```
@@ -49,13 +50,13 @@ swift run
 ## Project structure
 
 ```
-swift/
+platforms/apple/swift/
 ├── ChatUIFoundation/     # FColor, FType, FSpacing, Platform, FAccessibility
 ├── ChatUIThemes/         # ChatGPT theme constants
 ├── ChatUIComponents/     # SwiftUI primitives
 └── ChatUIShellChatGPT/   # Optional shell layouts
 
-apps/macos/
+platforms/apple/apps/macos/
 ├── ComponentGallery/     # Primary dev app
 └── ChatUIPlayground/     # Secondary dev app (modular packages)
 ```
@@ -104,20 +105,20 @@ pnpm test:swift:shell
 
 Use the Component Gallery accessibility panel and:
 
-- `swift/ACCESSIBILITY_TESTING.md`
-- `swift/ChatUIComponents/SETTINGS_EXAMPLE_SUMMARY.md`
+- `platforms/apple/swift/ACCESSIBILITY_TESTING.md`
+- `platforms/apple/swift/ChatUIComponents/SETTINGS_EXAMPLE_SUMMARY.md`
 
 ## Legacy: ui-swift (monolithic package)
 
-The original `swift/ui-swift` package is retained for historical reference. The current macOS apps (`ComponentGallery` and `ChatUIPlayground`) use the modular packages listed above.
+The original `platforms/apple/swift/ui-swift` package is retained for historical reference. The current macOS apps (`ComponentGallery` and `ChatUIPlayground`) use the modular packages listed above.
 
-- `swift/ui-swift/README.md`
+- `platforms/apple/swift/ui-swift/README.md`
 
 ## Troubleshooting
 
 **Xcode cannot find local packages**
 
-- See `swift/ChatUIComponents/XCODE_INTEGRATION.md`.
+- See `platforms/apple/swift/ChatUIComponents/XCODE_INTEGRATION.md`.
 - Ensure you open `Package.swift` directly for SwiftPM workflows.
 
 **SwiftUI previews not updating**
@@ -132,5 +133,5 @@ The original `swift/ui-swift` package is retained for historical reference. The 
 
 ## Next steps
 
-- Use `swift/ADOPTION_GUIDE.md` for team rollout.
-- Use `swift/DEVELOPMENT_WORKFLOW.md` for detailed workflows.
+- Use `platforms/apple/swift/ADOPTION_GUIDE.md` for team rollout.
+- Use `platforms/apple/swift/DEVELOPMENT_WORKFLOW.md` for detailed workflows.

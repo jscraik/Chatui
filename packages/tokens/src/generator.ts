@@ -7,65 +7,65 @@ import { spacingScale } from "./spacing.js";
 import { typographyTokens } from "./typography.js";
 
 export interface DesignTokens {
-    colors: typeof colorTokens;
-    spacing: typeof spacingScale;
-    typography: typeof typographyTokens;
+  colors: typeof colorTokens;
+  spacing: typeof spacingScale;
+  typography: typeof typographyTokens;
 }
 
 export interface GenerationManifest {
-    version: string;
-    sha256: {
-        swift: string;
-        css: string;
-        assetCatalog: string;
-    };
-    generated: string;
+  version: string;
+  sha256: {
+    swift: string;
+    css: string;
+    assetCatalog: string;
+  };
+  generated: string;
 }
 
 const MANIFEST_GENERATED_AT = "1970-01-01T00:00:00.000Z";
 
 interface ColorComponents {
-    red: string;
-    green: string;
-    blue: string;
-    alpha: string;
+  red: string;
+  green: string;
+  blue: string;
+  alpha: string;
 }
 
 interface AssetCatalogColor {
-    colors: Array<{
-        color: {
-            "color-space": string;
-            components: ColorComponents;
-        };
-        idiom: string;
-        appearances?: Array<{
-            appearance: string;
-            value: string;
-        }>;
-    }>;
-    info: {
-        author: string;
-        version: number;
+  colors: Array<{
+    color: {
+      "color-space": string;
+      components: ColorComponents;
     };
+    idiom: string;
+    appearances?: Array<{
+      appearance: string;
+      value: string;
+    }>;
+  }>;
+  info: {
+    author: string;
+    version: number;
+  };
 }
 
 export class TokenGenerator {
-    private tokens: DesignTokens;
+  private tokens: DesignTokens;
 
-    constructor() {
-        this.tokens = {
-            colors: colorTokens,
-            spacing: spacingScale,
-            typography: typographyTokens,
-        };
-    }
+  constructor() {
+    this.tokens = {
+      colors: colorTokens,
+      spacing: spacingScale,
+      typography: typographyTokens,
+    };
+  }
 
-    /**
-     * Generate Swift constants from design tokens
-     * Output is deterministic - same input produces identical file bytes
-     */
-    async generateSwift(): Promise<string> {
-        const swiftContent = `import SwiftUI
+  /**
+   * Generate Swift constants from design tokens
+   * Output is deterministic - same input produces identical file bytes
+   */
+  async generateSwift(): Promise<string> {
+    const swiftContent = `import SwiftUI
 #if canImport(AppKit)
 import AppKit
 #endif
@@ -83,7 +83,7 @@ public enum DesignTokens {
     public enum Colors {
         
         public enum Background {
-${this.generateColorConstants('background')}
+${this.generateColorConstants("background")}
             
             // Dynamic colors that adapt to system appearance
             public static let primary = Color.dynamicColor(
@@ -103,7 +103,7 @@ ${this.generateColorConstants('background')}
         }
         
         public enum Text {
-${this.generateColorConstants('text')}
+${this.generateColorConstants("text")}
             
             // Dynamic colors that adapt to system appearance
             public static let primary = Color.dynamicColor(
@@ -128,7 +128,7 @@ ${this.generateColorConstants('text')}
         }
         
         public enum Icon {
-${this.generateColorConstants('icon')}
+${this.generateColorConstants("icon")}
             
             // Dynamic colors that adapt to system appearance
             public static let primary = Color.dynamicColor(
@@ -154,31 +154,62 @@ ${this.generateColorConstants('icon')}
         
         public enum Accent {
 ${this.generateAccentColorConstants()}
-            
+
             // Dynamic colors that adapt to system appearance
-            public static let blue = Color.dynamicColor(
-                lightHex: "${this.tokens.colors.accent.light.blue}",
-                darkHex: "${this.tokens.colors.accent.dark.blue}"
+            public static let gray = Color.dynamicColor(
+                lightHex: "${this.tokens.colors.accent.light.gray}",
+                darkHex: "${this.tokens.colors.accent.dark.gray}"
             )
-            
+
             public static let red = Color.dynamicColor(
                 lightHex: "${this.tokens.colors.accent.light.red}",
                 darkHex: "${this.tokens.colors.accent.dark.red}"
             )
-            
+
             public static let orange = Color.dynamicColor(
                 lightHex: "${this.tokens.colors.accent.light.orange}",
                 darkHex: "${this.tokens.colors.accent.dark.orange}"
             )
-            
+
+            public static let yellow = Color.dynamicColor(
+                lightHex: "${this.tokens.colors.accent.light.yellow}",
+                darkHex: "${this.tokens.colors.accent.dark.yellow}"
+            )
+
             public static let green = Color.dynamicColor(
                 lightHex: "${this.tokens.colors.accent.light.green}",
                 darkHex: "${this.tokens.colors.accent.dark.green}"
             )
 
+            public static let blue = Color.dynamicColor(
+                lightHex: "${this.tokens.colors.accent.light.blue}",
+                darkHex: "${this.tokens.colors.accent.dark.blue}"
+            )
+
             public static let purple = Color.dynamicColor(
                 lightHex: "${this.tokens.colors.accent.light.purple}",
                 darkHex: "${this.tokens.colors.accent.dark.purple}"
+            )
+
+            public static let pink = Color.dynamicColor(
+                lightHex: "${this.tokens.colors.accent.light.pink}",
+                darkHex: "${this.tokens.colors.accent.dark.pink}"
+            )
+
+            public static let foreground = Color.dynamicColor(
+                lightHex: "${this.tokens.colors.accent.light.foreground}",
+                darkHex: "${this.tokens.colors.accent.dark.foreground}"
+            )
+        }
+
+        public enum Interactive {
+            public static let lightRing = Color(hex: "${this.tokens.colors.interactive.light.ring}")
+            public static let darkRing = Color(hex: "${this.tokens.colors.interactive.dark.ring}")
+
+            // Dynamic colors that adapt to system appearance
+            public static let ring = Color.dynamicColor(
+                lightHex: "${this.tokens.colors.interactive.light.ring}",
+                darkHex: "${this.tokens.colors.interactive.dark.ring}"
             )
         }
     }
@@ -194,7 +225,7 @@ ${this.generateTypographyConstants()}
     // MARK: - Spacing
     
     public enum Spacing {
-        public static let scale: [CGFloat] = [${this.tokens.spacing.join(', ')}]
+        public static let scale: [CGFloat] = [${this.tokens.spacing.join(", ")}]
         
         // Convenience accessors
 ${this.generateSpacingConstants()}
@@ -374,15 +405,15 @@ extension Color {
 // Note: Accessibility view extensions are defined in ChatUIFoundation/FAccessibility.swift
 `;
 
-        return swiftContent;
-    }
+    return swiftContent;
+  }
 
-    /**
-     * Generate CSS custom properties from design tokens
-     * This maintains compatibility with existing foundations.css
-     */
-    async generateCSS(): Promise<string> {
-        const cssContent = `/*
+  /**
+   * Generate CSS custom properties from design tokens
+   * This maintains compatibility with existing foundations.css
+   */
+  async generateCSS(): Promise<string> {
+    const cssContent = `/*
   Apps SDK UI audit tokens (from Figma foundations).
   These are reference values for compliance checks and documentation.
   Do not use as styling defaults; prefer Apps SDK UI tokens/classes instead.
@@ -401,11 +432,14 @@ extension Color {
   --foundation-text-dark-tertiary: ${this.tokens.colors.text.dark.tertiary};
 
   /* Dark accents */
-  --foundation-accent-blue: ${this.tokens.colors.accent.dark.blue};
+  --foundation-accent-gray: ${this.tokens.colors.accent.dark.gray};
   --foundation-accent-red: ${this.tokens.colors.accent.dark.red};
   --foundation-accent-orange: ${this.tokens.colors.accent.dark.orange};
+  --foundation-accent-yellow: ${this.tokens.colors.accent.dark.yellow};
   --foundation-accent-green: ${this.tokens.colors.accent.dark.green};
+  --foundation-accent-blue: ${this.tokens.colors.accent.dark.blue};
   --foundation-accent-purple: ${this.tokens.colors.accent.dark.purple};
+  --foundation-accent-pink: ${this.tokens.colors.accent.dark.pink};
 
   /* Light backgrounds */
   --foundation-bg-light-1: ${this.tokens.colors.background.light.primary};
@@ -430,11 +464,14 @@ extension Color {
   --foundation-icon-dark-inverted: ${this.tokens.colors.icon.dark.inverted};
 
   /* Light accents */
-  --foundation-accent-blue-light: ${this.tokens.colors.accent.light.blue};
+  --foundation-accent-gray-light: ${this.tokens.colors.accent.light.gray};
   --foundation-accent-red-light: ${this.tokens.colors.accent.light.red};
   --foundation-accent-orange-light: ${this.tokens.colors.accent.light.orange};
+  --foundation-accent-yellow-light: ${this.tokens.colors.accent.light.yellow};
   --foundation-accent-green-light: ${this.tokens.colors.accent.light.green};
+  --foundation-accent-blue-light: ${this.tokens.colors.accent.light.blue};
   --foundation-accent-purple-light: ${this.tokens.colors.accent.light.purple};
+  --foundation-accent-pink-light: ${this.tokens.colors.accent.light.pink};
 
   /* Spacing scale */
 ${this.generateCSSSpacing()}
@@ -503,346 +540,476 @@ ${this.generateCSSTypography()}
 }
 `;
 
-        return cssContent;
-    }
+    return cssContent;
+  }
 
-    /**
-     * Generate manifest with SHA hashes and metadata
-     */
-    async generateManifest(swiftContent: string, cssContent: string, assetCatalogContent: string): Promise<GenerationManifest> {
-        const swiftHash = createHash('sha256').update(swiftContent).digest('hex');
-        const cssHash = createHash('sha256').update(cssContent).digest('hex');
-        const assetCatalogHash = createHash('sha256').update(assetCatalogContent).digest('hex');
+  /**
+   * Generate manifest with SHA hashes and metadata
+   */
+  async generateManifest(
+    swiftContent: string,
+    cssContent: string,
+    assetCatalogContent: string,
+  ): Promise<GenerationManifest> {
+    const swiftHash = createHash("sha256").update(swiftContent).digest("hex");
+    const cssHash = createHash("sha256").update(cssContent).digest("hex");
+    const assetCatalogHash = createHash("sha256").update(assetCatalogContent).digest("hex");
 
-        return {
-            version: "1.0.0",
-            sha256: {
-                swift: swiftHash,
-                css: cssHash,
-                assetCatalog: assetCatalogHash,
+    return {
+      version: "1.0.0",
+      sha256: {
+        swift: swiftHash,
+        css: cssHash,
+        assetCatalog: assetCatalogHash,
+      },
+      generated: MANIFEST_GENERATED_AT,
+    };
+  }
+
+  /**
+   * Convert hex color to RGB components (0-1 range)
+   */
+  private hexToRGB(hex: string): ColorComponents {
+    const cleanHex = hex.replace("#", "");
+    const r = parseInt(cleanHex.substring(0, 2), 16) / 255;
+    const g = parseInt(cleanHex.substring(2, 4), 16) / 255;
+    const b = parseInt(cleanHex.substring(4, 6), 16) / 255;
+
+    return {
+      red: r.toFixed(3),
+      green: g.toFixed(3),
+      blue: b.toFixed(3),
+      alpha: "1.000",
+    };
+  }
+
+  /**
+   * Generate Asset Catalog colorset JSON
+   */
+  private generateColorsetJSON(lightColor: string, darkColor: string): AssetCatalogColor {
+    return {
+      colors: [
+        {
+          color: {
+            "color-space": "srgb",
+            components: this.hexToRGB(lightColor),
+          },
+          idiom: "universal",
+        },
+        {
+          appearances: [
+            {
+              appearance: "luminosity",
+              value: "dark",
             },
-            generated: MANIFEST_GENERATED_AT,
-        };
+          ],
+          color: {
+            "color-space": "srgb",
+            components: this.hexToRGB(darkColor),
+          },
+          idiom: "universal",
+        },
+      ],
+      info: {
+        author: "xcode",
+        version: 1,
+      },
+    };
+  }
+
+  /**
+   * Generate Asset Catalog structure
+   * Returns a deterministic string representation for hashing
+   */
+  async generateAssetCatalog(): Promise<string> {
+    const colorMappings = this.getAssetCatalogMappings()
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    const rootContents = {
+      info: {
+        author: "xcode",
+        version: 1,
+      },
+    };
+
+    const files: Record<string, string> = {
+      "Contents.json": JSON.stringify(rootContents, null, 2),
+    };
+
+    for (const mapping of colorMappings) {
+      const colorsetJSON = this.generateColorsetJSON(mapping.light, mapping.dark);
+      files[`${mapping.name}.colorset/Contents.json`] = JSON.stringify(colorsetJSON, null, 2);
     }
 
-    /**
-     * Convert hex color to RGB components (0-1 range)
-     */
-    private hexToRGB(hex: string): ColorComponents {
-        const cleanHex = hex.replace('#', '');
-        const r = parseInt(cleanHex.substring(0, 2), 16) / 255;
-        const g = parseInt(cleanHex.substring(2, 4), 16) / 255;
-        const b = parseInt(cleanHex.substring(4, 6), 16) / 255;
+    // Deterministic representation of the actual files written to disk
+    return JSON.stringify(files, null, 2);
+  }
 
-        return {
-            red: r.toFixed(3),
-            green: g.toFixed(3),
-            blue: b.toFixed(3),
-            alpha: "1.000",
-        };
+  /**
+   * Write Asset Catalog to disk
+   */
+  async writeAssetCatalog(basePath: string): Promise<void> {
+    const colorMappings = this.getAssetCatalogMappings()
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    // Clean existing Asset Catalog directory
+    const assetCatalogPath = join(basePath, "Colors.xcassets");
+    try {
+      await rm(assetCatalogPath, { recursive: true, force: true });
+    } catch {
+      // Directory might not exist, that's okay
     }
 
-    /**
-     * Generate Asset Catalog colorset JSON
-     */
-    private generateColorsetJSON(lightColor: string, darkColor: string): AssetCatalogColor {
-        return {
-            colors: [
-                {
-                    color: {
-                        "color-space": "srgb",
-                        components: this.hexToRGB(lightColor),
-                    },
-                    idiom: "universal",
-                },
-                {
-                    appearances: [
-                        {
-                            appearance: "luminosity",
-                            value: "dark",
-                        },
-                    ],
-                    color: {
-                        "color-space": "srgb",
-                        components: this.hexToRGB(darkColor),
-                    },
-                    idiom: "universal",
-                },
-            ],
-            info: {
-                author: "xcode",
-                version: 1,
-            },
-        };
+    // Create Asset Catalog directory
+    await mkdir(assetCatalogPath, { recursive: true });
+
+    // Write root Contents.json
+    const rootContents = {
+      info: {
+        author: "xcode",
+        version: 1,
+      },
+    };
+    await writeFile(
+      join(assetCatalogPath, "Contents.json"),
+      JSON.stringify(rootContents, null, 2),
+      "utf8",
+    );
+
+    // Write each colorset
+    for (const mapping of colorMappings) {
+      const colorsetPath = join(assetCatalogPath, `${mapping.name}.colorset`);
+      await mkdir(colorsetPath, { recursive: true });
+
+      const colorsetJSON = this.generateColorsetJSON(mapping.light, mapping.dark);
+      await writeFile(
+        join(colorsetPath, "Contents.json"),
+        JSON.stringify(colorsetJSON, null, 2),
+        "utf8",
+      );
     }
+  }
 
-    /**
-     * Generate Asset Catalog structure
-     * Returns a deterministic string representation for hashing
-     */
-    async generateAssetCatalog(): Promise<string> {
-        const colorMappings = this.getAssetCatalogMappings()
-            .slice()
-            .sort((a, b) => a.name.localeCompare(b.name));
+  private getAssetCatalogMappings(): Array<{ name: string; light: string; dark: string }> {
+    return [
+      // Background colors
+      {
+        name: "foundation-bg-app",
+        light: this.tokens.colors.background.light.primary,
+        dark: this.tokens.colors.background.dark.primary,
+      },
+      {
+        name: "foundation-bg-card",
+        light: this.tokens.colors.background.light.secondary,
+        dark: this.tokens.colors.background.dark.secondary,
+      },
+      {
+        name: "foundation-bg-card-alt",
+        light: this.tokens.colors.background.light.tertiary,
+        dark: this.tokens.colors.background.dark.tertiary,
+      },
 
-        const rootContents = {
-            info: {
-                author: "xcode",
-                version: 1,
-            },
-        };
+      // Text colors
+      {
+        name: "foundation-text-primary",
+        light: this.tokens.colors.text.light.primary,
+        dark: this.tokens.colors.text.dark.primary,
+      },
+      {
+        name: "foundation-text-secondary",
+        light: this.tokens.colors.text.light.secondary,
+        dark: this.tokens.colors.text.dark.secondary,
+      },
+      {
+        name: "foundation-text-tertiary",
+        light: this.tokens.colors.text.light.tertiary,
+        dark: this.tokens.colors.text.dark.tertiary,
+      },
 
-        const files: Record<string, string> = {
-            "Contents.json": JSON.stringify(rootContents, null, 2),
-        };
+      // Icon colors
+      {
+        name: "foundation-icon-primary",
+        light: this.tokens.colors.icon.light.primary,
+        dark: this.tokens.colors.icon.dark.primary,
+      },
+      {
+        name: "foundation-icon-secondary",
+        light: this.tokens.colors.icon.light.secondary,
+        dark: this.tokens.colors.icon.dark.secondary,
+      },
+      {
+        name: "foundation-icon-tertiary",
+        light: this.tokens.colors.icon.light.tertiary,
+        dark: this.tokens.colors.icon.dark.tertiary,
+      },
 
-        for (const mapping of colorMappings) {
-            const colorsetJSON = this.generateColorsetJSON(mapping.light, mapping.dark);
-            files[`${mapping.name}.colorset/Contents.json`] = JSON.stringify(colorsetJSON, null, 2);
-        }
+      // Accent colors
+      {
+        name: "foundation-accent-gray",
+        light: this.tokens.colors.accent.light.gray,
+        dark: this.tokens.colors.accent.dark.gray,
+      },
+      {
+        name: "foundation-accent-red",
+        light: this.tokens.colors.accent.light.red,
+        dark: this.tokens.colors.accent.dark.red,
+      },
+      {
+        name: "foundation-accent-orange",
+        light: this.tokens.colors.accent.light.orange,
+        dark: this.tokens.colors.accent.dark.orange,
+      },
+      {
+        name: "foundation-accent-yellow",
+        light: this.tokens.colors.accent.light.yellow,
+        dark: this.tokens.colors.accent.dark.yellow,
+      },
+      {
+        name: "foundation-accent-green",
+        light: this.tokens.colors.accent.light.green,
+        dark: this.tokens.colors.accent.dark.green,
+      },
+      {
+        name: "foundation-accent-blue",
+        light: this.tokens.colors.accent.light.blue,
+        dark: this.tokens.colors.accent.dark.blue,
+      },
+      {
+        name: "foundation-accent-purple",
+        light: this.tokens.colors.accent.light.purple,
+        dark: this.tokens.colors.accent.dark.purple,
+      },
+      {
+        name: "foundation-accent-pink",
+        light: this.tokens.colors.accent.light.pink,
+        dark: this.tokens.colors.accent.dark.pink,
+      },
 
-        // Deterministic representation of the actual files written to disk
-        return JSON.stringify(files, null, 2);
-    }
+      // Divider (using tertiary background as base)
+      {
+        name: "foundation-divider",
+        light: this.tokens.colors.background.light.tertiary,
+        dark: this.tokens.colors.background.dark.tertiary,
+      },
+    ];
+  }
 
-    /**
-     * Write Asset Catalog to disk
-     */
-    async writeAssetCatalog(basePath: string): Promise<void> {
-        const colorMappings = this.getAssetCatalogMappings()
-            .slice()
-            .sort((a, b) => a.name.localeCompare(b.name));
+  /**
+   * Generate all outputs and write to appropriate directories
+   */
+  async generate(): Promise<void> {
+    // Generate content
+    const swiftContent = await this.generateSwift();
+    const cssContent = await this.generateCSS();
+    const assetCatalogContent = await this.generateAssetCatalog();
+    const manifest = await this.generateManifest(swiftContent, cssContent, assetCatalogContent);
 
-        // Clean existing Asset Catalog directory
-        const assetCatalogPath = join(basePath, 'Colors.xcassets');
-        try {
-            await rm(assetCatalogPath, { recursive: true, force: true });
-        } catch {
-            // Directory might not exist, that's okay
-        }
+    // Determine output paths relative to packages/tokens
+    const swiftOutputPath = join(
+      process.cwd(),
+      "../../platforms/apple/swift/ChatUIFoundation/Sources/ChatUIFoundation/DesignTokens.swift",
+    );
+    const cssOutputPath = join(process.cwd(), "src/foundations.css");
+    const manifestOutputPath = join(process.cwd(), "docs/outputs/manifest.json");
+    const assetCatalogBasePath = join(
+      process.cwd(),
+      "../../platforms/apple/swift/ChatUIFoundation/Sources/ChatUIFoundation/Resources",
+    );
 
-        // Create Asset Catalog directory
-        await mkdir(assetCatalogPath, { recursive: true });
+    await mkdir(dirname(swiftOutputPath), { recursive: true });
+    await mkdir(dirname(cssOutputPath), { recursive: true });
+    await mkdir(dirname(manifestOutputPath), { recursive: true });
+    await mkdir(assetCatalogBasePath, { recursive: true });
 
-        // Write root Contents.json
-        const rootContents = {
-            info: {
-                author: "xcode",
-                version: 1,
-            },
-        };
-        await writeFile(
-            join(assetCatalogPath, 'Contents.json'),
-            JSON.stringify(rootContents, null, 2),
-            'utf8'
+    // Write files
+    await writeFile(swiftOutputPath, swiftContent, "utf8");
+    await writeFile(cssOutputPath, cssContent, "utf8");
+    await writeFile(manifestOutputPath, JSON.stringify(manifest, null, 2), "utf8");
+
+    // Write Asset Catalog
+    await this.writeAssetCatalog(assetCatalogBasePath);
+
+    console.log("✅ Token generation complete");
+    console.log(`   Swift: ${swiftOutputPath}`);
+    console.log(`   CSS: ${cssOutputPath}`);
+    console.log(`   Asset Catalog: ${assetCatalogBasePath}/Colors.xcassets`);
+    console.log(`   Manifest: ${manifestOutputPath}`);
+    console.log(`   Swift SHA: ${manifest.sha256.swift.substring(0, 8)}...`);
+    console.log(`   CSS SHA: ${manifest.sha256.css.substring(0, 8)}...`);
+    console.log(`   Asset Catalog SHA: ${manifest.sha256.assetCatalog.substring(0, 8)}...`);
+  }
+
+  private generateColorConstants(category: "background" | "text" | "icon"): string {
+    const colors = this.tokens.colors[category];
+    const lines: string[] = [];
+
+    // Light colors
+    Object.entries(colors.light).forEach(([name, value]) => {
+      const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
+      lines.push(`            public static let light${capitalizedName} = Color(hex: "${value}")`);
+    });
+
+    lines.push("");
+
+    // Dark colors
+    Object.entries(colors.dark).forEach(([name, value]) => {
+      const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
+      lines.push(`            public static let dark${capitalizedName} = Color(hex: "${value}")`);
+    });
+
+    return lines.join("\n");
+  }
+
+  private generateAccentColorConstants(): string {
+    const lines: string[] = [];
+
+    // Light accent colors
+    Object.entries(this.tokens.colors.accent.light).forEach(([name, value]) => {
+      const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
+      lines.push(`            public static let light${capitalizedName} = Color(hex: "${value}")`);
+    });
+
+    lines.push("");
+
+    // Dark accent colors
+    Object.entries(this.tokens.colors.accent.dark).forEach(([name, value]) => {
+      const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
+      lines.push(`            public static let dark${capitalizedName} = Color(hex: "${value}")`);
+    });
+
+    return lines.join("\n");
+  }
+
+  private generateTypographyConstants(): string {
+    const lines: string[] = [];
+
+    Object.entries(this.tokens.typography).forEach(([key, value]) => {
+      if (key === "fontFamily") return; // Already handled above
+
+      // Type assertion: after skipping fontFamily, value is an object with typography properties
+      const token = value as {
+        size: number;
+        lineHeight: number;
+        weight: number;
+        emphasisWeight?: number;
+        tracking: number;
+      };
+
+      const enumName = key.charAt(0).toUpperCase() + key.slice(1);
+      lines.push(`        public enum ${enumName} {`);
+      lines.push(`            public static let size: CGFloat = ${token.size}`);
+      lines.push(`            public static let lineHeight: CGFloat = ${token.lineHeight}`);
+      lines.push(
+        `            public static let weight = Font.Weight.${this.mapFontWeight(token.weight)}`,
+      );
+
+      if ("emphasisWeight" in token && token.emphasisWeight !== undefined) {
+        lines.push(
+          `            public static let emphasisWeight = Font.Weight.${this.mapFontWeight(token.emphasisWeight)}`,
         );
+      }
 
-        // Write each colorset
-        for (const mapping of colorMappings) {
-            const colorsetPath = join(assetCatalogPath, `${mapping.name}.colorset`);
-            await mkdir(colorsetPath, { recursive: true });
+      lines.push(`            public static let tracking: CGFloat = ${token.tracking}`);
+      lines.push(`        }`);
+      lines.push("");
+    });
 
-            const colorsetJSON = this.generateColorsetJSON(mapping.light, mapping.dark);
-            await writeFile(
-                join(colorsetPath, 'Contents.json'),
-                JSON.stringify(colorsetJSON, null, 2),
-                'utf8'
-            );
-        }
+    return lines.join("\n");
+  }
+
+  private generateSpacingConstants(): string {
+    const spacingNames = [
+      "xxl",
+      "xl",
+      "lg",
+      "lgMd",
+      "md",
+      "mdSm",
+      "sm",
+      "smXs",
+      "xs",
+      "xxs",
+      "xxxs",
+      "none",
+    ];
+    const lines: string[] = [];
+
+    this.tokens.spacing.forEach((value, index) => {
+      if (index < spacingNames.length) {
+        lines.push(`        public static let ${spacingNames[index]}: CGFloat = ${value}`);
+      }
+    });
+
+    return lines.join("\n");
+  }
+
+  private generateCSSSpacing(): string {
+    const lines: string[] = [];
+
+    this.tokens.spacing.forEach((value) => {
+      lines.push(`  --foundation-space-${value}: ${value}px;`);
+    });
+
+    return lines.join("\n");
+  }
+
+  private generateCSSTypography(): string {
+    const lines: string[] = [];
+
+    Object.entries(this.tokens.typography).forEach(([key, value]) => {
+      if (key === "fontFamily") return; // Already handled above
+
+      // Type assertion: after skipping fontFamily, value is an object with typography properties
+      const token = value as {
+        size: number;
+        lineHeight: number;
+        weight: number;
+        emphasisWeight?: number;
+        tracking: number;
+      };
+
+      const cssKey = key.replace(/([A-Z])/g, "-$1").toLowerCase();
+      lines.push(`  --foundation-${cssKey}-size: ${token.size}px;`);
+      lines.push(`  --foundation-${cssKey}-line: ${token.lineHeight}px;`);
+      lines.push(`  --foundation-${cssKey}-weight: ${token.weight};`);
+
+      if ("emphasisWeight" in token && token.emphasisWeight !== undefined) {
+        lines.push(`  --foundation-${cssKey}-weight-emphasis: ${token.emphasisWeight};`);
+      } else {
+        lines.push(`  --foundation-${cssKey}-weight-regular: ${token.weight};`);
+      }
+
+      lines.push(`  --foundation-${cssKey}-tracking: ${token.tracking}px;`);
+      lines.push("");
+    });
+
+    return lines.join("\n");
+  }
+
+  private mapFontWeight(weight: number): string {
+    switch (weight) {
+      case 100:
+        return "ultraLight";
+      case 200:
+        return "thin";
+      case 300:
+        return "light";
+      case 400:
+        return "regular";
+      case 500:
+        return "medium";
+      case 600:
+        return "semibold";
+      case 700:
+        return "bold";
+      case 800:
+        return "heavy";
+      case 900:
+        return "black";
+      default:
+        return "regular";
     }
-
-    private getAssetCatalogMappings(): Array<{ name: string; light: string; dark: string }> {
-        return [
-            // Background colors
-            { name: "foundation-bg-app", light: this.tokens.colors.background.light.primary, dark: this.tokens.colors.background.dark.primary },
-            { name: "foundation-bg-card", light: this.tokens.colors.background.light.secondary, dark: this.tokens.colors.background.dark.secondary },
-            { name: "foundation-bg-card-alt", light: this.tokens.colors.background.light.tertiary, dark: this.tokens.colors.background.dark.tertiary },
-
-            // Text colors
-            { name: "foundation-text-primary", light: this.tokens.colors.text.light.primary, dark: this.tokens.colors.text.dark.primary },
-            { name: "foundation-text-secondary", light: this.tokens.colors.text.light.secondary, dark: this.tokens.colors.text.dark.secondary },
-            { name: "foundation-text-tertiary", light: this.tokens.colors.text.light.tertiary, dark: this.tokens.colors.text.dark.tertiary },
-
-            // Icon colors
-            { name: "foundation-icon-primary", light: this.tokens.colors.icon.light.primary, dark: this.tokens.colors.icon.dark.primary },
-            { name: "foundation-icon-secondary", light: this.tokens.colors.icon.light.secondary, dark: this.tokens.colors.icon.dark.secondary },
-            { name: "foundation-icon-tertiary", light: this.tokens.colors.icon.light.tertiary, dark: this.tokens.colors.icon.dark.tertiary },
-
-            // Accent colors
-            { name: "foundation-accent-green", light: this.tokens.colors.accent.light.green, dark: this.tokens.colors.accent.dark.green },
-            { name: "foundation-accent-blue", light: this.tokens.colors.accent.light.blue, dark: this.tokens.colors.accent.dark.blue },
-            { name: "foundation-accent-orange", light: this.tokens.colors.accent.light.orange, dark: this.tokens.colors.accent.dark.orange },
-            { name: "foundation-accent-red", light: this.tokens.colors.accent.light.red, dark: this.tokens.colors.accent.dark.red },
-            { name: "foundation-accent-purple", light: this.tokens.colors.accent.light.purple, dark: this.tokens.colors.accent.dark.purple },
-
-            // Divider (using tertiary background as base)
-            { name: "foundation-divider", light: this.tokens.colors.background.light.tertiary, dark: this.tokens.colors.background.dark.tertiary },
-        ];
-    }
-
-    /**
-     * Generate all outputs and write to appropriate directories
-     */
-    async generate(): Promise<void> {
-        // Generate content
-        const swiftContent = await this.generateSwift();
-        const cssContent = await this.generateCSS();
-        const assetCatalogContent = await this.generateAssetCatalog();
-        const manifest = await this.generateManifest(swiftContent, cssContent, assetCatalogContent);
-
-        // Determine output paths relative to packages/tokens
-        const swiftOutputPath = join(process.cwd(), '../../swift/ChatUIFoundation/Sources/ChatUIFoundation/DesignTokens.swift');
-        const cssOutputPath = join(process.cwd(), 'src/foundations.css');
-        const manifestOutputPath = join(process.cwd(), 'outputs/manifest.json');
-        const assetCatalogBasePath = join(process.cwd(), '../../swift/ChatUIFoundation/Sources/ChatUIFoundation/Resources');
-
-        await mkdir(dirname(swiftOutputPath), { recursive: true });
-        await mkdir(dirname(cssOutputPath), { recursive: true });
-        await mkdir(dirname(manifestOutputPath), { recursive: true });
-        await mkdir(assetCatalogBasePath, { recursive: true });
-
-        // Write files
-        await writeFile(swiftOutputPath, swiftContent, 'utf8');
-        await writeFile(cssOutputPath, cssContent, 'utf8');
-        await writeFile(manifestOutputPath, JSON.stringify(manifest, null, 2), 'utf8');
-
-        // Write Asset Catalog
-        await this.writeAssetCatalog(assetCatalogBasePath);
-
-        console.log('✅ Token generation complete');
-        console.log(`   Swift: ${swiftOutputPath}`);
-        console.log(`   CSS: ${cssOutputPath}`);
-        console.log(`   Asset Catalog: ${assetCatalogBasePath}/Colors.xcassets`);
-        console.log(`   Manifest: ${manifestOutputPath}`);
-        console.log(`   Swift SHA: ${manifest.sha256.swift.substring(0, 8)}...`);
-        console.log(`   CSS SHA: ${manifest.sha256.css.substring(0, 8)}...`);
-        console.log(`   Asset Catalog SHA: ${manifest.sha256.assetCatalog.substring(0, 8)}...`);
-    }
-
-    private generateColorConstants(category: 'background' | 'text' | 'icon'): string {
-        const colors = this.tokens.colors[category];
-        const lines: string[] = [];
-
-        // Light colors
-        Object.entries(colors.light).forEach(([name, value]) => {
-            const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
-            lines.push(`            public static let light${capitalizedName} = Color(hex: "${value}")`);
-        });
-
-        lines.push('');
-
-        // Dark colors
-        Object.entries(colors.dark).forEach(([name, value]) => {
-            const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
-            lines.push(`            public static let dark${capitalizedName} = Color(hex: "${value}")`);
-        });
-
-        return lines.join('\n');
-    }
-
-    private generateAccentColorConstants(): string {
-        const lines: string[] = [];
-
-        // Light accent colors
-        Object.entries(this.tokens.colors.accent.light).forEach(([name, value]) => {
-            const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
-            lines.push(`            public static let light${capitalizedName} = Color(hex: "${value}")`);
-        });
-
-        lines.push('');
-
-        // Dark accent colors
-        Object.entries(this.tokens.colors.accent.dark).forEach(([name, value]) => {
-            const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
-            lines.push(`            public static let dark${capitalizedName} = Color(hex: "${value}")`);
-        });
-
-        return lines.join('\n');
-    }
-
-    private generateTypographyConstants(): string {
-        const lines: string[] = [];
-
-        Object.entries(this.tokens.typography).forEach(([key, value]) => {
-            if (key === 'fontFamily') return; // Already handled above
-
-            const enumName = key.charAt(0).toUpperCase() + key.slice(1);
-            lines.push(`        public enum ${enumName} {`);
-            lines.push(`            public static let size: CGFloat = ${value.size}`);
-            lines.push(`            public static let lineHeight: CGFloat = ${value.lineHeight}`);
-            lines.push(`            public static let weight = Font.Weight.${this.mapFontWeight(value.weight)}`);
-
-            if ('emphasisWeight' in value) {
-                lines.push(`            public static let emphasisWeight = Font.Weight.${this.mapFontWeight(value.emphasisWeight)}`);
-            }
-
-            lines.push(`            public static let tracking: CGFloat = ${value.tracking}`);
-            lines.push(`        }`);
-            lines.push('');
-        });
-
-        return lines.join('\n');
-    }
-
-    private generateSpacingConstants(): string {
-        const spacingNames = ['xxl', 'xl', 'lg', 'lgMd', 'md', 'mdSm', 'sm', 'smXs', 'xs', 'xxs', 'xxxs', 'none'];
-        const lines: string[] = [];
-
-        this.tokens.spacing.forEach((value, index) => {
-            if (index < spacingNames.length) {
-                lines.push(`        public static let ${spacingNames[index]}: CGFloat = ${value}`);
-            }
-        });
-
-        return lines.join('\n');
-    }
-
-    private generateCSSSpacing(): string {
-        const lines: string[] = [];
-
-        this.tokens.spacing.forEach((value) => {
-            lines.push(`  --foundation-space-${value}: ${value}px;`);
-        });
-
-        return lines.join('\n');
-    }
-
-    private generateCSSTypography(): string {
-        const lines: string[] = [];
-
-        Object.entries(this.tokens.typography).forEach(([key, value]) => {
-            if (key === 'fontFamily') return; // Already handled above
-
-            const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
-            lines.push(`  --foundation-${cssKey}-size: ${value.size}px;`);
-            lines.push(`  --foundation-${cssKey}-line: ${value.lineHeight}px;`);
-            lines.push(`  --foundation-${cssKey}-weight: ${value.weight};`);
-
-            if ('emphasisWeight' in value) {
-                lines.push(`  --foundation-${cssKey}-weight-emphasis: ${value.emphasisWeight};`);
-            } else {
-                lines.push(`  --foundation-${cssKey}-weight-regular: ${value.weight};`);
-            }
-
-            lines.push(`  --foundation-${cssKey}-tracking: ${value.tracking}px;`);
-            lines.push('');
-        });
-
-        return lines.join('\n');
-    }
-
-    private mapFontWeight(weight: number): string {
-        switch (weight) {
-            case 100: return 'ultraLight';
-            case 200: return 'thin';
-            case 300: return 'light';
-            case 400: return 'regular';
-            case 500: return 'medium';
-            case 600: return 'semibold';
-            case 700: return 'bold';
-            case 800: return 'heavy';
-            case 900: return 'black';
-            default: return 'regular';
-        }
-    }
+  }
 }

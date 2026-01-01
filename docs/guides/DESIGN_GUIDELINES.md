@@ -3,6 +3,7 @@
 These guidelines keep the UI consistent across ChatGPT widgets and standalone apps.
 
 ## Table of contents
+
 - [Core principles](#core-principles)
 - [Component usage](#component-usage)
 - [Layout and spacing](#layout-and-spacing)

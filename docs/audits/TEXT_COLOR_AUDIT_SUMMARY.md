@@ -23,7 +23,7 @@ All components have been updated to use the official ChatGPT text color specific
 
 ### 1. **ChatHeader.tsx** ✅
 
-**Location:** `/src/app/components/ChatHeader.tsx`
+**Location:** `packages/ui/src/app/chat/ChatHeader.tsx`
 
 **Updates Made:**
 
@@ -44,7 +44,7 @@ All components have been updated to use the official ChatGPT text color specific
 
 ### 2. **ChatInput.tsx** ✅
 
-**Location:** `/src/app/components/ChatInput.tsx`
+**Location:** `packages/ui/src/app/chat/ChatInput.tsx`
 
 **Updates Made:**
 
@@ -71,7 +71,7 @@ All components have been updated to use the official ChatGPT text color specific
 
 ### 3. **ChatMessages.tsx** ✅
 
-**Location:** `/src/app/components/ChatMessages.tsx`
+**Location:** `packages/ui/src/app/chat/ChatMessages.tsx`
 
 **Updates Made:**
 
@@ -85,7 +85,7 @@ All components have been updated to use the official ChatGPT text color specific
 
 ### 4. **ChatSidebar.tsx** ✅
 
-**Location:** `/src/app/components/ChatSidebar.tsx`
+**Location:** `packages/ui/src/app/chat/ChatSidebar.tsx`
 
 **Updates Made:**
 
@@ -126,7 +126,7 @@ All components have been updated to use the official ChatGPT text color specific
 
 ### 5. **ComposeView.tsx** ✅
 
-**Location:** `/src/app/components/ComposeView.tsx`
+**Location:** `packages/ui/src/app/chat/ComposeView.tsx`
 
 **Updates Made:**
 
@@ -158,7 +158,7 @@ All components have been updated to use the official ChatGPT text color specific
 
 ### 6. **DiscoverySettingsModal.tsx** ✅
 
-**Location:** `/src/app/components/DiscoverySettingsModal.tsx`
+**Location:** `packages/ui/src/app/modals/DiscoverySettingsModal.tsx`
 
 **Updates Made:**
 
@@ -254,12 +254,12 @@ All components now fully comply with the ChatGPT design system specifications:
 ## 📝 Files Modified
 
 ```
-/src/app/components/ChatHeader.tsx
-/src/app/components/ChatInput.tsx
-/src/app/components/ChatMessages.tsx
-/src/app/components/ChatSidebar.tsx
-/src/app/components/ComposeView.tsx
-/src/app/components/DiscoverySettingsModal.tsx
+packages/ui/src/app/chat/ChatHeader.tsx
+packages/ui/src/app/chat/ChatInput.tsx
+packages/ui/src/app/chat/ChatMessages.tsx
+packages/ui/src/app/chat/ChatSidebar.tsx
+packages/ui/src/app/chat/ComposeView.tsx
+packages/ui/src/app/modals/DiscoverySettingsModal.tsx
 ```
 
 ---

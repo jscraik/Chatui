@@ -26,7 +26,11 @@ const CONFIG = {
     "index*.css": 100,
   },
   // Directories to scan
-  directories: ["packages/widgets/dist", "packages/ui/dist", "apps/web/dist/assets"],
+  directories: [
+    "packages/widgets/dist",
+    "packages/ui/dist",
+    "platforms/web/apps/web/dist/assets",
+  ],
   // Warn threshold (percentage of budget)
   warnThreshold: 0.8,
   // Fail threshold (percentage of budget)

@@ -13,6 +13,8 @@ Use these when you want step-by-step workflows, not API reference.
 
 - **[PAGES_QUICK_START.md](./PAGES_QUICK_START.md)** - Quick start guide for creating new pages in the ChatUI system
 - **[DESIGN_GUIDELINES.md](./DESIGN_GUIDELINES.md)** - Design system guidelines and best practices
+- **[SECURITY_BEST_PRACTICES.md](./SECURITY_BEST_PRACTICES.md)** - Security best practices for deployment and widget development
+- **[repo-structure-migration.md](./repo-structure-migration.md)** - Path changes and migration notes for the 2026 restructure
 
 ### Integration Guides
 
@@ -26,7 +28,7 @@ Use these when you want step-by-step workflows, not API reference.
 ## Related Documentation
 
 - [Page Development Steering](../../.kiro/steering/page-development.md) - Comprehensive page development guide
-- [Component Organization](../../packages/ui/src/app/components/README.md) - Component structure and usage
+- [Component Organization](../../packages/ui/src/components/README.md) - Component structure and usage
 - [Contributing Guidelines](../../CONTRIBUTING.md) - General contribution guidelines
 
 ## Additional Resources

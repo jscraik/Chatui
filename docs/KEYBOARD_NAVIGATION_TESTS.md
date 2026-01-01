@@ -3,6 +3,7 @@
 This document describes the keyboard navigation and accessibility tests for modal and sidebar components using Playwright and Axe-core.
 
 ## Table of contents
+
 - [Test files](#test-files)
 - [Running tests](#running-tests)
 - [Test coverage](#test-coverage)
@@ -11,48 +12,51 @@ This document describes the keyboard navigation and accessibility tests for moda
 
 ## Test Files
 
-| Test File | Description |
-|-----------|-------------|
-| `apps/web/tests/keyboard-navigation.spec.ts` | Modal keyboard navigation tests |
-| `apps/web/tests/sidebar-keyboard.spec.ts` | Sidebar keyboard navigation tests |
-| `packages/ui/src/tests/utils/keyboard-utils.ts` | Reusable test utilities |
+| Test File                                       | Description                       |
+| ----------------------------------------------- | --------------------------------- |
+| `platforms/web/apps/web/tests/keyboard-navigation.spec.ts`    | Modal keyboard navigation tests   |
+| `platforms/web/apps/web/tests/sidebar-keyboard.spec.ts`       | Sidebar keyboard navigation tests |
+| `packages/ui/src/testing/utils/keyboard-utils.ts` | Reusable test utilities           |
 
 ## Running Tests
 
 ### All Tests
+
 ```bash
 # Run all E2E tests (includes keyboard nav)
 pnpm test:e2e:web
 
 # Run keyboard navigation tests only
-pnpm exec playwright test -c apps/web/playwright.config.ts keyboard-navigation.spec.ts
+pnpm exec playwright test -c platforms/web/apps/web/playwright.config.ts keyboard-navigation.spec.ts
 
 # Run sidebar tests only
-pnpm exec playwright test -c apps/web/playwright.config.ts sidebar-keyboard.spec.ts
+pnpm exec playwright test -c platforms/web/apps/web/playwright.config.ts sidebar-keyboard.spec.ts
 
 # Run with UI (debug mode)
-pnpm exec playwright test -c apps/web/playwright.config.ts keyboard-navigation.spec.ts --ui
+pnpm exec playwright test -c platforms/web/apps/web/playwright.config.ts keyboard-navigation.spec.ts --ui
 ```
 
 ### Specific Tests
+
 ```bash
 # Modal tests only
-pnpm exec playwright test -c apps/web/playwright.config.ts keyboard-navigation.spec.ts --grep "ModalDialog"
+pnpm exec playwright test -c platforms/web/apps/web/playwright.config.ts keyboard-navigation.spec.ts --grep "ModalDialog"
 
 # Settings modal tests
-pnpm exec playwright test -c apps/web/playwright.config.ts keyboard-navigation.spec.ts --grep "SettingsModal"
+pnpm exec playwright test -c platforms/web/apps/web/playwright.config.ts keyboard-navigation.spec.ts --grep "SettingsModal"
 
 # Sidebar rail navigation
-pnpm exec playwright test -c apps/web/playwright.config.ts sidebar-keyboard.spec.ts --grep "Collapsed Mode"
+pnpm exec playwright test -c platforms/web/apps/web/playwright.config.ts sidebar-keyboard.spec.ts --grep "Collapsed Mode"
 ```
 
 ### Accessibility Tests
+
 ```bash
 # Run all Axe-core accessibility tests
 pnpm test:a11y:widgets
 
 # Run specific accessibility test
-pnpm exec playwright test -c apps/web/playwright.config.ts sidebar-keyboard.spec.ts --grep "accessibility"
+pnpm exec playwright test -c platforms/web/apps/web/playwright.config.ts sidebar-keyboard.spec.ts --grep "accessibility"
 ```
 
 ## Test Coverage
@@ -60,6 +64,7 @@ pnpm exec playwright test -c apps/web/playwright.config.ts sidebar-keyboard.spec
 ### Modal Tests (`keyboard-navigation.spec.ts`)
 
 **ModalDialog Focus Trap:**
+
 - ✅ Focuses modal on open
 - ✅ Tab cycles forward through focusable elements
 - ✅ Shift+Tab cycles backward through focusable elements
@@ -70,6 +75,7 @@ pnpm exec playwright test -c apps/web/playwright.config.ts sidebar-keyboard.spec
 - ✅ Axe-core accessibility scan
 
 **SettingsModal Navigation:**
+
 - ✅ Tab through main sections
 - ✅ Navigate into panels and back with Escape
 - ✅ Toggle switches with Space/Enter
@@ -77,12 +83,14 @@ pnpm exec playwright test -c apps/web/playwright.config.ts sidebar-keyboard.spec
 - ✅ Axe-core accessibility scan
 
 **IconPickerModal Navigation:**
+
 - ✅ Navigate icon grid with arrow keys
 - ✅ Select color and icon with keyboard
 - ✅ Tab through controls
 - ✅ Axe-core accessibility scan
 
 **DiscoverySettingsModal Navigation:**
+
 - ✅ Tab through form controls
 - ✅ Operate range sliders with arrow keys
 - ✅ Toggle switches with Space
@@ -91,30 +99,35 @@ pnpm exec playwright test -c apps/web/playwright.config.ts sidebar-keyboard.spec
 ### Sidebar Tests (`sidebar-keyboard.spec.ts`)
 
 **Expanded Mode:**
+
 - ✅ Navigate main items with Tab
 - ✅ Navigate project list with Tab
 - ✅ Activate items with Enter/Space
 - ✅ Navigate between sections with Tab
 
 **Collapsed Mode (Rail):**
+
 - ✅ Collapse/expand sidebar with keyboard
 - ✅ Navigate rail buttons with arrow keys (Up/Down)
 - ✅ Wrap around rail with arrow keys
 - ✅ Show tooltip on rail button focus
 
 **Modal Context:**
+
 - ✅ Open project settings modal from sidebar
 - ✅ Focus modal when opened from sidebar
 - ✅ Return focus to sidebar after closing modal
 - ✅ Maintain focus trap in modal with Tab cycles
 
 **Accessibility:**
+
 - ✅ Proper ARIA attributes (role="navigation", aria-label)
 - ✅ Rail buttons have accessible names
 - ✅ Axe-core accessibility scan (expanded)
 - ✅ Axe-core accessibility scan (collapsed)
 
 **Keyboard Shortcuts:**
+
 - ✅ Open settings with keyboard
 - ✅ Toggle sidebar collapse with keyboard
 
@@ -153,7 +166,7 @@ await testFocusRestoration(
   page,
   "[role='dialog']",
   "#trigger",
-  "escape" // or "click"
+  "escape", // or "click"
 );
 ```
 
@@ -175,13 +188,13 @@ await runAxeScan(page, "[role='dialog']");
 
 // Run Axe-core scan with excluded rules
 await runAxeScan(page, "[role='dialog']", {
-  excludedRules: ["color-contrast"]
+  excludedRules: ["color-contrast"],
 });
 
 // Check ARIA attributes
 await checkAriaAttributes(page, "[role='dialog']", {
   "aria-modal": "true",
-  "aria-labelledby": "dialog-title"
+  "aria-labelledby": "dialog-title",
 });
 ```
 
@@ -201,7 +214,7 @@ test("focus stays in modal", async ({ page }) => {
 
     const isInModal = await modal.evaluate(
       (modal, focused) => modal.contains(focused),
-      await focused.elementHandle()
+      await focused.elementHandle(),
     );
 
     expect(isInModal).toBe(true);
@@ -247,7 +260,7 @@ test("arrow keys navigate list", async ({ page }) => {
 
   // Should be different item
   expect(await focused.evaluate((el) => el.textContent)).not.toBe(
-    await firstItem.evaluate((el) => el.textContent)
+    await firstItem.evaluate((el) => el.textContent),
   );
 });
 ```
@@ -272,19 +285,23 @@ test("passes accessibility scan", async ({ page }) => {
 These tests verify WCAG 2.1 Level AA compliance:
 
 ### Focus Visible (2.4.7)
+
 - All interactive elements have visible focus indicator
 - Focus indicator has contrast ratio ≥ 3:1
 
 ### Focus Order (2.4.3)
+
 - Focus moves in logical order
 - Tab/Shift+Tab follow predictable sequence
 
 ### Keyboard (2.1.1)
+
 - All functionality available via keyboard
 - No keyboard trap (except modals intentionally)
 - Focus indicator always visible
 
 ### Modal Pattern (ARIA Authoring Practices)
+
 - `role="dialog"` attribute present
 - `aria-modal="true"` set
 - `aria-labelledby` references title
@@ -293,6 +310,7 @@ These tests verify WCAG 2.1 Level AA compliance:
 - Escape key closes modal
 
 ### Character Key Shortcuts (2.1.4)
+
 - Turn off shortcut: Allow user to disable
 - Remap shortcut: Allow user to change
 - Active only on focus: Shortcut only works when element has focus
@@ -320,12 +338,15 @@ test("debug focus", async ({ page }) => {
     await page.keyboard.press("Tab");
 
     const focused = await page.locator(":focus").first();
-    console.log(`Focus ${i}:`, await focused.evaluate(el => ({
-      tagName: el.tagName,
-      id: el.id,
-      className: el.className,
-      textContent: el.textContent?.slice(0, 50)
-    })));
+    console.log(
+      `Focus ${i}:`,
+      await focused.evaluate((el) => ({
+        tagName: el.tagName,
+        id: el.id,
+        className: el.className,
+        textContent: el.textContent?.slice(0, 50),
+      })),
+    );
   }
 });
 ```

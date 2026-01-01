@@ -39,7 +39,6 @@ We have strong foundations with most Apps SDK requirements implemented. Recent i
 | `openai/widgetCSP.redirect_domains` | ⚠️     | Missing - needed for checkout flows        |
 | `openai/widgetCSP.frame_domains`    | ⚠️     | Missing - needed if embedding iframes      |
 
-
 ### 2. Tool Descriptor Metadata
 
 | Requirement                      | Status | Notes                                                      |
@@ -52,7 +51,6 @@ We have strong foundations with most Apps SDK requirements implemented. Recent i
 | `openai/fileParams`              | ⚠️     | Not implemented - no file upload tools yet                 |
 | `securitySchemes`                | ✅     | Set to `noauth`                                            |
 
-
 ### 3. Tool Response Structure
 
 | Requirement                              | Status | Notes                                 |
@@ -62,7 +60,6 @@ We have strong foundations with most Apps SDK requirements implemented. Recent i
 | `_meta` (widget-only, hidden from model) | ✅     | Implemented with widgetSessionId      |
 | Keep `structuredContent` < 4k tokens     | ⚠️     | Not enforced (low risk for our tools) |
 | `openai/closeWidget: true` in metadata   | ⚠️     | Not implemented - optional feature    |
-
 
 ### 4. Runtime API Coverage (`window.openai`)
 
@@ -90,7 +87,6 @@ We have strong foundations with most Apps SDK requirements implemented. Recent i
 | `userAgent`               | ✅     | Implemented |
 | `locale`                  | ✅     | Implemented |
 
-
 ### 5. Apps SDK UI Component Usage
 
 | Requirement                          | Status | Notes                              |
@@ -102,7 +98,6 @@ We have strong foundations with most Apps SDK requirements implemented. Recent i
 | System colors                        | ✅     | Using Apps SDK palettes            |
 | 8px grid spacing                     | ✅     | Audited and compliant              |
 
-
 ### 6. Display Mode Support
 
 | Mode                     | Status | Notes                                         |
@@ -110,7 +105,6 @@ We have strong foundations with most Apps SDK requirements implemented. Recent i
 | Inline                   | ✅     | Default mode, working                         |
 | Fullscreen               | ✅     | Implemented in Pizzaz Shop with expand button |
 | PiP (Picture-in-Picture) | ⚠️     | API available, not used in widgets            |
-
 
 ### 7. Accessibility
 
@@ -122,7 +116,6 @@ We have strong foundations with most Apps SDK requirements implemented. Recent i
 | Keyboard navigation   | ✅     | Focus rings, tab order on interactive elements |
 | ARIA labels           | ✅     | Comprehensive labels on shopping-cart          |
 | Focus management      | ✅     | Focus rings with offset for dark/light themes  |
-
 
 ### 8. Internationalization
 
@@ -143,7 +136,6 @@ We have strong foundations with most Apps SDK requirements implemented. Recent i
 | Input validation             | ✅     | Zod schemas on all tools |
 | CSP configuration            | ✅     | Core CSP set             |
 | Don't rely on hints for auth | ✅     | Not using hints for auth |
-
 
 ### 10. Performance
 

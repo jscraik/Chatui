@@ -36,6 +36,7 @@ bun-debug.log*
 *.swo
 *~
 .DS_Store
+.figma/
 
 # Xcode
 DerivedData/
@@ -68,11 +69,15 @@ playwright-report/
 **/dist/
 **/build/
 **/storybook-static/
+**/test-results/
+**/playwright-report/
 
 # Misc
 .cache/
 temp/
 tmp/
+_temp/
+.tmp/
 *.tsbuildinfo
 
 # OS

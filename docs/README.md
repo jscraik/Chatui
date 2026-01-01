@@ -8,7 +8,10 @@ This index helps you find the right doc fast. Start here, then jump into the cat
 docs/
 ├── architecture/    # System design and architecture documents
 ├── audits/          # Design system audits and compliance reports
-└── guides/          # How-to guides and quick starts
+├── guides/          # How-to guides and quick starts
+├── features/        # Feature design specs and parity notes
+├── foundations/     # Source reference materials (PDFs, specs)
+└── work/            # Work logs, audits, and validation notes
 ```
 
 ## Start here
@@ -22,6 +25,7 @@ docs/
 Technical architecture and design decisions.
 
 - **[WIDGET_ARCHITECTURE.md](./architecture/WIDGET_ARCHITECTURE.md)** - Widget system architecture
+- **[repo-map.md](./architecture/repo-map.md)** - High-level repository map
 - **[APPS_SDK_GAP_ANALYSIS.md](./architecture/APPS_SDK_GAP_ANALYSIS.md)** - Apps SDK integration analysis
 - **[CROSS_PLATFORM.md](./architecture/CROSS_PLATFORM.md)** - Cross-platform architecture notes (legacy context included)
 - **[WIDGET_SYSTEM_ENHANCEMENTS.md](./architecture/WIDGET_SYSTEM_ENHANCEMENTS.md)** - Widget infrastructure enhancements
@@ -46,6 +50,7 @@ Step-by-step guides for common tasks.
 - **[DESIGN_GUIDELINES.md](./guides/DESIGN_GUIDELINES.md)** - UI design and accessibility guidelines
 - **[CHATGPT_INTEGRATION.md](./guides/CHATGPT_INTEGRATION.md)** - Connect an MCP server to ChatGPT
 - **[CLOUDFLARE_DEPLOYMENT.md](./guides/CLOUDFLARE_DEPLOYMENT.md)** - Deploy widgets to Cloudflare Workers
+- **[repo-structure-migration.md](./guides/repo-structure-migration.md)** - Path changes from the 2026 restructure
 - **[RELEASE_CHECKLIST.md](./guides/RELEASE_CHECKLIST.md)** - Release checklist
 
 ## Root documentation

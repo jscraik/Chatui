@@ -8,7 +8,7 @@ This document defines the module boundaries, state ownership, and dependencies f
 
 ## 1. Infrastructure Layer (Stateless, Reusable)
 
-### Location: `packages/ui/src/app/components/`
+### Location: `packages/ui/src/hooks/` + `packages/ui/src/components/ui/`
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -53,7 +53,7 @@ DEPENDENCIES: None (only React, internal utilities)
 
 ## 2. Feature Modals (Stateful, Business Logic)
 
-### Location: `packages/ui/src/app/components/modals/`
+### Location: `packages/ui/src/app/modals/`
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -118,7 +118,7 @@ DEPENDENCIES: None (only React, internal utilities)
 
 ## 3. Settings Components (Leaf Building Blocks)
 
-### Location: `packages/ui/src/app/components/settings/`
+### Location: `packages/ui/src/app/settings/`
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -162,7 +162,7 @@ DEPENDENCIES: None (only React, internal utilities)
 
 ## 4. Panel Components (Nested Views)
 
-### Location: `packages/ui/src/app/components/settings/`
+### Location: `packages/ui/src/app/settings/`
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -236,26 +236,26 @@ DEPENDENCIES: None (only React, internal utilities)
 
 ### Infrastructure (OWNED: None, PASS-THROUGH: All)
 
-| Component | State Owned | State Received | State Passed |
-|-----------|-------------|----------------|--------------|
-| `useFocusTrap` | Refs only | `isOpen`, `onClose` | None |
-| `ModalDialog` | None | `isOpen`, `onClose`, children | None to children |
+| Component      | State Owned | State Received                | State Passed     |
+| -------------- | ----------- | ----------------------------- | ---------------- |
+| `useFocusTrap` | Refs only   | `isOpen`, `onClose`           | None             |
+| `ModalDialog`  | None        | `isOpen`, `onClose`, children | None to children |
 
 ### Feature Modals (OWNED: Business State)
 
-| Component | State Owned | State Sync | Callbacks |
-|-----------|-------------|-----------|----------|
-| `DiscoverySettingsModal` | ~10 useState hooks | Props → State on `isOpen` change | `onTargetSizeChange`, `onPromptEnhancementChange` |
-| `IconPickerModal` | `selectedIcon`, `selectedColorId` | Props → State on `isOpen` change | `onSave(iconId, colorId)` |
-| `SettingsModal` | ~25 useState hooks | None (all local) | None (no persistence) |
+| Component                | State Owned                       | State Sync                       | Callbacks                                         |
+| ------------------------ | --------------------------------- | -------------------------------- | ------------------------------------------------- |
+| `DiscoverySettingsModal` | ~10 useState hooks                | Props → State on `isOpen` change | `onTargetSizeChange`, `onPromptEnhancementChange` |
+| `IconPickerModal`        | `selectedIcon`, `selectedColorId` | Props → State on `isOpen` change | `onSave(iconId, colorId)`                         |
+| `SettingsModal`          | ~25 useState hooks                | None (all local)                 | None (no persistence)                             |
 
 ### Settings Components (OWNED: None, CONTROLLED)
 
-| Component | State Owned | Controlled By | Callback |
-|-----------|-------------|---------------|----------|
-| `SettingRow` | None | N/A (display) | `onClick` (optional) |
-| `SettingToggle` | None | Parent | `onCheckedChange` |
-| `SettingDropdown` | None | Parent | `onValueChange` |
+| Component         | State Owned | Controlled By | Callback             |
+| ----------------- | ----------- | ------------- | -------------------- |
+| `SettingRow`      | None        | N/A (display) | `onClick` (optional) |
+| `SettingToggle`   | None        | Parent        | `onCheckedChange`    |
+| `SettingDropdown` | None        | Parent        | `onValueChange`      |
 
 ---
 
@@ -308,11 +308,13 @@ Parent
 ### When to Create a New Modal
 
 **Use `ModalDialog` when:**
+
 - You need a dialog with focus trap, Escape handling
 - You want consistent styling and ARIA attributes
 - You don't need custom overlay behavior
 
 **Use raw `<div role="dialog">` when:**
+
 - You need custom overlay behavior (e.g., multiple overlays)
 - You need to integrate with existing modal infrastructure
 - You need special z-index stacking
@@ -328,7 +330,7 @@ Parent
 ### Example: Creating a New Modal
 
 ```tsx
-// packages/ui/src/app/components/modals/MyModal.tsx
+// packages/ui/src/app/modals/MyModal.tsx
 import { useState } from "react";
 import { ModalDialog, ModalHeader, ModalBody, ModalFooter } from "../ui/overlays/modal";
 
@@ -357,12 +359,8 @@ export function MyModal({ isOpen, onClose, value: externalValue, onValueChange }
   return (
     <ModalDialog isOpen={isOpen} onClose={onClose} title="My Modal">
       <ModalHeader title="My Modal" showClose onClose={onClose} />
-      <ModalBody>
-        {/* Content */}
-      </ModalBody>
-      <ModalFooter>
-        {/* Actions */}
-      </ModalFooter>
+      <ModalBody>{/* Content */}</ModalBody>
+      <ModalFooter>{/* Actions */}</ModalFooter>
     </ModalDialog>
   );
 }
@@ -376,8 +374,12 @@ export function MyModal({ isOpen, onClose, value: externalValue, onValueChange }
 
 ```tsx
 // DON'T: Copy-paste focus trap code into each modal
-const getFocusable = (container) => { /* ... */ };
-useEffect(() => { /* focus trap logic */ }, []);
+const getFocusable = (container) => {
+  /* ... */
+};
+useEffect(() => {
+  /* focus trap logic */
+}, []);
 ```
 
 **DO:** Use `ModalDialog` or `useFocusTrap` directly.
@@ -397,7 +399,7 @@ useEffect(() => {
 
 ```tsx
 // DON'T: Return complex objects from callbacks
-onSave({ iconId: string, colorId: string, colorClass: string })
+onSave({ iconId: string, colorId: string, colorClass: string });
 ```
 
 **DO:** Return primitive values (IDs, strings, numbers).
@@ -420,9 +422,15 @@ const [state, setState] = useState(propValue); // No sync effect!
 ```tsx
 // useFocusTrap.test.ts
 describe("useFocusTrap", () => {
-  it("should trap focus within container", () => { /* ... */ });
-  it("should restore focus on unmount", () => { /* ... */ });
-  it("should call onClose on Escape", () => { /* ... */ });
+  it("should trap focus within container", () => {
+    /* ... */
+  });
+  it("should restore focus on unmount", () => {
+    /* ... */
+  });
+  it("should call onClose on Escape", () => {
+    /* ... */
+  });
 });
 ```
 
@@ -431,8 +439,12 @@ describe("useFocusTrap", () => {
 ```tsx
 // DiscoverySettingsModal.test.ts
 describe("DiscoverySettingsModal", () => {
-  it("should sync local state when opened", () => { /* ... */ });
-  it("should call onTargetSizeChange when slider changes", () => { /* ... */ });
+  it("should sync local state when opened", () => {
+    /* ... */
+  });
+  it("should call onTargetSizeChange when slider changes", () => {
+    /* ... */
+  });
 });
 ```
 
@@ -440,11 +452,11 @@ describe("DiscoverySettingsModal", () => {
 
 ## Summary
 
-| Layer | Responsibility | State | Dependencies |
-|-------|---------------|-------|--------------|
-| Infrastructure (`useFocusTrap`, `ModalDialog`) | Focus management, layout, ARIA | Refs only | React, utilities |
-| Feature Modals | Business logic, state coordination | Local ephemeral + synced | Infrastructure, settings |
-| Settings Components | Display, interaction forwarding | None (controlled) | Icons only |
-| Panels | Nested view state | Local only | Settings components |
+| Layer                                          | Responsibility                     | State                    | Dependencies             |
+| ---------------------------------------------- | ---------------------------------- | ------------------------ | ------------------------ |
+| Infrastructure (`useFocusTrap`, `ModalDialog`) | Focus management, layout, ARIA     | Refs only                | React, utilities         |
+| Feature Modals                                 | Business logic, state coordination | Local ephemeral + synced | Infrastructure, settings |
+| Settings Components                            | Display, interaction forwarding    | None (controlled)        | Icons only               |
+| Panels                                         | Nested view state                  | Local only               | Settings components      |
 
 **Key Principle:** Each layer owns only what it needs to own. Infrastructure owns focus, modals own business logic, settings components are pure/controlled.

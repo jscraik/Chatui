@@ -1,7 +1,7 @@
 import { readFileSync, statSync } from "node:fs";
 import path from "node:path";
 
-const widgetPath = path.resolve(process.cwd(), "apps/web/dist/widget.html");
+const widgetPath = path.resolve(process.cwd(), "platforms/web/apps/web/dist/widget.html");
 
 try {
   const stats = statSync(widgetPath);

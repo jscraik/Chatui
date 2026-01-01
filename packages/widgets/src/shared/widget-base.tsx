@@ -1,5 +1,5 @@
-import React, { ReactNode, StrictMode } from 'react';
-import { createRoot, type Root } from 'react-dom/client';
+import React, { ReactNode, StrictMode } from "react";
+import { createRoot, type Root } from "react-dom/client";
 
 export interface WidgetProps {
   children: ReactNode;
@@ -23,9 +23,7 @@ export function WidgetBase({ children, className = "", title, style }: WidgetPro
           <h1 className="text-lg font-semibold text-white">{title}</h1>
         </div>
       )}
-      <div className="overflow-auto max-h-[80vh] widget-content">
-        {children}
-      </div>
+      <div className="overflow-auto max-h-[80vh] widget-content">{children}</div>
     </div>
   );
 }
@@ -35,18 +33,16 @@ export function WidgetBase({ children, className = "", title, style }: WidgetPro
  * Reduces boilerplate across all widget components
  */
 export function mountWidget(component: ReactNode) {
-  const rootElement = document.getElementById('root');
+  const rootElement = document.getElementById("root");
   if (!rootElement) {
-    console.error('Widget mount failed: No root element found');
+    if (import.meta.env.DEV) {
+      console.error("Widget mount failed: No root element found");
+    }
     return;
   }
 
   const root = getOrCreateRoot(rootElement);
-  root.render(
-    <StrictMode>
-      {component}
-    </StrictMode>
-  );
+  root.render(<StrictMode>{component}</StrictMode>);
 }
 
 const rootCache = new WeakMap<Element, Root>();
@@ -68,13 +64,13 @@ export function createWidget<T extends Record<string, unknown>>(
     title?: string;
     className?: string;
     maxHeight?: string;
-  }
+  },
 ) {
   return function Widget(props: T) {
     const component = (
-      <WidgetBase 
+      <WidgetBase
         title={options?.title}
-        className={options?.className || ''}
+        className={options?.className || ""}
         style={options?.maxHeight ? { maxHeight: options.maxHeight } : undefined}
       >
         <Component {...props} />
@@ -102,33 +98,39 @@ export class WidgetErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Widget error:', error, errorInfo);
-    
+    if (import.meta.env.DEV) {
+      console.error("Widget error:", error, errorInfo);
+    }
+
     // Report to error tracking service in production
-    if (typeof window !== 'undefined' && window.openai) {
+    if (typeof window !== "undefined" && window.openai) {
       // Could send error reports via OpenAI API if needed
-      console.warn('Widget error boundary caught:', { error, errorInfo });
+      if (import.meta.env.DEV) {
+        console.warn("Widget error boundary caught:", { error, errorInfo });
+      }
     }
   }
 
   render() {
     if (this.state.hasError) {
-      return this.props.fallback || (
-        <WidgetBase>
-          <div className="text-center py-8">
-            <div className="text-red-400 mb-2 text-2xl">⚠️</div>
-            <div className="text-red-400 mb-2 font-medium">Widget Error</div>
-            <div className="text-sm text-gray-400 mb-4">
-              Something went wrong. Please try refreshing.
+      return (
+        this.props.fallback || (
+          <WidgetBase>
+            <div className="text-center py-8">
+              <div className="text-red-400 mb-2 text-2xl">⚠️</div>
+              <div className="text-red-400 mb-2 font-medium">Widget Error</div>
+              <div className="text-sm text-gray-400 mb-4">
+                Something went wrong. Please try refreshing.
+              </div>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm transition-colors"
+              >
+                Refresh Widget
+              </button>
             </div>
-            <button 
-              onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm transition-colors"
-            >
-              Refresh Widget
-            </button>
-          </div>
-        </WidgetBase>
+          </WidgetBase>
+        )
       );
     }
 

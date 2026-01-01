@@ -2,12 +2,12 @@
 /**
  * Component Generator
  * Usage: node scripts/new-component.mjs ComponentName [category]
- * 
+ *
  * Categories:
- *   - primitive (default) -> packages/ui/src/app/components/ui/
- *   - chat -> packages/ui/src/app/components/
+ *   - primitive (default) -> packages/ui/src/components/ui/
+ *   - chat -> packages/ui/src/components/
  *   - template -> packages/ui/src/templates/
- *   - page -> packages/ui/src/app/pages/
+ *   - page -> packages/ui/src/storybook/pages/
  */
 
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
@@ -17,7 +17,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..");
 
-const [,, name, category = "primitive"] = process.argv;
+const [, , name, category = "primitive"] = process.argv;
 
 if (!name) {
   console.error("Usage: node scripts/new-component.mjs ComponentName [category]");
@@ -28,17 +28,17 @@ if (!name) {
 const kebabCase = name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
 
 const paths = {
-  primitive: `packages/ui/src/app/components/ui/${kebabCase}.tsx`,
-  chat: `packages/ui/src/app/components/${name}.tsx`,
+  primitive: `packages/ui/src/components/ui/${kebabCase}.tsx`,
+  chat: `packages/ui/src/components/${name}.tsx`,
   template: `packages/ui/src/templates/${name}.tsx`,
-  page: `packages/ui/src/app/pages/${name}.tsx`,
+  page: `packages/ui/src/storybook/pages/${name}.tsx`,
 };
 
 const storyPaths = {
-  primitive: `packages/ui/src/app/components/ui/${kebabCase}.stories.tsx`,
-  chat: `packages/ui/src/app/components/${name}.stories.tsx`,
+  primitive: `packages/ui/src/components/ui/${kebabCase}.stories.tsx`,
+  chat: `packages/ui/src/components/${name}.stories.tsx`,
   template: `packages/ui/src/templates/${name}.stories.tsx`,
-  page: `packages/ui/src/app/pages/${name}.stories.tsx`,
+  page: `packages/ui/src/storybook/pages/${name}.stories.tsx`,
 };
 
 const componentPath = paths[category];
@@ -58,7 +58,9 @@ if (existsSync(fullComponentPath)) {
 }
 
 // Component template
-const componentTemplate = category === "primitive" ? `import * as React from "react";
+const componentTemplate =
+  category === "primitive"
+    ? `import * as React from "react";
 import { cn } from "./utils";
 
 export interface ${name}Props {
@@ -104,7 +106,8 @@ export function ${name}({
 }
 
 ${name}.displayName = "${name}";
-` : `import * as React from "react";
+`
+    : `import * as React from "react";
 
 export interface ${name}Props {
   /** Additional CSS classes */

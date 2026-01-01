@@ -27,35 +27,35 @@ const require = createRequire(import.meta.url);
 const PATHS = {
   // Infrastructure: Stateless, reusable hooks and components
   infrastructure: [
-    "packages/ui/src/app/components/hooks/useFocusTrap.ts",
-    "packages/ui/src/app/components/ui/overlays/modal.tsx",
+    "packages/ui/src/hooks/useFocusTrap.ts",
+    "packages/ui/src/components/ui/overlays/modal.tsx",
   ],
 
   // Feature modals: Stateful business logic modals
   modals: [
-    "packages/ui/src/app/components/modals/DiscoverySettingsModal.tsx",
-    "packages/ui/src/app/components/modals/IconPickerModal.tsx",
-    "packages/ui/src/app/components/modals/SettingsModal.tsx",
+    "packages/ui/src/app/modals/DiscoverySettingsModal.tsx",
+    "packages/ui/src/app/modals/IconPickerModal.tsx",
+    "packages/ui/src/app/modals/SettingsModal.tsx",
   ],
 
   // Settings components: Controlled leaf components
   settings: [
-    "packages/ui/src/app/components/settings/SettingRow.tsx",
-    "packages/ui/src/app/components/settings/SettingToggle.tsx",
-    "packages/ui/src/app/components/settings/SettingDropdown.tsx",
+    "packages/ui/src/app/settings/SettingRow.tsx",
+    "packages/ui/src/app/settings/SettingToggle.tsx",
+    "packages/ui/src/app/settings/SettingDropdown.tsx",
   ],
 
   // Panels: Nested view components (used by SettingsModal)
   panels: [
-    "packages/ui/src/app/components/settings/PersonalizationPanel.tsx",
-    "packages/ui/src/app/components/settings/SecurityPanel.tsx",
-    "packages/ui/src/app/components/settings/ManageAppsPanel.tsx",
-    "packages/ui/src/app/components/settings/AudioSettingsPanel.tsx",
-    "packages/ui/src/app/components/settings/NotificationsPanel.tsx",
-    "packages/ui/src/app/components/settings/AppsPanel.tsx",
-    "packages/ui/src/app/components/settings/DataControlsPanel.tsx",
-    "packages/ui/src/app/components/settings/ArchivedChatsPanel.tsx",
-    "packages/ui/src/app/components/settings/CheckForUpdatesPanel.tsx",
+    "packages/ui/src/app/settings/PersonalizationPanel.tsx",
+    "packages/ui/src/app/settings/SecurityPanel.tsx",
+    "packages/ui/src/app/settings/ManageAppsPanel.tsx",
+    "packages/ui/src/app/settings/AudioSettingsPanel.tsx",
+    "packages/ui/src/app/settings/NotificationsPanel.tsx",
+    "packages/ui/src/app/settings/AppsPanel.tsx",
+    "packages/ui/src/app/settings/DataControlsPanel.tsx",
+    "packages/ui/src/app/settings/ArchivedChatsPanel.tsx",
+    "packages/ui/src/app/settings/CheckForUpdatesPanel.tsx",
   ],
 };
 
@@ -78,12 +78,18 @@ const modalBoundariesRule = {
     },
     schema: [], // No options
     messages: {
-      infraImportModal: "Infrastructure (useFocusTrap, ModalDialog) MUST NOT import from feature modals. This creates circular dependencies.",
-      infraImportSettings: "Infrastructure (useFocusTrap, ModalDialog) MUST NOT import from settings components. Keep infrastructure stateless.",
-      infraImportPanels: "Infrastructure (useFocusTrap, ModalDialog) MUST NOT import from panel components. Panels belong to feature layer.",
-      settingsImportModal: "Settings components (SettingRow, SettingToggle, SettingDropdown) MUST NOT import from modals. This creates circular dependencies.",
-      settingsImportPanel: "Settings components MUST NOT import from panels. Panels are higher-level views.",
-      panelImportModalDialog: "Panels MUST NOT import ModalDialog directly. Use parent SettingsModal's modal context instead.",
+      infraImportModal:
+        "Infrastructure (useFocusTrap, ModalDialog) MUST NOT import from feature modals. This creates circular dependencies.",
+      infraImportSettings:
+        "Infrastructure (useFocusTrap, ModalDialog) MUST NOT import from settings components. Keep infrastructure stateless.",
+      infraImportPanels:
+        "Infrastructure (useFocusTrap, ModalDialog) MUST NOT import from panel components. Panels belong to feature layer.",
+      settingsImportModal:
+        "Settings components (SettingRow, SettingToggle, SettingDropdown) MUST NOT import from modals. This creates circular dependencies.",
+      settingsImportPanel:
+        "Settings components MUST NOT import from panels. Panels are higher-level views.",
+      panelImportModalDialog:
+        "Panels MUST NOT import ModalDialog directly. Use parent SettingsModal's modal context instead.",
     },
   },
   create(context) {
@@ -130,23 +136,25 @@ const modalBoundariesRule = {
 
           // Check each layer
           for (const path of PATHS.infrastructure) {
-            if (path.includes("modal.tsx") && relativePath.includes("ui/overlays/modal")) return "infrastructure";
-            if (path.includes("useFocusTrap") && relativePath.includes("hooks/useFocusTrap")) return "infrastructure";
+            if (path.includes("modal.tsx") && relativePath.includes("ui/overlays/modal"))
+              return "infrastructure";
+            if (path.includes("useFocusTrap") && relativePath.includes("hooks/useFocusTrap"))
+              return "infrastructure";
           }
           if (
-            relativePath.includes("modals/") &&
+            relativePath.includes("app/modals/") &&
             PATHS.modals.some((p) => p.includes(relativePath.split("/").pop()))
           ) {
             return "modals";
           }
           if (
-            relativePath.includes("settings/") &&
+            relativePath.includes("app/settings/") &&
             PATHS.settings.some((p) => p.includes(relativePath.split("/").pop()))
           ) {
             return "settings";
           }
           if (
-            relativePath.includes("settings/") &&
+            relativePath.includes("app/settings/") &&
             PATHS.panels.some((p) => p.includes(relativePath.split("/").pop()))
           ) {
             return "panels";

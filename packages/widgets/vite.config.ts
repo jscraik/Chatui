@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-import { widgetManifest } from "./src/plugins/widget-manifest";
+import { widgetManifest } from "./src/sdk/plugins/widget-manifest";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
@@ -12,7 +12,7 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    widgetManifest() // Auto-discover widgets and generate manifest
+    widgetManifest(), // Auto-discover widgets and generate manifest
   ],
   build: {
     // Bundle size budgets - warn at 800KB to accommodate Three.js core chunk
