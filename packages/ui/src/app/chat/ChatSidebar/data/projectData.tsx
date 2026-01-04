@@ -23,19 +23,19 @@ export const projects: SidebarItem[] = [
     id: "apps-sdk",
     label: "Apps SDK Designer",
     icon: <IconWriting className="size-5" />,
-    color: "text-accent-blue",
+    color: "text-foundation-accent-blue-light dark:text-foundation-accent-blue",
   },
   {
     id: "dadmode",
     label: "DADMODE",
     icon: <IconBarChart className="size-5" />,
-    color: "text-accent-green",
+    color: "text-foundation-accent-green-light dark:text-foundation-accent-green",
   },
   {
     id: "peer",
     label: "PEER Framework",
     icon: <IconFolder className="size-5" />,
-    color: "text-accent-orange",
+    color: "text-foundation-accent-orange-light dark:text-foundation-accent-orange",
   },
 ];
 
@@ -71,33 +71,38 @@ export const categories = ["Investing", "Homework", "Writing", "Coding", "Resear
  * Category icon elements by label.
  */
 export const categoryIcons: Record<string, ReactNode> = {
-  Investing: <IconBarChart className="size-4" />,
-  Homework: <IconBook className="size-4" />,
-  Writing: <IconWriting className="size-4" />,
-  Coding: <IconCompose className="size-4" />,
-  Research: <IconSearch className="size-4" />,
+  Investing: <IconBarChart className="size-5" />,
+  Homework: <IconBook className="size-5" />,
+  Writing: <IconWriting className="size-5" />,
+  Coding: <IconCompose className="size-5" />,
+  Research: <IconSearch className="size-5" />,
 };
 
 /**
  * Category badge class names by label.
  */
 export const categoryColors: Record<string, string> = {
-  Investing: "bg-accent-green/20 text-accent-green border-accent-green/30",
-  Homework: "bg-accent-blue/20 text-accent-blue border-accent-blue/30",
-  Writing: "bg-accent-orange/20 text-accent-orange border-accent-orange/30",
-  Coding: "bg-accent-red/20 text-accent-red border-accent-red/30",
-  Research: "bg-accent-blue/20 text-accent-blue border-accent-blue/30",
+  Investing:
+    "bg-foundation-accent-green-light/15 dark:bg-foundation-accent-green/15 text-foundation-accent-green-light dark:text-foundation-accent-green border-foundation-accent-green-light/30 dark:border-foundation-accent-green/30",
+  Homework:
+    "bg-foundation-accent-blue-light/15 dark:bg-foundation-accent-blue/15 text-foundation-accent-blue-light dark:text-foundation-accent-blue border-foundation-accent-blue-light/30 dark:border-foundation-accent-blue/30",
+  Writing:
+    "bg-foundation-accent-orange-light/15 dark:bg-foundation-accent-orange/15 text-foundation-accent-orange-light dark:text-foundation-accent-orange border-foundation-accent-orange-light/30 dark:border-foundation-accent-orange/30",
+  Coding:
+    "bg-foundation-accent-red-light/15 dark:bg-foundation-accent-red/15 text-foundation-accent-red-light dark:text-foundation-accent-red border-foundation-accent-red-light/30 dark:border-foundation-accent-red/30",
+  Research:
+    "bg-foundation-accent-blue-light/15 dark:bg-foundation-accent-blue/15 text-foundation-accent-blue-light dark:text-foundation-accent-blue border-foundation-accent-blue-light/30 dark:border-foundation-accent-blue/30",
 };
 
 /**
  * Category icon class names by label.
  */
 export const categoryIconColors: Record<string, string> = {
-  Investing: "text-accent-green",
-  Homework: "text-accent-blue",
-  Writing: "text-accent-orange",
-  Coding: "text-accent-red",
-  Research: "text-accent-blue",
+  Investing: "text-foundation-accent-green-light dark:text-foundation-accent-green",
+  Homework: "text-foundation-accent-blue-light dark:text-foundation-accent-blue",
+  Writing: "text-foundation-accent-orange-light dark:text-foundation-accent-orange",
+  Coding: "text-foundation-accent-red-light dark:text-foundation-accent-red",
+  Research: "text-foundation-accent-blue-light dark:text-foundation-accent-blue",
 };
 
 /**
@@ -119,5 +124,5 @@ export const projectIconMap: { [key: string]: ReactNode } = {
  * @returns Icon element (folder icon as fallback).
  */
 export function getProjectIcon(iconId: string) {
-  return projectIconMap[iconId] || <IconFolder className="size-4" />;
+  return projectIconMap[iconId] || <IconFolder className="size-5" />;
 }

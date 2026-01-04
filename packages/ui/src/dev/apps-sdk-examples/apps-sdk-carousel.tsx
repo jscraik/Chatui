@@ -7,7 +7,7 @@ import { markers } from "./data/markers";
 import { PlaceCard, type Place } from "./components/PlaceCard";
 
 export function AppsSdkCarouselExample() {
-  const places = (markers as { places: Place[] })?.places || [];
+  const places = markers.places.map((place) => ({ ...place })) as Place[];
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "center",
     loop: false,
@@ -105,7 +105,7 @@ export function AppsSdkCarouselExample() {
 }
 
 export function AppsSdkCarouselExampleAlt() {
-  const places = (markers as { places: Place[] })?.places?.slice(0, 5) || [];
+  const places = markers.places.slice(0, 5).map((place) => ({ ...place })) as Place[];
 
   return (
     <div className="antialiased relative w-full py-5 bg-muted text-foreground rounded-24 border border-border-subtle">

@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "packageManager": "pnpm@9.15.0",
+  "packageManager": "pnpm@10.27.0",
   "scripts": {
     "dev": "concurrently -n web,storybook -c cyan,magenta \"pnpm dev:web\" \"pnpm dev:storybook\"",
     "dev:web": "pnpm -C platforms/web/apps/web dev",
@@ -23,6 +23,12 @@
     "validate:tokens": "node scripts/validate-token-consistency.mjs",
     "mcp:dev": "pnpm -C platforms/mcp dev",
     "mcp:start": "pnpm -C platforms/mcp start",
+    "mcp:inspector": "pnpm -C platforms/mcp inspector",
+    "mcp:test": "pnpm -C platforms/mcp test",
+    "mcp:test:contract": "pnpm -C platforms/mcp test:contract",
+    "mcp:test:jsonrpc": "pnpm -C platforms/mcp test:jsonrpc",
+    "mcp:test:cli": "pnpm -C platforms/mcp test:cli",
+    "mcp:test:inspector-ui": "pnpm -C platforms/mcp test:inspector-ui",
     "storybook:dev": "pnpm -C platforms/web/apps/storybook dev",
     "storybook:build": "pnpm -C platforms/web/apps/storybook build",
     "storybook:test": "pnpm -C platforms/web/apps/storybook test",
@@ -49,6 +55,10 @@
     "bundle:monitor": "node ./scripts/bundle-size-monitor.mjs",
     "bundle:monitor:strict": "node ./scripts/bundle-size-monitor.mjs --strict",
     "bundle:monitor:json": "node ./scripts/bundle-size-monitor.mjs --json",
+    "argos:upload": "pnpm exec -- argos upload ./screenshots",
+    "chatui": "pnpm -C packages/cli run start",
+    "chatui:dev": "pnpm -C packages/cli run dev",
+    "chatui:build": "pnpm -C packages/cli run build",
     "test:watch": "pnpm -C packages/ui test:watch",
     "test:coverage": "pnpm -C packages/ui test:coverage",
     "test:embed": "node ./platforms/mcp/scripts/smoke.mjs",
@@ -62,9 +72,12 @@
     "release": "changeset publish"
   },
   "devDependencies": {
+    "@argos-ci/cli": "^3.0.6",
+    "@argos-ci/playwright": "^1.7.0",
     "@axe-core/playwright": "^4.10.2",
     "@changesets/cli": "^2.27.1",
     "@eslint/js": "^9.18.0",
+    "@modelcontextprotocol/inspector": "^0.18.0",
     "@playwright/test": "^1.57.0",
     "@vitest/browser-playwright": "^4.0.16",
     "@vitest/coverage-v8": "^4.0.16",
@@ -86,13 +99,13 @@
   "pnpm": {
     "peerDependencyRules": {
       "allowedVersions": {
-        "storybook": "^8.6.15",
+        "storybook": "^10.1.11",
         "react": "^19.0.0",
         "react-dom": "^19.0.0"
       }
     },
     "overrides": {
-      "storybook": "8.6.15",
+      "storybook": "10.1.11",
       "react": "19.0.0",
       "react-dom": "19.0.0",
       "@types/react": "19.2.7",

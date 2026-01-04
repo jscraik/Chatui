@@ -1,4 +1,4 @@
-# Apps SDK UI Library Workspace
+# Developer Design UI Library
 
 Last updated: 2026-01-02
 
@@ -6,25 +6,29 @@ This repository is a **library-first monorepo** for building consistent UI acros
 
 ## What This Is
 
-A shared design system library that you can use across all your projects:
+A comprehensive design system and component library for building ChatGPT-style interfaces across multiple platforms:
 
-- **ChatGPT Widgets** - Embedded in ChatGPT via Apps SDK
-- **Standalone React Apps** - Any React application
-- **Internal Tools** - Dashboards, admin panels, etc.
+- **ChatGPT Widgets** - Embedded widgets via OpenAI Apps SDK
+- **React Applications** - Standalone web applications using `@chatui/ui`
+- **macOS Applications** - Native SwiftUI apps with ChatUI Swift packages
+- **MCP Integration** - Model Context Protocol server for ChatGPT tool integration
 
 ## Primary Products
 
 - `@chatui/ui` - Reusable UI components (chat layout, header, sidebar, primitives)
 - `@chatui/runtime` - Host adapters + mocks (`window.openai` wrapper, HostProvider)
 - `@chatui/tokens` - Design tokens (CSS variables, Tailwind preset)
+- `packages/widgets` - Standalone widget bundles for ChatGPT
 - `packages/cloudflare-template` - Cloudflare Workers deployment template for MCP
 
-## Reference Harnesses
+## Development Surfaces
 
-- `platforms/web/apps/web` - Standalone reference app with page routing system
-- `platforms/web/apps/storybook` - Component documentation and development
+- `platforms/web/apps/web` - Widget Gallery for visual testing and MCP widget builds
+- `platforms/web/apps/storybook` - Component documentation and interactive development
 - `platforms/mcp` - MCP server for ChatGPT integration
-- `packages/widgets` - Standalone widget bundles for ChatGPT
+- `platforms/apple/apps/macos/ChatUIApp` - Production macOS application with MCP integration
+- `platforms/apple/apps/macos/ChatUIPlayground` - SwiftUI experimentation harness
+- `platforms/apple/apps/macos/ComponentGallery` - Visual component browser for Swift packages
 
 ## Contents
 
@@ -33,7 +37,7 @@ A shared design system library that you can use across all your projects:
 - [Quick Start](#quick-start)
 - [Verify](#verify)
 - [Common tasks](#common-tasks)
-- [Pages & Navigation](#pages--navigation)
+- [Widget Gallery & Development](#widget-gallery--development)
 - [Documentation](#documentation)
 - [Troubleshooting](#troubleshooting)
 - [Rules of the road](#rules-of-the-road)
@@ -54,7 +58,9 @@ A shared design system library that you can use across all your projects:
 
 - Node.js 18+
 - pnpm 9.15.0 (see `packageManager` in `package.json`)
-- macOS app work (optional): macOS 13+ + Xcode 15+
+- **For macOS app development** (optional): macOS 13+ with Xcode 15+
+
+> Note: Web and widget development works on all platforms. macOS/Xcode is only required for Swift package and native macOS app work.
 
 ## Compatibility matrix
 
@@ -62,6 +68,9 @@ A shared design system library that you can use across all your projects:
 - **TypeScript**: 5.9+ (workspace devDependency)
 - **Node.js**: 18+ (runtime baseline)
 - **Apps SDK UI**: ^0.2.1 (from `@chatui/ui` dependencies)
+- **Swift**: 5.9+ with Xcode 15+ (for macOS/iOS development)
+- **macOS**: 13+ (deployment target for macOS apps)
+- **iOS**: 15+ (deployment target for Swift packages)
 
 ## 🚀 Quick Start
 
@@ -70,8 +79,8 @@ A shared design system library that you can use across all your projects:
 pnpm install
 
 # Start development
-pnpm dev                    # Web app at http://localhost:5173 + Storybook at http://localhost:6006
-pnpm dev:web                # Web app only (http://localhost:5173)
+pnpm dev                    # Widget Gallery at http://localhost:5173 + Storybook at http://localhost:6006
+pnpm dev:web                # Widget Gallery only (http://localhost:5173)
 pnpm dev:storybook          # Storybook only (http://localhost:6006)
 
 # Build for production
@@ -83,41 +92,91 @@ pnpm build:widget          # Single-file widget HTML (for MCP harness)
 
 ### Verify
 
-- Web app: open <http://localhost:5173/>
+- Widget Gallery: open <http://localhost:5173/>
 - Storybook: open <http://localhost:6006/>
 
 ## Common tasks
 
-Core scripts you will use often:
+Core scripts you'll use frequently:
 
 ```bash
-# Run MCP server (local dev)
-pnpm mcp:dev
+# Development
+pnpm dev                    # Widget Gallery + Storybook concurrently
+pnpm dev:web                # Widget Gallery only
+pnpm dev:storybook          # Storybook only
+pnpm dev:widgets            # Widget development mode
 
-# Run unit tests (UI package)
-pnpm test
+# MCP Server
+pnpm mcp:dev                # MCP server in development mode
+pnpm mcp:start              # MCP server in production mode
 
-# Run lint and formatting
-pnpm lint
-pnpm format
+# Testing
+pnpm test                   # UI unit tests (Vitest)
+pnpm test:e2e:web           # End-to-end tests (Playwright)
+pnpm test:a11y:widgets      # Accessibility tests for widgets
+pnpm test:visual:web        # Visual regression tests (web)
+pnpm test:visual:storybook  # Visual regression tests (Storybook)
+pnpm test:swift             # Run all Swift package tests
+pnpm test:mcp-contract      # MCP tool contract tests
 
-# Build a single-file widget HTML (for MCP harness)
+# Code Quality
+pnpm lint                   # ESLint
+pnpm format                 # Prettier (write)
+pnpm format:check           # Prettier (check only)
+pnpm lint:compliance        # Check compliance rules
+
+# Building
+pnpm build                  # Full build pipeline
+pnpm build:web              # Web-only build
+pnpm build:widgets          # Widget bundles for production
+pnpm build:widget           # Single-file widget HTML for MCP
+pnpm build:lib              # Build @chatui packages only
+pnpm build:macos            # macOS app build
+
+# Utilities
+pnpm new:component          # Component generator
+pnpm sync:versions          # Sync package versions across workspace
+pnpm validate:tokens        # Validate design token consistency
+```
+
+### ChatUI CLI
+
+The repo includes a unified CLI wrapper for common dev/build/test/MCP tasks:
+
+```bash
+pnpm chatui --help
+pnpm chatui dev
+pnpm chatui build web
+pnpm chatui test e2e-web
+pnpm chatui mcp tools list
+pnpm chatui doctor
+```
+
+## 📄 Widget Gallery & Development
+
+The web app (`platforms/web/apps/web`) is a **Widget Gallery** for visual testing and MCP widget builds:
+
+- **Widget Gallery**: <http://localhost:5173/> (default) - Browse and test all ChatUI widgets in iframe previews
+- **Widget Harness**: <http://localhost:5173/harness> - Test individual widgets with modal controls
+
+### Key Features
+
+- 12+ widgets including Dashboard, Chat View, Search Results, Compose, and Kitchen Sink
+- Iframe-based widget isolation for accurate testing
+- Built-in modal testing (Settings, Icon Picker, Discovery Settings)
+- Keyboard shortcuts (`?` for help, `G` for next widget)
+
+### Building Single-File Widgets for MCP
+
+```bash
 pnpm build:widget
 ```
 
-## 📄 Pages & Navigation
+This creates `platforms/web/apps/web/dist/widget.html` — a single-file HTML bundle used by the MCP server.
 
-The web app includes a flexible page system with URL-based routing:
+### Adding Pages (for custom apps)
 
-- **Chat**: <http://localhost:5173/> (default)
-- **Settings**: <http://localhost:5173/settings>
-- **Profile**: <http://localhost:5173/profile>
-- **About**: <http://localhost:5173/about>
-- **Widget Harness**: <http://localhost:5173/harness>
-
-### Adding New Pages
-
-See [PAGES_QUICK_START.md](./docs/guides/PAGES_QUICK_START.md) for a 5-minute guide, or check `.kiro/steering/page-development.md` for comprehensive patterns.
+If you're building a custom application with page routing, see [PAGES_QUICK_START.md](./docs/guides/PAGES_QUICK_START.md) for guidance on adding new pages to your application.
 
 ## 📚 Documentation
 
@@ -135,8 +194,10 @@ Use this table to jump to the canonical doc surface. For more detail, see
 | Swift integration       | `docs/SWIFT_INTEGRATION.md`      |
 | Restructure migration   | `docs/guides/repo-structure-migration.md` |
 | Swift packages overview | `platforms/apple/swift/README.md`                |
-| macOS app               | `platforms/apple/apps/macos/ChatUIApp/README.md` |
-| Web app                 | `platforms/web/apps/web/README.md`             |
+| macOS ChatUI app        | `platforms/apple/apps/macos/ChatUIApp/README.md` |
+| macOS Playground        | `platforms/apple/apps/macos/ChatUIPlayground/README.md` |
+| macOS Component Gallery | `platforms/apple/apps/macos/ComponentGallery/README.md` |
+| Web Widget Gallery      | `platforms/web/apps/web/README.md`             |
 | Storybook               | `platforms/web/apps/storybook/README.md`       |
 | MCP server              | `platforms/mcp/README.md`             |
 | Tokens                  | `packages/tokens/README.md`      |
@@ -164,9 +225,9 @@ Fix:
 pnpm mcp:start
 ```
 
-Then confirm the MCP URL in the macOS app Settings (default `http://localhost:8787`).
+Then confirm the MCP URL in the ChatUI macOS app Settings panel (default `http://localhost:8787`).
 
-### Symptom: Storybook or web app doesn’t start
+### Symptom: Storybook or Widget Gallery doesn't start
 
 Cause: Dependencies not installed or Node version mismatch.
 Fix:
@@ -195,14 +256,21 @@ node -v
   ✅ `createStandaloneHost()` uses your API/mocks  
   ❌ No UI components
 
-- **platforms/web/apps/web / platforms/web/apps/storybook**  
-  ✅ Reference shells + preview  
-  ✅ Provide host adapters  
+- **platforms/web/apps/web**  
+  ✅ Widget Gallery for visual testing  
+  ✅ Builds single-file widget HTML for MCP  
+  ✅ Standalone host adapter implementation  
+  ❌ No reusable UI source
+
+- **platforms/web/apps/storybook**  
+  ✅ Component documentation and interactive development  
+  ✅ Design system showcase  
   ❌ No reusable UI source
 
 - **platforms/mcp**  
-  ✅ Integration harness (widget bundle + tool definitions)  
-  ❌ Not required for the library itself
+  ✅ MCP server (serves widgets and defines tool contracts)  
+  ✅ ChatGPT integration layer  
+  ❌ Not required for library usage (only for ChatGPT integration)
 
 ## Apps SDK UI integration
 
@@ -399,10 +467,11 @@ This creates the component file and a Storybook story.
 
 ## Development Workflow
 
-1. **Design in Storybook** - `pnpm dev:storybook`
-2. **Test in Web App** - `pnpm dev:web`
-3. **Build Widgets** - `pnpm build:widgets`
-4. **Test in ChatGPT** - `pnpm mcp:start`
+1. **Design in Storybook** - `pnpm dev:storybook` - Interactive component development and documentation
+2. **Test in Widget Gallery** - `pnpm dev:web` - Visual testing of widget bundles in isolation
+3. **Build Widgets** - `pnpm build:widgets` - Create production widget bundles
+4. **Test in ChatGPT** - `pnpm mcp:start` - Run MCP server for ChatGPT integration
+5. **Test in macOS** - Open `platforms/apple/apps/macos/ChatUIApp` in Xcode for native app testing
 
 ## Architecture
 
@@ -410,37 +479,45 @@ This creates the component file and a Storybook story.
 ┌─────────────────────────────────────────────────────────────┐
 │                     Your Projects                            │
 ├─────────────────────────────────────────────────────────────┤
-│  Project A    │  Project B    │  ChatGPT Widget  │  ...     │
-│  (React App)  │  (Dashboard)  │  (Embedded)      │          │
-└───────┬───────┴───────┬───────┴────────┬─────────┴──────────┘
-        │               │                │
-        └───────────────┼────────────────┘
-                        │
-        ┌───────────────▼───────────────┐
-        │      @chatui/ui               │
-        │  (Shared Component Library)   │
-        ├───────────────────────────────┤
-        │  • Chat Components            │
-        │  • UI Primitives              │
-        │  • Templates                  │
-        │  • Pages                      │
-        └───────────────┬───────────────┘
-                        │
-        ┌───────────────▼───────────────┐
-        │      @chatui/runtime          │
-        │  (Host Abstraction)           │
-        ├───────────────────────────────┤
-        │  • createEmbeddedHost()       │
-        │  • createStandaloneHost()     │
-        │  • HostProvider               │
-        └───────────────┬───────────────┘
-                        │
-        ┌───────────────▼───────────────┐
-        │      @chatui/tokens           │
-        │  (Design Tokens)              │
-        ├───────────────────────────────┤
-        │  • CSS Variables              │
-        │  • Tailwind Preset            │
-        │  • Theme Configuration        │
-        └───────────────────────────────┘
+│  React App    │  ChatGPT Widget  │  macOS App    │  ...     │
+│  (Standalone) │  (Embedded)      │  (Native)     │          │
+└───────┬───────┴────────┬─────────┴────────┬──────┴──────────┘
+        │                │                  │
+        ├────────────────┘                  │
+        │                                   │
+┌───────▼──────────────────┐    ┌───────────▼────────────────┐
+│   @chatui/ui (React)     │    │  ChatUI Swift Packages     │
+│  Component Library       │    │  (SwiftUI)                 │
+├──────────────────────────┤    ├────────────────────────────┤
+│  • Chat Components       │    │  • ChatUIFoundation        │
+│  • UI Primitives         │    │  • ChatUIComponents        │
+│  • Templates             │    │  • ChatUIThemes            │
+│  • Pages                 │    │  • ChatUIShellChatGPT      │
+└───────┬──────────────────┘    │  • ChatUIMCP               │
+        │                       │  • ChatUISystemIntegration │
+┌───────▼──────────────────┐    └────────────────────────────┘
+│   @chatui/runtime        │
+│  (Host Abstraction)      │
+├──────────────────────────┤
+│  • createEmbeddedHost()  │
+│  • createStandaloneHost()│
+│  • HostProvider          │
+└───────┬──────────────────┘
+        │
+┌───────▼──────────────────┐
+│   @chatui/tokens         │
+│  (Design Tokens)         │
+├──────────────────────────┤
+│  • CSS Variables         │
+│  • Tailwind Preset       │
+│  • Theme Configuration   │
+└──────────────────────────┘
 ```
+
+### Cross-Platform Architecture
+
+The repository supports both **React** (web/ChatGPT widgets) and **Swift** (macOS/iOS) implementations:
+
+- **React**: Uses `@chatui/ui`, `@chatui/runtime`, and `@chatui/tokens` packages
+- **Swift**: Uses modular Swift packages (`ChatUIFoundation`, `ChatUIComponents`, `ChatUIThemes`, etc.)
+- **Design Parity**: Both platforms share the same design tokens and visual language from Apps SDK UI

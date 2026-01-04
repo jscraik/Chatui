@@ -14,6 +14,7 @@ import { useRef } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../../../components/ui/base/Collapsible";
 import { Input } from "../../../components/ui/base/Input";
 import { ListItem } from "../../../components/ui/base/ListItem";
+import { cn } from "../../../components/ui/utils";
 import {
   IconChat,
   IconChevronRightMd,
@@ -152,21 +153,22 @@ export function ChatSidebar({
         data-testid="chat-sidebar"
         role="navigation"
         aria-label="Chat sidebar"
-        className={`bg-background text-foreground flex flex-col h-full border-r border-border transition-all duration-300 shrink-0 ${
-          isCollapsed ? "w-[60px]" : "w-64"
-        }`}
+        className={cn(
+          "bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 text-foundation-text-light-primary dark:text-foundation-text-dark-primary flex flex-col h-full border-r border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 transition-all duration-300 shrink-0 w-[260px]",
+          isCollapsed && "w-[64px]",
+        )}
       >
         <div
           className={`flex items-center px-6 py-6 ${isCollapsed ? "justify-center" : "justify-between"}`}
         >
           {!isCollapsed && (
             <div className="size-8 rounded-full bg-foundation-accent-purple-light dark:bg-foundation-accent-purple text-foundation-text-dark-primary flex items-center justify-center flex-shrink-0">
-              <IconCloseBold className="size-4" />
+              <IconCloseBold className="size-5" />
             </div>
           )}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="size-8 flex items-center justify-center rounded-lg hover:bg-secondary transition-colors"
+            className="size-8 flex items-center justify-center rounded-lg hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2 transition-colors"
             title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
             aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
             data-testid="chat-sidebar-toggle"
@@ -188,7 +190,7 @@ export function ChatSidebar({
             />
           ) : (
             <div className="relative">
-              <IconSearch className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-secondary" />
+              <IconSearch className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary" />
               <Input
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
@@ -251,7 +253,7 @@ export function ChatSidebar({
             selected={selectedAction === "images"}
             right={
               !isCollapsed && (
-                <span className="text-[10px] font-semibold leading-[14px] tracking-[0.5px] px-1.5 py-0.5 bg-secondary rounded text-foreground uppercase">
+                <span className="text-[10px] font-semibold leading-[14px] tracking-[0.5px] px-1.5 py-0.5 bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 rounded text-foundation-text-light-primary dark:text-foundation-text-dark-primary uppercase">
                   NEW
                 </span>
               )
@@ -298,7 +300,7 @@ export function ChatSidebar({
             <Collapsible open={gptsExpanded} onOpenChange={setGptsExpanded}>
               <div className="px-2 pb-1 pt-2">
                 <CollapsibleTrigger asChild>
-                  <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-colors hover:bg-secondary">
+                  <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-colors hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2">
                     <span className="text-[13px] font-normal leading-[18px] tracking-[-0.3px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary flex-1 text-left">
                       GPTs
                     </span>
@@ -316,8 +318,8 @@ export function ChatSidebar({
                       onClick={() => setSelectedAction(label)}
                       className={`w-full text-left px-3 py-2 text-body-small rounded-lg transition-colors ${
                         selectedAction === label
-                          ? "bg-muted text-foreground"
-                          : "text-text-secondary hover:bg-muted hover:text-foreground"
+                          ? "bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 text-foundation-text-light-primary dark:text-foundation-text-dark-primary"
+                          : "text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary hover:bg-foundation-bg-light-2/80 dark:hover:bg-foundation-bg-dark-2/80 hover:text-foundation-text-light-primary dark:hover:text-foundation-text-dark-primary"
                       }`}
                     >
                       {label}
@@ -332,7 +334,7 @@ export function ChatSidebar({
             <Collapsible open={groupChatsExpanded} onOpenChange={setGroupChatsExpanded}>
               <div className="px-2 pb-1 pt-2">
                 <CollapsibleTrigger asChild>
-                  <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-colors hover:bg-secondary">
+                  <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-colors hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2">
                     <span className="text-[13px] font-normal leading-[18px] tracking-[-0.3px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary flex-1 text-left">
                       Group chats
                     </span>
@@ -347,16 +349,16 @@ export function ChatSidebar({
                   <div className="px-2 pb-1">
                     <ListItem
                       icon={
-                        <div className="size-6 rounded-full bg-accent-red flex items-center justify-center flex-shrink-0">
-                          <IconChat className="size-4 text-foreground" />
+                        <div className="size-6 rounded-full bg-foundation-accent-red-light dark:bg-foundation-accent-red flex items-center justify-center flex-shrink-0">
+                          <IconChat className="size-5 text-white" />
                         </div>
                       }
                       label="Summarize chat exchange"
                     />
                     <ListItem
                       icon={
-                        <div className="size-6 rounded-full bg-accent-blue flex items-center justify-center flex-shrink-0">
-                          <IconChat className="size-4 text-foreground" />
+                        <div className="size-6 rounded-full bg-foundation-accent-blue-light dark:bg-foundation-accent-blue flex items-center justify-center flex-shrink-0">
+                          <IconChat className="size-5 text-white" />
                         </div>
                       }
                       label="Draft follow-up"
@@ -371,7 +373,7 @@ export function ChatSidebar({
             <Collapsible open={yourChatsExpanded} onOpenChange={setYourChatsExpanded}>
               <div className="px-2 pb-1 pt-2">
                 <CollapsibleTrigger asChild>
-                  <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-colors hover:bg-secondary">
+                  <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-colors hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2">
                     <span className="text-[13px] font-normal leading-[18px] tracking-[-0.3px] text-foundation-text-light-primary dark:text-foundation-text-dark-primary flex-1 text-left">
                       Your chats
                     </span>
@@ -395,20 +397,22 @@ export function ChatSidebar({
           )}
         </div>
 
-        <div className="p-2 border-t border-border relative">
+        <div className="p-2 border-t border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 relative">
           <button
             ref={userMenuButtonRef}
             onClick={() => setShowUserMenu(!showUserMenu)}
-          className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-secondary transition-colors ${railItemClassName}`}
+            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2 transition-colors ${railItemClassName}`}
             title={isCollapsed ? "Jamie Scott Craik" : ""}
             data-testid="chat-sidebar-user-menu"
           >
             <div className="size-7 rounded-full bg-foundation-accent-purple-light dark:bg-foundation-accent-purple text-foundation-text-dark-primary flex items-center justify-center flex-shrink-0">
-              <IconCloseBold className="size-4" />
+              <IconCloseBold className="size-5" />
             </div>
             {!isCollapsed && (
               <div className="flex flex-col items-start flex-1 min-w-0">
-                <span className="text-body-small truncate font-normal text-foreground">Jamie Scott Craik</span>
+                <span className="text-body-small truncate font-normal text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
+                  Jamie Scott Craik
+                </span>
                 <span className="text-caption font-normal text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
                   Personal account
                 </span>
@@ -416,8 +420,8 @@ export function ChatSidebar({
             )}
           </button>
           {showUserMenu && !isCollapsed && (
-            <div className="absolute bottom-full left-3 right-3 mb-2 bg-popover border border-border rounded-xl shadow-2xl py-1 z-50">
-              <div className="px-3 py-2.5 border-b border-border">
+            <div className="absolute bottom-full left-3 right-3 mb-2 bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-2 border border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 rounded-xl shadow-2xl py-1 z-50">
+              <div className="px-3 py-2.5 border-b border-foundation-bg-light-3 dark:border-foundation-bg-dark-3">
                 <div className="flex items-center gap-2 text-body-small">
                   <div className="size-2 rounded-full bg-[var(--accent-green)]" />
                   <span className="text-foundation-text-light-primary dark:text-foundation-text-dark-primary font-normal">
@@ -425,7 +429,7 @@ export function ChatSidebar({
                   </span>
                 </div>
               </div>
-              <button className="w-full text-left px-3 py-2.5 hover:bg-secondary transition-colors flex items-center gap-2">
+              <button className="w-full text-left px-3 py-2.5 hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2 transition-colors flex items-center gap-2">
                 <svg
                   className="size-4 text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary"
                   viewBox="0 0 24 24"
@@ -436,7 +440,9 @@ export function ChatSidebar({
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                   <circle cx="12" cy="7" r="4" />
                 </svg>
-                <span className="text-body-small text-foreground font-normal">Personal account</span>
+                <span className="text-body-small text-foundation-text-light-primary dark:text-foundation-text-dark-primary font-normal">
+                  Personal account
+                </span>
               </button>
               <button
                 onClick={() => {
@@ -444,14 +450,18 @@ export function ChatSidebar({
                   setShowSettingsModal(true);
                 }}
                 data-testid="chat-sidebar-settings"
-                className="w-full text-left px-3 py-2.5 hover:bg-secondary transition-colors flex items-center gap-2"
+                className="w-full text-left px-3 py-2.5 hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2 transition-colors flex items-center gap-2"
               >
                 <IconSettings className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
-                <span className="text-body-small text-foreground font-normal">Settings</span>
+                <span className="text-body-small text-foundation-text-light-primary dark:text-foundation-text-dark-primary font-normal">
+                  Settings
+                </span>
               </button>
-              <div className="my-1 border-t border-border" />
-              <button className="w-full text-left px-3 py-2.5 hover:bg-secondary transition-colors">
-                <span className="text-body-small text-foreground font-normal">Log Out</span>
+              <div className="my-1 border-t border-foundation-bg-light-3 dark:border-foundation-bg-dark-3" />
+              <button className="w-full text-left px-3 py-2.5 hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2 transition-colors">
+                <span className="text-body-small text-foundation-text-light-primary dark:text-foundation-text-dark-primary font-normal">
+                  Log Out
+                </span>
               </button>
             </div>
           )}

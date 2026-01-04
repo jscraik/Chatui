@@ -1,9 +1,12 @@
-// Storybook configuration for ChatUI Design System (CJS for Node ESM projects)
-const path = require("node:path");
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "../../../../..");
 const uiRoot = path.join(repoRoot, "packages/ui/src");
 const uiStorybookRoot = path.join(uiRoot, "storybook");
+const toStorybookRelative = (absolutePath: string) =>
+  path.relative(__dirname, absolutePath).split(path.sep).join(path.posix.sep);
 
 /**
  * Rollup plugin to remove "use client" and "use server" directives.
@@ -15,7 +18,7 @@ function removeModuleDirectives() {
     name: "remove-module-directives",
     enforce: "pre",
 
-    transform(code) {
+    transform(code: string) {
       // Match both "use client" and "use server" with any quote style
       const useDirectiveRegex = /^("|')use (client|server)\1;\s*/;
 
@@ -31,24 +34,23 @@ function removeModuleDirectives() {
   };
 }
 
-/** @type {import("@storybook/react-vite").StorybookConfig} */
 const config = {
   stories: [
     // Overview pages (top level)
     {
-      directory: path.join(uiStorybookRoot, "docs"),
+      directory: toStorybookRelative(path.join(uiStorybookRoot, "docs")),
       title: "Overview",
       files: "**/*.mdx",
     },
     {
-      directory: path.join(uiStorybookRoot, "docs"),
+      directory: toStorybookRelative(path.join(uiStorybookRoot, "docs")),
       title: "Overview",
       files: "**/*.stories.tsx",
     },
 
     // Design System
     {
-      directory: path.join(uiStorybookRoot, "design-system"),
+      directory: toStorybookRelative(path.join(uiStorybookRoot, "design-system")),
       title: "Design System",
       files: "**/*.stories.tsx",
       // Use titlePrefix to avoid "Design System Design Tokens"
@@ -57,96 +59,92 @@ const config = {
 
     // Templates (organized layout examples)
     {
-      directory: path.join(uiRoot, "templates"),
+      directory: toStorybookRelative(path.join(uiRoot, "templates")),
       title: "Templates",
       files: "**/*.stories.tsx",
     },
 
     // Chat Components (core chat features)
     {
-      directory: path.join(uiRoot, "app/chat"),
+      directory: toStorybookRelative(path.join(uiRoot, "app/chat")),
       title: "Components/Chat",
       files: "**/*.stories.tsx",
     },
 
     // Settings Components
     {
-      directory: path.join(uiRoot, "app/settings"),
+      directory: toStorybookRelative(path.join(uiRoot, "app/settings")),
       title: "Components/Settings",
       files: "**/*.stories.tsx",
     },
 
     // UI Primitives (organized by category)
     {
-      directory: path.join(uiRoot, "components/ui/base"),
+      directory: toStorybookRelative(path.join(uiRoot, "components/ui/base")),
       title: "Components/UI/Base",
       files: "**/*.stories.tsx",
     },
     {
-      directory: path.join(uiRoot, "components/ui/forms"),
+      directory: toStorybookRelative(path.join(uiRoot, "components/ui/forms")),
       title: "Components/UI/Forms",
       files: "**/*.stories.tsx",
     },
     {
-      directory: path.join(uiRoot, "components/ui/navigation"),
+      directory: toStorybookRelative(path.join(uiRoot, "components/ui/navigation")),
       title: "Components/UI/Navigation",
       files: "**/*.stories.tsx",
     },
     {
-      directory: path.join(uiRoot, "components/ui/overlays"),
+      directory: toStorybookRelative(path.join(uiRoot, "components/ui/overlays")),
       title: "Components/UI/Overlays",
       files: "**/*.stories.tsx",
     },
     {
-      directory: path.join(uiRoot, "components/ui/feedback"),
+      directory: toStorybookRelative(path.join(uiRoot, "components/ui/feedback")),
       title: "Components/UI/Feedback",
       files: "**/*.stories.tsx",
     },
     {
-      directory: path.join(uiRoot, "components/ui/data-display"),
+      directory: toStorybookRelative(path.join(uiRoot, "components/ui/data-display")),
       title: "Components/UI/Data Display",
       files: "**/*.stories.tsx",
     },
     {
-      directory: path.join(uiRoot, "components/ui/chat"),
+      directory: toStorybookRelative(path.join(uiRoot, "components/ui/chat")),
       title: "Components/UI/Chat UI",
       files: "**/*.stories.tsx",
     },
 
     // Modals
     {
-      directory: path.join(uiRoot, "app/modals"),
+      directory: toStorybookRelative(path.join(uiRoot, "app/modals")),
       title: "Components/Modals",
       files: "**/*.stories.tsx",
     },
 
     // Design System Showcase (documentation components)
     {
-      directory: path.join(uiRoot, "design-system/showcase"),
+      directory: toStorybookRelative(path.join(uiRoot, "design-system/showcase")),
       title: "Documentation",
       files: "**/*.stories.tsx",
     },
 
     // App Pages
     {
-      directory: path.join(uiStorybookRoot, "pages"),
+      directory: toStorybookRelative(path.join(uiStorybookRoot, "pages")),
       title: "Pages",
       files: "**/*.stories.tsx",
     },
 
     // Root App
     {
-      directory: path.join(uiStorybookRoot, "App"),
+      directory: toStorybookRelative(path.join(uiStorybookRoot, "App")),
       title: "App",
       files: "**/*.stories.tsx",
     },
   ],
 
-  addons: [
-    "@storybook/addon-essentials",
-    "@storybook/addon-a11y",
-    "@storybook/addon-interactions",
-  ],
+  addons: ["@storybook/addon-docs", "@storybook/addon-a11y", "@storybook/addon-vitest"],
 
   framework: {
     name: "@storybook/react-vite",
@@ -158,7 +156,7 @@ const config = {
   },
 
   sidebar: {
-    renderLabel: ({ title, type }) => {
+    renderLabel: ({ title, type }: { title: string; type: string }) => {
       if (type === "story") {
         return title.replace(/^[^.]+\./, "");
       }
@@ -171,13 +169,14 @@ const config = {
     reactDocgenTypescriptOptions: {
       shouldExtractLiteralValuesFromEnum: true,
       shouldRemoveUndefinedFromOptional: true,
-      propFilter: (prop) => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
+      propFilter: (prop: { parent?: { fileName?: string } }) =>
+        prop.parent ? !/node_modules/.test(prop.parent.fileName ?? "") : true,
     },
   },
 
   staticDirs: ["../public"],
 
-  viteFinal: async (viteConfig) => {
+  viteFinal: async (viteConfig: any) => {
     const { default: tailwindcss } = await import("@tailwindcss/vite");
     viteConfig.plugins = [removeModuleDirectives(), ...(viteConfig.plugins ?? []), tailwindcss()];
     viteConfig.base = "./";
@@ -202,14 +201,18 @@ const config = {
 
     viteConfig.optimizeDeps = {
       ...(viteConfig.optimizeDeps ?? {}),
-      include: ["@storybook/addon-docs", "@storybook/addon-a11y", "@storybook/blocks"],
+      include: [
+        "@storybook/addon-docs",
+        "@storybook/addon-a11y",
+        "@storybook/addon-docs/blocks",
+      ],
     };
 
     viteConfig.build = {
       ...(viteConfig.build ?? {}),
       rollupOptions: {
         ...(viteConfig.build?.rollupOptions ?? {}),
-        external: ["@storybook/addon-docs", "@storybook/blocks", "@storybook/addon-a11y"],
+        external: ["@storybook/addon-docs", "@storybook/addon-docs/blocks", "@storybook/addon-a11y"],
       },
       minify: false,
     };
@@ -223,4 +226,4 @@ const config = {
   },
 };
 
-module.exports = config;
+export default config;

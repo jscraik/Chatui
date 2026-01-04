@@ -26,7 +26,16 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: [["html", { outputFolder: "playwright-report/visual" }]],
+  reporter: [
+    ["html", { outputFolder: "playwright-report/visual" }],
+    [
+      "@argos-ci/playwright/reporter",
+      {
+        uploadToArgos: !!process.env.CI,
+        token: process.env.ARGOS_TOKEN,
+      },
+    ],
+  ],
 
   // Snapshot configuration
   snapshotDir: "./tests/visual/__snapshots__",

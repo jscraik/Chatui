@@ -1,45 +1,55 @@
 import type { ComponentType } from "react";
+import * as React from "react";
 
-import { FoundationsShowcase } from "../design-system/showcase/FoundationsShowcase";
-import { ColorShowcase } from "../design-system/showcase/ColorShowcase";
-import { TypographyShowcase } from "../design-system/showcase/TypographyShowcase";
-import { SpacingShowcase } from "../design-system/showcase/SpacingShowcase";
-import { IconographyShowcase } from "../design-system/showcase/IconographyShowcase";
-import { DesignSystemDocs } from "../design-system/showcase/DesignSystemDocs";
+import { FoundationsShowcase as TempFoundationsShowcase } from "./_temp_import/components/FoundationsShowcase";
+import { ColorShowcase as TempColorShowcase } from "./_temp_import/components/ColorShowcase";
+import { TypographyShowcase as TempTypographyShowcase } from "./_temp_import/components/TypographyShowcase";
+import { SpacingShowcase as TempSpacingShowcase } from "./_temp_import/components/SpacingShowcase";
+import { IconographyShowcase as TempIconographyShowcase } from "./_temp_import/components/IconographyShowcase";
+import { DesignSystemDocs as TempDesignSystemDocs } from "./_temp_import/components/DesignSystemDocs";
 
 import { ComposeTemplate } from "./ComposeTemplate";
 import { ChatTemplate } from "./ChatTemplate";
-import { ChatHeaderTemplate } from "./ChatHeaderTemplate";
 import { ChatSidebarTemplate } from "./ChatSidebarTemplate";
 import { ChatMessagesTemplate } from "./ChatMessagesTemplate";
-import { ChatInputTemplate } from "./ChatInputTemplate";
 import { ChatVariantsTemplate } from "./ChatVariantsTemplate";
-import { AppsPanelTemplate } from "./AppsPanelTemplate";
-import { ArchivedChatsPanelTemplate } from "./ArchivedChatsPanelTemplate";
+import { ChatHeader as TempChatHeader } from "./_temp_import/components/ChatHeader";
+import { ChatInput as TempChatInput } from "./_temp_import/components/ChatInput";
+import { AppsPanel as TempAppsPanel } from "./_temp_import/components/AppsPanel";
+import { ArchivedChatsPanel as TempArchivedChatsPanel } from "./_temp_import/components/ArchivedChatsPanel";
 import { AudioSettingsPanelTemplate } from "./AudioSettingsPanelTemplate";
 import { CheckForUpdatesPanelTemplate } from "./CheckForUpdatesPanelTemplate";
-import { DataControlsPanelTemplate } from "./DataControlsPanelTemplate";
-import { ManageAppsPanelTemplate } from "./ManageAppsPanelTemplate";
-import { NotificationsPanelTemplate } from "./NotificationsPanelTemplate";
-import { PersonalizationPanelTemplate } from "./PersonalizationPanelTemplate";
-import { SecurityPanelTemplate } from "./SecurityPanelTemplate";
-import { ChatGPTIconCatalog } from "./ChatGPTIconCatalog";
-import { TemplateShellDemo } from "./demos/TemplateShellDemo";
-import { TemplatePanelDemo } from "./demos/TemplatePanelDemo";
-import { TemplateHeaderBarDemo } from "./demos/TemplateHeaderBarDemo";
-import { TemplateFormFieldDemo } from "./demos/TemplateFormFieldDemo";
-import { TemplateFooterBarDemo } from "./demos/TemplateFooterBarDemo";
-import { TemplateFieldGroupDemo } from "./demos/TemplateFieldGroupDemo";
-import { SettingToggleBlockDemo } from "./demos/SettingToggleBlockDemo";
-import { SettingRowBlockDemo } from "./demos/SettingRowBlockDemo";
-import { SettingDropdownBlockDemo } from "./demos/SettingDropdownBlockDemo";
-import { ChatHeaderDemo } from "./demos/ChatHeaderDemo";
-import { ModelSelectorDemo } from "./demos/ModelSelectorDemo";
-import { ChatInputDemo } from "./demos/ChatInputDemo";
-import { AttachmentMenuDemo } from "./demos/AttachmentMenuDemo";
-import { IconPickerModalDemo } from "./demos/IconPickerModalDemo";
-import { DiscoverySettingsModalDemo } from "./demos/DiscoverySettingsModalDemo";
-import { SettingsModalDemo } from "./demos/SettingsModalDemo";
+import { DataControlsPanel as TempDataControlsPanel } from "./_temp_import/components/DataControlsPanel";
+import { ManageAppsPanel as TempManageAppsPanel } from "./_temp_import/components/ManageAppsPanel";
+import { NotificationsPanel as TempNotificationsPanel } from "./_temp_import/components/NotificationsPanel";
+import { PersonalizationPanel as TempPersonalizationPanel } from "./_temp_import/components/PersonalizationPanel";
+import { SecurityPanel as TempSecurityPanel } from "./_temp_import/components/SecurityPanel";
+import TempChatGPTIconCatalog from "./_temp_import/components/icons/ChatGPTIconCatalog";
+import { TemplateShellDemo as TempTemplateShellDemo } from "./_temp_import/components/demos/TemplateShellDemo";
+import { TemplatePanelDemo as TempTemplatePanelDemo } from "./_temp_import/components/demos/TemplatePanelDemo";
+import { TemplateHeaderBarDemo as TempTemplateHeaderBarDemo } from "./_temp_import/components/demos/TemplateHeaderBarDemo";
+import { TemplateFormFieldDemo as TempTemplateFormFieldDemo } from "./_temp_import/components/demos/TemplateFormFieldDemo";
+import { TemplateFooterBarDemo as TempTemplateFooterBarDemo } from "./_temp_import/components/demos/TemplateFooterBarDemo";
+import { TemplateFieldGroupDemo as TempTemplateFieldGroupDemo } from "./_temp_import/components/demos/TemplateFieldGroupDemo";
+import { SettingToggleBlockDemo as TempSettingToggleBlockDemo } from "./_temp_import/components/demos/SettingToggleBlockDemo";
+import { SettingRowBlockDemo as TempSettingRowBlockDemo } from "./_temp_import/components/demos/SettingRowBlockDemo";
+import { SettingDropdownBlockDemo as TempSettingDropdownBlockDemo } from "./_temp_import/components/demos/SettingDropdownBlockDemo";
+import { ChatHeaderDemo as TempChatHeaderDemo } from "./_temp_import/components/demos/ChatHeaderDemo";
+import { ModelSelectorDemo as TempModelSelectorDemo } from "./_temp_import/components/demos/ModelSelectorDemo";
+import { ChatInputDemo as TempChatInputDemo } from "./_temp_import/components/demos/ChatInputDemo";
+import { AttachmentMenuDemo as TempAttachmentMenuDemo } from "./_temp_import/components/demos/AttachmentMenuDemo";
+import { IconPickerModalDemo as TempIconPickerModalDemo } from "./_temp_import/components/demos/IconPickerModalDemo";
+import { DiscoverySettingsModalDemo as TempDiscoverySettingsModalDemo } from "./_temp_import/components/demos/DiscoverySettingsModalDemo";
+import { SettingsModalDemo as TempSettingsModalDemo } from "./_temp_import/components/demos/SettingsModalDemo";
+
+const TempChatInputPreview: ComponentType = () =>
+  React.createElement(TempChatInput, {
+    selectedModel: {
+      name: "GPT-4",
+      shortName: "GPT-4",
+      description: "Most capable model",
+    },
+  });
 
 // ============================================================================
 // TEMPLATE DEFINITIONS
@@ -174,7 +184,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Chat Header",
     description: "Top navigation header for chat surfaces.",
     category: "layouts",
-    Component: ChatHeaderTemplate,
+    Component: TempChatHeader,
     tags: ["chat", "header"],
   },
   {
@@ -198,7 +208,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Chat Input",
     description: "Composer bar with attachments and send controls.",
     category: "layouts",
-    Component: ChatInputTemplate,
+    Component: TempChatInputPreview,
     tags: ["chat", "input"],
   },
   {
@@ -214,7 +224,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Settings: Apps",
     description: "Apps settings panel template.",
     category: "panels",
-    Component: AppsPanelTemplate,
+    Component: TempAppsPanel,
     tags: ["settings", "apps"],
   },
   {
@@ -222,7 +232,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Settings: Archived Chats",
     description: "Archived chats panel template.",
     category: "panels",
-    Component: ArchivedChatsPanelTemplate,
+    Component: TempArchivedChatsPanel,
     tags: ["settings", "chats"],
   },
   {
@@ -246,7 +256,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Settings: Data Controls",
     description: "Data controls panel template.",
     category: "panels",
-    Component: DataControlsPanelTemplate,
+    Component: TempDataControlsPanel,
     tags: ["settings", "data"],
   },
   {
@@ -254,7 +264,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Settings: Manage Apps",
     description: "Manage apps panel template.",
     category: "panels",
-    Component: ManageAppsPanelTemplate,
+    Component: TempManageAppsPanel,
     tags: ["settings", "apps"],
   },
   {
@@ -262,7 +272,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Settings: Notifications",
     description: "Notifications panel template.",
     category: "panels",
-    Component: NotificationsPanelTemplate,
+    Component: TempNotificationsPanel,
     tags: ["settings", "notifications"],
   },
   {
@@ -270,7 +280,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Settings: Personalization",
     description: "Personalization panel template.",
     category: "panels",
-    Component: PersonalizationPanelTemplate,
+    Component: TempPersonalizationPanel,
     tags: ["settings", "personalization"],
   },
   {
@@ -278,7 +288,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Settings: Security",
     description: "Security panel template.",
     category: "panels",
-    Component: SecurityPanelTemplate,
+    Component: TempSecurityPanel,
     tags: ["settings", "security"],
   },
   {
@@ -286,7 +296,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Icon Catalog",
     description: "Browse all 350+ ChatGPT icons with search and categories.",
     category: "design-system",
-    Component: ChatGPTIconCatalog,
+    Component: TempChatGPTIconCatalog,
     tags: ["design-system", "icons", "catalog"],
   },
   {
@@ -294,7 +304,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Foundations Showcase",
     description: "Complete design system hub with tabbed interface.",
     category: "design-system",
-    Component: FoundationsShowcase,
+    Component: TempFoundationsShowcase,
     tags: ["design-system", "foundations", "hub"],
   },
   {
@@ -302,7 +312,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Color Showcase",
     description: "Complete color palette with light/dark modes.",
     category: "design-system",
-    Component: ColorShowcase,
+    Component: TempColorShowcase,
     tags: ["design-system", "color", "palette"],
   },
   {
@@ -310,7 +320,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Typography Showcase",
     description: "Typography system with font families, sizes, and weights.",
     category: "design-system",
-    Component: TypographyShowcase,
+    Component: TempTypographyShowcase,
     tags: ["design-system", "typography", "fonts"],
   },
   {
@@ -318,7 +328,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Spacing Showcase",
     description: "Spacing system with scale and usage examples.",
     category: "design-system",
-    Component: SpacingShowcase,
+    Component: TempSpacingShowcase,
     tags: ["design-system", "spacing", "scale"],
   },
   {
@@ -326,7 +336,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Iconography Showcase",
     description: "Icon library with categories and usage guidelines.",
     category: "design-system",
-    Component: IconographyShowcase,
+    Component: TempIconographyShowcase,
     tags: ["design-system", "icons", "guidelines"],
   },
   {
@@ -334,7 +344,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Design System Documentation",
     description: "Comprehensive design system documentation.",
     category: "design-system",
-    Component: DesignSystemDocs,
+    Component: TempDesignSystemDocs,
     tags: ["design-system", "docs", "reference"],
   },
 
@@ -347,7 +357,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Template Shell",
     description: "Demo of TemplateShell component with collapsible sidebars.",
     category: "templates",
-    Component: TemplateShellDemo,
+    Component: TempTemplateShellDemo,
     tags: ["templates", "shell", "layout"],
   },
   {
@@ -355,7 +365,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Template Panel",
     description: "Demo of TemplatePanel component with variants and states.",
     category: "templates",
-    Component: TemplatePanelDemo,
+    Component: TempTemplatePanelDemo,
     tags: ["templates", "panel"],
   },
   {
@@ -363,7 +373,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Template Header Bar",
     description: "Demo of TemplateHeaderBar component.",
     category: "templates",
-    Component: TemplateHeaderBarDemo,
+    Component: TempTemplateHeaderBarDemo,
     tags: ["templates", "header"],
   },
   {
@@ -371,7 +381,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Template Form Field",
     description: "Demo of TemplateFormField component.",
     category: "templates",
-    Component: TemplateFormFieldDemo,
+    Component: TempTemplateFormFieldDemo,
     tags: ["templates", "form"],
   },
   {
@@ -379,7 +389,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Template Footer Bar",
     description: "Demo of TemplateFooterBar component.",
     category: "templates",
-    Component: TemplateFooterBarDemo,
+    Component: TempTemplateFooterBarDemo,
     tags: ["templates", "footer"],
   },
   {
@@ -387,7 +397,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Template Field Group",
     description: "Demo of TemplateFieldGroup component.",
     category: "templates",
-    Component: TemplateFieldGroupDemo,
+    Component: TempTemplateFieldGroupDemo,
     tags: ["templates", "form", "group"],
   },
 
@@ -400,7 +410,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Setting Toggle Block",
     description: "Demo of SettingToggleBlock component.",
     category: "components",
-    Component: SettingToggleBlockDemo,
+    Component: TempSettingToggleBlockDemo,
     tags: ["settings", "toggle", "block"],
   },
   {
@@ -408,7 +418,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Setting Row Block",
     description: "Demo of SettingRowBlock component.",
     category: "components",
-    Component: SettingRowBlockDemo,
+    Component: TempSettingRowBlockDemo,
     tags: ["settings", "row", "block"],
   },
   {
@@ -416,7 +426,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Setting Dropdown Block",
     description: "Demo of SettingDropdownBlock component.",
     category: "components",
-    Component: SettingDropdownBlockDemo,
+    Component: TempSettingDropdownBlockDemo,
     tags: ["settings", "dropdown", "block"],
   },
 
@@ -429,7 +439,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Chat Header Demo",
     description: "Demo of ChatHeader component with various states.",
     category: "components",
-    Component: ChatHeaderDemo,
+    Component: TempChatHeaderDemo,
     tags: ["chat", "header", "demo"],
   },
   {
@@ -437,7 +447,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Model Selector",
     description: "Demo of ModelSelector component.",
     category: "components",
-    Component: ModelSelectorDemo,
+    Component: TempModelSelectorDemo,
     tags: ["chat", "model", "selector"],
   },
   {
@@ -445,7 +455,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Chat Input Demo",
     description: "Demo of ChatInput component.",
     category: "components",
-    Component: ChatInputDemo,
+    Component: TempChatInputDemo,
     tags: ["chat", "input", "demo"],
   },
   {
@@ -453,7 +463,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Attachment Menu",
     description: "Demo of AttachmentMenu component.",
     category: "components",
-    Component: AttachmentMenuDemo,
+    Component: TempAttachmentMenuDemo,
     tags: ["chat", "attachment", "menu"],
   },
 
@@ -466,7 +476,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Icon Picker Modal",
     description: "Demo of IconPickerModal component.",
     category: "modals",
-    Component: IconPickerModalDemo,
+    Component: TempIconPickerModalDemo,
     tags: ["modal", "icon", "picker"],
   },
   {
@@ -474,7 +484,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Discovery Settings Modal",
     description: "Demo of DiscoverySettingsModal component.",
     category: "modals",
-    Component: DiscoverySettingsModalDemo,
+    Component: TempDiscoverySettingsModalDemo,
     tags: ["modal", "settings", "discovery"],
   },
   {
@@ -482,7 +492,7 @@ export const templateRegistry: TemplateDefinition[] = [
     title: "Settings Modal",
     description: "Demo of SettingsModal component.",
     category: "modals",
-    Component: SettingsModalDemo,
+    Component: TempSettingsModalDemo,
     tags: ["modal", "settings"],
   },
 

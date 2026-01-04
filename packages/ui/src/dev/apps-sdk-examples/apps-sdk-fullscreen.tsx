@@ -7,6 +7,12 @@ import { Button } from "../../components/ui";
 import { FilmStrip } from "./components/FilmStrip";
 import { useMaxHeight } from "./use-max-height";
 
+const normalizeAlbums = (items: typeof albumsData.albums): Album[] =>
+  items.map((album) => ({
+    ...album,
+    photos: album.photos.map((photo) => ({ ...photo })),
+  })) as Album[];
+
 function FullscreenViewer({ album }: { album: Album }) {
   const maxHeight = useMaxHeight() ?? 560;
   const [index, setIndex] = React.useState(0);
@@ -43,7 +49,7 @@ function FullscreenViewer({ album }: { album: Album }) {
 }
 
 function AlbumsCarousel({ onSelect }: { onSelect: (album: Album) => void }) {
-  const albums = (albumsData as { albums: Album[] })?.albums || [];
+  const albums = normalizeAlbums(albumsData.albums);
 
   return (
     <div className="antialiased relative w-full text-foreground py-5 select-none">
@@ -59,7 +65,7 @@ function AlbumsCarousel({ onSelect }: { onSelect: (album: Album) => void }) {
 }
 
 export function AppsSdkFullscreenExample() {
-  const albumsList = (albumsData as { albums: Album[] })?.albums || [];
+  const albumsList = normalizeAlbums(albumsData.albums);
   const [selectedAlbum, setSelectedAlbum] = React.useState<Album | null>(albumsList[0] ?? null);
   const [isFullscreen, setIsFullscreen] = React.useState(false);
 
@@ -93,7 +99,7 @@ export function AppsSdkFullscreenExample() {
 }
 
 export function AppsSdkFullscreenExampleAlt() {
-  const albumsList = (albumsData as { albums: Album[] })?.albums || [];
+  const albumsList = normalizeAlbums(albumsData.albums);
   const [selectedAlbum, setSelectedAlbum] = React.useState<Album | null>(albumsList[1] ?? null);
 
   return (

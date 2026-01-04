@@ -4,7 +4,7 @@ import { blockRegistry } from "../templates/blocks/registry";
 import { DashboardTemplate } from "../templates/DashboardTemplate";
 import { ChatFullWidthTemplate } from "../templates/ChatFullWidthTemplate";
 import { ChatTwoPaneTemplate } from "../templates/ChatTwoPaneTemplate";
-import { NewComponentsShowcase } from "../templates/NewComponentsShowcase";
+import { NewComponentsShowcase } from "../templates/_temp_import/components/templates/NewComponentsShowcase";
 import {
   AppsSdkCarouselExample,
   AppsSdkCarouselExampleAlt,
@@ -211,6 +211,10 @@ export const templatesGalleryRegistry: TemplatesGalleryItem[] = [
   ...blocks,
 ];
 
+const isTemplateCategory = (
+  category: TemplatesGalleryCategory,
+): category is keyof typeof templateCategories => category in templateCategories;
+
 export function getTemplatesGalleryByCategory(
   category: TemplatesGalleryCategory,
 ): TemplatesGalleryItem[] {
@@ -221,7 +225,7 @@ export function getTemplatesGalleryByCategory(
   const legacy = legacyTemplates.filter((item) => item.category === category);
   const extras = extraDevItems.filter((item) => item.category === category);
   const appsSdk = appsSdkExamples.filter((item) => item.category === category);
-  const canonical = getTemplatesByCategory(category);
+  const canonical = isTemplateCategory(category) ? getTemplatesByCategory(category) : [];
 
   return [...legacy, ...extras, ...appsSdk, ...canonical];
 }

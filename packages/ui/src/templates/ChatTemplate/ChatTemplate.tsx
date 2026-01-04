@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 import { ChatVariantSplitSidebar } from "../../app/chat/ChatVariants";
+import { ChatHeader as TempChatHeader } from "../_temp_import/components/ChatHeader";
+import { ChatInput as TempChatInput } from "../_temp_import/components/ChatInput";
 import {
   sampleCategories,
   sampleCategoryColors,
@@ -33,22 +35,24 @@ export function ChatTemplate({ initialViewMode = "chat" }: ChatTemplateProps) {
   const [selectedModel, setSelectedModel] = useState(sampleModels[0]);
   const [viewMode, setViewMode] = useState<"chat" | "compose">(initialViewMode);
 
+  const handleModelChange = (model: string | typeof sampleModels[number]) => {
+    if (typeof model === "string") {
+      const resolved = [...sampleModels, ...sampleLegacyModels].find(
+        (candidate) => candidate.name === model || candidate.shortName === model,
+      );
+      if (resolved) setSelectedModel(resolved);
+      return;
+    }
+    setSelectedModel(model);
+  };
+
   return (
     <div className="h-full w-full">
       <ChatVariantSplitSidebar
         sidebarOpen={isSidebarOpen}
         onSidebarOpenChange={setIsSidebarOpen}
         selectedModel={selectedModel}
-        onModelChange={(model) => {
-          if (typeof model === "string") {
-            const resolved = [...sampleModels, ...sampleLegacyModels].find(
-              (candidate) => candidate.name === model || candidate.shortName === model,
-            );
-            if (resolved) setSelectedModel(resolved);
-            return;
-          }
-          setSelectedModel(model);
-        }}
+        onModelChange={handleModelChange}
         models={sampleModels}
         legacyModels={sampleLegacyModels}
         viewMode={viewMode}
@@ -64,6 +68,23 @@ export function ChatTemplate({ initialViewMode = "chat" }: ChatTemplateProps) {
         categoryColors={sampleCategoryColors}
         categoryIconColors={sampleCategoryIconColors}
         user={sampleUser}
+        slots={{
+          header: (
+            <TempChatHeader
+              isSidebarOpen={isSidebarOpen}
+              onSidebarToggle={() => setIsSidebarOpen((prev) => !prev)}
+              showSidebarToggle={true}
+              selectedModel={selectedModel}
+              onModelChange={handleModelChange}
+              models={sampleModels}
+              legacyModels={sampleLegacyModels}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+            />
+          ),
+          composer:
+            viewMode === "compose" ? null : <TempChatInput selectedModel={selectedModel} />,
+        }}
       />
     </div>
   );

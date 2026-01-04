@@ -1161,7 +1161,15 @@ ${this.generateCSSTypography()}
     return lines.join("\n");
   }
 
-  private formatShadow(shadow: Array<{ color: string; offsetX: number; offsetY: number; blur: number; spread: number }>): string {
+  private formatShadow(
+    shadow: ReadonlyArray<{
+      color: string;
+      offsetX: number;
+      offsetY: number;
+      blur: number;
+      spread: number;
+    }>,
+  ): string {
     return shadow
       .map(
         (layer) =>

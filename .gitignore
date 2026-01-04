@@ -64,6 +64,7 @@ coverage/
 *.lcov
 test-results/
 playwright-report/
+screenshots/
 **/test-results/
 **/playwright-report/
 **/playwright-snapshots/

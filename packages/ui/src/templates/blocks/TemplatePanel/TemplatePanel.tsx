@@ -668,10 +668,10 @@ export function TemplatePanelHeader({
             </svg>
           </button>
         )}
-        {showCloseButton && (closeButton || close) && (
+        {showCloseButton && close && (
           <button
             type="button"
-            onClick={closeButton ? undefined : close}
+            onClick={close}
             className={cn(
               "inline-flex items-center justify-center rounded-md p-1.5",
               "text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary",
@@ -681,7 +681,7 @@ export function TemplatePanelHeader({
             )}
             aria-label="Close panel"
           >
-            {closeButton ?? <IconX className="size-4" />}
+            <IconX className="size-4" />
           </button>
         )}
       </div>

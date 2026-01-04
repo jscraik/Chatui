@@ -1,4 +1,5 @@
-import type { ReactNode } from "react";
+import type { ReactElement, ReactNode } from "react";
+import { cloneElement, isValidElement } from "react";
 
 import { IconChevronRightMd } from "../../../../icons";
 import { cn } from "../../utils";
@@ -70,6 +71,18 @@ export function ListItem({
   dataRailItem,
   dataTestId,
 }: ListItemProps) {
+  const iconSizeClass = size === "lg" ? "size-6" : size === "sm" ? "size-4" : "size-5";
+  const iconWrapperSizeClass =
+    size === "lg" ? "[&>svg]:size-6" : size === "sm" ? "[&>svg]:size-4" : "[&>svg]:size-5";
+  const iconElement = isValidElement(icon) && typeof icon.type !== "string"
+    ? cloneElement(icon as ReactElement<{ className?: string }>, {
+        className: (() => {
+          const existing = (icon.props as { className?: string }).className ?? "";
+          const hasExplicitSize = /\bsize-\d+\b/.test(existing);
+          return cn(existing, hasExplicitSize ? null : iconSizeClass);
+        })(),
+      })
+    : icon;
   const sizes = {
     sm: "px-3 py-2",
     md: "px-4 py-3",
@@ -88,34 +101,40 @@ export function ListItem({
       data-rail-item={dataRailItem ? "true" : undefined}
       data-testid={dataTestId}
       className={cn(
-        "w-full flex items-center justify-between rounded-10 transition-colors text-left",
+        "group w-full flex items-center justify-between rounded-10 transition-colors text-left",
         sizes[size],
         onClick &&
-          "hover:bg-secondary/60 dark:hover:bg-secondary/40 cursor-pointer",
-        selected && "bg-secondary/60 dark:bg-secondary/40",
+          "hover:bg-foundation-bg-light-2/80 dark:hover:bg-foundation-bg-dark-2/80 cursor-pointer",
+        selected && "bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2",
         disabled && "opacity-50 cursor-not-allowed",
+        dataRailItem && "justify-center px-2",
         className,
       )}
     >
       <div className="flex items-center gap-3 flex-1 min-w-0">
         {icon && (
-          <div className="flex-shrink-0 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary">
-            {icon}
+          <div
+            className={cn(
+              "flex-shrink-0 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary [&>svg]:shrink-0",
+              iconWrapperSizeClass,
+            )}
+          >
+            {iconElement}
           </div>
         )}
-        <div className="flex-1 min-w-0">
-          <div className="text-list-title text-foreground truncate">
+        <div className={cn("flex-1 min-w-0", dataRailItem && "hidden")}>
+          <div className="text-list-title text-foundation-text-light-primary dark:text-foundation-text-dark-primary truncate">
             {label}
           </div>
           {description && (
-            <div className="text-list-subtitle text-text-secondary truncate">
+            <div className="text-list-subtitle text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary truncate">
               {description}
             </div>
           )}
         </div>
       </div>
 
-      <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+      <div className={cn("flex items-center gap-2 flex-shrink-0 ml-2", dataRailItem && "hidden")}>
         {right}
         {showChevron && (
           <IconChevronRightMd className="size-4 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary" />

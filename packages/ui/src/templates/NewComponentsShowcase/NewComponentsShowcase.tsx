@@ -139,7 +139,7 @@ export function NewComponentsShowcase() {
             <h3 className="text-lg font-medium text-foundation-text-dark-primary">
               CodeBlock Component
             </h3>
-            <CodeBlock code={codeExample} language="tsx" showLineNumbers />
+            <CodeBlock code={codeExample} language="tsx" />
           </div>
 
           {/* EmptyMessage (mapped to Card + Button) */}

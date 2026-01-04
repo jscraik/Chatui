@@ -1,3 +1,4 @@
+import { createRequire } from "node:module";
 import type { WidgetName } from "../sdk/generated/widget-manifest";
 
 /**
@@ -43,12 +44,14 @@ export function createWidgetTool(
   widgetName: WidgetName,
   meta: WidgetMeta,
   handler: () => Promise<unknown>,
+  toolName?: string,
 ): WidgetToolConfig {
   // Import manifest dynamically to avoid circular dependencies
   let widgetManifest: Record<string, { uri: string }>;
 
   try {
     // This will be available after build
+    const require = createRequire(import.meta.url);
     widgetManifest = require("../sdk/generated/widget-manifest").widgetManifest;
   } catch {
     // Fallback for development
@@ -57,13 +60,19 @@ export function createWidgetTool(
     };
   }
 
-  const widgetInfo = widgetManifest[widgetName];
+  let widgetInfo = widgetManifest[widgetName];
   if (!widgetInfo) {
-    throw new Error(`Widget "${widgetName}" not found in manifest`);
+    const message = `Widget "${widgetName}" not found in manifest`;
+    if (process.env.NODE_ENV === "production") {
+      console.warn(message);
+      widgetInfo = { uri: `${widgetName}.missing` };
+    } else {
+      throw new Error(message);
+    }
   }
 
   return {
-    name: widgetName,
+    name: toolName ?? widgetName,
     config: {
       title: meta.title,
       description: meta.description,
@@ -72,7 +81,8 @@ export function createWidgetTool(
         "openai/toolInvocation/invoking": meta.invoking || `Running ${meta.title}...`,
         "openai/toolInvocation/invoked": meta.invoked || `Completed ${meta.title}`,
         "openai/widgetAccessible": meta.accessible ?? true,
-        ...(meta.visibility && { "openai/visibility": meta.visibility }),
+        "openai/visibility": meta.visibility ?? "public",
+        securitySchemes: [{ type: "noauth" }],
       },
     },
     handler,
@@ -87,11 +97,14 @@ export function createWidgetTool(
 export function createWidgetTools(
   tools: Array<{
     widgetName: WidgetName;
+    toolName?: string;
     meta: WidgetMeta;
     handler: () => Promise<unknown>;
   }>,
 ): WidgetToolConfig[] {
-  return tools.map(({ widgetName, meta, handler }) => createWidgetTool(widgetName, meta, handler));
+  return tools.map(({ widgetName, meta, handler, toolName }) =>
+    createWidgetTool(widgetName, meta, handler, toolName),
+  );
 }
 
 /**

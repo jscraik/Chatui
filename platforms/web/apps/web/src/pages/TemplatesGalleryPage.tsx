@@ -11,13 +11,14 @@ type TemplatesGalleryPageProps = {
 };
 
 const CATEGORY_ORDER: (keyof typeof templatesGalleryCategories)[] = [
-  "layouts",
-  "templates",
   "components",
-  "apps-sdk-examples",
-  "panels",
-  "modals",
   "design-system",
+  "templates",
+  "settings",
+  "layouts",
+  "modals",
+  "panels",
+  "apps-sdk-examples",
   "blocks",
 ];
 
@@ -79,18 +80,15 @@ export function TemplatesGalleryPage({ initialTemplateId }: TemplatesGalleryPage
   }, []);
 
   return (
-    <div
-      data-theme="dark"
-      className="min-h-screen bg-foundation-bg-dark-1 text-foundation-text-dark-primary"
-    >
+    <div className="dark min-h-screen bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
       <div className="fixed top-0 left-0 right-0 z-10 border-b border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 bg-foundation-bg-light-2/95 dark:bg-foundation-bg-dark-2/95 backdrop-blur-sm">
         <div className="flex items-center justify-between px-6 py-4">
           <div>
             <h1 className="text-xl font-semibold text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
-              ChatUI Templates Gallery
+              ChatGPT UI Templates
             </h1>
             <p className="text-sm text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary mt-1">
-              Canonical templates + demos from @chatui/ui/dev
+              Production-ready components for ChatGPT-style interfaces
             </p>
           </div>
           <div className="flex items-center gap-3">

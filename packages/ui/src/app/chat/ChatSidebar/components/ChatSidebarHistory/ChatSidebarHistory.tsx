@@ -26,24 +26,24 @@ export function ChatSidebarHistory({
 
   return (
     <div className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
-      <div className="px-3 pb-2 text-[11px] text-muted-foreground font-medium tracking-wide uppercase">
+      <div className="px-3 pb-2 text-[11px] text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary font-medium tracking-wide uppercase">
         Recent
       </div>
       {filteredHistory.map((item, index) => {
         const chatId = `chat-${index}`;
         const isSelected = selectedId === chatId;
         return (
-        <button
-          key={chatId}
-          onClick={() => onSelect?.(chatId)}
-          className={`w-full text-left px-3 py-2 text-body-small rounded-lg transition-colors line-clamp-1 font-normal ${
-            isSelected
-              ? "bg-muted text-foreground"
-              : "text-text-secondary hover:bg-muted hover:text-foreground"
-          }`}
-        >
-          {item}
-        </button>
+          <button
+            key={chatId}
+            onClick={() => onSelect?.(chatId)}
+            className={`w-full text-left px-3 py-2 text-body-small rounded-lg transition-colors line-clamp-1 font-normal ${
+              isSelected
+                ? "bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 text-foundation-text-light-primary dark:text-foundation-text-dark-primary"
+                : "text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary hover:bg-foundation-bg-light-2/80 dark:hover:bg-foundation-bg-dark-2/80 hover:text-foundation-text-light-primary dark:hover:text-foundation-text-dark-primary"
+            }`}
+          >
+            {item}
+          </button>
       );
       })}
     </div>

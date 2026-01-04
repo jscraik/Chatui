@@ -1,7 +1,11 @@
+import { useState } from "react";
+
 import { ChatInput } from "../../../app/chat/ChatInput";
+import { ChatInputReference } from "./ChatInputReference";
 
 export function ChatInputDemo() {
   const model = { name: "GPT-4", shortName: "GPT-4", description: "Most capable model" };
+  const [showReference, setShowReference] = useState(false);
 
   return (
     <div className="h-full bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 overflow-auto">
@@ -15,17 +19,59 @@ export function ChatInputDemo() {
               Complete chat input with attachments, search toggle, research toggle, and voice input - fully compliant with ChatGPT design tokens
             </p>
           </div>
+          <div className="flex items-center gap-3">
+            <span className="text-[13px] text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary">
+              View:
+            </span>
+            <div className="inline-flex rounded-lg border border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 p-1">
+              <button
+                type="button"
+                onClick={() => setShowReference(false)}
+                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
+                  !showReference
+                    ? "bg-foundation-accent-blue-light/15 dark:bg-foundation-accent-blue/15 text-foundation-accent-blue-light dark:text-foundation-accent-blue"
+                    : "text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary hover:text-foundation-text-light-primary dark:hover:text-foundation-text-dark-primary"
+                }`}
+              >
+                Current
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowReference(true)}
+                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
+                  showReference
+                    ? "bg-foundation-accent-blue-light/15 dark:bg-foundation-accent-blue/15 text-foundation-accent-blue-light dark:text-foundation-accent-blue"
+                    : "text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary hover:text-foundation-text-light-primary dark:hover:text-foundation-text-dark-primary"
+                }`}
+              >
+                Reference (_temp)
+              </button>
+            </div>
+          </div>
           <div className="border border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 rounded-lg overflow-hidden bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1">
-            <ChatInput
-              selectedModel={model}
-              onSendMessage={(msg) => console.log("Send:", msg)}
-              onAttachmentAction={(action) => console.log("Attachment:", action)}
-              onMoreAction={(action) => console.log("More:", action)}
-              onToolAction={(action) => console.log("Tool:", action)}
-              onSearchToggle={(enabled) => console.log("Search:", enabled)}
-              onResearchToggle={(enabled) => console.log("Research:", enabled)}
-              onAutoClear={() => console.log("Auto-clear")}
-            />
+            {showReference ? (
+              <ChatInputReference
+                selectedModel={model}
+                onSendMessage={(msg) => console.log("Send:", msg)}
+                onAttachmentAction={(action) => console.log("Attachment:", action)}
+                onMoreAction={(action) => console.log("More:", action)}
+                onToolAction={(action) => console.log("Tool:", action)}
+                onSearchToggle={(enabled) => console.log("Search:", enabled)}
+                onResearchToggle={(enabled) => console.log("Research:", enabled)}
+                onAutoClear={() => console.log("Auto-clear")}
+              />
+            ) : (
+              <ChatInput
+                selectedModel={model}
+                onSendMessage={(msg) => console.log("Send:", msg)}
+                onAttachmentAction={(action) => console.log("Attachment:", action)}
+                onMoreAction={(action) => console.log("More:", action)}
+                onToolAction={(action) => console.log("Tool:", action)}
+                onSearchToggle={(enabled) => console.log("Search:", enabled)}
+                onResearchToggle={(enabled) => console.log("Research:", enabled)}
+                onAutoClear={() => console.log("Auto-clear")}
+              />
+            )}
           </div>
         </div>
 

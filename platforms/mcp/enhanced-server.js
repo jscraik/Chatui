@@ -5,7 +5,9 @@ import { fileURLToPath } from "node:url";
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 // Import the new widget registry system
 import {
@@ -185,35 +187,43 @@ try {
 }
 
 // Tool input schemas (keeping existing schemas)
-const displayChatInputSchema = {
-  seedMessage: z
-    .string()
-    .optional()
-    .describe("Optional initial message to seed the chat conversation"),
-};
+const emptyInputSchema = z.object({}).strict();
 
-const displaySearchResultsInputSchema = {
-  query: z.string().describe("The search query that was performed"),
-  results: z
-    .array(
-      z.object({
-        id: z.union([z.string(), z.number()]).describe("Unique identifier for the result"),
-        title: z.string().describe("Title of the search result"),
-        description: z.string().optional().describe("Brief description of the result"),
-        url: z.string().optional().describe("URL to the full content"),
-        tags: z.array(z.string()).optional().describe("Tags or categories for the result"),
-      }),
-    )
-    .describe("Array of search results to display"),
-};
+const displayChatInputSchema = z
+  .object({
+    seedMessage: z
+      .string()
+      .optional()
+      .describe("Optional initial message to seed the chat conversation"),
+  })
+  .strict();
 
-const displayTableInputSchema = {
-  title: z.string().optional().describe("Optional title for the table"),
-  columns: z.array(z.string()).describe("Column headers for the table"),
-  rows: z.array(z.record(z.any())).describe("Array of row objects with keys matching column names"),
-};
+const searchResultSchema = z.object({
+  id: z.union([z.string(), z.number()]).describe("Unique identifier for the result"),
+  title: z.string().describe("Title of the search result"),
+  description: z.string().optional().describe("Brief description of the result"),
+  url: z.string().optional().describe("URL to the full content"),
+  tags: z.array(z.string()).optional().describe("Tags or categories for the result"),
+});
 
-const displayDashboardInputSchema = {};
+const displaySearchResultsInputSchema = z
+  .object({
+    query: z.string().describe("The search query that was performed"),
+    results: z.array(searchResultSchema).describe("Array of search results to display"),
+  })
+  .strict();
+
+const displayTableInputSchema = z
+  .object({
+    title: z.string().optional().describe("Optional title for the table"),
+    columns: z.array(z.string()).describe("Column headers for the table"),
+    rows: z
+      .array(z.record(z.unknown()))
+      .describe("Array of row objects with keys matching column names"),
+  })
+  .strict();
+
+const displayDashboardInputSchema = emptyInputSchema;
 
 // Shopping Cart schemas
 const cartItemSchema = z.object({
@@ -225,49 +235,328 @@ const cartItemSchema = z.object({
   description: z.string().optional().describe("Brief item description"),
 });
 
-const addToCartInputSchema = {
-  items: z.array(cartItemSchema).describe("Items to add to the cart"),
-  sessionId: z.string().optional().describe("Cart session ID for cross-turn persistence"),
-};
+const addToCartInputSchema = z
+  .object({
+    items: z.array(cartItemSchema).describe("Items to add to the cart"),
+    sessionId: z.string().optional().describe("Cart session ID for cross-turn persistence"),
+  })
+  .strict();
 
-const _removeFromCartInputSchema = {
-  itemIds: z.array(z.string()).describe("IDs of items to remove from cart"),
-  sessionId: z.string().optional().describe("Cart session ID"),
-};
+const _removeFromCartInputSchema = z
+  .object({
+    itemIds: z.array(z.string()).describe("IDs of items to remove from cart"),
+    sessionId: z.string().optional().describe("Cart session ID"),
+  })
+  .strict();
 
-const _showCartInputSchema = {
-  sessionId: z.string().optional().describe("Cart session ID to display"),
-};
+const _showCartInputSchema = z
+  .object({
+    sessionId: z.string().optional().describe("Cart session ID to display"),
+  })
+  .strict();
 
 // Pizzaz Shop schemas
-const _showShopInputSchema = {
-  view: z.enum(["cart", "checkout", "confirmation"]).optional().describe("Initial view to display"),
-  items: z.array(cartItemSchema).optional().describe("Pre-populate cart with items"),
-};
+const _showShopInputSchema = z
+  .object({
+    view: z.enum(["cart", "checkout", "confirmation"]).optional().describe("Initial view to display"),
+    items: z.array(cartItemSchema).optional().describe("Pre-populate cart with items"),
+  })
+  .strict();
 
-const _placeOrderInputSchema = {
-  deliveryOption: z.enum(["standard", "express"]).optional().describe("Delivery speed"),
-  tipPercent: z.number().optional().describe("Tip percentage (0, 10, 15, 20)"),
-};
+const _placeOrderInputSchema = z
+  .object({
+    deliveryOption: z.enum(["standard", "express"]).optional().describe("Delivery speed"),
+    tipPercent: z.number().optional().describe("Tip percentage (0, 10, 15, 20)"),
+  })
+  .strict();
 
 // Auth Demo schemas
-const _authStatusInputSchema = {
-  checkLevel: z
-    .enum(["none", "basic", "oauth", "oauth_elevated"])
-    .optional()
-    .describe("Minimum auth level to check for"),
+const _authStatusInputSchema = z
+  .object({
+    checkLevel: z
+      .enum(["none", "basic", "oauth", "oauth_elevated"])
+      .optional()
+      .describe("Minimum auth level to check for"),
+  })
+  .strict();
+
+const _authLoginInputSchema = z
+  .object({
+    provider: z.string().optional().describe("OAuth provider (e.g., 'google', 'github')"),
+    scopes: z.array(z.string()).optional().describe("Requested OAuth scopes"),
+  })
+  .strict();
+
+const _authLogoutInputSchema = emptyInputSchema;
+
+const _authRefreshInputSchema = z
+  .object({
+    forceRefresh: z.boolean().optional().describe("Force token refresh even if not expired"),
+  })
+  .strict();
+
+const displayChatOutputSchema = z
+  .object({
+    seedMessage: z.string(),
+    locale: z.string(),
+  })
+  .strict();
+
+const displaySearchResultsOutputSchema = z
+  .object({
+    query: z.string(),
+    results: z.array(searchResultSchema),
+    locale: z.string(),
+  })
+  .strict();
+
+const displayTableOutputSchema = z
+  .object({
+    title: z.string().optional(),
+    columns: z.array(z.string()),
+    data: z.array(z.record(z.unknown())),
+    locale: z.string(),
+  })
+  .strict();
+
+const displayDemoOutputSchema = z
+  .object({
+    demo: z.boolean(),
+  })
+  .strict();
+
+const dashboardStatSchema = z.object({
+  label: z.string(),
+  value: z.string(),
+  change: z.string(),
+});
+
+const dashboardChatSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  model: z.string(),
+  time: z.string(),
+});
+
+const displayDashboardOutputSchema = z
+  .object({
+    dashboard: z.boolean(),
+    headerText: z.string(),
+    stats: z.array(dashboardStatSchema),
+    recentChats: z.array(dashboardChatSchema),
+  })
+  .strict();
+
+const addToCartOutputSchema = z
+  .object({
+    action: z.literal("add"),
+    items: z.array(cartItemSchema),
+    sessionId: z.string(),
+  })
+  .strict();
+
+const removeFromCartOutputSchema = z
+  .object({
+    action: z.literal("remove"),
+    items: z.array(z.object({ id: z.string() })),
+    sessionId: z.string(),
+  })
+  .strict();
+
+const showCartOutputSchema = z
+  .object({
+    action: z.literal("show"),
+    sessionId: z.string().optional(),
+  })
+  .strict();
+
+const showShopOutputSchema = z
+  .object({
+    view: z.enum(["cart", "checkout", "confirmation"]),
+    items: z.array(cartItemSchema).optional(),
+  })
+  .strict();
+
+const placeOrderOutputSchema = z
+  .object({
+    view: z.literal("confirmation"),
+    orderId: z.string(),
+    deliveryOption: z.enum(["standard", "express"]),
+    tipPercent: z.number(),
+  })
+  .strict();
+
+const authStatusSchema = z
+  .object({
+    authenticated: z.boolean(),
+    level: z.enum(["none", "basic", "oauth", "oauth_elevated"]),
+    provider: z.string().optional(),
+    expiresAt: z.string().optional(),
+    scopes: z.array(z.string()).optional(),
+  })
+  .strict();
+
+const authStatusOutputSchema = z
+  .object({
+    authStatus: authStatusSchema,
+    meetsRequiredLevel: z.boolean(),
+  })
+  .strict();
+
+const authLoginOutputSchema = z
+  .object({
+    authStatus: authStatusSchema,
+    user: z.object({
+      id: z.string(),
+      name: z.string(),
+      email: z.string(),
+      plan: z.string(),
+    }),
+  })
+  .strict();
+
+const authLogoutOutputSchema = z
+  .object({
+    authStatus: authStatusSchema,
+  })
+  .strict();
+
+const authRefreshOutputSchema = authLogoutOutputSchema;
+
+function contentWithJsonFallback(message, structuredContent) {
+  const json = JSON.stringify(structuredContent, null, 2);
+  return [
+    { type: "text", text: message },
+    { type: "text", text: json },
+  ];
+}
+
+function toJsonSchema(schema, name) {
+  const jsonSchema = zodToJsonSchema(schema, { name, target: "jsonSchema2019-09" });
+  const upgraded = upgradeTo202012(jsonSchema);
+  return { ...upgraded, $schema: "https://json-schema.org/draft/2020-12/schema" };
+}
+
+function upgradeTo202012(schema) {
+  if (!schema || typeof schema !== "object") return schema;
+
+  const cloned = Array.isArray(schema) ? schema.map(upgradeTo202012) : { ...schema };
+
+  if (cloned.definitions) {
+    cloned.$defs = upgradeTo202012(cloned.definitions);
+    delete cloned.definitions;
+  }
+
+  for (const [key, value] of Object.entries(cloned)) {
+    if (key === "$ref" && typeof value === "string") {
+      cloned.$ref = value.replace("#/definitions/", "#/$defs/");
+      continue;
+    }
+    cloned[key] = upgradeTo202012(value);
+  }
+
+  return cloned;
+}
+
+const displayChatInputJsonSchema = toJsonSchema(displayChatInputSchema, "DisplayChatInput");
+const displaySearchResultsInputJsonSchema = toJsonSchema(
+  displaySearchResultsInputSchema,
+  "DisplaySearchResultsInput",
+);
+const displayTableInputJsonSchema = toJsonSchema(displayTableInputSchema, "DisplayTableInput");
+const displayDashboardInputJsonSchema = toJsonSchema(
+  displayDashboardInputSchema,
+  "DisplayDashboardInput",
+);
+const displayDemoInputJsonSchema = toJsonSchema(emptyInputSchema, "DisplayDemoInput");
+const emptyInputJsonSchema = toJsonSchema(emptyInputSchema, "EmptyInput");
+const addToCartInputJsonSchema = toJsonSchema(addToCartInputSchema, "AddToCartInput");
+const removeFromCartInputJsonSchema = toJsonSchema(
+  _removeFromCartInputSchema,
+  "RemoveFromCartInput",
+);
+const showCartInputJsonSchema = toJsonSchema(_showCartInputSchema, "ShowCartInput");
+const showShopInputJsonSchema = toJsonSchema(_showShopInputSchema, "ShowShopInput");
+const placeOrderInputJsonSchema = toJsonSchema(_placeOrderInputSchema, "PlaceOrderInput");
+const authStatusInputJsonSchema = toJsonSchema(_authStatusInputSchema, "AuthStatusInput");
+const authLoginInputJsonSchema = toJsonSchema(_authLoginInputSchema, "AuthLoginInput");
+const authLogoutInputJsonSchema = toJsonSchema(_authLogoutInputSchema, "AuthLogoutInput");
+const authRefreshInputJsonSchema = toJsonSchema(_authRefreshInputSchema, "AuthRefreshInput");
+
+const displayChatOutputJsonSchema = toJsonSchema(displayChatOutputSchema, "DisplayChatOutput");
+const displaySearchResultsOutputJsonSchema = toJsonSchema(
+  displaySearchResultsOutputSchema,
+  "DisplaySearchResultsOutput",
+);
+const displayTableOutputJsonSchema = toJsonSchema(displayTableOutputSchema, "DisplayTableOutput");
+const displayDemoOutputJsonSchema = toJsonSchema(displayDemoOutputSchema, "DisplayDemoOutput");
+const displayDashboardOutputJsonSchema = toJsonSchema(
+  displayDashboardOutputSchema,
+  "DisplayDashboardOutput",
+);
+const addToCartOutputJsonSchema = toJsonSchema(addToCartOutputSchema, "AddToCartOutput");
+const removeFromCartOutputJsonSchema = toJsonSchema(
+  removeFromCartOutputSchema,
+  "RemoveFromCartOutput",
+);
+const showCartOutputJsonSchema = toJsonSchema(showCartOutputSchema, "ShowCartOutput");
+const showShopOutputJsonSchema = toJsonSchema(showShopOutputSchema, "ShowShopOutput");
+const placeOrderOutputJsonSchema = toJsonSchema(placeOrderOutputSchema, "PlaceOrderOutput");
+const authStatusOutputJsonSchema = toJsonSchema(authStatusOutputSchema, "AuthStatusOutput");
+const authLoginOutputJsonSchema = toJsonSchema(authLoginOutputSchema, "AuthLoginOutput");
+const authLogoutOutputJsonSchema = toJsonSchema(authLogoutOutputSchema, "AuthLogoutOutput");
+const authRefreshOutputJsonSchema = toJsonSchema(authRefreshOutputSchema, "AuthRefreshOutput");
+
+const toolListSchemaMap = {
+  display_chat: { input: displayChatInputJsonSchema, output: displayChatOutputJsonSchema },
+  display_search_results: {
+    input: displaySearchResultsInputJsonSchema,
+    output: displaySearchResultsOutputJsonSchema,
+  },
+  display_table: { input: displayTableInputJsonSchema, output: displayTableOutputJsonSchema },
+  display_demo: { input: displayDemoInputJsonSchema, output: displayDemoOutputJsonSchema },
+  display_dashboard: {
+    input: displayDashboardInputJsonSchema,
+    output: displayDashboardOutputJsonSchema,
+  },
+  add_to_cart: { input: addToCartInputJsonSchema, output: addToCartOutputJsonSchema },
+  remove_from_cart: { input: removeFromCartInputJsonSchema, output: removeFromCartOutputJsonSchema },
+  show_cart: { input: showCartInputJsonSchema, output: showCartOutputJsonSchema },
+  show_shop: { input: showShopInputJsonSchema, output: showShopOutputJsonSchema },
+  place_order: { input: placeOrderInputJsonSchema, output: placeOrderOutputJsonSchema },
+  auth_status: { input: authStatusInputJsonSchema, output: authStatusOutputJsonSchema },
+  auth_login: { input: authLoginInputJsonSchema, output: authLoginOutputJsonSchema },
+  auth_logout: { input: authLogoutInputJsonSchema, output: authLogoutOutputJsonSchema },
+  auth_refresh: { input: authRefreshInputJsonSchema, output: authRefreshOutputJsonSchema },
 };
 
-const _authLoginInputSchema = {
-  provider: z.string().optional().describe("OAuth provider (e.g., 'google', 'github')"),
-  scopes: z.array(z.string()).optional().describe("Requested OAuth scopes"),
-};
-
-const _authLogoutInputSchema = {};
-
-const _authRefreshInputSchema = {
-  forceRefresh: z.boolean().optional().describe("Force token refresh even if not expired"),
-};
+function installListToolsHandler(server) {
+  server.server.setRequestHandler(ListToolsRequestSchema, () => ({
+    tools: Object.entries(server._registeredTools)
+      .filter(([, tool]) => tool.enabled)
+      .map(([name, tool]) => {
+        const schemas = toolListSchemaMap[name] ?? {};
+        const inputSchema =
+          schemas.input ??
+          (tool.inputSchema ? toJsonSchema(tool.inputSchema, `${name}Input`) : emptyInputJsonSchema);
+        const outputSchema =
+          schemas.output ??
+          (tool.outputSchema ? toJsonSchema(tool.outputSchema, `${name}Output`) : undefined);
+        const toolDefinition = {
+          name,
+          title: tool.title,
+          description: tool.description,
+          inputSchema,
+          annotations: tool.annotations,
+          _meta: tool._meta,
+        };
+        if (outputSchema) {
+          toolDefinition.outputSchema = outputSchema;
+        }
+        return toolDefinition;
+      }),
+  }));
+}
 
 function createEnhancedChatUiServer() {
   const server = new McpServer({
@@ -328,6 +617,7 @@ function createEnhancedChatUiServer() {
   const widgetTools = createWidgetTools([
     {
       widgetName: "chat-view",
+      toolName: "display_chat",
       meta: {
         title: "Display Chat Interface",
         description: "Displays an interactive chat interface widget with seed message support",
@@ -340,20 +630,19 @@ function createEnhancedChatUiServer() {
         const locale = _meta?.["openai/locale"] ?? "en";
         const userAgent = _meta?.["openai/userAgent"];
         const userLocation = _meta?.["openai/userLocation"];
+        const structuredContent = {
+          seedMessage,
+          locale,
+        };
 
         return {
-          content: [
-            {
-              type: "text",
-              text: seedMessage
-                ? `Chat interface opened with message: "${seedMessage}"`
-                : "Chat interface opened",
-            },
-          ],
-          structuredContent: {
-            seedMessage,
-            locale,
-          },
+          content: contentWithJsonFallback(
+            seedMessage
+              ? `Chat interface opened with message: "${seedMessage}"`
+              : "Chat interface opened",
+            structuredContent,
+          ),
+          structuredContent,
           _meta: {
             clientInfo: {
               userAgent,
@@ -365,6 +654,7 @@ function createEnhancedChatUiServer() {
     },
     {
       widgetName: "search-results",
+      toolName: "display_search_results",
       meta: {
         title: "Display Search Results",
         description: "Displays search results in a structured, scannable card layout",
@@ -377,19 +667,18 @@ function createEnhancedChatUiServer() {
         const count = results?.length ?? 0;
         const locale = _meta?.["openai/locale"] ?? "en";
         const userLocation = _meta?.["openai/userLocation"];
+        const structuredContent = {
+          query,
+          results,
+          locale,
+        };
 
         return {
-          content: [
-            {
-              type: "text",
-              text: `Displaying ${count} result${count !== 1 ? "s" : ""} for "${query}"`,
-            },
-          ],
-          structuredContent: {
-            query,
-            results,
-            locale,
-          },
+          content: contentWithJsonFallback(
+            `Displaying ${count} result${count !== 1 ? "s" : ""} for "${query}"`,
+            structuredContent,
+          ),
+          structuredContent,
           _meta: {
             searchContext: {
               location: userLocation,
@@ -401,6 +690,7 @@ function createEnhancedChatUiServer() {
     },
     {
       widgetName: "pizzaz-table",
+      toolName: "display_table",
       meta: {
         title: "Display Data Table",
         description: "Displays data in a structured table format with columns and rows",
@@ -412,22 +702,21 @@ function createEnhancedChatUiServer() {
         const { title, columns, rows } = args;
         const rowCount = rows?.length ?? 0;
         const locale = _meta?.["openai/locale"] ?? "en";
+        const structuredContent = {
+          title,
+          columns,
+          data: rows,
+          locale,
+        };
 
         return {
-          content: [
-            {
-              type: "text",
-              text: title
-                ? `Displaying "${title}" with ${rowCount} row${rowCount !== 1 ? "s" : ""}`
-                : `Displaying table with ${rowCount} row${rowCount !== 1 ? "s" : ""}`,
-            },
-          ],
-          structuredContent: {
-            title,
-            columns,
-            data: rows,
-            locale,
-          },
+          content: contentWithJsonFallback(
+            title
+              ? `Displaying "${title}" with ${rowCount} row${rowCount !== 1 ? "s" : ""}`
+              : `Displaying table with ${rowCount} row${rowCount !== 1 ? "s" : ""}`,
+            structuredContent,
+          ),
+          structuredContent,
           _meta: {
             tableContext: {
               generatedAt: new Date().toISOString(),
@@ -438,6 +727,7 @@ function createEnhancedChatUiServer() {
     },
     {
       widgetName: "dashboard-widget",
+      toolName: "display_dashboard",
       meta: {
         title: "Display Dashboard",
         description: "Displays a dashboard widget with analytics and quick actions",
@@ -446,28 +736,30 @@ function createEnhancedChatUiServer() {
         accessible: false,
       },
       handler: async () => {
+        const structuredContent = {
+          dashboard: true,
+          headerText: "ChatGPT Dashboard Widget",
+          stats: [
+            { label: "Total Conversations", value: "1,234", change: "+12%" },
+            { label: "Messages Today", value: "89", change: "+5%" },
+            { label: "Active Models", value: "3", change: "0%" },
+            { label: "Response Time", value: "1.2s", change: "-8%" },
+          ],
+          recentChats: [
+            { id: 1, title: "Code Review Session", model: "GPT-4", time: "2 min ago" },
+            { id: 2, title: "Project Planning", model: "Claude", time: "1 hour ago" },
+            { id: 3, title: "Debug Help", model: "GPT-4o", time: "3 hours ago" },
+          ],
+        };
         return {
-          content: [{ type: "text", text: "Dashboard displayed" }],
-          structuredContent: {
-            dashboard: true,
-            headerText: "ChatGPT Dashboard Widget",
-            stats: [
-              { label: "Total Conversations", value: "1,234", change: "+12%" },
-              { label: "Messages Today", value: "89", change: "+5%" },
-              { label: "Active Models", value: "3", change: "0%" },
-              { label: "Response Time", value: "1.2s", change: "-8%" },
-            ],
-            recentChats: [
-              { id: 1, title: "Code Review Session", model: "GPT-4", time: "2 min ago" },
-              { id: 2, title: "Project Planning", model: "Claude", time: "1 hour ago" },
-              { id: 3, title: "Debug Help", model: "GPT-4o", time: "3 hours ago" },
-            ],
-          },
+          content: contentWithJsonFallback("Dashboard displayed", structuredContent),
+          structuredContent,
         };
       },
     },
     {
       widgetName: "kitchen-sink-lite",
+      toolName: "display_demo",
       meta: {
         title: "Display Demo Widget",
         description: "Displays a demonstration widget showcasing various Apps SDK capabilities",
@@ -476,14 +768,16 @@ function createEnhancedChatUiServer() {
         accessible: false,
       },
       handler: async () => {
+        const structuredContent = { demo: true };
         return {
-          content: [{ type: "text", text: "Demo widget displayed" }],
-          structuredContent: { demo: true },
+          content: contentWithJsonFallback("Demo widget displayed", structuredContent),
+          structuredContent,
         };
       },
     },
     {
       widgetName: "shopping-cart",
+      toolName: "add_to_cart",
       meta: {
         title: "Add to Cart",
         description: "Adds items to the shopping cart with session persistence",
@@ -494,20 +788,279 @@ function createEnhancedChatUiServer() {
       handler: async (args, { _meta } = {}) => {
         const { items, sessionId } = args;
         const widgetSessionId = sessionId ?? `cart-${Date.now().toString(36)}`;
+        const structuredContent = {
+          action: "add",
+          items,
+          sessionId: widgetSessionId,
+        };
 
         return {
-          content: [
-            {
-              type: "text",
-              text: `Added ${items.length} item(s) to cart`,
-            },
-          ],
-          structuredContent: {
-            action: "add",
-            items,
-          },
+          content: contentWithJsonFallback(
+            `Added ${items.length} item(s) to cart`,
+            structuredContent,
+          ),
+          structuredContent,
           _meta: {
             widgetSessionId,
+          },
+        };
+      },
+    },
+    {
+      widgetName: "shopping-cart",
+      toolName: "remove_from_cart",
+      meta: {
+        title: "Remove from Cart",
+        description: "Removes items from the shopping cart by their IDs",
+        invoking: "Removing items from cart...",
+        invoked: "Items removed from cart",
+        accessible: true,
+      },
+      handler: async (args) => {
+        const { itemIds, sessionId } = args;
+        const widgetSessionId = sessionId ?? `cart-${Date.now().toString(36)}`;
+        const structuredContent = {
+          action: "remove",
+          items: itemIds.map((id) => ({ id })),
+          sessionId: widgetSessionId,
+        };
+
+        return {
+          content: contentWithJsonFallback(
+            `Removed ${itemIds.length} item(s) from cart`,
+            structuredContent,
+          ),
+          structuredContent,
+          _meta: {
+            widgetSessionId,
+          },
+        };
+      },
+    },
+    {
+      widgetName: "shopping-cart",
+      toolName: "show_cart",
+      meta: {
+        title: "Show Cart",
+        description: "Displays the current shopping cart contents",
+        invoking: "Loading cart...",
+        invoked: "Cart displayed",
+        accessible: false,
+      },
+      handler: async (args) => {
+        const { sessionId } = args;
+        const structuredContent = {
+          action: "show",
+          ...(sessionId ? { sessionId } : {}),
+        };
+
+        return {
+          content: contentWithJsonFallback("Shopping cart displayed", structuredContent),
+          structuredContent,
+          _meta: {
+            widgetSessionId: sessionId,
+          },
+        };
+      },
+    },
+    {
+      widgetName: "pizzaz-shop",
+      toolName: "show_shop",
+      meta: {
+        title: "Show Pizzaz Shop",
+        description: "Displays the Pizzaz Shop e-commerce interface",
+        invoking: "Opening Pizzaz Shop...",
+        invoked: "Pizzaz Shop ready",
+        accessible: false,
+      },
+      handler: async (args) => {
+        const { view, items } = args;
+        const structuredContent = {
+          view: view ?? "cart",
+          items,
+        };
+
+        return {
+          content: contentWithJsonFallback("Pizzaz Shop displayed", structuredContent),
+          structuredContent,
+        };
+      },
+    },
+    {
+      widgetName: "pizzaz-shop",
+      toolName: "place_order",
+      meta: {
+        title: "Place Order",
+        description: "Places an order in the Pizzaz Shop with the current cart contents",
+        invoking: "Placing order...",
+        invoked: "Order placed successfully",
+        accessible: false,
+      },
+      handler: async (args) => {
+        const { deliveryOption, tipPercent } = args;
+        const orderId = `PZ-${Date.now().toString(36).toUpperCase()}`;
+        const structuredContent = {
+          view: "confirmation",
+          orderId,
+          deliveryOption: deliveryOption ?? "standard",
+          tipPercent: tipPercent ?? 10,
+        };
+
+        return {
+          content: contentWithJsonFallback(
+            `Order ${orderId} placed successfully`,
+            structuredContent,
+          ),
+          structuredContent,
+        };
+      },
+    },
+    {
+      widgetName: "auth-demo",
+      toolName: "auth_status",
+      meta: {
+        title: "Check Auth Status",
+        description: "Displays the current authentication status",
+        invoking: "Checking auth status...",
+        invoked: "Auth status retrieved",
+        accessible: false,
+      },
+      handler: async (args) => {
+        const { checkLevel } = args;
+        const authStatus = {
+          authenticated: true,
+          level: "oauth",
+          provider: "demo",
+          expiresAt: new Date(Date.now() + 3600000).toISOString(),
+          scopes: ["read", "write", "profile"],
+        };
+        const meetsLevel =
+          !checkLevel ||
+          ["none", "basic", "oauth", "oauth_elevated"].indexOf(authStatus.level) >=
+            ["none", "basic", "oauth", "oauth_elevated"].indexOf(checkLevel);
+        const structuredContent = {
+          authStatus,
+          meetsRequiredLevel: meetsLevel,
+        };
+
+        return {
+          content: contentWithJsonFallback(
+            authStatus.authenticated
+              ? `Authenticated via ${authStatus.provider} (${authStatus.level})`
+              : "Not authenticated",
+            structuredContent,
+          ),
+          structuredContent,
+          _meta: {
+            authStatus,
+          },
+        };
+      },
+    },
+    {
+      widgetName: "auth-demo",
+      toolName: "auth_login",
+      meta: {
+        title: "Login",
+        description: "Initiates an authentication flow (demo)",
+        invoking: "Initiating login...",
+        invoked: "Login successful",
+        accessible: false,
+      },
+      handler: async (args) => {
+        const { provider, scopes } = args;
+        const authStatus = {
+          authenticated: true,
+          level: "oauth",
+          provider: provider ?? "demo",
+          expiresAt: new Date(Date.now() + 3600000).toISOString(),
+          scopes: scopes ?? ["read", "write"],
+        };
+        const user = {
+          id: "demo-user-123",
+          name: "Demo User",
+          email: "demo@example.com",
+          plan: "Pro",
+        };
+        const structuredContent = {
+          authStatus,
+          user,
+        };
+
+        return {
+          content: contentWithJsonFallback(
+            `Successfully authenticated as ${user.name}`,
+            structuredContent,
+          ),
+          structuredContent,
+          _meta: {
+            authStatus,
+          },
+        };
+      },
+    },
+    {
+      widgetName: "auth-demo",
+      toolName: "auth_logout",
+      meta: {
+        title: "Logout",
+        description: "Ends the current authentication session and clears credentials",
+        invoking: "Logging out...",
+        invoked: "Logged out successfully",
+        accessible: true,
+        visibility: "private",
+      },
+      handler: async () => {
+        const structuredContent = {
+          authStatus: {
+            authenticated: false,
+            level: "none",
+          },
+        };
+
+        return {
+          content: contentWithJsonFallback("Successfully logged out", structuredContent),
+          structuredContent,
+          _meta: {
+            authStatus: {
+              authenticated: false,
+              level: "none",
+            },
+          },
+        };
+      },
+    },
+    {
+      widgetName: "auth-demo",
+      toolName: "auth_refresh",
+      meta: {
+        title: "Refresh Auth",
+        description: "Refreshes the current authentication token to extend the session",
+        invoking: "Refreshing auth...",
+        invoked: "Auth refreshed",
+        accessible: true,
+        visibility: "private",
+      },
+      handler: async () => {
+        const authStatus = {
+          authenticated: true,
+          level: "oauth",
+          provider: "demo",
+          expiresAt: new Date(Date.now() + 3600000).toISOString(),
+          scopes: ["read", "write", "profile"],
+        };
+        const structuredContent = {
+          authStatus,
+        };
+
+        return {
+          content: contentWithJsonFallback(
+            `Auth token refreshed, expires at ${authStatus.expiresAt}`,
+            structuredContent,
+          ),
+          structuredContent,
+          _meta: {
+            authStatus,
           },
         };
       },
@@ -524,6 +1077,7 @@ function createEnhancedChatUiServer() {
         title: config.title,
         description: config.description,
         inputSchema: getInputSchemaForTool(name), // Helper function to get appropriate schema
+        outputSchema: getOutputSchemaForTool(name),
         securitySchemes: [{ type: "noauth" }],
         annotations: getAnnotationsForTool(name), // Helper function to get appropriate annotations
         _meta: config._meta,
@@ -532,38 +1086,77 @@ function createEnhancedChatUiServer() {
     );
   });
 
+  installListToolsHandler(server);
+
   return server;
 }
 
 // Helper functions to get appropriate schemas and annotations
 function getInputSchemaForTool(toolName) {
   const schemaMap = {
-    "chat-view": displayChatInputSchema,
-    "search-results": displaySearchResultsInputSchema,
-    "pizzaz-table": displayTableInputSchema,
-    "dashboard-widget": displayDashboardInputSchema,
-    "kitchen-sink-lite": {},
-    "shopping-cart": addToCartInputSchema,
+    display_chat: displayChatInputSchema,
+    display_search_results: displaySearchResultsInputSchema,
+    display_table: displayTableInputSchema,
+    display_dashboard: displayDashboardInputSchema,
+    display_demo: emptyInputSchema,
+    add_to_cart: addToCartInputSchema,
+    remove_from_cart: _removeFromCartInputSchema,
+    show_cart: _showCartInputSchema,
+    show_shop: _showShopInputSchema,
+    place_order: _placeOrderInputSchema,
+    auth_status: _authStatusInputSchema,
+    auth_login: _authLoginInputSchema,
+    auth_logout: _authLogoutInputSchema,
+    auth_refresh: _authRefreshInputSchema,
     // Add more mappings as needed
   };
-  return schemaMap[toolName] || {};
+  return schemaMap[toolName] || emptyInputSchema;
+}
+
+function getOutputSchemaForTool(toolName) {
+  const schemaMap = {
+    display_chat: displayChatOutputSchema,
+    display_search_results: displaySearchResultsOutputSchema,
+    display_table: displayTableOutputSchema,
+    display_dashboard: displayDashboardOutputSchema,
+    display_demo: displayDemoOutputSchema,
+    add_to_cart: addToCartOutputSchema,
+    remove_from_cart: removeFromCartOutputSchema,
+    show_cart: showCartOutputSchema,
+    show_shop: showShopOutputSchema,
+    place_order: placeOrderOutputSchema,
+    auth_status: authStatusOutputSchema,
+    auth_login: authLoginOutputSchema,
+    auth_logout: authLogoutOutputSchema,
+    auth_refresh: authRefreshOutputSchema,
+    // Add more mappings as needed
+  };
+  return schemaMap[toolName];
 }
 
 function getAnnotationsForTool(toolName) {
-  const readOnlyTools = [
-    "chat-view",
-    "search-results",
-    "pizzaz-table",
-    "dashboard-widget",
-    "kitchen-sink-lite",
-  ];
-  const isReadOnly = readOnlyTools.includes(toolName);
+  const annotationsMap = {
+    display_chat: { readOnlyHint: true, destructiveHint: false, openWorldHint: false, idempotentHint: true },
+    display_search_results: { readOnlyHint: true, destructiveHint: false, openWorldHint: false, idempotentHint: true },
+    display_table: { readOnlyHint: true, destructiveHint: false, openWorldHint: false, idempotentHint: true },
+    display_dashboard: { readOnlyHint: true, destructiveHint: false, openWorldHint: false, idempotentHint: true },
+    display_demo: { readOnlyHint: true, destructiveHint: false, openWorldHint: false, idempotentHint: true },
+    add_to_cart: { readOnlyHint: false, destructiveHint: false, openWorldHint: false, idempotentHint: false },
+    remove_from_cart: { readOnlyHint: false, destructiveHint: true, openWorldHint: false, idempotentHint: true },
+    show_cart: { readOnlyHint: true, destructiveHint: false, openWorldHint: false, idempotentHint: true },
+    show_shop: { readOnlyHint: true, destructiveHint: false, openWorldHint: false, idempotentHint: true },
+    place_order: { readOnlyHint: false, destructiveHint: false, openWorldHint: false, idempotentHint: false },
+    auth_status: { readOnlyHint: true, destructiveHint: false, openWorldHint: false, idempotentHint: true },
+    auth_login: { readOnlyHint: false, destructiveHint: false, openWorldHint: true, idempotentHint: false },
+    auth_logout: { readOnlyHint: false, destructiveHint: true, openWorldHint: false, idempotentHint: true },
+    auth_refresh: { readOnlyHint: false, destructiveHint: false, openWorldHint: true, idempotentHint: true },
+  };
 
-  return {
-    readOnlyHint: isReadOnly,
+  return annotationsMap[toolName] ?? {
+    readOnlyHint: false,
     destructiveHint: false,
     openWorldHint: false,
-    idempotentHint: isReadOnly,
+    idempotentHint: false,
   };
 }
 
@@ -575,6 +1168,7 @@ const isDirectRun =
 
 if (isDirectRun) {
   const port = Number(process.env.PORT ?? 8787);
+  const host = process.env.MCP_BIND_HOST ?? "127.0.0.1";
   const MCP_PATH = "/mcp";
 
   const httpServer = createServer(async (req, res) => {
@@ -606,7 +1200,7 @@ if (isDirectRun) {
       res.writeHead(204, {
         "Access-Control-Allow-Origin": CORS_ORIGIN,
         "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-        "Access-Control-Allow-Headers": "content-type, mcp-session-id",
+        "Access-Control-Allow-Headers": "content-type, mcp-session-id, mcp-protocol-version",
         "Access-Control-Expose-Headers": "Mcp-Session-Id",
       });
       res.end();
@@ -620,7 +1214,7 @@ if (isDirectRun) {
       return;
     }
 
-    const MCP_METHODS = new Set(["POST", "GET", "DELETE"]);
+    const MCP_METHODS = new Set(["POST", "GET"]);
     if (url.pathname === MCP_PATH && req.method && MCP_METHODS.has(req.method)) {
       res.setHeader("Access-Control-Allow-Origin", CORS_ORIGIN);
       res.setHeader("Access-Control-Expose-Headers", "Mcp-Session-Id");
@@ -658,8 +1252,10 @@ if (isDirectRun) {
     res.writeHead(404).end("Not Found");
   });
 
-  httpServer.listen(port, () => {
-    console.log(`ChatUI Enhanced MCP server listening on http://localhost:${port}${MCP_PATH}`);
+  httpServer.listen(port, host, () => {
+    console.log(
+      `ChatUI Enhanced MCP server listening on http://${host}:${port}${MCP_PATH}`,
+    );
     console.log(`Widget source: ${widgetHtmlPath}`);
     console.log(`Widget bundles: ${widgetsDistPath}`);
     console.log(

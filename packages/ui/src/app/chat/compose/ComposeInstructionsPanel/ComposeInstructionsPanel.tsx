@@ -36,11 +36,11 @@ export function ComposeInstructionsPanel({
           leading={
             <button
               type="button"
-              className="p-2 hover:bg-secondary rounded-md transition-colors"
+              className="p-2 hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2 rounded-md transition-colors"
               aria-label="Copy to clipboard"
             >
               <svg
-                className="size-4 text-muted-foreground"
+                className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -57,10 +57,10 @@ export function ComposeInstructionsPanel({
           trailing={
             <button
               type="button"
-              className="flex items-center gap-2 px-3 py-1.5 bg-muted hover:bg-muted/80 border border-border text-foreground rounded-lg transition-colors text-caption leading-5"
+              className="flex items-center gap-2 px-3 py-1.5 bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 hover:bg-foundation-bg-light-2/80 dark:hover:bg-foundation-bg-dark-2/80 border border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 text-foundation-text-light-primary dark:text-foundation-text-dark-primary rounded-lg transition-colors text-caption leading-5"
             >
               <svg
-                className="size-4 text-muted-foreground"
+                className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -83,11 +83,11 @@ export function ComposeInstructionsPanel({
             <>
               <button
                 type="button"
-                className="p-2 hover:bg-secondary rounded-md transition-colors"
+                className="p-2 hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2 rounded-md transition-colors"
                 title="Add"
                 aria-label="Add"
               >
-                <svg className="size-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
               </button>
@@ -95,13 +95,19 @@ export function ComposeInstructionsPanel({
                 type="button"
                 onClick={onToggleWebSearch}
                 className={`p-2 rounded-md transition-colors relative ${
-                  isWebSearchActive ? "bg-accent-blue/10" : "hover:bg-secondary"
+                  isWebSearchActive
+                    ? "bg-foundation-accent-blue-light/10 dark:bg-foundation-accent-blue/10"
+                    : "hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2"
                 }`}
                 title="Web"
                 aria-label="Toggle web search"
               >
                 <svg
-                  className={`size-4 ${isWebSearchActive ? "text-accent-blue" : "text-muted-foreground"}`}
+                  className={`size-4 ${
+                    isWebSearchActive
+                      ? "text-foundation-accent-blue-light dark:text-foundation-accent-blue"
+                      : "text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary"
+                  }`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -114,54 +120,58 @@ export function ComposeInstructionsPanel({
                   />
                 </svg>
                 {isWebSearchActive && (
-                  <svg className="size-3.5 text-accent-blue absolute top-0.5 right-0.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                  <svg className="size-3.5 text-foundation-accent-blue-light dark:text-foundation-accent-blue absolute top-0.5 right-0.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                   </svg>
                 )}
               </button>
-              <button type="button" className="p-2 hover:bg-secondary rounded-md transition-colors" title="Link" aria-label="Link">
-                <svg className="size-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <button type="button" className="p-2 hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2 rounded-md transition-colors" title="Link" aria-label="Link">
+                <svg className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                 </svg>
               </button>
-              <button type="button" className="p-2 hover:bg-secondary rounded-md transition-colors" title="Refresh" aria-label="Refresh">
-                <svg className="size-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <button type="button" className="p-2 hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2 rounded-md transition-colors" title="Refresh" aria-label="Refresh">
+                <svg className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
               </button>
               <button
                 type="button"
-                className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg transition-colors group hover:bg-secondary"
+                className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg transition-colors group hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2"
                 title="Tools"
                 aria-label="Tools"
               >
-                <IconOperator className="size-4 text-muted-foreground group-hover:text-foreground" />
+                <IconOperator className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary group-hover:text-foundation-text-light-primary dark:group-hover:text-foundation-text-dark-primary" />
                 <span className="hidden text-body-small font-normal">Apps</span>
               </button>
-              <div className="ml-1 px-2 py-1 bg-muted rounded-md">
-                <span className="text-caption leading-4 text-foreground font-medium">{selectedModel.shortName}</span>
+              <div className="ml-1 px-2 py-1 bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 rounded-md">
+                <span className="text-caption leading-4 text-foundation-text-light-primary dark:text-foundation-text-dark-primary font-medium">
+                  {selectedModel.shortName}
+                </span>
               </div>
             </>
           }
           trailing={
             <>
-              <button type="button" className="flex items-center gap-1.5 px-2 py-1.5 hover:bg-secondary rounded-md transition-colors">
-                <svg className="size-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <button type="button" className="flex items-center gap-1.5 px-2 py-1.5 hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2 rounded-md transition-colors">
+                <svg className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
-                <span className="text-caption leading-4 text-muted-foreground">Auto-clear</span>
+                <span className="text-caption leading-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary">
+                  Auto-clear
+                </span>
               </button>
-              <button type="button" className="p-2 hover:bg-secondary rounded-md transition-colors" title="Voice" aria-label="Voice">
-                <svg className="size-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <button type="button" className="p-2 hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2 rounded-md transition-colors" title="Voice" aria-label="Voice">
+                <svg className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                 </svg>
               </button>
               <button
                 aria-label="Send message"
                 type="button"
-                className="w-7 h-7 rounded-full bg-accent-green ml-1 flex items-center justify-center hover:bg-accent-green/90 transition-colors"
+                className="w-7 h-7 rounded-full bg-foundation-accent-green-light dark:bg-foundation-accent-green ml-1 flex items-center justify-center hover:bg-foundation-accent-green-light/90 dark:hover:bg-foundation-accent-green/90 transition-colors"
               >
-                <svg className="size-4 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <svg className="size-4 text-foundation-text-dark-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
                 </svg>
               </button>
@@ -175,7 +185,7 @@ export function ComposeInstructionsPanel({
         onChange={(e) => onInstructionsChange(e.target.value)}
         placeholder="Enter your prompt's task specific instructions. Use {{template variables}} for dynamic inputs"
         aria-label="Prompt instructions"
-        className="w-full h-[187px] bg-muted px-4 py-3 text-body-small leading-6 text-foreground placeholder:text-text-secondary focus:outline-none resize-none border-0"
+        className="w-full h-[187px] bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 px-4 py-3 text-body-small leading-6 text-foundation-text-light-primary dark:text-foundation-text-dark-primary placeholder:text-foundation-text-light-secondary dark:placeholder:text-foundation-text-dark-secondary focus:outline-none resize-none border-0"
       />
     </TemplatePanel>
   );

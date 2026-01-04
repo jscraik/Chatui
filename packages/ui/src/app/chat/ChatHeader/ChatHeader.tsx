@@ -158,7 +158,7 @@ export function ChatHeader({
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foundation-accent-blue/50",
             )}
           >
-            <IconSidebar className="size-5 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
+            <IconSidebar className="size-5" />
           </button>
         )}
 
@@ -178,7 +178,7 @@ export function ChatHeader({
         >
           {viewMode === "compose" ? (
             <>
-              <IconChat className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
+              <IconChat className="size-4 text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary" />
               <span className="text-sm font-medium text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
                 Chat
               </span>
@@ -214,7 +214,7 @@ export function ChatHeader({
                 </span>
                 <IconChevronDown
                   className={cn(
-                    "size-3.5 text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary transition-transform duration-200",
+                    "size-3.5 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary transition-transform duration-200",
                     isModelSelectorOpen && "rotate-180",
                   )}
                 />

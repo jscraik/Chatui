@@ -159,19 +159,25 @@ const preview: Preview = {
         (lightBackgrounds.has(resolvedBackground) ||
           /--foundation-bg-light-/.test(resolvedBackground));
       const isDark = !isLight;
+      const theme = isDark ? "dark" : "light";
 
       return (
         <HostProvider host={host}>
           <AppsSDKUIProvider linkComponent="a">
             <div
-              className={isDark ? "dark" : "light"}
+              className={theme}
+              data-theme={theme}
               style={{
                 backgroundColor: resolvedBackground || "var(--foundation-bg-dark-1)",
                 color: isDark
                   ? "var(--foundation-text-dark-primary)"
                   : "var(--foundation-text-light-primary)",
+                colorScheme: theme,
                 minHeight: context.parameters.layout === "fullscreen" ? "100vh" : "auto",
-                padding: context.parameters.layout === "centered" ? "1rem" : 0,
+                padding:
+                  context.parameters.layout === "centered"
+                    ? "var(--foundation-space-16)"
+                    : 0,
               }}
             >
               <Story />

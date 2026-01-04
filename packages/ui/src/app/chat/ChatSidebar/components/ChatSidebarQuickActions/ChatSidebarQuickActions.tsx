@@ -39,7 +39,9 @@ export function ChatSidebarQuickActions({
       <button
         onClick={() => onNewChatClick("chatgpt")}
         className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group ${
-          selectedAction === "chatgpt" ? "bg-muted" : "hover:bg-muted"
+          selectedAction === "chatgpt"
+            ? "bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2"
+            : "hover:bg-foundation-bg-light-2/80 dark:hover:bg-foundation-bg-dark-2/80"
         }`}
       >
         <IconChat className="size-5 flex-shrink-0 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
@@ -51,7 +53,7 @@ export function ChatSidebarQuickActions({
       {/* New Project */}
       <button
         onClick={onNewProjectClick}
-        className="w-full flex items-center gap-3 px-3 py-2 hover:bg-muted rounded-lg transition-colors group"
+        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group hover:bg-foundation-bg-light-2/80 dark:hover:bg-foundation-bg-dark-2/80"
       >
         <IconFolder className="size-5 flex-shrink-0 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
         <span className="text-body-small font-normal text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">
@@ -65,7 +67,9 @@ export function ChatSidebarQuickActions({
           key={project.id}
           onClick={() => onProjectSelect(project)}
           className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left ${
-            selectedAction === project.id ? "bg-muted" : "hover:bg-muted"
+            selectedAction === project.id
+              ? "bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2"
+              : "hover:bg-foundation-bg-light-2/80 dark:hover:bg-foundation-bg-dark-2/80"
           }`}
         >
           <div
@@ -87,7 +91,7 @@ export function ChatSidebarQuickActions({
       {projectsData.length > 3 && (
         <button
           onClick={onToggleExpanded}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted transition-colors text-left"
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left hover:bg-foundation-bg-light-2/80 dark:hover:bg-foundation-bg-dark-2/80"
         >
           <IconDotsHorizontal className="size-5 flex-shrink-0 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
           <span className="text-body-small font-normal text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary">

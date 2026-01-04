@@ -83,13 +83,13 @@ export function ChatView({
           onClick={scrollToBottom}
           aria-label="Scroll to bottom"
           title="Scroll to bottom"
-          className="absolute bottom-[200px] left-1/2 -translate-x-1/2 z-10 flex items-center justify-center size-10 bg-muted hover:bg-muted/80 border border-border rounded-full shadow-lg transition-all duration-200 ease-out hover:scale-110"
+          className="absolute bottom-[200px] left-1/2 -translate-x-1/2 z-10 flex items-center justify-center size-10 bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 hover:bg-foundation-bg-light-2/80 dark:hover:bg-foundation-bg-dark-2/80 border border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 rounded-full shadow-lg transition-all duration-200 ease-out hover:scale-110"
         >
-          <IconArrowDownMd className="size-5 text-foreground" />
+          <IconArrowDownMd className="size-5 text-foundation-text-light-primary dark:text-foundation-text-dark-primary" />
         </button>
       )}
 
-      <div className="absolute bottom-0 left-0 right-0 bg-background">
+      <div className="absolute bottom-0 left-0 right-0 bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1">
         <ChatInput
           selectedModel={selectedModel}
           composerLeft={composerLeft}

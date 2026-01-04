@@ -18,6 +18,7 @@ import {
   SlackIcon,
   TeamsIcon,
 } from "../../../icons";
+import { getSizeClass } from "../../../icons";
 import { cn } from "../../../components/ui/utils";
 
 /**
@@ -179,6 +180,7 @@ export function AttachmentMenu({
   open,
   onOpenChange,
 }: AttachmentMenuProps) {
+  const iconMd = getSizeClass("md");
   const handleAction = (action: AttachmentAction) => {
     onAttachmentAction?.(action);
     onOpenChange?.(false);
@@ -209,9 +211,10 @@ export function AttachmentMenu({
         >
           <IconPlusComposer
             className={cn(
-              "size-4 transition-colors",
-              "text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary",
-              "group-hover:text-foundation-icon-light-primary dark:group-hover:text-foundation-icon-dark-primary",
+              iconMd,
+              "transition-colors",
+              "text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary",
+              "group-hover:text-foundation-text-light-primary dark:group-hover:text-foundation-text-dark-primary",
               "group-data-[state=open]:text-foundation-accent-blue-light dark:group-data-[state=open]:text-foundation-accent-blue",
             )}
           />
@@ -220,7 +223,6 @@ export function AttachmentMenu({
 
       <Popover.Portal>
         <Popover.Content
-          forceMount
           side="top"
           align="start"
           sideOffset={10}
@@ -233,45 +235,44 @@ export function AttachmentMenu({
         >
           {/* Primary Actions */}
           <MenuItem onClick={() => handleAction("add-photos-files")}>
-            <IconPaperclip className="size-5 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary group-hover:text-foundation-icon-light-primary dark:group-hover:text-foundation-icon-dark-primary transition-colors" />
+            <IconPaperclip className="size-5 text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary group-hover:text-foundation-text-light-primary dark:group-hover:text-foundation-text-dark-primary transition-colors" />
             <span>Add photos & files</span>
           </MenuItem>
 
           <MenuItem onClick={() => handleAction("deep-research")}>
-            <TelescopeIcon className="size-5 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary group-hover:text-foundation-icon-light-primary dark:group-hover:text-foundation-icon-dark-primary transition-colors" />
+            <TelescopeIcon className="size-5 text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary group-hover:text-foundation-text-light-primary dark:group-hover:text-foundation-text-dark-primary transition-colors" />
             <span>Deep research</span>
           </MenuItem>
 
           <MenuItem onClick={() => handleAction("shopping-research")}>
-            <ShoppingIcon className="size-5 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary group-hover:text-foundation-icon-light-primary dark:group-hover:text-foundation-icon-dark-primary transition-colors" />
+            <ShoppingIcon className="size-5 text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary group-hover:text-foundation-text-light-primary dark:group-hover:text-foundation-text-dark-primary transition-colors" />
             <span>Shopping research</span>
           </MenuItem>
 
           <MenuItem onClick={() => handleAction("agent-mode")}>
-            <AgentIcon className="size-5 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary group-hover:text-foundation-icon-light-primary dark:group-hover:text-foundation-icon-dark-primary transition-colors" />
+            <AgentIcon className="size-5 text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary group-hover:text-foundation-text-light-primary dark:group-hover:text-foundation-text-dark-primary transition-colors" />
             <span>Agent mode</span>
           </MenuItem>
 
           <MenuItem onClick={() => handleAction("create-image")}>
-            <IconImage className="size-5 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary group-hover:text-foundation-icon-light-primary dark:group-hover:text-foundation-icon-dark-primary transition-colors" />
+            <IconImage className="size-5 text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary group-hover:text-foundation-text-light-primary dark:group-hover:text-foundation-text-dark-primary transition-colors" />
             <span>Create image</span>
           </MenuItem>
 
           {/* More submenu with nested popover */}
           <Popover.Root modal={false}>
             <Popover.Trigger asChild>
-              <MenuItem className="justify-between data-[state=open]:bg-foundation-bg-dark-3">
+              <MenuItem className="justify-between data-[state=open]:bg-foundation-bg-light-3 dark:data-[state=open]:bg-foundation-bg-dark-3">
                 <div className="flex items-center gap-3">
-                  <IconDotsVertical className="size-5 text-foundation-icon-dark-secondary group-hover:text-foundation-icon-dark-primary" />
+                  <IconDotsVertical className="size-5 text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary group-hover:text-foundation-text-light-primary dark:group-hover:text-foundation-text-dark-primary transition-colors" />
                   <span>More</span>
                 </div>
-                <ChevronRightIcon className="size-4 text-foundation-icon-dark-tertiary group-hover:text-foundation-icon-dark-secondary" />
+                <ChevronRightIcon className="size-4 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary group-hover:text-foundation-text-light-secondary dark:group-hover:text-foundation-text-dark-secondary transition-colors" />
               </MenuItem>
             </Popover.Trigger>
 
             <Popover.Portal>
               <Popover.Content
-                forceMount
                 side="right"
                 align="start"
                 sideOffset={8}
@@ -290,7 +291,7 @@ export function AttachmentMenu({
 
                 <MenuItem onClick={() => handleMoreAction("study-learn")}>
                   <svg
-                    className="size-5 text-foundation-icon-dark-secondary group-hover:text-foundation-icon-dark-primary"
+                    className="size-5 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary group-hover:text-foundation-text-light-primary dark:group-hover:text-foundation-text-dark-primary"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
@@ -318,7 +319,7 @@ export function AttachmentMenu({
                         "size-5 transition-colors",
                         isWebSearchActive
                           ? "text-foundation-accent-blue-light dark:text-foundation-accent-blue"
-                          : "text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary group-hover:text-foundation-icon-light-primary dark:group-hover:text-foundation-icon-dark-primary",
+                          : "text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary group-hover:text-foundation-text-light-primary dark:group-hover:text-foundation-text-dark-primary",
                       )}
                     />
                     <span>Web search</span>
@@ -331,7 +332,7 @@ export function AttachmentMenu({
                 {/* Additional integrations would go here */}
                 <MenuItem onClick={() => handleMoreAction("browser-memory")}>
                   <svg
-                    className="size-5 text-foundation-icon-dark-secondary group-hover:text-foundation-icon-dark-primary"
+                    className="size-5 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary group-hover:text-foundation-text-light-primary dark:group-hover:text-foundation-text-dark-primary"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
@@ -353,7 +354,7 @@ export function AttachmentMenu({
 
                 <MenuItem onClick={() => handleMoreAction("quizzes")}>
                   <svg
-                    className="size-5 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary group-hover:text-foundation-icon-light-primary dark:group-hover:text-foundation-icon-dark-primary transition-colors"
+                    className="size-5 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary group-hover:text-foundation-text-light-primary dark:group-hover:text-foundation-text-dark-primary transition-colors"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
@@ -380,7 +381,7 @@ export function AttachmentMenu({
 
                 <MenuItem onClick={() => handleMoreAction("year-with-chatgpt")}>
                   <svg
-                    className="size-5 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary group-hover:text-foundation-icon-light-primary dark:group-hover:text-foundation-icon-dark-primary transition-colors"
+                    className="size-5 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary group-hover:text-foundation-text-light-primary dark:group-hover:text-foundation-text-dark-primary transition-colors"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
@@ -429,7 +430,7 @@ export function AttachmentMenu({
                 <div className="my-2 border-t border-foundation-bg-light-3 dark:border-foundation-bg-dark-3" />
 
                 <MenuItem onClick={() => handleMoreAction("explore-apps")}>
-                  <IconSearch className="size-5 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary group-hover:text-foundation-icon-light-primary dark:group-hover:text-foundation-icon-dark-primary transition-colors" />
+                  <IconSearch className="size-5 text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary group-hover:text-foundation-text-light-primary dark:group-hover:text-foundation-text-dark-primary transition-colors" />
                   <span>Explore apps</span>
                 </MenuItem>
               </Popover.Content>

@@ -4,7 +4,7 @@ import { markers } from "./data/markers";
 import type { Place } from "./components/PlaceCard";
 
 export function AppsSdkInlineExample() {
-  const places = (markers as { places: Place[] })?.places || [];
+  const places: Array<Place & { city?: string }> = markers.places.map((place) => ({ ...place }));
 
   return (
     <div className="antialiased w-full text-foreground px-4 pb-2 border border-border-strong rounded-24 overflow-hidden bg-card shadow-foundation-card">
@@ -89,7 +89,9 @@ export function AppsSdkInlineExample() {
 }
 
 export function AppsSdkInlineExampleAlt() {
-  const places = (markers as { places: Place[] })?.places?.slice(0, 4) || [];
+  const places: Array<Place & { city?: string }> = markers.places
+    .slice(0, 4)
+    .map((place) => ({ ...place }));
 
   return (
     <div className="antialiased w-full text-foreground px-4 pb-4 border border-border-subtle rounded-16 bg-card">

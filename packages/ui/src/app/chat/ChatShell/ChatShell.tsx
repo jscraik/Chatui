@@ -32,7 +32,10 @@ export function ChatShell({ slots, className, contentClassName }: ChatShellProps
   return (
     <div
       data-testid="chat-shell"
-      className={cn("size-full flex bg-foundation-bg-dark-1 overflow-hidden", className)}
+      className={cn(
+        "size-full flex bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 text-foundation-text-light-primary dark:text-foundation-text-dark-primary overflow-hidden",
+        className,
+      )}
     >
       {slots.sidebar}
       <div className={cn("flex min-h-0 min-w-0 flex-1 flex-col", contentClassName)}>

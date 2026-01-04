@@ -1,3 +1,6 @@
+import type { ReactElement } from "react";
+import { cloneElement, isValidElement } from "react";
+
 import { cn } from "../../utils";
 
 type IconButtonLabelProps =
@@ -105,6 +108,12 @@ export function IconButton({
     solid: "bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2 hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3",
   };
 
+  const iconElement = isValidElement(icon)
+    ? cloneElement(icon as ReactElement<{ className?: string }>, {
+        className: cn((icon.props as { className?: string }).className, iconSizes[size]),
+      })
+    : icon;
+
   return (
     <button
       type={type}
@@ -134,7 +143,6 @@ export function IconButton({
     >
       <span
         className={cn(
-          iconSizes[size],
           "text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary hover:text-foundation-icon-light-primary dark:hover:text-foundation-icon-dark-primary transition-colors",
           "motion-reduce:transition-none",
           "[&>svg]:w-full [&>svg]:h-full",
@@ -142,7 +150,7 @@ export function IconButton({
         )}
         style={active ? { color: activeColor } : undefined}
       >
-        {icon}
+        {iconElement}
       </span>
     </button>
   );

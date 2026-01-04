@@ -10,7 +10,9 @@ import {
   IconRefresh,
   IconTelescope,
 } from "../../../icons";
+import { getSizeClass } from "../../../icons";
 import { cn } from "../../../components/ui/utils";
+import { Textarea as AppsSDKTextarea } from "../../../integrations/apps-sdk";
 import { AttachmentMenu, type AttachmentAction, type MoreAction } from "../AttachmentMenu";
 
 // ============================================================================
@@ -138,11 +140,13 @@ export function ChatInput({
   }, [isResearchEnabled, onResearchToggle]);
 
   const dynamicPlaceholder = isSearchEnabled ? "Search the web" : placeholder || "Ask anything";
+  const iconSm = getSizeClass("sm");
+  const iconMd = getSizeClass("md");
 
   return (
     <div
       className={cn(
-        "border-t border-foundation-border-light dark:border-foundation-border-dark",
+        "border-t border-foundation-bg-light-3 dark:border-foundation-bg-dark-3",
         "bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1",
         "px-4 py-4",
         className,
@@ -150,15 +154,16 @@ export function ChatInput({
     >
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-[361px] sm:max-w-[992px] mx-auto"
+        className="max-w-3xl mx-auto"
+        data-testid="chat-input"
       >
         <div
           className={cn(
             "rounded-[24px] overflow-hidden transition-all duration-200",
-            "bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-2",
-            "border border-foundation-border-heavy dark:border-foundation-border-dark-default",
-            "shadow-sm dark:shadow-black/10",
-            "focus-within:border-foundation-accent-blue-light/40 dark:focus-within:border-foundation-accent-blue/40",
+            "bg-foundation-bg-light-2 dark:bg-foundation-bg-dark-2",
+            "border border-foundation-bg-light-3 dark:border-foundation-bg-dark-3",
+            "shadow-sm hover:shadow-md dark:shadow-black/10",
+            "focus-within:border-foundation-accent-blue-light/50 dark:focus-within:border-foundation-accent-blue/50",
             "focus-within:shadow-lg focus-within:shadow-foundation-accent-blue-light/5 dark:focus-within:shadow-foundation-accent-blue/5",
           )}
         >
@@ -175,12 +180,12 @@ export function ChatInput({
                     "text-[13px] font-medium leading-[18px] tracking-[-0.3px]",
                   )}
                 >
-                  <IconGlobe className="size-3.5" />
+                <IconGlobe className={iconSm} />
                   <span>Search</span>
                 </div>
               </div>
             )}
-            <textarea
+            <AppsSDKTextarea
               ref={textareaRef}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
@@ -208,8 +213,8 @@ export function ChatInput({
           {/* Action Bar */}
           <div
             className={cn(
-              "flex items-center justify-between px-4 py-2.5",
-              "border-t border-foundation-border-light dark:border-foundation-border-dark",
+              "flex items-center justify-between px-3 py-2",
+              "border-t border-foundation-bg-light-3/50 dark:border-foundation-bg-dark-3/50",
             )}
           >
             {/* Left Actions */}
@@ -226,7 +231,29 @@ export function ChatInput({
                 onOpenChange={setAttachmentMenuOpen}
               />
 
-              {/* Research Toggle */}
+              <button
+                type="button"
+                onClick={handleSearchToggle}
+                title="Web search"
+                className={cn(
+                  "flex items-center gap-1.5 px-2 py-1.5 rounded-lg transition-all duration-200",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foundation-accent-blue-light dark:focus-visible:ring-foundation-accent-blue focus-visible:ring-offset-1",
+                  isSearchEnabled
+                    ? "bg-foundation-accent-blue-light/15 dark:bg-foundation-accent-blue/15 text-foundation-accent-blue-light dark:text-foundation-accent-blue"
+                    : cn(
+                        "hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3",
+                        "text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary",
+                        "hover:text-foundation-text-light-primary dark:hover:text-foundation-text-dark-primary",
+                      ),
+                )}
+              >
+                <IconGlobe className={iconMd} />
+                {isSearchEnabled && (
+                  <span className="text-[14px] font-normal leading-[18px] tracking-[-0.3px]">
+                    Search
+                  </span>
+                )}
+              </button>
               <button
                 type="button"
                 onClick={handleResearchToggle}
@@ -237,15 +264,15 @@ export function ChatInput({
                   isResearchEnabled
                     ? "bg-foundation-accent-blue-light/15 dark:bg-foundation-accent-blue/15 text-foundation-accent-blue-light dark:text-foundation-accent-blue"
                     : cn(
-                        "hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-3",
-                        "text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary",
-                        "hover:text-foundation-icon-light-primary dark:hover:text-foundation-icon-dark-primary",
+                        "hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3",
+                        "text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary",
+                        "hover:text-foundation-text-light-primary dark:hover:text-foundation-text-dark-primary",
                       ),
                 )}
               >
-                <IconTelescope className="size-4" />
+                <IconTelescope className={iconMd} />
                 {isResearchEnabled && (
-                  <span className="text-[14px] font-normal leading-[20px] tracking-[-0.3px]">
+                  <span className="text-[14px] font-normal leading-[18px] tracking-[-0.3px]">
                     Research
                   </span>
                 )}
@@ -271,21 +298,21 @@ export function ChatInput({
                   type="button"
                   onClick={onAutoClear}
                   title="Auto-clear conversation"
-                  className={cn(
-                    "flex items-center gap-1.5 px-3 py-1.5 rounded-full",
-                    "text-[13px] font-normal leading-[18px] tracking-[-0.3px]",
-                    "bg-foundation-bg-light-3 dark:bg-foundation-bg-dark-3",
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-full",
+                  "text-[13px] font-normal leading-[18px] tracking-[-0.3px]",
+                  "bg-foundation-bg-light-3 dark:bg-foundation-bg-dark-3",
                     "hover:bg-foundation-bg-light-3/80 dark:hover:bg-foundation-bg-dark-3/80",
                     "text-foundation-text-light-secondary dark:text-foundation-text-dark-secondary",
                     "hover:text-foundation-text-light-primary dark:hover:text-foundation-text-dark-primary",
                     "transition-all duration-200",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foundation-accent-blue-light dark:focus-visible:ring-foundation-accent-blue focus-visible:ring-offset-1",
-                  )}
-                >
-                  <IconRefresh className="size-4 text-foundation-icon-light-secondary dark:text-foundation-icon-dark-secondary" />
-                  <span>Auto-clear</span>
-                </button>
-              )}
+                )}
+              >
+                <IconRefresh className={iconMd} />
+                <span>Auto-clear</span>
+              </button>
+            )}
 
               {composerRight}
 
@@ -294,14 +321,14 @@ export function ChatInput({
                 type="button"
                 className={cn(
                   "p-2 rounded-lg transition-all duration-200",
-                  "text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary",
+                  "text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary",
                   "hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3",
-                  "hover:text-foundation-icon-light-primary dark:hover:text-foundation-icon-dark-primary",
+                  "hover:text-foundation-text-light-primary dark:hover:text-foundation-text-dark-primary",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foundation-accent-blue-light dark:focus-visible:ring-foundation-accent-blue focus-visible:ring-offset-1",
                 )}
                 title="History"
               >
-                <IconClock className="size-4" />
+                <IconClock className={iconMd} />
               </button>
 
               {/* Voice Input */}
@@ -314,14 +341,14 @@ export function ChatInput({
                   isRecording
                     ? "bg-foundation-accent-red-light/15 dark:bg-foundation-accent-red/15 text-foundation-accent-red-light dark:text-foundation-accent-red"
                     : cn(
-                        "text-foundation-icon-light-tertiary dark:text-foundation-icon-dark-tertiary",
+                        "text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary",
                         "hover:bg-foundation-bg-light-3 dark:hover:bg-foundation-bg-dark-3",
-                        "hover:text-foundation-icon-light-primary dark:hover:text-foundation-icon-dark-primary",
+                        "hover:text-foundation-text-light-primary dark:hover:text-foundation-text-dark-primary",
                       ),
                 )}
                 title="Voice input"
               >
-                <IconMic className="size-4" />
+                <IconMic className={iconMd} />
               </button>
               {/* Advanced Features */}
               <button
@@ -336,7 +363,7 @@ export function ChatInput({
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foundation-accent-blue-light dark:focus-visible:ring-foundation-accent-blue focus-visible:ring-offset-1",
                 )}
               >
-                <IconHeadphones className="size-4 text-white" />
+                <IconHeadphones className={cn(iconMd, "text-white")} />
               </button>
 
               {/* Send Button */}
@@ -353,7 +380,7 @@ export function ChatInput({
                   "text-white shadow-sm",
                 )}
               >
-                <IconArrowUpSm className="size-4" />
+                <IconArrowUpSm className={iconMd} />
               </button>
             </div>
           </div>

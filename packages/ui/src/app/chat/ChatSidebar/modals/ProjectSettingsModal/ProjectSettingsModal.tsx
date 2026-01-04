@@ -29,27 +29,33 @@ export function ProjectSettingsModal({
       onClick={onClose}
     >
       <div
-        className="bg-secondary border border-border text-foreground rounded-2xl w-[380px] shadow-2xl"
+        className="bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-2 border border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 text-foundation-text-light-primary dark:text-foundation-text-dark-primary rounded-2xl w-[380px] shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="px-6 pt-6 pb-5">
-          <h2 className="text-body font-semibold text-foreground">Project settings</h2>
+          <h2 className="text-body font-semibold text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
+            Project settings
+          </h2>
         </div>
         <div className="px-6 pb-6">
           <div className="mb-6">
-            <h3 className="text-body-small text-muted-foreground mb-3 font-normal">Memory</h3>
+            <h3 className="text-body-small text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary mb-3 font-normal">
+              Memory
+            </h3>
             <button
               onClick={() => onSelectMemoryOption("default")}
               className={`w-full text-left p-4 rounded-xl mb-3 border-2 transition-all ${
                 memoryOption === "default"
-                  ? "bg-[var(--accent-green)]/20 border-[var(--accent-green)]/40"
-                  : "bg-transparent border-border hover:border-border"
+                  ? "bg-foundation-accent-green-light/20 dark:bg-foundation-accent-green/20 border-foundation-accent-green-light/40 dark:border-foundation-accent-green/40"
+                  : "bg-transparent border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 hover:border-foundation-bg-light-3 dark:hover:border-foundation-bg-dark-3"
               }`}
             >
               <div className="flex items-start justify-between mb-2">
-                <span className="text-body-small font-semibold text-foreground">Default</span>
+                <span className="text-body-small font-semibold text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
+                  Default
+                </span>
               </div>
-              <p className="text-body-small text-muted-foreground font-normal">
+              <p className="text-body-small text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary font-normal">
                 Project can access memories from outside chats, and vice versa.
               </p>
             </button>
@@ -57,30 +63,32 @@ export function ProjectSettingsModal({
               onClick={() => onSelectMemoryOption("project-only")}
               className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
                 memoryOption === "project-only"
-                  ? "bg-[var(--accent-green)]/20 border-[var(--accent-green)]/40"
-                  : "bg-transparent border-border hover:border-border"
+                  ? "bg-foundation-accent-green-light/20 dark:bg-foundation-accent-green/20 border-foundation-accent-green-light/40 dark:border-foundation-accent-green/40"
+                  : "bg-transparent border-foundation-bg-light-3 dark:border-foundation-bg-dark-3 hover:border-foundation-bg-light-3 dark:hover:border-foundation-bg-dark-3"
               }`}
             >
               <div className="flex items-start justify-between mb-2">
-                <span className="text-body-small font-semibold text-foreground">Project-only</span>
+                <span className="text-body-small font-semibold text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
+                  Project-only
+                </span>
               </div>
-              <p className="text-body-small text-muted-foreground font-normal">
+              <p className="text-body-small text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary font-normal">
                 Project can only access its own memories. Its memories are hidden from outside
                 chats.
               </p>
             </button>
           </div>
         </div>
-        <div className="flex items-center justify-end gap-6 px-6 py-4 border-t border-border">
+        <div className="flex items-center justify-end gap-6 px-6 py-4 border-t border-foundation-bg-light-3 dark:border-foundation-bg-dark-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-body-small text-muted-foreground hover:text-foreground hover:bg-secondary rounded-lg transition-colors font-normal"
+            className="px-4 py-2 text-body-small text-foundation-text-light-tertiary dark:text-foundation-text-dark-tertiary hover:text-foundation-text-light-primary dark:hover:text-foundation-text-dark-primary hover:bg-foundation-bg-light-2 dark:hover:bg-foundation-bg-dark-2 rounded-lg transition-colors font-normal"
           >
             Cancel
           </button>
           <button
             onClick={onDone}
-            className="px-4 py-2 text-body-small bg-foreground text-background hover:bg-foreground/90 rounded-lg transition-colors font-semibold"
+            className="px-4 py-2 text-body-small bg-foundation-text-light-primary dark:bg-foundation-text-dark-primary text-foundation-bg-light-1 dark:text-foundation-bg-dark-1 hover:opacity-90 rounded-lg transition-colors font-semibold"
           >
             Done
           </button>

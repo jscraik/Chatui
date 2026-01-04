@@ -5,7 +5,9 @@ import { fileURLToPath } from "node:url";
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const widgetHtmlPath = process.env.WEB_WIDGET_HTML
@@ -133,35 +135,43 @@ function readWidgetBundle(widgetId) {
 }
 
 // Tool input schemas with detailed descriptions per Apps SDK guidelines
-const displayChatInputSchema = {
-  seedMessage: z
-    .string()
-    .optional()
-    .describe("Optional initial message to seed the chat conversation"),
-};
+const emptyInputSchema = z.object({}).strict();
 
-const displaySearchResultsInputSchema = {
-  query: z.string().describe("The search query that was performed"),
-  results: z
-    .array(
-      z.object({
-        id: z.union([z.string(), z.number()]).describe("Unique identifier for the result"),
-        title: z.string().describe("Title of the search result"),
-        description: z.string().optional().describe("Brief description of the result"),
-        url: z.string().optional().describe("URL to the full content"),
-        tags: z.array(z.string()).optional().describe("Tags or categories for the result"),
-      }),
-    )
-    .describe("Array of search results to display"),
-};
+const displayChatInputSchema = z
+  .object({
+    seedMessage: z
+      .string()
+      .optional()
+      .describe("Optional initial message to seed the chat conversation"),
+  })
+  .strict();
 
-const displayTableInputSchema = {
-  title: z.string().optional().describe("Optional title for the table"),
-  columns: z.array(z.string()).describe("Column headers for the table"),
-  rows: z.array(z.record(z.any())).describe("Array of row objects with keys matching column names"),
-};
+const searchResultSchema = z.object({
+  id: z.union([z.string(), z.number()]).describe("Unique identifier for the result"),
+  title: z.string().describe("Title of the search result"),
+  description: z.string().optional().describe("Brief description of the result"),
+  url: z.string().optional().describe("URL to the full content"),
+  tags: z.array(z.string()).optional().describe("Tags or categories for the result"),
+});
 
-const displayDashboardInputSchema = {};
+const displaySearchResultsInputSchema = z
+  .object({
+    query: z.string().describe("The search query that was performed"),
+    results: z.array(searchResultSchema).describe("Array of search results to display"),
+  })
+  .strict();
+
+const displayTableInputSchema = z
+  .object({
+    title: z.string().optional().describe("Optional title for the table"),
+    columns: z.array(z.string()).describe("Column headers for the table"),
+    rows: z
+      .array(z.record(z.unknown()))
+      .describe("Array of row objects with keys matching column names"),
+  })
+  .strict();
+
+const displayDashboardInputSchema = emptyInputSchema;
 
 // Shopping Cart schemas
 const cartItemSchema = z.object({
@@ -173,49 +183,328 @@ const cartItemSchema = z.object({
   description: z.string().optional().describe("Brief item description"),
 });
 
-const addToCartInputSchema = {
-  items: z.array(cartItemSchema).describe("Items to add to the cart"),
-  sessionId: z.string().optional().describe("Cart session ID for cross-turn persistence"),
-};
+const addToCartInputSchema = z
+  .object({
+    items: z.array(cartItemSchema).describe("Items to add to the cart"),
+    sessionId: z.string().optional().describe("Cart session ID for cross-turn persistence"),
+  })
+  .strict();
 
-const removeFromCartInputSchema = {
-  itemIds: z.array(z.string()).describe("IDs of items to remove from cart"),
-  sessionId: z.string().optional().describe("Cart session ID"),
-};
+const removeFromCartInputSchema = z
+  .object({
+    itemIds: z.array(z.string()).describe("IDs of items to remove from cart"),
+    sessionId: z.string().optional().describe("Cart session ID"),
+  })
+  .strict();
 
-const showCartInputSchema = {
-  sessionId: z.string().optional().describe("Cart session ID to display"),
-};
+const showCartInputSchema = z
+  .object({
+    sessionId: z.string().optional().describe("Cart session ID to display"),
+  })
+  .strict();
 
 // Pizzaz Shop schemas
-const showShopInputSchema = {
-  view: z.enum(["cart", "checkout", "confirmation"]).optional().describe("Initial view to display"),
-  items: z.array(cartItemSchema).optional().describe("Pre-populate cart with items"),
-};
+const showShopInputSchema = z
+  .object({
+    view: z.enum(["cart", "checkout", "confirmation"]).optional().describe("Initial view to display"),
+    items: z.array(cartItemSchema).optional().describe("Pre-populate cart with items"),
+  })
+  .strict();
 
-const placeOrderInputSchema = {
-  deliveryOption: z.enum(["standard", "express"]).optional().describe("Delivery speed"),
-  tipPercent: z.number().optional().describe("Tip percentage (0, 10, 15, 20)"),
-};
+const placeOrderInputSchema = z
+  .object({
+    deliveryOption: z.enum(["standard", "express"]).optional().describe("Delivery speed"),
+    tipPercent: z.number().optional().describe("Tip percentage (0, 10, 15, 20)"),
+  })
+  .strict();
 
 // Auth Demo schemas
-const authStatusInputSchema = {
-  checkLevel: z
-    .enum(["none", "basic", "oauth", "oauth_elevated"])
-    .optional()
-    .describe("Minimum auth level to check for"),
+const authStatusInputSchema = z
+  .object({
+    checkLevel: z
+      .enum(["none", "basic", "oauth", "oauth_elevated"])
+      .optional()
+      .describe("Minimum auth level to check for"),
+  })
+  .strict();
+
+const authLoginInputSchema = z
+  .object({
+    provider: z.string().optional().describe("OAuth provider (e.g., 'google', 'github')"),
+    scopes: z.array(z.string()).optional().describe("Requested OAuth scopes"),
+  })
+  .strict();
+
+const authLogoutInputSchema = emptyInputSchema;
+
+const authRefreshInputSchema = z
+  .object({
+    forceRefresh: z.boolean().optional().describe("Force token refresh even if not expired"),
+  })
+  .strict();
+
+const displayChatOutputSchema = z
+  .object({
+    seedMessage: z.string(),
+    locale: z.string(),
+  })
+  .strict();
+
+const displaySearchResultsOutputSchema = z
+  .object({
+    query: z.string(),
+    results: z.array(searchResultSchema),
+    locale: z.string(),
+  })
+  .strict();
+
+const displayTableOutputSchema = z
+  .object({
+    title: z.string().optional(),
+    columns: z.array(z.string()),
+    data: z.array(z.record(z.unknown())),
+    locale: z.string(),
+  })
+  .strict();
+
+const displayDemoOutputSchema = z
+  .object({
+    demo: z.boolean(),
+  })
+  .strict();
+
+const dashboardStatSchema = z.object({
+  label: z.string(),
+  value: z.string(),
+  change: z.string(),
+});
+
+const dashboardChatSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  model: z.string(),
+  time: z.string(),
+});
+
+const displayDashboardOutputSchema = z
+  .object({
+    dashboard: z.boolean(),
+    headerText: z.string(),
+    stats: z.array(dashboardStatSchema),
+    recentChats: z.array(dashboardChatSchema),
+  })
+  .strict();
+
+const addToCartOutputSchema = z
+  .object({
+    action: z.literal("add"),
+    items: z.array(cartItemSchema),
+    sessionId: z.string(),
+  })
+  .strict();
+
+const removeFromCartOutputSchema = z
+  .object({
+    action: z.literal("remove"),
+    items: z.array(z.object({ id: z.string() })),
+    sessionId: z.string(),
+  })
+  .strict();
+
+const showCartOutputSchema = z
+  .object({
+    action: z.literal("show"),
+    sessionId: z.string().optional(),
+  })
+  .strict();
+
+const showShopOutputSchema = z
+  .object({
+    view: z.enum(["cart", "checkout", "confirmation"]),
+    items: z.array(cartItemSchema).optional(),
+  })
+  .strict();
+
+const placeOrderOutputSchema = z
+  .object({
+    view: z.literal("confirmation"),
+    orderId: z.string(),
+    deliveryOption: z.enum(["standard", "express"]),
+    tipPercent: z.number(),
+  })
+  .strict();
+
+const authStatusSchema = z
+  .object({
+    authenticated: z.boolean(),
+    level: z.enum(["none", "basic", "oauth", "oauth_elevated"]),
+    provider: z.string().optional(),
+    expiresAt: z.string().optional(),
+    scopes: z.array(z.string()).optional(),
+  })
+  .strict();
+
+const authStatusOutputSchema = z
+  .object({
+    authStatus: authStatusSchema,
+    meetsRequiredLevel: z.boolean(),
+  })
+  .strict();
+
+const authLoginOutputSchema = z
+  .object({
+    authStatus: authStatusSchema,
+    user: z.object({
+      id: z.string(),
+      name: z.string(),
+      email: z.string(),
+      plan: z.string(),
+    }),
+  })
+  .strict();
+
+const authLogoutOutputSchema = z
+  .object({
+    authStatus: authStatusSchema,
+  })
+  .strict();
+
+const authRefreshOutputSchema = authLogoutOutputSchema;
+
+function contentWithJsonFallback(message, structuredContent) {
+  const json = JSON.stringify(structuredContent, null, 2);
+  return [
+    { type: "text", text: message },
+    { type: "text", text: json },
+  ];
+}
+
+function toJsonSchema(schema, name) {
+  const jsonSchema = zodToJsonSchema(schema, { name, target: "jsonSchema2019-09" });
+  const upgraded = upgradeTo202012(jsonSchema);
+  return { ...upgraded, $schema: "https://json-schema.org/draft/2020-12/schema" };
+}
+
+function upgradeTo202012(schema) {
+  if (!schema || typeof schema !== "object") return schema;
+
+  const cloned = Array.isArray(schema) ? schema.map(upgradeTo202012) : { ...schema };
+
+  if (cloned.definitions) {
+    cloned.$defs = upgradeTo202012(cloned.definitions);
+    delete cloned.definitions;
+  }
+
+  for (const [key, value] of Object.entries(cloned)) {
+    if (key === "$ref" && typeof value === "string") {
+      cloned.$ref = value.replace("#/definitions/", "#/$defs/");
+      continue;
+    }
+    cloned[key] = upgradeTo202012(value);
+  }
+
+  return cloned;
+}
+
+const displayChatInputJsonSchema = toJsonSchema(displayChatInputSchema, "DisplayChatInput");
+const displaySearchResultsInputJsonSchema = toJsonSchema(
+  displaySearchResultsInputSchema,
+  "DisplaySearchResultsInput",
+);
+const displayTableInputJsonSchema = toJsonSchema(displayTableInputSchema, "DisplayTableInput");
+const displayDashboardInputJsonSchema = toJsonSchema(
+  displayDashboardInputSchema,
+  "DisplayDashboardInput",
+);
+const displayDemoInputJsonSchema = toJsonSchema(emptyInputSchema, "DisplayDemoInput");
+const emptyInputJsonSchema = toJsonSchema(emptyInputSchema, "EmptyInput");
+const addToCartInputJsonSchema = toJsonSchema(addToCartInputSchema, "AddToCartInput");
+const removeFromCartInputJsonSchema = toJsonSchema(
+  removeFromCartInputSchema,
+  "RemoveFromCartInput",
+);
+const showCartInputJsonSchema = toJsonSchema(showCartInputSchema, "ShowCartInput");
+const showShopInputJsonSchema = toJsonSchema(showShopInputSchema, "ShowShopInput");
+const placeOrderInputJsonSchema = toJsonSchema(placeOrderInputSchema, "PlaceOrderInput");
+const authStatusInputJsonSchema = toJsonSchema(authStatusInputSchema, "AuthStatusInput");
+const authLoginInputJsonSchema = toJsonSchema(authLoginInputSchema, "AuthLoginInput");
+const authLogoutInputJsonSchema = toJsonSchema(authLogoutInputSchema, "AuthLogoutInput");
+const authRefreshInputJsonSchema = toJsonSchema(authRefreshInputSchema, "AuthRefreshInput");
+
+const displayChatOutputJsonSchema = toJsonSchema(displayChatOutputSchema, "DisplayChatOutput");
+const displaySearchResultsOutputJsonSchema = toJsonSchema(
+  displaySearchResultsOutputSchema,
+  "DisplaySearchResultsOutput",
+);
+const displayTableOutputJsonSchema = toJsonSchema(displayTableOutputSchema, "DisplayTableOutput");
+const displayDemoOutputJsonSchema = toJsonSchema(displayDemoOutputSchema, "DisplayDemoOutput");
+const displayDashboardOutputJsonSchema = toJsonSchema(
+  displayDashboardOutputSchema,
+  "DisplayDashboardOutput",
+);
+const addToCartOutputJsonSchema = toJsonSchema(addToCartOutputSchema, "AddToCartOutput");
+const removeFromCartOutputJsonSchema = toJsonSchema(
+  removeFromCartOutputSchema,
+  "RemoveFromCartOutput",
+);
+const showCartOutputJsonSchema = toJsonSchema(showCartOutputSchema, "ShowCartOutput");
+const showShopOutputJsonSchema = toJsonSchema(showShopOutputSchema, "ShowShopOutput");
+const placeOrderOutputJsonSchema = toJsonSchema(placeOrderOutputSchema, "PlaceOrderOutput");
+const authStatusOutputJsonSchema = toJsonSchema(authStatusOutputSchema, "AuthStatusOutput");
+const authLoginOutputJsonSchema = toJsonSchema(authLoginOutputSchema, "AuthLoginOutput");
+const authLogoutOutputJsonSchema = toJsonSchema(authLogoutOutputSchema, "AuthLogoutOutput");
+const authRefreshOutputJsonSchema = toJsonSchema(authRefreshOutputSchema, "AuthRefreshOutput");
+
+const toolListSchemaMap = {
+  display_chat: { input: displayChatInputJsonSchema, output: displayChatOutputJsonSchema },
+  display_search_results: {
+    input: displaySearchResultsInputJsonSchema,
+    output: displaySearchResultsOutputJsonSchema,
+  },
+  display_table: { input: displayTableInputJsonSchema, output: displayTableOutputJsonSchema },
+  display_demo: { input: displayDemoInputJsonSchema, output: displayDemoOutputJsonSchema },
+  display_dashboard: {
+    input: displayDashboardInputJsonSchema,
+    output: displayDashboardOutputJsonSchema,
+  },
+  add_to_cart: { input: addToCartInputJsonSchema, output: addToCartOutputJsonSchema },
+  remove_from_cart: { input: removeFromCartInputJsonSchema, output: removeFromCartOutputJsonSchema },
+  show_cart: { input: showCartInputJsonSchema, output: showCartOutputJsonSchema },
+  show_shop: { input: showShopInputJsonSchema, output: showShopOutputJsonSchema },
+  place_order: { input: placeOrderInputJsonSchema, output: placeOrderOutputJsonSchema },
+  auth_status: { input: authStatusInputJsonSchema, output: authStatusOutputJsonSchema },
+  auth_login: { input: authLoginInputJsonSchema, output: authLoginOutputJsonSchema },
+  auth_logout: { input: authLogoutInputJsonSchema, output: authLogoutOutputJsonSchema },
+  auth_refresh: { input: authRefreshInputJsonSchema, output: authRefreshOutputJsonSchema },
 };
 
-const authLoginInputSchema = {
-  provider: z.string().optional().describe("OAuth provider (e.g., 'google', 'github')"),
-  scopes: z.array(z.string()).optional().describe("Requested OAuth scopes"),
-};
-
-const authLogoutInputSchema = {};
-
-const authRefreshInputSchema = {
-  forceRefresh: z.boolean().optional().describe("Force token refresh even if not expired"),
-};
+function installListToolsHandler(server) {
+  server.server.setRequestHandler(ListToolsRequestSchema, () => ({
+    tools: Object.entries(server._registeredTools)
+      .filter(([, tool]) => tool.enabled)
+      .map(([name, tool]) => {
+        const schemas = toolListSchemaMap[name] ?? {};
+        const inputSchema =
+          schemas.input ??
+          (tool.inputSchema ? toJsonSchema(tool.inputSchema, `${name}Input`) : emptyInputJsonSchema);
+        const outputSchema =
+          schemas.output ??
+          (tool.outputSchema ? toJsonSchema(tool.outputSchema, `${name}Output`) : undefined);
+        const toolDefinition = {
+          name,
+          title: tool.title,
+          description: tool.description,
+          inputSchema,
+          annotations: tool.annotations,
+          _meta: tool._meta,
+        };
+        if (outputSchema) {
+          toolDefinition.outputSchema = outputSchema;
+        }
+        return toolDefinition;
+      }),
+  }));
+}
 
 function createChatUiServer() {
   const server = new McpServer({
@@ -302,6 +591,7 @@ function createChatUiServer() {
         "to have a conversation-style interaction or needs a dedicated chat view. " +
         "This tool only renders a UI and does not modify any external data.",
       inputSchema: displayChatInputSchema,
+      outputSchema: displayChatOutputSchema,
       securitySchemes: [{ type: "noauth" }],
       annotations: {
         // Per Apps SDK guidelines: mark read-only tools correctly
@@ -327,20 +617,19 @@ function createChatUiServer() {
       const locale = _meta?.["openai/locale"] ?? "en";
       const userAgent = _meta?.["openai/userAgent"];
       const userLocation = _meta?.["openai/userLocation"];
+      const structuredContent = {
+        seedMessage,
+        locale,
+      };
 
       return {
-        content: [
-          {
-            type: "text",
-            text: seedMessage
-              ? `Chat interface opened with message: "${seedMessage}"`
-              : "Chat interface opened",
-          },
-        ],
-        structuredContent: {
-          seedMessage,
-          locale,
-        },
+        content: contentWithJsonFallback(
+          seedMessage
+            ? `Chat interface opened with message: "${seedMessage}"`
+            : "Chat interface opened",
+          structuredContent,
+        ),
+        structuredContent,
         _meta: {
           // Widget-specific metadata (hidden from model)
           clientInfo: {
@@ -367,6 +656,7 @@ function createChatUiServer() {
         "results, recommendations, or lists of items that users need to scan and " +
         "choose from. This tool only renders results and does not perform searches.",
       inputSchema: displaySearchResultsInputSchema,
+      outputSchema: displaySearchResultsOutputSchema,
       securitySchemes: [{ type: "noauth" }],
       annotations: {
         readOnlyHint: true, // Only displays data
@@ -391,19 +681,18 @@ function createChatUiServer() {
       // Extract client metadata
       const locale = _meta?.["openai/locale"] ?? "en";
       const userLocation = _meta?.["openai/userLocation"];
+      const structuredContent = {
+        query,
+        results,
+        locale,
+      };
 
       return {
-        content: [
-          {
-            type: "text",
-            text: `Displaying ${count} result${count !== 1 ? "s" : ""} for "${query}"`,
-          },
-        ],
-        structuredContent: {
-          query,
-          results,
-          locale,
-        },
+        content: contentWithJsonFallback(
+          `Displaying ${count} result${count !== 1 ? "s" : ""} for "${query}"`,
+          structuredContent,
+        ),
+        structuredContent,
         _meta: {
           // Widget-specific metadata
           searchContext: {
@@ -430,6 +719,7 @@ function createChatUiServer() {
         "tabular layout. Ideal for showing prices, specifications, schedules, or " +
         "any data with consistent fields across items.",
       inputSchema: displayTableInputSchema,
+      outputSchema: displayTableOutputSchema,
       securitySchemes: [{ type: "noauth" }],
       annotations: {
         readOnlyHint: true, // Only displays data
@@ -453,22 +743,21 @@ function createChatUiServer() {
 
       // Extract client metadata
       const locale = _meta?.["openai/locale"] ?? "en";
+      const structuredContent = {
+        title,
+        columns,
+        data: rows,
+        locale,
+      };
 
       return {
-        content: [
-          {
-            type: "text",
-            text: title
-              ? `Displaying "${title}" with ${rowCount} row${rowCount !== 1 ? "s" : ""}`
-              : `Displaying table with ${rowCount} row${rowCount !== 1 ? "s" : ""}`,
-          },
-        ],
-        structuredContent: {
-          title,
-          columns,
-          data: rows,
-          locale,
-        },
+        content: contentWithJsonFallback(
+          title
+            ? `Displaying "${title}" with ${rowCount} row${rowCount !== 1 ? "s" : ""}`
+            : `Displaying table with ${rowCount} row${rowCount !== 1 ? "s" : ""}`,
+          structuredContent,
+        ),
+        structuredContent,
         _meta: {
           // Widget-specific metadata
           tableContext: {
@@ -492,7 +781,8 @@ function createChatUiServer() {
         "Displays a demonstration widget showcasing various Apps SDK capabilities. " +
         "Use this for testing or demonstrating the widget system. This is primarily " +
         "for development and testing purposes.",
-      inputSchema: {},
+      inputSchema: emptyInputSchema,
+      outputSchema: displayDemoOutputSchema,
       securitySchemes: [{ type: "noauth" }],
       annotations: {
         readOnlyHint: true,
@@ -511,9 +801,10 @@ function createChatUiServer() {
       },
     },
     async () => {
+      const structuredContent = { demo: true };
       return {
-        content: [{ type: "text", text: "Demo widget displayed" }],
-        structuredContent: { demo: true },
+        content: contentWithJsonFallback("Demo widget displayed", structuredContent),
+        structuredContent,
       };
     },
   );
@@ -531,6 +822,7 @@ function createChatUiServer() {
         "Displays a dashboard widget with analytics and quick actions. " +
         "Use this when the user wants a high-level overview or a dashboard-style view.",
       inputSchema: displayDashboardInputSchema,
+      outputSchema: displayDashboardOutputSchema,
       securitySchemes: [{ type: "noauth" }],
       annotations: {
         readOnlyHint: true,
@@ -549,23 +841,24 @@ function createChatUiServer() {
       },
     },
     async () => {
+      const structuredContent = {
+        dashboard: true,
+        headerText: "ChatGPT Dashboard Widget",
+        stats: [
+          { label: "Total Conversations", value: "1,234", change: "+12%" },
+          { label: "Messages Today", value: "89", change: "+5%" },
+          { label: "Active Models", value: "3", change: "0%" },
+          { label: "Response Time", value: "1.2s", change: "-8%" },
+        ],
+        recentChats: [
+          { id: 1, title: "Code Review Session", model: "GPT-4", time: "2 min ago" },
+          { id: 2, title: "Project Planning", model: "Claude", time: "1 hour ago" },
+          { id: 3, title: "Debug Help", model: "GPT-4o", time: "3 hours ago" },
+        ],
+      };
       return {
-        content: [{ type: "text", text: "Dashboard displayed" }],
-        structuredContent: {
-          dashboard: true,
-          headerText: "ChatGPT Dashboard Widget",
-          stats: [
-            { label: "Total Conversations", value: "1,234", change: "+12%" },
-            { label: "Messages Today", value: "89", change: "+5%" },
-            { label: "Active Models", value: "3", change: "0%" },
-            { label: "Response Time", value: "1.2s", change: "-8%" },
-          ],
-          recentChats: [
-            { id: 1, title: "Code Review Session", model: "GPT-4", time: "2 min ago" },
-            { id: 2, title: "Project Planning", model: "Claude", time: "1 hour ago" },
-            { id: 3, title: "Debug Help", model: "GPT-4o", time: "3 hours ago" },
-          ],
-        },
+        content: contentWithJsonFallback("Dashboard displayed", structuredContent),
+        structuredContent,
       };
     },
   );
@@ -588,6 +881,7 @@ function createChatUiServer() {
         "add products to their cart. The cart persists across conversation turns using " +
         "widgetSessionId. Returns the updated cart state.",
       inputSchema: addToCartInputSchema,
+      outputSchema: addToCartOutputSchema,
       securitySchemes: [{ type: "noauth" }],
       annotations: {
         readOnlyHint: false,
@@ -608,18 +902,18 @@ function createChatUiServer() {
     async (args, { _meta } = {}) => {
       const { items, sessionId } = args;
       const widgetSessionId = sessionId ?? `cart-${Date.now().toString(36)}`;
+      const structuredContent = {
+        action: "add",
+        items,
+        sessionId: widgetSessionId,
+      };
 
       return {
-        content: [
-          {
-            type: "text",
-            text: `Added ${items.length} item(s) to cart`,
-          },
-        ],
-        structuredContent: {
-          action: "add",
-          items,
-        },
+        content: contentWithJsonFallback(
+          `Added ${items.length} item(s) to cart`,
+          structuredContent,
+        ),
+        structuredContent,
         _meta: {
           widgetSessionId,
         },
@@ -640,6 +934,7 @@ function createChatUiServer() {
         "Removes items from the shopping cart by their IDs. Use this when the user " +
         "wants to remove specific products from their cart.",
       inputSchema: removeFromCartInputSchema,
+      outputSchema: removeFromCartOutputSchema,
       securitySchemes: [{ type: "noauth" }],
       annotations: {
         readOnlyHint: false,
@@ -659,20 +954,21 @@ function createChatUiServer() {
     },
     async (args, { _meta } = {}) => {
       const { itemIds, sessionId } = args;
+      const widgetSessionId = sessionId ?? `cart-${Date.now().toString(36)}`;
+      const structuredContent = {
+        action: "remove",
+        items: itemIds.map((id) => ({ id })),
+        sessionId: widgetSessionId,
+      };
 
       return {
-        content: [
-          {
-            type: "text",
-            text: `Removed ${itemIds.length} item(s) from cart`,
-          },
-        ],
-        structuredContent: {
-          action: "remove",
-          items: itemIds.map((id) => ({ id })),
-        },
+        content: contentWithJsonFallback(
+          `Removed ${itemIds.length} item(s) from cart`,
+          structuredContent,
+        ),
+        structuredContent,
         _meta: {
-          widgetSessionId: sessionId,
+          widgetSessionId,
         },
       };
     },
@@ -691,6 +987,7 @@ function createChatUiServer() {
         "Displays the current shopping cart contents. Use this when the user wants " +
         "to see what's in their cart, review items, or proceed to checkout.",
       inputSchema: showCartInputSchema,
+      outputSchema: showCartOutputSchema,
       securitySchemes: [{ type: "noauth" }],
       annotations: {
         readOnlyHint: true,
@@ -710,12 +1007,14 @@ function createChatUiServer() {
     },
     async (args, { _meta } = {}) => {
       const { sessionId } = args;
+      const structuredContent = {
+        action: "show",
+        ...(sessionId ? { sessionId } : {}),
+      };
 
       return {
-        content: [{ type: "text", text: "Shopping cart displayed" }],
-        structuredContent: {
-          action: "show",
-        },
+        content: contentWithJsonFallback("Shopping cart displayed", structuredContent),
+        structuredContent,
         _meta: {
           widgetSessionId: sessionId,
         },
@@ -741,6 +1040,7 @@ function createChatUiServer() {
         "order confirmation views. Use this for demonstrating a full checkout flow " +
         "with animated transitions and multi-step navigation.",
       inputSchema: showShopInputSchema,
+      outputSchema: showShopOutputSchema,
       securitySchemes: [{ type: "noauth" }],
       annotations: {
         readOnlyHint: true,
@@ -760,13 +1060,14 @@ function createChatUiServer() {
     },
     async (args, { _meta } = {}) => {
       const { view, items } = args;
+      const structuredContent = {
+        view: view ?? "cart",
+        items,
+      };
 
       return {
-        content: [{ type: "text", text: "Pizzaz Shop displayed" }],
-        structuredContent: {
-          view: view ?? "cart",
-          items,
-        },
+        content: contentWithJsonFallback("Pizzaz Shop displayed", structuredContent),
+        structuredContent,
       };
     },
   );
@@ -784,6 +1085,7 @@ function createChatUiServer() {
         "Places an order in the Pizzaz Shop with the current cart contents. " +
         "Optionally specify delivery option and tip percentage.",
       inputSchema: placeOrderInputSchema,
+      outputSchema: placeOrderOutputSchema,
       securitySchemes: [{ type: "noauth" }],
       annotations: {
         readOnlyHint: false,
@@ -804,20 +1106,19 @@ function createChatUiServer() {
     async (args, { _meta } = {}) => {
       const { deliveryOption, tipPercent } = args;
       const orderId = `PZ-${Date.now().toString(36).toUpperCase()}`;
+      const structuredContent = {
+        view: "confirmation",
+        orderId,
+        deliveryOption: deliveryOption ?? "standard",
+        tipPercent: tipPercent ?? 10,
+      };
 
       return {
-        content: [
-          {
-            type: "text",
-            text: `Order ${orderId} placed successfully`,
-          },
-        ],
-        structuredContent: {
-          view: "confirmation",
-          orderId,
-          deliveryOption: deliveryOption ?? "standard",
-          tipPercent: tipPercent ?? 10,
-        },
+        content: contentWithJsonFallback(
+          `Order ${orderId} placed successfully`,
+          structuredContent,
+        ),
+        structuredContent,
       };
     },
   );
@@ -839,6 +1140,7 @@ function createChatUiServer() {
         "Displays the current authentication status including auth level, provider, " +
         "expiration, and granted scopes. Use this to show users their current auth state.",
       inputSchema: authStatusInputSchema,
+      outputSchema: authStatusOutputSchema,
       securitySchemes: [{ type: "noauth" }],
       annotations: {
         readOnlyHint: true,
@@ -872,20 +1174,19 @@ function createChatUiServer() {
         !checkLevel ||
         ["none", "basic", "oauth", "oauth_elevated"].indexOf(authStatus.level) >=
           ["none", "basic", "oauth", "oauth_elevated"].indexOf(checkLevel);
+      const structuredContent = {
+        authStatus,
+        meetsRequiredLevel: meetsLevel,
+      };
 
       return {
-        content: [
-          {
-            type: "text",
-            text: authStatus.authenticated
-              ? `Authenticated via ${authStatus.provider} (${authStatus.level})`
-              : "Not authenticated",
-          },
-        ],
-        structuredContent: {
-          authStatus,
-          meetsRequiredLevel: meetsLevel,
-        },
+        content: contentWithJsonFallback(
+          authStatus.authenticated
+            ? `Authenticated via ${authStatus.provider} (${authStatus.level})`
+            : "Not authenticated",
+          structuredContent,
+        ),
+        structuredContent,
         _meta: {
           authStatus,
         },
@@ -906,6 +1207,7 @@ function createChatUiServer() {
         "Initiates an authentication flow. In production, this would redirect to " +
         "an OAuth provider. For demo purposes, simulates successful authentication.",
       inputSchema: authLoginInputSchema,
+      outputSchema: authLoginOutputSchema,
       securitySchemes: [{ type: "noauth" }],
       annotations: {
         readOnlyHint: false,
@@ -940,18 +1242,17 @@ function createChatUiServer() {
         email: "demo@example.com",
         plan: "Pro",
       };
+      const structuredContent = {
+        authStatus,
+        user,
+      };
 
       return {
-        content: [
-          {
-            type: "text",
-            text: `Successfully authenticated as ${user.name}`,
-          },
-        ],
-        structuredContent: {
-          authStatus,
-          user,
-        },
+        content: contentWithJsonFallback(
+          `Successfully authenticated as ${user.name}`,
+          structuredContent,
+        ),
+        structuredContent,
         _meta: {
           authStatus,
         },
@@ -971,6 +1272,7 @@ function createChatUiServer() {
       title: "Logout",
       description: "Ends the current authentication session and clears credentials.",
       inputSchema: authLogoutInputSchema,
+      outputSchema: authLogoutOutputSchema,
       securitySchemes: [{ type: "noauth" }],
       annotations: {
         readOnlyHint: false,
@@ -989,14 +1291,15 @@ function createChatUiServer() {
       },
     },
     async () => {
-      return {
-        content: [{ type: "text", text: "Successfully logged out" }],
-        structuredContent: {
-          authStatus: {
-            authenticated: false,
-            level: "none",
-          },
+      const structuredContent = {
+        authStatus: {
+          authenticated: false,
+          level: "none",
         },
+      };
+      return {
+        content: contentWithJsonFallback("Successfully logged out", structuredContent),
+        structuredContent,
         _meta: {
           authStatus: {
             authenticated: false,
@@ -1019,6 +1322,7 @@ function createChatUiServer() {
       title: "Refresh Auth",
       description: "Refreshes the current authentication token to extend the session.",
       inputSchema: authRefreshInputSchema,
+      outputSchema: authRefreshOutputSchema,
       securitySchemes: [{ type: "noauth" }],
       annotations: {
         readOnlyHint: false,
@@ -1044,17 +1348,16 @@ function createChatUiServer() {
         expiresAt: new Date(Date.now() + 3600000).toISOString(),
         scopes: ["read", "write", "profile"],
       };
+      const structuredContent = {
+        authStatus,
+      };
 
       return {
-        content: [
-          {
-            type: "text",
-            text: `Auth token refreshed, expires at ${authStatus.expiresAt}`,
-          },
-        ],
-        structuredContent: {
-          authStatus,
-        },
+        content: contentWithJsonFallback(
+          `Auth token refreshed, expires at ${authStatus.expiresAt}`,
+          structuredContent,
+        ),
+        structuredContent,
         _meta: {
           authStatus,
         },
@@ -1062,6 +1365,7 @@ function createChatUiServer() {
     },
   );
 
+  installListToolsHandler(server);
   return server;
 }
 
@@ -1072,6 +1376,7 @@ const isDirectRun =
 
 if (isDirectRun) {
   const port = Number(process.env.PORT ?? 8787);
+  const host = process.env.MCP_BIND_HOST ?? "127.0.0.1";
   const MCP_PATH = "/mcp";
 
   const httpServer = createServer(async (req, res) => {
@@ -1103,7 +1408,7 @@ if (isDirectRun) {
       res.writeHead(204, {
         "Access-Control-Allow-Origin": CORS_ORIGIN,
         "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-        "Access-Control-Allow-Headers": "content-type, mcp-session-id",
+        "Access-Control-Allow-Headers": "content-type, mcp-session-id, mcp-protocol-version",
         "Access-Control-Expose-Headers": "Mcp-Session-Id",
       });
       res.end();
@@ -1117,7 +1422,7 @@ if (isDirectRun) {
       return;
     }
 
-    const MCP_METHODS = new Set(["POST", "GET", "DELETE"]);
+    const MCP_METHODS = new Set(["POST", "GET"]);
     if (url.pathname === MCP_PATH && req.method && MCP_METHODS.has(req.method)) {
       res.setHeader("Access-Control-Allow-Origin", CORS_ORIGIN);
       res.setHeader("Access-Control-Expose-Headers", "Mcp-Session-Id");
@@ -1155,8 +1460,8 @@ if (isDirectRun) {
     res.writeHead(404).end("Not Found");
   });
 
-  httpServer.listen(port, () => {
-    console.log(`ChatUI MCP server listening on http://localhost:${port}${MCP_PATH}`);
+  httpServer.listen(port, host, () => {
+    console.log(`ChatUI MCP server listening on http://${host}:${port}${MCP_PATH}`);
     console.log(`Widget source: ${widgetHtmlPath}`);
     console.log(`Widget bundles: ${widgetsDistPath}`);
   });

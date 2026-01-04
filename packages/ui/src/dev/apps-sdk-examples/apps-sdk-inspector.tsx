@@ -91,7 +91,7 @@ function InspectorCard({ place, onClose }: { place: Place; onClose: (() => void)
 }
 
 export function AppsSdkInspectorExample() {
-  const places = (markers as { places: Place[] })?.places || [];
+  const places: Array<Place & { city?: string }> = markers.places.map((place) => ({ ...place }));
   const [isOpen, setIsOpen] = React.useState(true);
   const place = places[0];
 
@@ -111,7 +111,7 @@ export function AppsSdkInspectorExample() {
 }
 
 export function AppsSdkInspectorExampleAlt() {
-  const places = (markers as { places: Place[] })?.places || [];
+  const places: Array<Place & { city?: string }> = markers.places.map((place) => ({ ...place }));
   const place = places[1];
 
   return (

@@ -158,9 +158,9 @@ export function ChatUIRoot({
   // Local state (replace later with your real data model/host adapter)
   const [selectedModel, setSelectedModel] = useState<ModelConfig>(
     defaultModel ?? {
-      name: "ChatGPT 5.2 Pro",
-      shortName: "5.2 Pro",
-      description: "Our most capable model",
+      name: "Auto",
+      shortName: "Auto",
+      description: "Decides how long to think",
     },
   );
   const [viewMode, setViewMode] = useControllableState<"chat" | "compose">({
@@ -323,10 +323,11 @@ export function ChatUIRoot({
     }
 
     return (
-      <div className="flex-1 flex flex-col bg-background">
+      <div className="flex-1 flex flex-col bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1">
         <ChatHeader
           isSidebarOpen={sidebarOpenForHeader}
           onSidebarToggle={toggleSidebar}
+          showSidebarToggle={true}
           selectedModel={selectedModel}
           onModelChange={handleModelChange}
           viewMode={viewMode}
@@ -361,7 +362,10 @@ export function ChatUIRoot({
   ]);
 
   return (
-    <div className="min-h-screen w-full flex bg-background overflow-hidden" data-testid="chat-ui-root">
+    <div
+      className="min-h-screen w-full flex bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 overflow-hidden"
+      data-testid="chat-ui-root"
+    >
       {/* Inline desktop sidebar (twoPane desktop only; Option B = fully hidden when closed) */}
       {sidebarBehavior === "inline" ? (
         <ChatUISlotsProvider value={slotsValue}>

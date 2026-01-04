@@ -43,7 +43,7 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
 
   return (
     <>
-      <div className="flex-1 flex flex-col bg-background text-foreground">
+      <div className="flex-1 flex flex-col bg-foundation-bg-light-1 dark:bg-foundation-bg-dark-1 text-foundation-text-light-primary dark:text-foundation-text-dark-primary">
         <div className="flex-1 overflow-y-auto">
           <div className="w-full px-8 py-8 space-y-4 overflow-y-auto">
             <ComposeInstructionsPanel
@@ -54,7 +54,7 @@ export function ComposeView({ models, modes }: ComposeViewProps) {
               selectedModel={selectedModel}
             />
 
-            <div className="border-b border-border"></div>
+            <div className="border-b border-foundation-bg-light-3 dark:border-foundation-bg-dark-3"></div>
 
             <PromptBuilderSection
               systemMessage={systemMessage}
