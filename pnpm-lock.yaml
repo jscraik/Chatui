@@ -32,7 +32,7 @@ importers:
         version: 9.39.2
       '@modelcontextprotocol/inspector':
         specifier: ^0.18.0
-        version: 0.18.0(@cfworker/json-schema@4.1.1)(@swc/core@1.15.8)(@types/node@25.0.3)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(hono@4.11.3)(typescript@5.9.3)
+        version: 0.18.0(@cfworker/json-schema@4.1.1)(@swc/core@1.15.8)(@types/node@25.0.3)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(typescript@5.9.3)
       '@playwright/test':
         specifier: ^1.57.0
         version: 1.57.0
@@ -111,13 +111,13 @@ importers:
         version: link:../widgets
       '@modelcontextprotocol/sdk':
         specifier: ^1.20.0
-        version: 1.25.1(@cfworker/json-schema@4.1.1)(hono@4.11.3)(zod@3.25.76)
+        version: 1.25.1(@cfworker/json-schema@4.1.1)(hono@4.11.3)(zod@4.3.4)
       agents:
         specifier: ^0.2.13
-        version: 0.2.35(@cloudflare/workers-types@4.20251228.0)(react@19.0.0)(typescript@5.9.3)(zod@3.25.76)
+        version: 0.2.35(@cloudflare/workers-types@4.20251228.0)(react@19.0.0)(typescript@5.9.3)(zod@4.3.4)
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.3.4
+        version: 4.3.4
     devDependencies:
       '@cloudflare/vite-plugin':
         specifier: ^1.13.12
@@ -448,16 +448,16 @@ importers:
     dependencies:
       '@modelcontextprotocol/sdk':
         specifier: ^1.20.2
-        version: 1.25.1(@cfworker/json-schema@4.1.1)(hono@4.11.3)(zod@3.25.76)
+        version: 1.25.1(@cfworker/json-schema@4.1.1)(hono@4.11.3)(zod@4.3.4)
       hono:
         specifier: ^4.11.3
         version: 4.11.3
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.3.4
+        version: 4.3.4
       zod-to-json-schema:
         specifier: ^3.25.0
-        version: 3.25.0(zod@3.25.76)
+        version: 3.25.0(zod@4.3.4)
     devDependencies:
       '@modelcontextprotocol/inspector':
         specifier: ^0.18.0
@@ -8071,6 +8071,9 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
+  zod@4.3.4:
+    resolution: {integrity: sha512-Zw/uYiiyF6pUT1qmKbZziChgNPRu+ZRneAsMUDU6IwmXdWt5JwcUfy2bvLOCUtz5UniaN/Zx5aFttZYbYc7O/A==}
+
   zustand@4.5.7:
     resolution: {integrity: sha512-CHOUy7mu3lbD6o6LJLfllpjkzhHXSBlX8B9+qPddUsIfeF5S/UZ5q0kmCsnRqT1UHFQZchNFDDzMbQsuesHWlw==}
     engines: {node: '>=12.7.0'}
@@ -9212,6 +9215,51 @@ snapshots:
       - supports-color
       - zod
 
+  '@modelcontextprotocol/inspector-cli@0.18.0(@cfworker/json-schema@4.1.1)(zod@3.25.76)':
+    dependencies:
+      '@modelcontextprotocol/sdk': 1.25.1(@cfworker/json-schema@4.1.1)(zod@3.25.76)
+      commander: 13.1.0
+      spawn-rx: 5.1.2
+    transitivePeerDependencies:
+      - '@cfworker/json-schema'
+      - hono
+      - supports-color
+      - zod
+
+  '@modelcontextprotocol/inspector-client@0.18.0(@cfworker/json-schema@4.1.1)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)':
+    dependencies:
+      '@modelcontextprotocol/sdk': 1.25.1(@cfworker/json-schema@4.1.1)(zod@3.25.76)
+      '@radix-ui/react-checkbox': 1.3.3(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-dialog': 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-icons': 1.3.2(react@19.0.0)
+      '@radix-ui/react-label': 2.1.7(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-popover': 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-select': 2.2.6(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-slot': 1.2.4(@types/react@19.2.7)(react@19.0.0)
+      '@radix-ui/react-switch': 1.2.6(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-tabs': 1.1.13(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-toast': 1.2.15(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-tooltip': 1.2.8(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      ajv: 6.12.6
+      class-variance-authority: 0.7.1
+      clsx: 2.1.1
+      cmdk: 1.1.1(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      lucide-react: 0.523.0(react@19.0.0)
+      pkce-challenge: 4.1.0
+      prismjs: 1.30.0
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+      react-simple-code-editor: 0.14.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      serve-handler: 6.1.6
+      tailwind-merge: 2.6.0
+      zod: 3.25.76
+    transitivePeerDependencies:
+      - '@cfworker/json-schema'
+      - '@types/react'
+      - '@types/react-dom'
+      - hono
+      - supports-color
+
   '@modelcontextprotocol/inspector-client@0.18.0(@cfworker/json-schema@4.1.1)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(hono@4.11.3)':
     dependencies:
       '@modelcontextprotocol/sdk': 1.25.1(@cfworker/json-schema@4.1.1)(hono@4.11.3)(zod@3.25.76)
@@ -9245,6 +9293,22 @@ snapshots:
       - '@types/react-dom'
       - hono
       - supports-color
+
+  '@modelcontextprotocol/inspector-server@0.18.0(@cfworker/json-schema@4.1.1)':
+    dependencies:
+      '@modelcontextprotocol/sdk': 1.25.1(@cfworker/json-schema@4.1.1)(zod@3.25.76)
+      cors: 2.8.5
+      express: 5.2.1
+      shell-quote: 1.8.3
+      spawn-rx: 5.1.2
+      ws: 8.18.3
+      zod: 3.25.76
+    transitivePeerDependencies:
+      - '@cfworker/json-schema'
+      - bufferutil
+      - hono
+      - supports-color
+      - utf-8-validate
 
   '@modelcontextprotocol/inspector-server@0.18.0(@cfworker/json-schema@4.1.1)(hono@4.11.3)':
     dependencies:
@@ -9288,7 +9352,33 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@modelcontextprotocol/sdk@1.23.0(@cfworker/json-schema@4.1.1)(zod@3.25.76)':
+  '@modelcontextprotocol/inspector@0.18.0(@cfworker/json-schema@4.1.1)(@swc/core@1.15.8)(@types/node@25.0.3)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(typescript@5.9.3)':
+    dependencies:
+      '@modelcontextprotocol/inspector-cli': 0.18.0(@cfworker/json-schema@4.1.1)(zod@3.25.76)
+      '@modelcontextprotocol/inspector-client': 0.18.0(@cfworker/json-schema@4.1.1)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)
+      '@modelcontextprotocol/inspector-server': 0.18.0(@cfworker/json-schema@4.1.1)
+      '@modelcontextprotocol/sdk': 1.25.1(@cfworker/json-schema@4.1.1)(zod@3.25.76)
+      concurrently: 9.2.1
+      node-fetch: 3.3.2
+      open: 10.2.0
+      shell-quote: 1.8.3
+      spawn-rx: 5.1.2
+      ts-node: 10.9.2(@swc/core@1.15.8)(@types/node@25.0.3)(typescript@5.9.3)
+      zod: 3.25.76
+    transitivePeerDependencies:
+      - '@cfworker/json-schema'
+      - '@swc/core'
+      - '@swc/wasm'
+      - '@types/node'
+      - '@types/react'
+      - '@types/react-dom'
+      - bufferutil
+      - hono
+      - supports-color
+      - typescript
+      - utf-8-validate
+
+  '@modelcontextprotocol/sdk@1.23.0(@cfworker/json-schema@4.1.1)(zod@4.3.4)':
     dependencies:
       ajv: 8.17.1
       ajv-formats: 3.0.1(ajv@8.17.1)
@@ -9301,14 +9391,62 @@ snapshots:
       express-rate-limit: 7.5.1(express@5.2.1)
       pkce-challenge: 5.0.1
       raw-body: 3.0.2
-      zod: 3.25.76
-      zod-to-json-schema: 3.25.0(zod@3.25.76)
+      zod: 4.3.4
+      zod-to-json-schema: 3.25.0(zod@4.3.4)
     optionalDependencies:
       '@cfworker/json-schema': 4.1.1
     transitivePeerDependencies:
       - supports-color
 
   '@modelcontextprotocol/sdk@1.25.1(@cfworker/json-schema@4.1.1)(hono@4.11.3)(zod@3.25.76)':
+    dependencies:
+      '@hono/node-server': 1.19.7(hono@4.11.3)
+      ajv: 8.17.1
+      ajv-formats: 3.0.1(ajv@8.17.1)
+      content-type: 1.0.5
+      cors: 2.8.5
+      cross-spawn: 7.0.6
+      eventsource: 3.0.7
+      eventsource-parser: 3.0.6
+      express: 5.2.1
+      express-rate-limit: 7.5.1(express@5.2.1)
+      jose: 6.1.3
+      json-schema-typed: 8.0.2
+      pkce-challenge: 5.0.1
+      raw-body: 3.0.2
+      zod: 3.25.76
+      zod-to-json-schema: 3.25.0(zod@3.25.76)
+    optionalDependencies:
+      '@cfworker/json-schema': 4.1.1
+    transitivePeerDependencies:
+      - hono
+      - supports-color
+
+  '@modelcontextprotocol/sdk@1.25.1(@cfworker/json-schema@4.1.1)(hono@4.11.3)(zod@4.3.4)':
+    dependencies:
+      '@hono/node-server': 1.19.7(hono@4.11.3)
+      ajv: 8.17.1
+      ajv-formats: 3.0.1(ajv@8.17.1)
+      content-type: 1.0.5
+      cors: 2.8.5
+      cross-spawn: 7.0.6
+      eventsource: 3.0.7
+      eventsource-parser: 3.0.6
+      express: 5.2.1
+      express-rate-limit: 7.5.1(express@5.2.1)
+      jose: 6.1.3
+      json-schema-typed: 8.0.2
+      pkce-challenge: 5.0.1
+      raw-body: 3.0.2
+      zod: 4.3.4
+      zod-to-json-schema: 3.25.0(zod@4.3.4)
+    optionalDependencies:
+      '@cfworker/json-schema': 4.1.1
+    transitivePeerDependencies:
+      - hono
+      - supports-color
+
+  '@modelcontextprotocol/sdk@1.25.1(@cfworker/json-schema@4.1.1)(zod@3.25.76)':
     dependencies:
       '@hono/node-server': 1.19.7(hono@4.11.3)
       ajv: 8.17.1
@@ -11832,10 +11970,10 @@ snapshots:
 
   agent-base@7.1.4: {}
 
-  agents@0.2.35(@cloudflare/workers-types@4.20251228.0)(react@19.0.0)(typescript@5.9.3)(zod@3.25.76):
+  agents@0.2.35(@cloudflare/workers-types@4.20251228.0)(react@19.0.0)(typescript@5.9.3)(zod@4.3.4):
     dependencies:
       '@cfworker/json-schema': 4.1.1
-      '@modelcontextprotocol/sdk': 1.23.0(@cfworker/json-schema@4.1.1)(zod@3.25.76)
+      '@modelcontextprotocol/sdk': 1.23.0(@cfworker/json-schema@4.1.1)(zod@4.3.4)
       cron-schedule: 6.0.0
       json-schema: 0.4.0
       json-schema-to-typescript: 15.0.4
@@ -11845,8 +11983,8 @@ snapshots:
       partysocket: 1.1.10
       react: 19.0.0
       yargs: 18.0.0
-      zod: 3.25.76
-      zod-to-ts: 2.0.0(typescript@5.9.3)(zod@3.25.76)
+      zod: 4.3.4
+      zod-to-ts: 2.0.0(typescript@5.9.3)(zod@4.3.4)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - supports-color
@@ -16638,14 +16776,20 @@ snapshots:
     dependencies:
       zod: 3.25.76
 
-  zod-to-ts@2.0.0(typescript@5.9.3)(zod@3.25.76):
+  zod-to-json-schema@3.25.0(zod@4.3.4):
+    dependencies:
+      zod: 4.3.4
+
+  zod-to-ts@2.0.0(typescript@5.9.3)(zod@4.3.4):
     dependencies:
       typescript: 5.9.3
-      zod: 3.25.76
+      zod: 4.3.4
 
   zod@3.22.3: {}
 
   zod@3.25.76: {}
+
+  zod@4.3.4: {}
 
   zustand@4.5.7(@types/react@19.2.7)(react@19.0.0):
     dependencies:
