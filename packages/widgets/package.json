@@ -17,7 +17,7 @@
     "@react-three/postprocessing": "3.0.4",
     "embla-carousel-react": "8.6.0",
     "framer-motion": "12.23.26",
-    "lucide-react": "0.487.0",
+    "lucide-react": "0.562.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "9.1.0",
