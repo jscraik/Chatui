@@ -220,6 +220,7 @@ See also: `~/.codex/instructions/Learnings.md`
 ### 2026-06-20
 
 - **Cloudflare template agents security bump**: upgraded packages/cloudflare-template from agents ^0.3.10 to ^0.4.0 and refreshed pnpm-lock.yaml so frozen pnpm installs resolve agents@0.4.0 with the matching partysocket@1.1.13 dependency path. The change keeps the template runtime dependency graph aligned with the Snyk security PR while leaving the public command surface unchanged.
+- **Radix dropdown-menu security override**: upgraded the direct `@radix-ui/react-dropdown-menu` dependency to `2.1.18` and added a root pnpm override so transitive consumers such as `@openai/apps-sdk-ui` cannot retain the vulnerable `2.1.16` package in the install graph. The lockfile was refreshed without changing the public component API.
 
 ### 2026-06-19
 
