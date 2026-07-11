@@ -217,6 +217,10 @@ See also: `~/.codex/instructions/Learnings.md`
 
 ## Recent changes
 
+### 2026-07-11
+
+- **GitHub Actions cache pin refresh**: updated the pinned `actions/cache` v5 commit used by the Ubuntu and macOS CI cache steps. This is a tooling-only Dependabot maintenance change; workflow behavior and cache keys remain unchanged.
+
 ### 2026-06-20
 
 - **Cloudflare template agents security bump**: upgraded packages/cloudflare-template from agents ^0.3.10 to ^0.4.0 and refreshed pnpm-lock.yaml so frozen pnpm installs resolve agents@0.4.0 with the matching partysocket@1.1.13 dependency path. The change keeps the template runtime dependency graph aligned with the Snyk security PR while leaving the public command surface unchanged.
