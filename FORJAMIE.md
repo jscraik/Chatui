@@ -225,6 +225,7 @@ See also: `~/.codex/instructions/Learnings.md`
 ### 2026-06-20
 
 - **Cloudflare template agents security bump**: upgraded packages/cloudflare-template from agents ^0.3.10 to ^0.4.0 and refreshed pnpm-lock.yaml so frozen pnpm installs resolve agents@0.4.0 with the matching partysocket@1.1.13 dependency path. The change keeps the template runtime dependency graph aligned with the Snyk security PR while leaving the public command surface unchanged.
+- **date-fns security bump**: upgraded the UI workspace date-fns dependency to 4.4.0 and refreshed pnpm-lock.yaml so the design-system dependency graph uses the patched release without changing the public component API.
 
 ### 2026-06-19
 
