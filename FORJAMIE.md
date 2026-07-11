@@ -219,6 +219,7 @@ See also: `~/.codex/instructions/Learnings.md`
 
 ### 2026-07-11
 
+- **GitHub Actions checkout v7 refresh**: updated the pinned checkout action used by CI to v7. This is a tooling-only Dependabot maintenance change; repository checkout behavior and CI stages remain unchanged.
 - **GitHub Actions cache pin refresh**: updated the pinned `actions/cache` v5 commit used by the Ubuntu and macOS CI cache steps. This is a tooling-only Dependabot maintenance change; workflow behavior and cache keys remain unchanged.
 
 ### 2026-06-20
