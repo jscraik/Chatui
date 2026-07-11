@@ -219,6 +219,7 @@ See also: `~/.codex/instructions/Learnings.md`
 
 ### 2026-07-11
 
+- **Radix focus-guards security bump**: added a root pnpm override so transitive Radix overlay dependencies resolve `@radix-ui/react-focus-guards` at `1.1.4` or newer, matching the Storybook dependency update in PR #184.
 - **GitHub Actions cache pin refresh**: updated the pinned `actions/cache` v5 commit used by the Ubuntu and macOS CI cache steps. This is a tooling-only Dependabot maintenance change; workflow behavior and cache keys remain unchanged.
 
 ### 2026-06-20
